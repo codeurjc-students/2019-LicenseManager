@@ -4,7 +4,7 @@
 
 You can follow the development on this [Medium blog](https://medium.com/@KikeAjani) where I, the unique developer, will post every new advance, feature or problems that I found.
 
-##FEATURES
+## FEATURES
  + Library to add on your software to call LicenseManager.
  + Admin Dashboard on LicenseManager to see info about your products and its licenses.
  + Client Dashboard to see your bills and metrics.
@@ -20,13 +20,13 @@ You can follow the development on this [Medium blog](https://medium.com/@KikeAja
  
  ***
 
-##ROADMAP
+## ROADMAP
 
 
 
 
 
-##POSIBLE FEATURES
+## POSIBLE FEATURES
 * Paypal.
 * Marketplace.
 * Free licenses ("beta testers, insiders").
@@ -34,6 +34,6 @@ You can follow the development on this [Medium blog](https://medium.com/@KikeAja
 * Deploy (elastic, scalable, etc).
 
 
-##TECHNOLOGIES USED
+## TECHNOLOGIES USED
 - SpringBoot
 - Angular
