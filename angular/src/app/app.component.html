@@ -1,0 +1,29 @@
+  <!--<td-layout-nav>
+    <div id="toolbar" td-toolbar-content layout="row" layout-align="start center" flex>
+      <a mat-icon-button [routerLink]="['/']" matTooltip="LicenSoft">
+        <mat-icon>home</mat-icon>
+      </a>
+      <div>
+        <a mat-button matTooltip="A VER"> A VER</a>
+      </div>
+    </div>
+    <router-outlet></router-outlet>
+  </td-layout-nav>
+-->
+
+<div id="appRootClass">
+  <div>
+      <img src="assets/logo.jpg" id="logoPhoto"> 
+  </div>
+  <button mat-fab>Sign In</button>
+
+  <td-tab-select [(ngModel)]="value" backgroundColor="accent" stretchTabs  [disabled]="disabled">
+      <td-tab-option value="dogs">Home</td-tab-option>
+      <td-tab-option value="cats">
+        Products
+      </td-tab-option>
+  </td-tab-select>
+  <app-login></app-login>
+  <router-outlet></router-outlet>
+</div>
+
