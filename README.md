@@ -1,4 +1,4 @@
-# 2019-LicenseManager (prov. name)
+# 2019-LicenSoft 
 
 **LicenseManager** is an online platform to provide software companies a way to license their products. 
 
