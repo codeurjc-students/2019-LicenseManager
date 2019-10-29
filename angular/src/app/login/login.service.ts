@@ -2,7 +2,7 @@ import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 
-const URL = '/api';
+const URL = 'http://localhost:8080/api';
 
 export interface User {
     id?: number;
@@ -35,7 +35,7 @@ export class LoginService {
             'X-Requested-With': 'XMLHttpRequest',
         });
 
-        return this.http.get<User>('/api/logIn', { headers })
+        return this.http.get<User>(URL+'/logIn', { headers })
             .pipe(map(user => {
 
                 if (user) {

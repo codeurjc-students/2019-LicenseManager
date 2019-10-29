@@ -1,0 +1,60 @@
+<h1>{{name}}</h1>
+<mat-card>
+    <mat-card-title> Licenses </mat-card-title>
+    <mat-card-content>
+        <mat-grid-list cols="6" rowHeight="20:1">
+            <mat-grid-tile>
+                <a><strong>SERIAL</strong></a>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <a><strong>STATUS</strong></a>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <a><strong>TYPE</strong></a>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <a><strong>START DATE</strong></a>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                    <a><strong>END DATE</strong></a>
+            </mat-grid-tile>
+            <mat-grid-tile>
+            </mat-grid-tile>
+        </mat-grid-list>
+
+        <mat-grid-list cols="6" rowHeight="20:1">
+           <div *ngFor="let license of licenses">
+                <mat-grid-tile>
+                    <a>{{license.serial}}</a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <span *ngIf="license.active"><mat-icon>check</mat-icon></span> 
+                    <span *ngIf="!license.active"><mat-icon>remove</mat-icon></span> 
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <span>{{license.type}}</span>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                        <a *ngIf="license.startDate">{{license.startDate}}</a>
+                        <a *ngIf="!license.startDate">--</a>
+
+                </mat-grid-tile>
+                <mat-grid-tile>
+                        <a *ngIf="license.endDate">{{license.endDate}}</a>
+                        <a *ngIf="!license.endDate">--</a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                        <button mat-icon-button *ngIf="loginService.isAdmin && license.active" (click)="pauseLicense()">
+                                <mat-icon fxFlex="10%">pause</mat-icon>
+                        </button>
+                        <button mat-icon-button *ngIf="loginService.isAdmin && !license.active" (click)="startLicense()">
+                                <mat-icon fxFlex="10%">play_arrow</mat-icon>
+                        </button>
+                        <button mat-icon-button *ngIf="loginService.isAdmin" (click)="deleteLicense()">
+                                <mat-icon fxFlex="10%">delete</mat-icon>
+                        </button>
+                </mat-grid-tile>
+            </div>
+        </mat-grid-list>
+    </mat-card-content>
+</mat-card>

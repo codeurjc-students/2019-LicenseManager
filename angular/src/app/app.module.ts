@@ -67,6 +67,11 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
 import { LocationStrategy, HashLocationStrategy } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { LoginService } from './login/login.service';
+import { RegisterComponent } from './register/register.component';
+import { RegisterService } from './register/register.service';
+import { IndexComponent } from './index/index.component';
+import { ProductComponent } from './product/product.component';
+import { ProductService } from './product/product.service';
 
 @NgModule({
     imports: [
@@ -125,11 +130,11 @@ import { LoginService } from './login/login.service';
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,LoginComponent],
+    declarations: [AppComponent,LoginComponent, RegisterComponent, ProductComponent],
     bootstrap: [AppComponent],
     entryComponents: [
     ],
-    providers:[ LoginService,
+    providers:[ LoginService, RegisterService, ProductService,
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
         { provide: LocationStrategy, useClass: HashLocationStrategy }

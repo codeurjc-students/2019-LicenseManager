@@ -15,15 +15,12 @@
   <div>
       <img src="assets/logo.jpg" id="logoPhoto"> 
   </div>
-  <button mat-fab>Sign In</button>
-
-  <td-tab-select [(ngModel)]="value" backgroundColor="accent" stretchTabs  [disabled]="disabled">
-      <td-tab-option value="dogs">Home</td-tab-option>
-      <td-tab-option value="cats">
-        Products
-      </td-tab-option>
-  </td-tab-select>
-  <app-login></app-login>
+  <div>
+    <td-tab-select [(ngModel)]="value" backgroundColor="accent" stretchTabs  [disabled]="disabled">
+        <td-tab-option value="home"></td-tab-option>
+    </td-tab-select>
+    <app-login></app-login>
+  </div>
   <router-outlet></router-outlet>
 </div>
 

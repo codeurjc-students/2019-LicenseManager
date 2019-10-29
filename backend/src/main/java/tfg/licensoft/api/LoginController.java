@@ -1,5 +1,6 @@
 package tfg.licensoft.api;
-
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -53,6 +54,7 @@ public class LoginController {
 
 	@RequestMapping("/api/logOut")
 	public ResponseEntity<Boolean> logOut(HttpSession session) {
+		System.out.println("--------------------------" + userComponent.getLoggedUser());
 		if (!userComponent.isLoggedUser()) {
 			log.info("No user logged");
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -82,5 +84,25 @@ public class LoginController {
 		
 		
 	}
-
+	
+	
+	@RequestMapping(value="/api/register", method= RequestMethod.POST)
+	public ResponseEntity<User> register2(Model model, @RequestParam String user, @RequestParam String pass1,
+			@RequestParam String pass2, HttpServletRequest request, HttpServletResponse httpServletResponse) {
+		User newUser =userServ.findByName(user);
+		if ((pass1.equals(pass2)) && (newUser == null)) {
+			userServ.save(new User(user, pass1, "ROLE_USER"));
+			try {
+				request.login(user, pass1);
+			} catch (ServletException e) {
+				e.printStackTrace();
+			}
+			return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
+		} else {
+			return new ResponseEntity<User>(newUser, HttpStatus.CONFLICT);
+		}
+		
+		
+	}
+	
 }

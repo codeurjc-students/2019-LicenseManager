@@ -1,4 +1,4 @@
-package tfg.licensoft.users;
+package tfg.licensoft.configurations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,41 +14,58 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import tfg.licensoft.users.User;
+import tfg.licensoft.users.UserComponent;
+import tfg.licensoft.users.UserRepository;
+
+
+
+/**
+ * This class is used to check http credentials against database data. Also it
+ * is responsible to set database user info into userComponent, a session scoped
+ * bean that holds session user information.
+ * 
+ * NOTE: This class is not intended to be modified by app developer.
+ */
 @Component
-public class UserRepositoryAuthenticationProvider implements AuthenticationProvider {
+public class UserRepositoryAuthProvider implements AuthenticationProvider {
 
 	@Autowired
-	private UserService userServ;
+	private UserRepository userRepository;
 
 	@Autowired
 	private UserComponent userComponent;
 
 	@Override
-	public Authentication authenticate(Authentication auth) throws AuthenticationException {
-		User user = userServ.findByName(auth.getName());
+	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
+
+		String username = authentication.getName();
+		String password = (String) authentication.getCredentials();
+
+		User user = userRepository.findByName(username);
 
 		if (user == null) {
 			throw new BadCredentialsException("User not found");
 		}
 
-		String password = (String) auth.getCredentials();
 		if (!new BCryptPasswordEncoder().matches(password, user.getPasswordHash())) {
+
 			throw new BadCredentialsException("Wrong password");
+		} else {
+
+			userComponent.setLoggedUser(user);
+
+			List<GrantedAuthority> roles = new ArrayList<>();
+			for (String role : user.getRoles()) {
+				roles.add(new SimpleGrantedAuthority(role));
+			}
+
+			return new UsernamePasswordAuthenticationToken(username, password, roles);
 		}
-
-		userComponent.setLoggedUser(user);
-
-		List<GrantedAuthority> roles = new ArrayList<>();
-		for (String role : user.getRoles()) {
-			roles.add(new SimpleGrantedAuthority(role));
-		}
-
-		return new UsernamePasswordAuthenticationToken(user.getName(), password, roles);
 	}
 
 	@Override
 	public boolean supports(Class<?> authenticationObject) {
 		return true;
 	}
-
 }

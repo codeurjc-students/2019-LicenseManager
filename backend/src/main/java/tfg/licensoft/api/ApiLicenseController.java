@@ -23,12 +23,17 @@ public class ApiLicenseController {
 
 	@PostMapping(value = "/")
 	public ResponseEntity<License> postLicense(@RequestBody License license){
-		if (this.licServ.findOne(license.getSerial())==null) {
-			this.licServ.save(license);
-			return new ResponseEntity<>(license, HttpStatus.CREATED);
-		}
-		else {
-			return new ResponseEntity<>(HttpStatus.CONFLICT);
+		if (this.licServ.getSubTypes().contains(license.getType())) {
+			License l = this.licServ.findOne(license.getSerial());
+			if (l==null || l.getProduct()!=license.getProduct()) {
+				this.licServ.save(license);
+				return new ResponseEntity<>(license, HttpStatus.CREATED);
+			}
+			else {
+				return new ResponseEntity<>(HttpStatus.CONFLICT);
+			}
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
 	
@@ -39,9 +44,9 @@ public class ApiLicenseController {
 		
 	}
 	
-	@GetMapping(value = "/serial/{serial}")
-	public ResponseEntity<License> getLicenseBySerial(@PathVariable String serial){
-		License license = this.licServ.findOne(serial);
+	@GetMapping(value = "/{serial}/{product}")
+	public ResponseEntity<License> getLicenseBySerialAndProduct(@PathVariable String serial, @PathVariable String product){
+		License license = this.licServ.findBySerialAndProduct(serial, product);
 		if (license!=null) {
 			return new ResponseEntity<License>(license, HttpStatus.OK);
 		}else {
@@ -49,9 +54,9 @@ public class ApiLicenseController {
 		}
 	}
 	
-	@DeleteMapping(value = "/{serial}")
-	public ResponseEntity<License> deleteLicenseBySerial(@PathVariable String serial){
-		License license = this.licServ.findOne(serial);
+	@DeleteMapping(value = "/{serial}/{product}")
+	public ResponseEntity<License> deleteLicenseBySerial(@PathVariable String serial, @PathVariable String product){
+		License license = this.licServ.findBySerialAndProduct(serial,product);
 		if (license!=null) {
 			this.licServ.delete(license);
 			return new ResponseEntity<License>(license, HttpStatus.OK);
