@@ -21,7 +21,7 @@ public class Product {
 	private Long id;
 	
 	@JsonIgnore
-	@OneToMany(mappedBy = "product", cascade = CascadeType.MERGE)
+	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<License>licenses;
 
 	private String name;

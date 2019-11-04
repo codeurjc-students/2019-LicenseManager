@@ -29,7 +29,7 @@ export class ProductService {
 
     addLicenseToProduct(license:License){
       let url = BASE_URL + "product/" + license.product.name;
-      return this.http.post(url,license)
+      return this.http.put(url,license)
     .map(response => response.json())
     .catch(error => this.handleError(error));
     }

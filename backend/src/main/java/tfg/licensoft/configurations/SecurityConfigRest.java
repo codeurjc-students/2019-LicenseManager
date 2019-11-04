@@ -25,6 +25,8 @@ public class SecurityConfigRest extends WebSecurityConfigurerAdapter{
 		*/
 				http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/logIn").authenticated();
 				http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/logIn").authenticated();
+				http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/logIn").authenticated();
+
 
 		http.authorizeRequests().anyRequest().permitAll();
 		

@@ -49,14 +49,21 @@ public class ApiProductController {
 		}
 	}
 	
+	
+	//TODO
 	@PutMapping("/{productName}")
 	public ResponseEntity<Product> addLicenseToProduct(@PathVariable String productName, @RequestBody License license){
 		Product p = this.productServ.findOne(productName);
+		if (license.getProduct().equals(p)) {
+			license.setProduct(p);
+		}else {
+			return new ResponseEntity<Product>(HttpStatus.NOT_MODIFIED);
+		}
 		if (p!=null) {
 			List<License> l = p.getLicenses();
 			l.add(license);
 			p.setLicenses(l);
-			this.productServ.save(license.getProduct());
+			//this.productServ.save(license.getProduct());
 			this.productServ.save(p);
 			return new ResponseEntity<Product>(p,HttpStatus.OK);
 		}else {
