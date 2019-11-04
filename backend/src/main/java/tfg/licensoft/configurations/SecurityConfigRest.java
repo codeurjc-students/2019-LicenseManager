@@ -18,13 +18,14 @@ public class SecurityConfigRest extends WebSecurityConfigurerAdapter{
 	protected void configure(HttpSecurity http) throws Exception {
 		/*http.antMatcher("/api/**");
 		
-		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/logIn").authenticated();
 		
 		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/**").permitAll();
 		http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/**").permitAll();	
 		
 		*/
-		
+				http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/logIn").authenticated();
+				http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/logIn").authenticated();
+
 		http.authorizeRequests().anyRequest().permitAll();
 		
 		http.csrf().disable();

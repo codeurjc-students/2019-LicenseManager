@@ -3,10 +3,14 @@ package tfg.licensoft.licenses;
 import java.util.Calendar;
 import java.util.Date;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
+import javax.persistence.ManyToOne;
+
+import tfg.licensoft.products.Product;
 
 
 @Entity
@@ -17,13 +21,17 @@ public class License {
 	private String serial;
 	private boolean active;
 	private String type;
-	private String product;
+	
+	@ManyToOne
+	private Product product;
+	
 	private Date startDate;
 	private Date endDate;
+	private String owner;
 	
 	
 	
-	public License(String serial, boolean active, String type, String product) {
+	public License(String serial, boolean active, String type, Product product, String owner) {
 		super();
 		Calendar ahoraCal = Calendar.getInstance();
 		this.serial = serial;
@@ -33,10 +41,23 @@ public class License {
 		if(active) {
 			this.startDate = ahoraCal.getTime();
 			this.calculateEndDate(ahoraCal);
+			this.owner=owner;
 		}
 
 	}
 	
+
+
+	public Product getProduct() {
+		return product;
+	}
+
+
+
+	public void setProduct(Product product) {
+		this.product = product;
+	}
+
 
 
 	public License () {}
@@ -57,16 +78,19 @@ public class License {
 			default: this.endDate=null;
 		}
 	}
-	
-	
-	public String getProduct() {
-		return product;
+
+	public String getOwner() {
+		return owner;
 	}
 
 
-	public void setProduct(String product) {
-		this.product = product;
+
+	public void setOwner(String owner) {
+		this.owner = owner;
 	}
+
+
+
 	
 	public Long getId() {
 		return id;

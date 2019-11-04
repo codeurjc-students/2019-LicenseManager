@@ -7,12 +7,18 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import tfg.licensoft.products.Product;
+import tfg.licensoft.users.UserService;
+
 @Service
  public class LicenseService {
 	
 	
 	@Autowired
 	private LicenseRepository licRep;
+	
+	@Autowired 
+	private UserService userServ;
 	
 	
 	public License findOne(String serial) {
@@ -27,11 +33,11 @@ import org.springframework.stereotype.Service;
 		this.licRep.delete(license);
 	}
 	
-	public Page<License> findLicensesOfProduct(String product, Pageable page) {
+	public Page<License> findLicensesOfProduct(Product product, Pageable page) {
 		return this.licRep.findByProduct(product,page);
 	}
 	
-	public License findBySerialAndProduct(String serial, String product) {
+	public License findBySerialAndProduct(String serial, Product product) {
 		return this.licRep.findBySerialAndProduct(serial, product);
 	}
 	
@@ -41,6 +47,14 @@ import org.springframework.stereotype.Service;
 		list.add("M");
 		list.add("L");
 		return list;
+	}
+	
+	public Page<License> findByUsername(String username, Pageable page){
+		if (this.userServ.findByName(username)!=null) {
+			return this.licRep.findByOwner(username, page);
+		}else {
+			return null;
+		}
 	}
 	
 }

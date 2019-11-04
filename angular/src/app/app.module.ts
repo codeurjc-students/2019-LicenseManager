@@ -72,6 +72,9 @@ import { RegisterService } from './register/register.service';
 import { IndexComponent } from './index/index.component';
 import { ProductComponent } from './product/product.component';
 import { ProductService } from './product/product.service';
+import { LicenseService } from './licenses/license.service';
+import { UserDashboardComponent } from './userDashboard/userDashboard.component';
+import { LicenseComponent } from './licenses/license.component';
 
 @NgModule({
     imports: [
@@ -130,11 +133,11 @@ import { ProductService } from './product/product.service';
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,LoginComponent, RegisterComponent, ProductComponent],
+    declarations: [AppComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent],
     bootstrap: [AppComponent],
     entryComponents: [
     ],
-    providers:[ LoginService, RegisterService, ProductService,
+    providers:[ LoginService, RegisterService, ProductService, LicenseService,
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
         { provide: LocationStrategy, useClass: HashLocationStrategy }

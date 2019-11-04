@@ -1,0 +1,53 @@
+<h1>{{userName}}</h1>
+<mat-card>
+    <mat-card-title>  Licenses </mat-card-title>
+    <mat-card-content>
+
+
+    <mat-grid-list cols="5" rowHeight="20:1">
+        <mat-grid-tile>
+            <a><strong>PRODUCT</strong></a>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <a><strong>SERIAL</strong></a>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <a><strong>TYPE</strong></a>
+        </mat-grid-tile>
+        <mat-grid-tile>
+            <a><strong>START DATE</strong></a>
+        </mat-grid-tile>
+        <mat-grid-tile>
+                <a><strong>END DATE</strong></a>
+        </mat-grid-tile>
+    </mat-grid-list>
+
+        <mat-grid-list cols="5" rowHeight="20:1">
+            <div *ngFor="let license of activeLicenses">
+                <mat-grid-tile>
+                     <a>{{license.product.name}}</a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <a>{{license.serial}}</a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <span>{{license.type}}</span>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <a *ngIf="license.startDate">{{license.startDate}}</a>
+                    <a *ngIf="!license.startDate">--</a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <a *ngIf="license.endDate">{{license.endDate}}</a>
+                    <a *ngIf="!license.endDate">--</a>
+                </mat-grid-tile>
+            </div>
+        </mat-grid-list>
+    </mat-card-content>
+</mat-card>
+
+<button mat-raised-button color="accent" (click)="openSearchDialog()">COMPRAR</button>
+
+<ng-template #searchProductDialog let-searchProductDialog="searchProductDialog">
+    
+</ng-template>
