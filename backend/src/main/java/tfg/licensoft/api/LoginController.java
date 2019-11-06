@@ -9,6 +9,8 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.ui.Model;
@@ -103,6 +105,12 @@ public class LoginController {
 		}
 		
 		
+	}
+	
+	@RequestMapping(value="/api/users", method=RequestMethod.GET)
+	public ResponseEntity<Page<User>> getAllUsers(Pageable page){
+		Page<User> users= userServ.findAll(page);
+		return new ResponseEntity<Page<User>>(users,HttpStatus.OK);
 	}
 	
 }

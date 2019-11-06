@@ -34,6 +34,13 @@ export class ProductService {
     .catch(error => this.handleError(error));
     }
 
+    removeLicenseOfProduct(serial:string,productName:string){
+      let url = BASE_URL + "product/" + productName+"/license/"+serial;
+      return this.http.put(url,productName,serial)
+    .map(response => response.json())
+    .catch(error => this.handleError(error));
+    }
+
 
 
     private handleError(error: any) {

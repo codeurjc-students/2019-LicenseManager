@@ -74,7 +74,7 @@ public class License {
 				ahoraCal.add(Calendar.YEAR, 1);
 				this.endDate = ahoraCal.getTime();
 				break;	
-			}
+			} 
 			default: this.endDate=null;
 		}
 	}
@@ -122,6 +122,8 @@ public class License {
 
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
+		Calendar ahoraCal = Calendar.getInstance();
+		this.calculateEndDate(ahoraCal);
 	}
 
 

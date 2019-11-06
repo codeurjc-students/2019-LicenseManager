@@ -1,4 +1,4 @@
-package tfg.licensoft.configurations;
+package tfg.licensoft.users;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +13,6 @@ import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
-
-import tfg.licensoft.users.User;
-import tfg.licensoft.users.UserComponent;
-import tfg.licensoft.users.UserRepository;
 
 
 
@@ -38,7 +34,7 @@ public class UserRepositoryAuthProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-
+		System.out.println("asdasdasdasds");
 		String username = authentication.getName();
 		String password = (String) authentication.getCredentials();
 

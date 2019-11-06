@@ -17,6 +17,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import tfg.licensoft.licenses.License;
+import tfg.licensoft.licenses.LicenseService;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
 
@@ -27,6 +28,9 @@ public class ApiProductController {
 	
 	@Autowired
 	private ProductService productServ;
+	
+	@Autowired
+	private LicenseService licenseServ;
 
 	@GetMapping("/{productName}")
 	public ResponseEntity<Product> getProduct(@PathVariable String productName) {
@@ -54,22 +58,40 @@ public class ApiProductController {
 	@PutMapping("/{productName}")
 	public ResponseEntity<Product> addLicenseToProduct(@PathVariable String productName, @RequestBody License license){
 		Product p = this.productServ.findOne(productName);
-		if (license.getProduct().equals(p)) {
-			license.setProduct(p);
-		}else {
-			return new ResponseEntity<Product>(HttpStatus.NOT_MODIFIED);
+		
+		if (this.licenseServ.findBySerialAndProduct(license.getSerial(), p)!=null) {
+			return new ResponseEntity<Product>(HttpStatus.CONFLICT);
+		}else {		
+			if (license.getProduct().equals(p) || p!=null) {
+				license.setProduct(p);
+			}else {
+				return new ResponseEntity<Product>(HttpStatus.NOT_MODIFIED);
+			}
+			if (p!=null) {
+				List<License> l = p.getLicenses();
+				l.add(license);
+				p.setLicenses(l);
+				this.productServ.save(p);
+				return new ResponseEntity<Product>(p,HttpStatus.OK);
+			}else {
+				return new ResponseEntity<Product>(HttpStatus.NOT_MODIFIED);
+			}
 		}
-		if (p!=null) {
+	}
+	
+	@PutMapping("/{productName}/license/{serial}")
+	public ResponseEntity<Product> removeLicenseOfProduct(@PathVariable String productName, @PathVariable String serial){
+		Product p = this.productServ.findOne(productName);
+		License license = this.licenseServ.findBySerialAndProduct(serial, p);
+		if (p!=null && license!=null) {
 			List<License> l = p.getLicenses();
-			l.add(license);
+			l.remove(license);
 			p.setLicenses(l);
-			//this.productServ.save(license.getProduct());
 			this.productServ.save(p);
 			return new ResponseEntity<Product>(p,HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Product>(HttpStatus.NOT_MODIFIED);
 		}
-		
 	}
  
 }

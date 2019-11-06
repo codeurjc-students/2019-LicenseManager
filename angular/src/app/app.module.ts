@@ -75,6 +75,9 @@ import { ProductService } from './product/product.service';
 import { LicenseService } from './licenses/license.service';
 import { UserDashboardComponent } from './userDashboard/userDashboard.component';
 import { LicenseComponent } from './licenses/license.component';
+import { CardLicenseComponent } from './cards/cardLicense.component';
+import { DialogDeleteComponent } from './dialogs/dialogDelete.component';
+import { DialogEditComponent } from './dialogs/dialogEdit.component';
 
 @NgModule({
     imports: [
@@ -133,9 +136,9 @@ import { LicenseComponent } from './licenses/license.component';
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent],
+    declarations: [AppComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent],
     bootstrap: [AppComponent],
-    entryComponents: [
+    entryComponents: [DialogDeleteComponent, DialogEditComponent
     ],
     providers:[ LoginService, RegisterService, ProductService, LicenseService,
         { provide: MAT_DIALOG_DATA, useValue: {} },

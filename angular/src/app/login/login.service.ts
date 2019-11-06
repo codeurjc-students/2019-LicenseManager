@@ -1,6 +1,9 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
+import { Observable } from 'rxjs';
+import 'rxjs/Rx';
+import { Http } from '@angular/http';
 
 const URL = 'http://localhost:8080/api';
 
@@ -19,8 +22,10 @@ export class LoginService {
     user: User;
     auth: string;
 
-    constructor(private http: HttpClient) {
+    constructor(private http: HttpClient,private http2: Http) {
+        localStorage.clear; //TODO
         let user = JSON.parse(localStorage.getItem('currentUser'));
+        console.log(user);
         if (user) {
             this.setCurrentUser(user);
         }
@@ -42,10 +47,12 @@ export class LoginService {
                     this.setCurrentUser(user);
                     user.authdata = auth;
                     localStorage.setItem('currentUser', JSON.stringify(user));
+                    console.log("adasdsa");
                 }
 
                 return user;
             }));
+           
     }
 
     logOut() {
@@ -59,14 +66,30 @@ export class LoginService {
     }
 
     private setCurrentUser(user: User) {
+        console.log(localStorage.length);
         this.isLogged = true;
         this.user = user;
         this.isAdmin = this.user.roles.indexOf('ROLE_ADMIN') !== -1;
     }
 
+
+    getUsers(){
+        let url = URL + "/users/";
+      return this.http2.get(url)
+    .map(response => response.json())
+    .catch(error => this.handleError(error));
+    }
+
+    
     removeCurrentUser() {
         localStorage.removeItem('currentUser');
         this.isLogged = false;
         this.isAdmin = false;
+    }
+
+
+    private handleError(error: any) {
+        console.error(error);
+        return Observable.throw("Server error (" + error.status + "): " + error.text())
     }
 }

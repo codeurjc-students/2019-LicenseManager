@@ -5,6 +5,7 @@ import { ActivatedRoute, Router, ParamMap } from '@angular/router';
 import { LoginService } from '../login/login.service';
 import { Product } from './product.model';
 import { MatDialog, MatDialogRef } from '@angular/material';
+import { CardLicenseComponent } from '../cards/cardLicense.component';
 
 @Component({
     selector: 'app-product',
@@ -12,15 +13,13 @@ import { MatDialog, MatDialogRef } from '@angular/material';
     styleUrls: ['./product.component.css'],
   })
   export class ProductComponent implements OnInit{
-    @ViewChild('addLicenseDialog') addLicenseDialog: TemplateRef<any>;
-    dialogRef: MatDialogRef<any, any>; 
+    @ViewChild('cardLicense') cardLicense: CardLicenseComponent;
     product:Product;
-
     serial?:string="";
     active?:boolean;
     type?:string;
 
-    constructor(private router: Router, private activeRoute: ActivatedRoute,private productService:ProductService,  public loginService: LoginService,public dialog: MatDialog){    }
+    constructor(private router: Router, private activeRoute: ActivatedRoute,private productService:ProductService,  public loginService: LoginService){    }
 
     ngOnInit(): void {
 
@@ -34,17 +33,15 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 
     getProduct(name:string){
       this.productService.getProduct(name).subscribe(
-        prod => {this.product = prod; this.getLicenses(name)},
+        prod => {this.product = prod;this.cardLicense.product=prod; this.cardLicense.getLicenses(this.product.name)},
         error => console.log(error)
       )
     }
 
-    getLicenses(name:string){
-      this.productService.getLicensesByProduct(name).subscribe(
-        lics => {this.product.licenses=lics.content;},
-        error => console.log(error)
-      ); 
- 
+
+
+    configCardLicense(cardLicense:CardLicenseComponent){
+      cardLicense.product=this.product;
     }
 
     deleteLicense(){}
@@ -55,20 +52,6 @@ import { MatDialog, MatDialogRef } from '@angular/material';
 
 
 
-    openAddDialog(){
-      this.dialogRef = this.dialog.open(this.addLicenseDialog, {
-        width: '50%',
-        height: '40%',
-    });
-    }
 
-    addLicense(s:string,active:boolean,type:string){
-      console.log(s,active,type);
-      let lic :License = {serial: s,active:active,type:type, owner:null,product:this.product,};
-      this.productService.addLicenseToProduct(lic).subscribe(
-        lic=>console.log(lic),
-        error=> console.log(error)
-      );
-    }
 
   }
