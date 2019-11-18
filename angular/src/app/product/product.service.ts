@@ -41,6 +41,13 @@ export class ProductService {
     .catch(error => this.handleError(error));
     }
 
+    getProducts(){
+      let url = BASE_URL + "product/all";
+      return this.http.get(url)
+    .map(response => response.json())
+    .catch(error => this.handleError(error));
+    }
+
 
 
     private handleError(error: any) {

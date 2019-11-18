@@ -4,6 +4,7 @@ import { LoginService } from '../login/login.service';
 import { LicenseService } from '../licenses/license.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialogRef, MatDialog } from '@angular/material';
+import { DialogSearchComponent } from '../dialogs/dialogSearch.component';
 
 @Component({
     selector: 'app-userDashboard',
@@ -17,7 +18,7 @@ export class UserDashboardComponent implements OnInit{
     activeLicenses:License[];
     
 
-    constructor(public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute){}
+    constructor(public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute, public loginService:LoginService){}
 
 
     ngOnInit(): void {
@@ -31,11 +32,16 @@ export class UserDashboardComponent implements OnInit{
     }
 
     openSearchDialog() {
-        this.dialogRef = this.dialog.open(this.searchDialog, {
-            width: '50%',
-            height: '50%',
+        this.dialogRef = this.dialog.open(DialogSearchComponent, {
+            data:{
+                user:this.loginService.user,
+            },
         });
     }
+
+    
+
+
 
 
 

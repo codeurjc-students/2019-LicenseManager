@@ -1,0 +1,11 @@
+<mat-dialog-content>
+        <mat-form-field>
+                <mat-select placeholder="Product" [(ngModel)]="productSelected">
+                  <mat-option *ngFor="let product of listProducts" value="product" [value]="product">{{product.name}}</mat-option>
+                </mat-select>
+        </mat-form-field>
+</mat-dialog-content>
+<mat-dialog-actions>
+        <button mat-raised-button color="warn" (click)="buyProduct()">BUY</button>
+        <button mat-button  (click)="close()">CANCEL</button>
+</mat-dialog-actions>

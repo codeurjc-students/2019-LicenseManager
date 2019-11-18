@@ -11,7 +11,7 @@ import { UserDashboardComponent } from './userDashboard/userDashboard.component'
 const appRoutes = [
    { path: 'register', component: RegisterComponent, },
    { path: 'login', component: LoginComponent, },
-   { path: 'product/:name', component: ProductComponent, },
+   { path: 'admin/product/:name', component: ProductComponent, },
    { path: 'user/:userName', component: UserDashboardComponent, }
 
 ];
