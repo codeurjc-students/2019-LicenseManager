@@ -1,6 +1,12 @@
 package tfg.licensoft.api;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestParam;
+
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+import java.util.Optional;
+
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -20,6 +26,10 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 
+import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
+
+import tfg.licensoft.stripe.StripeCard;
 import tfg.licensoft.users.User;
 import tfg.licensoft.users.UserComponent;
 import tfg.licensoft.users.UserService;
@@ -43,13 +53,24 @@ public class LoginController {
 	private UserService userServ;
 
 	@RequestMapping("/api/logIn")
-	public ResponseEntity<User> logIn() { 
+	public ResponseEntity<User> logIn() {
 		if (!userComponent.isLoggedUser()) {
 			log.info("Not user logged");
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		} else {
 			User loggedUser = userComponent.getLoggedUser();
 			log.info("Logged as " + loggedUser.getName());
+			
+			Optional<User> u = userServ.findOne(loggedUser.getId());
+			
+			List<StripeCard> list = u.get().getStripeCards();
+			if (list==null) {
+				loggedUser.setStripeCards(new ArrayList<StripeCard>());
+			}
+			else {
+				loggedUser.setStripeCards(list);
+			}
+			
 			return new ResponseEntity<>(loggedUser, HttpStatus.OK);
 		}
 	}
@@ -73,12 +94,21 @@ public class LoginController {
 			@PathVariable String pass2, HttpServletRequest request, HttpServletResponse httpServletResponse) {
 		User newUser =userServ.findByName(user);
 		if ((pass1.equals(pass2)) && (newUser == null)) {
-			userServ.save(new User(user, pass1, "ROLE_USER"));
+			Map<String,Object> customerParameter = new HashMap<String,Object>();
+			customerParameter.put("name", user);
+			customerParameter.put("email",user+"@email.com");
+			try {
+				Customer customer = Customer.create(customerParameter);
+				userServ.save(new User(customer.getId(),user, pass1, "ROLE_USER"));
+			} catch (StripeException e) {
+				e.printStackTrace();
+			}
 			try {
 				request.login(user, pass1);
 			} catch (ServletException e) {
 				e.printStackTrace();
 			}
+			
 			return new ResponseEntity<User>(newUser, HttpStatus.OK);
 		} else {
 			return new ResponseEntity<User>(newUser, HttpStatus.CONFLICT);
@@ -87,7 +117,7 @@ public class LoginController {
 		
 	}
 	
-	
+	/*
 	@RequestMapping(value="/api/register", method= RequestMethod.POST)
 	public ResponseEntity<User> register2(Model model, @RequestParam String user, @RequestParam String pass1,
 			@RequestParam String pass2, HttpServletRequest request, HttpServletResponse httpServletResponse) {
@@ -105,7 +135,7 @@ public class LoginController {
 		}
 		
 		
-	}
+	}*/
 	
 	@RequestMapping(value="/api/users", method=RequestMethod.GET)
 	public ResponseEntity<Page<User>> getAllUsers(Pageable page){

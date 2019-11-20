@@ -1,6 +1,6 @@
 import { NgModule, TemplateRef } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { FormsModule } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JsonpModule, HttpModule } from '@angular/http';
 import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatIconRegistry } from '@angular/material/icon';
@@ -79,10 +79,13 @@ import { CardLicenseComponent } from './cards/cardLicense.component';
 import { DialogDeleteComponent } from './dialogs/dialogDelete.component';
 import { DialogEditComponent } from './dialogs/dialogEdit.component';
 import { DialogSearchComponent } from './dialogs/dialogSearch.component';
+import { UserProfileComponent } from './userProfile/userProfile.component';
+import { UserProfileService } from './userProfile/userProfile.service';
 
 @NgModule({
     imports: [
         HttpModule,
+        ReactiveFormsModule,
         CovalentVirtualScrollModule,
         MatChipsModule,
         BrowserModule,
@@ -137,11 +140,11 @@ import { DialogSearchComponent } from './dialogs/dialogSearch.component';
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent,DialogSearchComponent],
+    declarations: [AppComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent,DialogSearchComponent],
     bootstrap: [AppComponent],
     entryComponents: [DialogDeleteComponent, DialogEditComponent, DialogSearchComponent
     ],
-    providers:[ LoginService, RegisterService, ProductService, LicenseService,
+    providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
         { provide: LocationStrategy, useClass: HashLocationStrategy }

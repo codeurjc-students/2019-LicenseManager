@@ -4,6 +4,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import 'rxjs/Rx';
 import { Http } from '@angular/http';
+import { StripeCard } from '../stripe/stripeCard.model';
 
 const URL = 'http://localhost:8080/api';
 
@@ -12,6 +13,8 @@ export interface User {
     name: string;
     roles: string[];
     authdata: string;
+    userStripeId:string;
+    stripeCards:StripeCard[];
 }
 
 @Injectable()
@@ -23,9 +26,7 @@ export class LoginService {
     auth: string;
 
     constructor(private http: HttpClient,private http2: Http) {
-        localStorage.clear; //TODO
         let user = JSON.parse(localStorage.getItem('currentUser'));
-        console.log(user);
         if (user) {
             this.setCurrentUser(user);
         }
@@ -49,7 +50,6 @@ export class LoginService {
                     localStorage.setItem('currentUser', JSON.stringify(user));
                     console.log("adasdsa");
                 }
-
                 return user;
             }));
            

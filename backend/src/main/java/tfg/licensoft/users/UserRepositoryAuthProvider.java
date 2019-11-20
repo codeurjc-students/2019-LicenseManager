@@ -34,7 +34,6 @@ public class UserRepositoryAuthProvider implements AuthenticationProvider {
 
 	@Override
 	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		System.out.println("asdasdasdasds");
 		String username = authentication.getName();
 		String password = (String) authentication.getCredentials();
 

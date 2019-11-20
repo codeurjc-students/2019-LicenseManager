@@ -1,9 +1,15 @@
 package tfg.licensoft;
 
+import java.util.HashMap;
+import java.util.Map;
+
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Component;
+
+import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
 
 import tfg.licensoft.licenses.License;
 import tfg.licensoft.licenses.LicenseService;
@@ -27,15 +33,26 @@ public class DatabaseInitializer {
 	ProductService productServ;
 
 	@PostConstruct
-	public void init() {
+	public void init() throws StripeException {
+
 
 	
 		// users
-		userServ.save(new User("customer", "c", "ROLE_USER"));
-		userServ.save(new User("user", "u", "ROLE_USER"));
-		userServ.save(new User("C1", "c1", "ROLE_USER"));
+		Customer c1 = Customer.retrieve("cus_GCfRnHS286gdq9");
+		userServ.save(new User(c1.getId(),"customer", "c", "ROLE_USER"));
+	
 
-		userServ.save(new User("admin", "a", "ROLE_USER", "ROLE_ADMIN"));	
+		Customer c2 = Customer.retrieve("cus_GCfRldTX850sXN");
+		userServ.save(new User(c2.getId(),"user", "u", "ROLE_USER"));
+		
+
+		Customer c3 = Customer.retrieve("cus_GCfRu2cBr7Xkkh");
+		userServ.save(new User(c3.getId(),"C1", "c1", "ROLE_USER"));
+
+		
+
+		Customer c4 = Customer.retrieve("cus_GCfRVJhDGwsjpi");
+		userServ.save(new User(c4.getId(),"admin", "a", "ROLE_USER", "ROLE_ADMIN"));	
 		
 		
 		//products

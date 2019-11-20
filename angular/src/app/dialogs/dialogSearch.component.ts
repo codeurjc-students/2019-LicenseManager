@@ -24,7 +24,9 @@ import { ProductService } from '../product/product.service';
 
     }
 
-
+    buyProduct(){
+        
+    }
 
 
 
