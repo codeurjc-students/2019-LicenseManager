@@ -4,6 +4,7 @@ import { HttpClient } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { LoginService } from '../login/login.service';
+import { Product } from '../product/product.model';
 
 const BASE_URL = 'http://localhost:8080/api/user/';
 
@@ -50,6 +51,13 @@ export class UserProfileService {
         .map(response => response.json())
         .catch(error => this.handleError(error));
     }
+
+    addSubscriptionToProduct(product:Product,typeSubs:string){
+        return this.http.put(BASE_URL+product.name+"/" + typeSubs + "/addSubscription",product)
+        .map(response => response.json())
+        .catch(error => this.handleError(error));
+    }
+
 
     private handleError(error: any) {
         console.error(error);

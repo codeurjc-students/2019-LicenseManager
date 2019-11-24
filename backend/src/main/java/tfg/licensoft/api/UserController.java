@@ -1,5 +1,9 @@
 package tfg.licensoft.api;
 
+import tfg.licensoft.licenses.License;
+import tfg.licensoft.licenses.LicenseService;
+import tfg.licensoft.products.Product;
+import tfg.licensoft.products.ProductService;
 import tfg.licensoft.stripe.StripeCard;
 import tfg.licensoft.stripe.StripeCardService;
 import tfg.licensoft.users.User;
@@ -9,9 +13,17 @@ import tfg.licensoft.users.UserService;
 import org.springframework.web.bind.annotation.*;
 
 import com.stripe.exception.StripeException;
+import com.stripe.model.Card;
+import com.stripe.model.CardCollection;
 import com.stripe.model.Customer;
+import com.stripe.model.PaymentSource;
+import com.stripe.model.PaymentSourceCollection;
+import com.stripe.model.Plan;
+import com.stripe.model.Subscription;
 import com.stripe.model.Token;
 
+import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -28,10 +40,16 @@ import org.springframework.http.ResponseEntity;
 public class UserController {
 
 	@Autowired
+	private LicenseService licenseServ;
+	
+	@Autowired
 	private UserService userServ;
 	
 	@Autowired
 	private UserComponent userComponent;
+	
+	@Autowired
+	private ProductService productServ;
 	
 	@Autowired
 	private StripeCardService stripeCardServ;
@@ -88,4 +106,74 @@ public class UserController {
 		User user = userComponent.getLoggedUser();
 		return this.stripeCardServ.findByUser(user, page);
 	}
+	
+	@PutMapping("/{productName}/{typeSubs}/addSubscription")
+	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs){
+		Product product = this.productServ.findOne(productName);
+		User user = userComponent.getLoggedUser();
+		Map<String,String> plans = product.getPlans();
+		
+		String planId = plans.get(typeSubs);
+		if (planId!=null) {
+			Map<String, Object> item = new HashMap<>();
+			item.put("plan", planId);
+			Map<String, Object> items = new HashMap<>();
+			items.put("0", item);
+			Map<String, Object> expand = new HashMap<>();
+			expand.put("0", "latest_invoice.payment_intent");
+			Map<String, Object> params = new HashMap<>();
+			params.put("customer", user.getCustomerStripeId());
+			params.put("items", items);
+			params.put("expand", expand);
+			try {
+				Subscription subscription = Subscription.create(params);
+			} catch (StripeException e) {
+				e.printStackTrace();
+			}
+			this.productServ.save(product);
+			List<License> notActiveLicenses = this.licenseServ.findByProductAndActive(product, false);
+			
+			if (!notActiveLicenses.isEmpty()) {
+				License license = notActiveLicenses.get(0);
+				license.setActive(true);
+				license.setOwner(user.getName());
+				license.setStartDate(new Date());
+				licenseServ.save(license);
+				return new ResponseEntity<License>(license,HttpStatus.OK);
+
+			}else {
+				return new ResponseEntity<License>(HttpStatus.BAD_REQUEST);
+
+			}
+		}else {
+			return new ResponseEntity<License>(HttpStatus.BAD_REQUEST);
+		}
+	}
+	
+	
+	/* TODO
+	@GetMapping("/stripeCardsBDStripe")
+	public List<StripeCard> getCardsBDStripe(Pageable page){
+		User user = userComponent.getLoggedUser();
+		try {
+			Customer c = Customer.retrieve(user.getCustomerStripeId());
+			Map<String, Object> params = new HashMap<>();
+			params.put("object", "card");
+			params.put("limit", 100);
+
+			PaymentSourceCollection cards =
+					  c.getSources().list(params);
+			
+			List<PaymentSource> p = cards.getData();
+			List<StripeCard> pages = new ArrayList();
+			for (PaymentSource ps : p) {
+				Card card =  (Card) c.getSources().retrieve(ps.getId());
+				StripeCard cardStripe = new StripeCard();
+				
+
+			}
+		} catch (StripeException e) {
+			e.printStackTrace();
+		}
+	}*/
 }

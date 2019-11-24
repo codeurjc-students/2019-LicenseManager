@@ -3,6 +3,7 @@ import { User } from '../login/login.service';
 import { Product } from '../product/product.model';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 import { ProductService } from '../product/product.service';
+import { UserProfileService } from '../userProfile/userProfile.service';
 
 @Component({
     selector: 'app-dialogSearch',
@@ -12,10 +13,10 @@ import { ProductService } from '../product/product.service';
         user:User;
         listProducts:Product[];
         productSelected:Product;
+        types:string[];
+        typeSubSelected:string;
 
-
-
-    constructor( @Inject(MAT_DIALOG_DATA) public data:any, private dialogRef:MatDialogRef<DialogSearchComponent>, public productService:ProductService){
+    constructor( @Inject(MAT_DIALOG_DATA) public data:any, private dialogRef:MatDialogRef<DialogSearchComponent>, public productService:ProductService, public userService:UserProfileService){
         this.user=data.user;
         this.productService.getProducts().subscribe(
             products => {this.listProducts=products.content},
@@ -25,7 +26,9 @@ import { ProductService } from '../product/product.service';
     }
 
     buyProduct(){
-        
+        this.userService.addSubscriptionToProduct(this.productSelected,this.typeSubSelected).subscribe(
+            u=> this.dialogRef.close(),
+        )
     }
 
 

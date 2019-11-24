@@ -1,7 +1,13 @@
 <mat-dialog-content>
         <mat-form-field>
                 <mat-select placeholder="Product" [(ngModel)]="productSelected">
-                  <mat-option *ngFor="let product of listProducts" value="product" [value]="product">{{product.name}}</mat-option>
+                        <mat-option *ngFor="let product of listProducts" value="product" [value]="product">{{product.name}}</mat-option>
+                </mat-select>
+        </mat-form-field>
+        <br>
+        <mat-form-field>
+                <mat-select placeholder="Type Subscription" [(ngModel)]="typeSubSelected">
+                        <mat-option  *ngFor="let type of productSelected?.typeSubs" value="type" [value]="type">{{type}}</mat-option>
                 </mat-select>
         </mat-form-field>
 </mat-dialog-content>

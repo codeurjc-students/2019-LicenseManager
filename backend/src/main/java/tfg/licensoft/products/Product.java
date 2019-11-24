@@ -1,8 +1,9 @@
 package tfg.licensoft.products;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
-
+import javax.persistence.ElementCollection;
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -26,12 +27,50 @@ public class Product {
 
 	private String name;
 	
+	private String productStripeId;
 	
+	@JsonIgnore
+	private HashMap<String,String> plans;
+	
+	@ElementCollection
+	private List<String> typeSubs;
+	
+	
+	
+	public List<String> getTypeSubs() {
+		return typeSubs;
+	}
+
+	public void setTypeSubs(List<String> typeSubs) {
+		this.typeSubs = typeSubs;
+	}
+
+	public String getProductStripeId() {
+		return productStripeId;
+	}
+
+	public void setProductStripeId(String productStripeId) {
+		this.productStripeId = productStripeId;
+	}
+
+
+
 	public Product() {}
 	
 	public Product(String name) {
 		this.name=name;
 		this.licenses = new ArrayList();
+		this.plans = new HashMap();
+		this.typeSubs= new ArrayList<>();
+
+	}
+
+	public HashMap<String, String> getPlans() {
+		return plans;
+	}
+
+	public void setPlans(HashMap<String, String> plans) {
+		this.plans = plans;
 	}
 
 	public List<License> getLicenses() {

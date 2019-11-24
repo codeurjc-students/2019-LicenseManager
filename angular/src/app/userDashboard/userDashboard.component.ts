@@ -24,10 +24,7 @@ export class UserDashboardComponent implements OnInit{
     ngOnInit(): void {
         this.activeRoute.paramMap.subscribe((params: ParamMap) => {
             this.userName = this.activeRoute.snapshot.params.userName;
-            this.licenseServ.getActiveLicensesOfUser(this.userName).subscribe(
-                lics => this.activeLicenses = lics.content,
-                error => console.log(error)
-            ); 
+            this.getLicenses();
         });
     }
 
@@ -37,6 +34,17 @@ export class UserDashboardComponent implements OnInit{
                 user:this.loginService.user,
             },
         });
+        this.dialogRef.afterClosed().subscribe(
+            lics => {this.getLicenses()},
+            error => console.log(error)
+        );
+    }
+
+    getLicenses(){
+        this.licenseServ.getActiveLicensesOfUser(this.userName).subscribe(
+            lics => this.activeLicenses = lics.content,
+            error => console.log(error)
+        ); 
     }
 
     
