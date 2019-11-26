@@ -1,5 +1,6 @@
 package tfg.licensoft.licenses;
 
+import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
 
@@ -46,6 +47,25 @@ public class License {
 
 	}
 	
+	public License(boolean active, String type, Product product, String owner) {
+		super();
+		try {
+			this.generateSerial(product.getName(),type,owner);
+		} catch (NoSuchAlgorithmException e) {
+			e.printStackTrace();
+		}
+		Calendar ahoraCal = Calendar.getInstance();
+		this.active = active;
+		this.type = type;
+		this.product=product;
+		if(active) {
+			this.startDate = ahoraCal.getTime();
+			this.calculateEndDate(ahoraCal);
+			this.owner=owner;
+		}
+
+	}
+	
 
 
 	public Product getProduct() {
@@ -75,6 +95,11 @@ public class License {
 				this.endDate = ahoraCal.getTime();
 				break;	
 			} 
+			case "D":{
+				ahoraCal.add(Calendar.HOUR, 24);
+				this.endDate = ahoraCal.getTime();
+				break;	
+			}
 			default: this.endDate=null;
 		}
 	}
@@ -181,6 +206,51 @@ public class License {
 			return false;
 		return true;
 	}
+
+	
+	private void generateSerial(String productName,String type, String userName) throws NoSuchAlgorithmException {
+		String serialNumberEncodedName = this.calculateSecurityHash(userName,"MD2") +
+			    calculateSecurityHash(userName,"MD5") +
+			        calculateSecurityHash(userName,"SHA1");
+		
+		String serialNumberEncodedType = this.calculateSecurityHash(type,"MD2") +
+			    calculateSecurityHash(type,"MD5") +
+			        calculateSecurityHash(type,"SHA1");
+		
+		String serialNumberEncodedProduct = this.calculateSecurityHash(productName,"MD2") +
+			    calculateSecurityHash(productName,"MD5") +
+			        calculateSecurityHash(productName,"SHA1");
+		
+		String serialNumber = ""
+			    + serialNumberEncodedName.charAt(32)  + serialNumberEncodedName.charAt(76)
+			    + serialNumberEncodedProduct.charAt(100) + serialNumberEncodedName.charAt(50) + "-"
+			    + serialNumberEncodedType.charAt(2)   + serialNumberEncodedName.charAt(91)
+			    + serialNumberEncodedName.charAt(73)  + serialNumberEncodedType.charAt(72)
+			    + serialNumberEncodedProduct.charAt(98)  + "-"
+			    + serialNumberEncodedName.charAt(47)  + serialNumberEncodedProduct.charAt(65)
+			    + serialNumberEncodedType.charAt(18)  + serialNumberEncodedType.charAt(85) + "-"
+			    + serialNumberEncodedName.charAt(27)  + serialNumberEncodedName.charAt(53)
+			    + serialNumberEncodedProduct.charAt(102) + serialNumberEncodedType.charAt(15)
+			    + serialNumberEncodedType.charAt(99);
+		this.setSerial(serialNumber);
+	}
+	
+	private String calculateSecurityHash(String stringInput, String algorithmName) throws java.security.NoSuchAlgorithmException {
+		        String hexMessageEncode = "";
+		        byte[] buffer = stringInput.getBytes();
+		        java.security.MessageDigest messageDigest =
+		            java.security.MessageDigest.getInstance(algorithmName);
+		        messageDigest.update(buffer);
+		        byte[] messageDigestBytes = messageDigest.digest();
+		        for (int index=0; index < messageDigestBytes.length ; index ++) {
+		            int countEncode = messageDigestBytes[index] & 0xff;
+		            if (Integer.toHexString(countEncode).length() == 1)
+		                hexMessageEncode = hexMessageEncode + "0";
+		            hexMessageEncode = hexMessageEncode + Integer.toHexString(countEncode);
+		        }
+		        return hexMessageEncode;
+	}
+	
 
 
 }

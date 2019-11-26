@@ -23,7 +23,7 @@ export class UserDashboardComponent implements OnInit{
 
     ngOnInit(): void {
         this.activeRoute.paramMap.subscribe((params: ParamMap) => {
-            this.userName = this.activeRoute.snapshot.params.userName;
+            this.userName = this.loginService.user.name;
             this.getLicenses();
         });
     }

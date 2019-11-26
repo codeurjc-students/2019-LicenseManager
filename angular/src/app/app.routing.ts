@@ -13,7 +13,7 @@ const appRoutes = [
    { path: 'register', component: RegisterComponent, },
    { path: 'login', component: LoginComponent, },
    { path: 'admin/product/:name', component: ProductComponent, },
-   { path: 'user/:userName/dashboard', component: UserDashboardComponent, },
+   { path: 'user/dashboard', component: UserDashboardComponent, },
    { path: 'user/profile', component: UserProfileComponent, },
 
 ];

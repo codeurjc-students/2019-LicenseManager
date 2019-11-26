@@ -37,7 +37,7 @@ public class DatabaseInitializer {
 	public void init() throws StripeException {
 
 
-	
+	 
 		// users
 		Customer c1 = Customer.retrieve("cus_GCfRnHS286gdq9");
 		userServ.save(new User(c1.getId(),"customer", "c", "ROLE_USER"));

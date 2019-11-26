@@ -23,16 +23,17 @@ public class SecurityConfigRest extends WebSecurityConfigurerAdapter{
 		http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/**").permitAll();	
 		
 		*/
-				http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/logIn").authenticated();
-				http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/logIn").authenticated();
-				http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/logIn").authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/logIn").authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/logIn").authenticated();
+		http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/logIn").authenticated();
 
-
+		
 		http.authorizeRequests().anyRequest().permitAll();
 		
 		http.csrf().disable();
 		http.httpBasic();
 		http.logout().logoutSuccessHandler((rq, rs, a) -> {	});
+
 		
 		//h2 settings
 		http.headers().frameOptions().disable();

@@ -54,8 +54,8 @@ export class UserProfileService {
 
     addSubscriptionToProduct(product:Product,typeSubs:string){
         return this.http.put(BASE_URL+product.name+"/" + typeSubs + "/addSubscription",product)
-        .map(response => response.json())
-        .catch(error => this.handleError(error));
+        .map(response => response.json());
+        
     }
 
 

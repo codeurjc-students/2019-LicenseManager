@@ -12,10 +12,8 @@ import { Router } from '@angular/router';
 
 export class AppComponent {
     mode: string;
- //   tabs: string[];
 
     constructor(private router: Router) {
-      //  this.tabs = new Array<string>();
         if (environment.production) {
             this.mode = "Production";
         } else {
@@ -23,24 +21,23 @@ export class AppComponent {
         }
     }
 
-    /*
-    addTab(tabName: string) {
-        if (!this.tabs.includes(tabName)) {
-            this.tabs.push(tabName);
+    manageLinks(route:string){
+        switch(route){
+            case 'adminProduct':{
+                this.router.navigate(["/admin/product/sw"]);
+                break;
+            }
+            case 'userDashboard':{
+                this.router.navigate(["user/dashboard"]);
+                break;
+            }
+            case 'userProfile':{
+                this.router.navigate(["user/profile"]);
+                break;
+            }
+            
         }
     }
 
-    deleteTab(tabName: string) {
-        const index: number = this.tabs.indexOf(tabName);
-        if (index !== -1) {
-            this.tabs.splice(index, 1);
-        }
-        if(this.router.url.includes(tabName)){
-            this.router.navigate(['/']);
-        }
-    }
-
-    deleteAllTabs() {
-        this.tabs = new Array<string>();
-    }*/
+    
 }

@@ -114,37 +114,34 @@ public class UserController {
 		Map<String,String> plans = product.getPlans();
 		
 		String planId = plans.get(typeSubs);
-		if (planId!=null) {
-			Map<String, Object> item = new HashMap<>();
-			item.put("plan", planId);
-			Map<String, Object> items = new HashMap<>();
-			items.put("0", item);
-			Map<String, Object> expand = new HashMap<>();
-			expand.put("0", "latest_invoice.payment_intent");
-			Map<String, Object> params = new HashMap<>();
-			params.put("customer", user.getCustomerStripeId());
-			params.put("items", items);
-			params.put("expand", expand);
-			try {
-				Subscription subscription = Subscription.create(params);
-			} catch (StripeException e) {
-				e.printStackTrace();
-			}
-			this.productServ.save(product);
-			List<License> notActiveLicenses = this.licenseServ.findByProductAndActive(product, false);
-			
-			if (!notActiveLicenses.isEmpty()) {
-				License license = notActiveLicenses.get(0);
-				license.setActive(true);
-				license.setOwner(user.getName());
-				license.setStartDate(new Date());
+		if (planId!=null && product!=null) {
+			List<License> list= this.licenseServ.findByProductAndOwnerAndType(product, user.getName(), typeSubs);
+			if (list.isEmpty()) {
+				Map<String, Object> item = new HashMap<>();
+				item.put("plan", planId);
+				Map<String, Object> items = new HashMap<>();
+				items.put("0", item);
+				Map<String, Object> expand = new HashMap<>();
+				expand.put("0", "latest_invoice.payment_intent");
+				Map<String, Object> params = new HashMap<>();
+				params.put("customer", user.getCustomerStripeId());
+				params.put("items", items);
+				params.put("expand", expand);
+				try {
+					Subscription subscription = Subscription.create(params);
+				} catch (StripeException e) {
+					if(e.getCode().equals("resource_missing") && e.getMessage().contains("This customer has no attached payment source")) {
+						return new ResponseEntity<License>(HttpStatus.PRECONDITION_REQUIRED); //The precondition is to have an attached payment source
+					}
+				}
+				this.productServ.save(product);			
+				License license = new License(true, typeSubs, product, user.getName());
 				licenseServ.save(license);
 				return new ResponseEntity<License>(license,HttpStatus.OK);
-
 			}else {
-				return new ResponseEntity<License>(HttpStatus.BAD_REQUEST);
-
+				return new ResponseEntity<License>(HttpStatus.CONFLICT);
 			}
+			
 		}else {
 			return new ResponseEntity<License>(HttpStatus.BAD_REQUEST);
 		}

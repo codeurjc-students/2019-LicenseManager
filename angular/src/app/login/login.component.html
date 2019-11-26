@@ -1,4 +1,4 @@
-<ng-container *ngIf="loginService.isLogged">
+<ng-container *ngIf="!loginService.isLogged">
     	<span>
                 <button mat-button (click)='openLoginDialog()'>
                     Login

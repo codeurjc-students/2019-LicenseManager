@@ -14,4 +14,7 @@
 <mat-dialog-actions>
         <button mat-raised-button color="warn" (click)="buyProduct()">BUY</button>
         <button mat-button  (click)="close()">CANCEL</button>
+        <div *ngIf="loading">
+                <img src="assets/spinner.gif" id="spinner">
+        </div>
 </mat-dialog-actions>

@@ -42,11 +42,16 @@ import tfg.licensoft.users.UserService;
 		return this.licRep.findBySerialAndProduct(serial, product);
 	}
 	
+	public List<License> findByProductAndOwnerAndType(Product product,String owner,String type) {
+		return this.licRep.findByProductAndOwnerAndType(product, owner, type);
+	}
+	
 	public ArrayList<String> getSubTypes(){
 		ArrayList<String> list = new ArrayList();
 		list.add("A");
 		list.add("M");
 		list.add("L");
+		list.add("D");
 		return list;
 	}
 	
@@ -58,8 +63,8 @@ import tfg.licensoft.users.UserService;
 		}
 	}
 	
-	public List<License> findByProductAndActive(Product product, boolean active){
-		return this.licRep.findByProductAndActive(product, active);
+	public List<License> findByProductAndActiveAndOwner(Product product, boolean active, String owner){
+		return this.licRep.findByProductAndActiveAndOwner(product, active,owner);
 	}
 	
 }
