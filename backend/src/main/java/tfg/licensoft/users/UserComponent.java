@@ -9,6 +9,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 
 @Component
+@SessionScope 
 public class UserComponent {
 
 	private User user;

@@ -26,10 +26,10 @@ export class LoginService {
     auth: string;
 
     constructor(private http: HttpClient,private http2: Http) {
-       /* let user = JSON.parse(localStorage.getItem('currentUser'));
+        let user = JSON.parse(localStorage.getItem('currentUser'));
         if (user) {
             this.setCurrentUser(user);
-        }*/
+        }
     }
 
     logIn(user: string, pass: string) {

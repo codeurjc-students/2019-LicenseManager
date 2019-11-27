@@ -81,6 +81,8 @@ import { DialogEditComponent } from './dialogs/dialogEdit.component';
 import { DialogSearchComponent } from './dialogs/dialogSearch.component';
 import { UserProfileComponent } from './userProfile/userProfile.component';
 import { UserProfileService } from './userProfile/userProfile.service';
+import { BasicAuthInterceptor } from 'src/auth.interceptor';
+import { ErrorInterceptor } from 'src/error.interceptor';
 
 @NgModule({
     imports: [
@@ -147,7 +149,9 @@ import { UserProfileService } from './userProfile/userProfile.service';
     providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
-        { provide: LocationStrategy, useClass: HashLocationStrategy }
+        { provide: LocationStrategy, useClass: HashLocationStrategy },
+        { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
+        { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
         ,]
 })
 export class AppModule {
