@@ -83,6 +83,8 @@ import { UserProfileComponent } from './userProfile/userProfile.component';
 import { UserProfileService } from './userProfile/userProfile.service';
 import { BasicAuthInterceptor } from 'src/auth.interceptor';
 import { ErrorInterceptor } from 'src/error.interceptor';
+import { AdminDashboardComponent } from './adminDashboard/adminDashboard.component';
+import { DialogAddProductComponent } from './dialogs/dialogAddProduct.component';
 
 @NgModule({
     imports: [
@@ -142,9 +144,9 @@ import { ErrorInterceptor } from 'src/error.interceptor';
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent,DialogSearchComponent],
+    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent,DialogSearchComponent, AdminDashboardComponent],
     bootstrap: [AppComponent],
-    entryComponents: [DialogDeleteComponent, DialogEditComponent, DialogSearchComponent
+    entryComponents: [DialogDeleteComponent, DialogEditComponent, DialogSearchComponent,DialogAddProductComponent
     ],
     providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,
         { provide: MAT_DIALOG_DATA, useValue: {} },

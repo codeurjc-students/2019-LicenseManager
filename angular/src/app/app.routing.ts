@@ -5,6 +5,7 @@ import { IndexComponent } from './index/index.component';
 import { ProductComponent } from './product/product.component';
 import { UserDashboardComponent } from './userDashboard/userDashboard.component';
 import { UserProfileComponent } from './userProfile/userProfile.component';
+import { AdminDashboardComponent } from './adminDashboard/adminDashboard.component';
 
 
 
@@ -13,6 +14,7 @@ const appRoutes = [
    { path: 'register', component: RegisterComponent, },
    { path: 'login', component: LoginComponent, },
    { path: 'admin/product/:name', component: ProductComponent, },
+   { path: 'admin/dashboard', component: AdminDashboardComponent, },
    { path: 'user/dashboard', component: UserDashboardComponent, },
    { path: 'user/profile', component: UserProfileComponent, },
 

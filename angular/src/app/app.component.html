@@ -18,15 +18,17 @@
   <div>
       <button mat-button [matMenuTriggerFor]="afterMenu">Links</button>
       <mat-menu #afterMenu="matMenu" xPosition="after">
-        <button mat-menu-item (click)="manageLinks('adminProduct')">Admin Product</button>
+        <button mat-menu-item (click)="manageLinks('adminDashboard')">Admin Product</button>
         <button mat-menu-item (click)="manageLinks('userDashboard')">User Dashboard</button>
         <button mat-menu-item (click)="manageLinks('userProfile')">User Profile</button>
       </mat-menu>
     <td-tab-select [(ngModel)]="value" backgroundColor="accent" stretchTabs  [disabled]="disabled">
-        <td-tab-option value="home">Home</td-tab-option>
+        <td-tab-option value="home"></td-tab-option>
+        <!--
         <td-tab-option value="adminProduct">Admin Product</td-tab-option>
         <td-tab-option value="userDashboard">User Dashboard</td-tab-option>
         <td-tab-option value="userProfile">User Profile</td-tab-option>
+      -->
     </td-tab-select>
 
     

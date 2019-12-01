@@ -23,8 +23,8 @@ export class AppComponent {
 
     manageLinks(route:string){
         switch(route){
-            case 'adminProduct':{
-                this.router.navigate(["/admin/product/sw"]);
+            case 'adminDashboard':{
+                this.router.navigate(["/admin/dashboard"]);
                 break;
             }
             case 'userDashboard':{

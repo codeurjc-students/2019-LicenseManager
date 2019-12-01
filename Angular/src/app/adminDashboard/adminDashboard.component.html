@@ -1,0 +1,15 @@
+<mat-card>
+        <mat-card-title> Your products </mat-card-title>
+        <mat-card-content>
+                    <mat-grid-list cols="1" rowHeight="25:1">
+                            <div *ngFor="let product of products">
+                                 <mat-grid-tile>
+                                     <a routerLink="/admin/product/{{product.name}}">{{product.name}}</a>
+                                 </mat-grid-tile>
+                            </div>
+                    </mat-grid-list>
+        </mat-card-content>
+
+        <button mat-raised-button color="accent" (click)="openAddProductDialog()">ADD PRODUCT</button>
+
+</mat-card>
