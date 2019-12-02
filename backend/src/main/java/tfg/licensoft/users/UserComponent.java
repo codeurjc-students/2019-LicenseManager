@@ -25,6 +25,7 @@ public class UserComponent {
 	}
 
 	public void setLoggedUser(User user) {
+		System.out.println("User logged -> " + user.getName() );
 		this.user = user;
 	}
 

@@ -32,7 +32,7 @@ export class UserProfileService {
 
         console.log(card);
 
-        return this.http.post(BASE_URL + 'addCard',card).pipe(
+        return this.http.post(BASE_URL + this.loginServ.user.name + '/addCard',card).pipe(
             map(response => console.log(response)),
         );
     }
@@ -52,8 +52,8 @@ export class UserProfileService {
         .catch(error => this.handleError(error));
     }
 
-    addSubscriptionToProduct(product:Product,typeSubs:string){
-        return this.http.put(BASE_URL+product.name+"/" + typeSubs + "/addSubscription",product)
+    addSubscriptionToProduct(product:Product,typeSubs:string,userName:string){
+        return this.http.put(BASE_URL+product.name+"/" + typeSubs + "/" + userName +"/addSubscription",product)
         .map(response => response.json());
         
     }

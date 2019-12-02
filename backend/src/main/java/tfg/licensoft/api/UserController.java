@@ -54,6 +54,8 @@ public class UserController {
 	@Autowired
 	private StripeCardService stripeCardServ;
 	
+	
+	//TODO error
 	@PutMapping("/")
 	private ResponseEntity<User> updateStripeCards(@RequestBody User updatedUser) {
 		User user = userServ.findByName(updatedUser.getName());
@@ -68,9 +70,10 @@ public class UserController {
 		}
 	}
 	
-	@PostMapping("/addCard")
-	public ResponseEntity<StripeCard> addCard(@RequestBody StripeCard stripeCard) {
-		User user = userComponent.getLoggedUser();
+	@PostMapping("{userName}/addCard")
+	public ResponseEntity<StripeCard> addCard(@PathVariable String userName,@RequestBody StripeCard stripeCard) {
+		//User user = userComponent.getLoggedUser();
+		User user = this.userServ.findByName(userName);
 		try {
 			Customer c = Customer.retrieve(user.getCustomerStripeId());
 			Map<String,Object> cardParam = new HashMap<String,Object>();
@@ -107,10 +110,11 @@ public class UserController {
 		return this.stripeCardServ.findByUser(user, page);
 	}
 	
-	@PutMapping("/{productName}/{typeSubs}/addSubscription")
-	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs){
+	@PutMapping("/{productName}/{typeSubs}/{userName}/addSubscription")
+	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName){
 		Product product = this.productServ.findOne(productName);
-		User user = userComponent.getLoggedUser();
+		//User user = userComponent.getLoggedUser();
+		User user = this.userServ.findByName(userName);
 		Map<String,String> plans = product.getPlans();
 		
 		String planId = plans.get(typeSubs);

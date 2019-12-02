@@ -29,7 +29,7 @@ import { UserProfileService } from '../userProfile/userProfile.service';
 
     buyProduct(){
         this.loading=true;
-        this.userService.addSubscriptionToProduct(this.productSelected,this.typeSubSelected).subscribe(
+        this.userService.addSubscriptionToProduct(this.productSelected,this.typeSubSelected, this.user.name).subscribe(
             u=> {this.dialogRef.close();this.loading=false},
             error=> {this.dialogRef.close();this.treatmentBuyError(error);},
         )
