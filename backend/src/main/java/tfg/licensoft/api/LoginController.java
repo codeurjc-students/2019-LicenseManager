@@ -52,6 +52,7 @@ public class LoginController {
 	@Autowired
 	private UserService userServ;
 
+	
 	@RequestMapping("/api/logIn")
 	public ResponseEntity<User> logIn() {
 		if (!userComponent.isLoggedUser()) {
@@ -70,7 +71,7 @@ public class LoginController {
 			else {
 				loggedUser.setStripeCards(list);
 			}
-			
+			this.userServ.save(loggedUser);
 			return new ResponseEntity<>(loggedUser, HttpStatus.OK);
 		}
 	}
@@ -141,6 +142,11 @@ public class LoginController {
 	public ResponseEntity<Page<User>> getAllUsers(Pageable page){
 		Page<User> users= userServ.findAll(page);
 		return new ResponseEntity<Page<User>>(users,HttpStatus.OK);
+	}
+	
+	@RequestMapping("/api/getUserLogged")
+	public void getUserLogged() {
+		System.out.println("??? ->  "+this.userComponent.getLoggedUser());
 	}
 	
 }

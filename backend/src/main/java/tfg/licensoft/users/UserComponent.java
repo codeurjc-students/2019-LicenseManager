@@ -8,8 +8,7 @@ import org.springframework.web.context.annotation.SessionScope;
 
 
 
-@Component
-@SessionScope 
+@Component 
 public class UserComponent {
 
 	private User user;
@@ -25,7 +24,6 @@ public class UserComponent {
 	}
 
 	public void setLoggedUser(User user) {
-		System.out.println("User logged -> " + user.getName() );
 		this.user = user;
 	}
 

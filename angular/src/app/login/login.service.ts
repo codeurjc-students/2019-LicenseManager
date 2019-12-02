@@ -92,4 +92,9 @@ export class LoginService {
         console.error(error);
         return Observable.throw("Server error (" + error.status + "): " + error.text())
     }
+
+    getUserLogged(){
+        let url = URL + "/getUserLogged/";
+      return this.http2.get(url);
+    }
 }

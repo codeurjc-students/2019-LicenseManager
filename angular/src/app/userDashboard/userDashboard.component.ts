@@ -47,6 +47,12 @@ export class UserDashboardComponent implements OnInit{
         ); 
     }
 
+    getUserLogged(){
+        this.loginService.getUserLogged().subscribe(
+            
+        );
+    }
+
     
 
 
