@@ -4,6 +4,8 @@ export interface Product{
     name:string;
     licenses:License[];
     typeSubs:string[];
-
+    photoAvailable:boolean;
+    description:string;
+    webLink:string;
     constructor();
 }

@@ -11,7 +11,7 @@ import { AppComponent } from '../app.component';
   styleUrls: ['./login.component.css']
 })
 export class LoginComponent  {
-  @ViewChild('loginDialog') loginDialog: TemplateRef<any>;
+  @ViewChild('loginDialog',{static:false}) loginDialog: TemplateRef<any>;
   dialogRef: MatDialogRef<any, any>;
 
   constructor(public dialog: MatDialog,private snackBar: MatSnackBar, public loginService:LoginService, private router:Router, private appComponent: AppComponent) { 

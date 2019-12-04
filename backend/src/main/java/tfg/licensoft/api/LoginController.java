@@ -29,7 +29,6 @@ import org.springframework.web.bind.annotation.RestController;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 
-import tfg.licensoft.stripe.StripeCard;
 import tfg.licensoft.users.User;
 import tfg.licensoft.users.UserComponent;
 import tfg.licensoft.users.UserService;
@@ -61,16 +60,6 @@ public class LoginController {
 		} else {
 			User loggedUser = userComponent.getLoggedUser();
 			log.info("Logged as " + loggedUser.getName());
-			
-			Optional<User> u = userServ.findOne(loggedUser.getId());
-			
-			List<StripeCard> list = u.get().getStripeCards();
-			if (list==null) {
-				loggedUser.setStripeCards(new ArrayList<StripeCard>());
-			}
-			else {
-				loggedUser.setStripeCards(list);
-			}
 			this.userServ.save(loggedUser);
 			return new ResponseEntity<>(loggedUser, HttpStatus.OK);
 		}

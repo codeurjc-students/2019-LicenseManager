@@ -4,8 +4,6 @@ import tfg.licensoft.licenses.License;
 import tfg.licensoft.licenses.LicenseService;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
-import tfg.licensoft.stripe.StripeCard;
-import tfg.licensoft.stripe.StripeCardService;
 import tfg.licensoft.users.User;
 import tfg.licensoft.users.UserComponent;
 import tfg.licensoft.users.UserService;
@@ -51,10 +49,8 @@ public class UserController {
 	@Autowired
 	private ProductService productServ;
 	
-	@Autowired
-	private StripeCardService stripeCardServ;
 	
-	
+	/*
 	//TODO error
 	@PutMapping("/")
 	private ResponseEntity<User> updateStripeCards(@RequestBody User updatedUser) {
@@ -69,6 +65,7 @@ public class UserController {
 			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
 	
 	@PostMapping("{userName}/addCard")
 	public ResponseEntity<StripeCard> addCard(@PathVariable String userName,@RequestBody StripeCard stripeCard) {
@@ -103,12 +100,26 @@ public class UserController {
 		
 		
 	}
+	*/
 	
-	@GetMapping("/stripeCards")
-	public Page<StripeCard> getCards(Pageable page){
+	@PostMapping("/addCard/{tokenId}")
+	public ResponseEntity<User> addCardStripeElements(@PathVariable String tokenId){
 		User user = userComponent.getLoggedUser();
-		return this.stripeCardServ.findByUser(user, page);
+		try {
+			Customer c = Customer.retrieve(user.getCustomerStripeId());
+			Map<String,Object> source = new HashMap<String,Object>();
+			source.put("source", tokenId);
+			c.getSources().create(source);
+			return new ResponseEntity<User>(user,HttpStatus.OK);
+
+		} catch (StripeException e) {
+			e.printStackTrace();
+			return new ResponseEntity(HttpStatus.NOT_FOUND);
+		}
+ 
 	}
+	
+
 	
 	@PutMapping("/{productName}/{typeSubs}/{userName}/addSubscription")
 	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName){

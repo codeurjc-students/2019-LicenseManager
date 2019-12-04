@@ -22,44 +22,10 @@ import { StripeCard } from '../stripe/stripeCard.model';
     exp_year = new FormControl('',Validators.required);
 
     
-    constructor( private loginService:LoginService, private userProfileServ:UserProfileService){
-      this.getCards();
-    }
+    constructor( private loginService:LoginService){ }
 
 
     ngOnInit(): void {
       this.user=this.loginService.user;
     }
-
-    addCard(){
-      console.log(this.cvv);
-      
-      this.userProfileServ.addCard(this.owner.value,this.cvv.value,this.number.value,this.exp_month.value,this.exp_year.value).subscribe(
-        (u) => {
-            this.updateCards();
-            
-        },
-        (error) => console.log(error),
-    );    
-    }
-
-    updateCards(){
-      this.userProfileServ.updateCards().subscribe(
-         u =>   this.getCards(),  
-        (error) => console.log(error),
-      );
-    }
-
-    getCards(){
-      this.userProfileServ.getCards().subscribe(
-        cards => this.stripeCards = cards.content,
-      )
-    }
-
-    try(){
-      console.log(this.stripeCards);
-    }
-
-
-    
   }

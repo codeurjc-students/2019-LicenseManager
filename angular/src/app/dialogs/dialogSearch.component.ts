@@ -31,7 +31,7 @@ import { UserProfileService } from '../userProfile/userProfile.service';
         this.loading=true;
         this.userService.addSubscriptionToProduct(this.productSelected,this.typeSubSelected, this.user.name).subscribe(
             u=> {this.dialogRef.close();this.loading=false},
-            error=> {this.dialogRef.close();this.treatmentBuyError(error);},
+            error=> {this.dialogRef.close();this.treatmentBuyError(error);this.loading=false;},
         )
     }
 

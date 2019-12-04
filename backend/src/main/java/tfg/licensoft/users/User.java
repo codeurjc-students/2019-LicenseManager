@@ -19,8 +19,6 @@ import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
 import com.stripe.model.Customer;
 
-import tfg.licensoft.stripe.StripeCard;
-
 @Entity
 public class User {
 
@@ -36,29 +34,19 @@ public class User {
 	@Column(unique=true)
 	private String customerStripeId;
 	
-	@ElementCollection
-	@OneToMany(targetEntity=StripeCard.class, mappedBy="user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-	private List<StripeCard> stripeCards;
+
 
 	public User(String customerStripeId,String name, String password, String... roles) {
 		this.name = name;
 		this.passwordHash = new BCryptPasswordEncoder().encode(password);
 		this.roles = new ArrayList<>(Arrays.asList(roles));
 		this.customerStripeId=customerStripeId;
-		this.stripeCards= new ArrayList<StripeCard>();
 	}
 
 	protected User() {}
 
 	
 	
-	public List<StripeCard> getStripeCards() {
-		return stripeCards;
-	}
-
-	public void setStripeCards(List<StripeCard> stripeCards) {
-		this.stripeCards = stripeCards;
-	}
 
 	public Long getId() {
 		return id;

@@ -85,6 +85,7 @@ import { BasicAuthInterceptor } from 'src/auth.interceptor';
 import { ErrorInterceptor } from 'src/error.interceptor';
 import { AdminDashboardComponent } from './adminDashboard/adminDashboard.component';
 import { DialogAddProductComponent } from './dialogs/dialogAddProduct.component';
+import { CardFormComponent } from './userProfile/card-form/card-form.component';
 
 @NgModule({
     imports: [
@@ -144,7 +145,7 @@ import { DialogAddProductComponent } from './dialogs/dialogAddProduct.component'
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent,DialogSearchComponent, AdminDashboardComponent],
+    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent,DialogSearchComponent, AdminDashboardComponent, CardFormComponent],
     bootstrap: [AppComponent],
     entryComponents: [DialogDeleteComponent, DialogEditComponent, DialogSearchComponent,DialogAddProductComponent
     ],

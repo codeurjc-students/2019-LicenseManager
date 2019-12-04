@@ -20,7 +20,7 @@ import { DialogEditComponent } from '../dialogs/dialogEdit.component';
   export class CardLicenseComponent{
 
     product?:Product;
-    @ViewChild('addLicenseDialog') addLicenseDialog: TemplateRef<any>;
+    @ViewChild('addLicenseDialog',{static:false}) addLicenseDialog: TemplateRef<any>;
 
     dialogRef: MatDialogRef<any, any>; 
     typeAlertNull:boolean;

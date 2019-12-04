@@ -13,7 +13,7 @@ import { CardLicenseComponent } from '../cards/cardLicense.component';
     styleUrls: ['./product.component.css'],
   })
   export class ProductComponent implements OnInit{
-    @ViewChild('cardLicense') cardLicense: CardLicenseComponent;
+    @ViewChild('cardLicense',{static:false}) cardLicense: CardLicenseComponent;
     product:Product;
     serial?:string="";
     active?:boolean;

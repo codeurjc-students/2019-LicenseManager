@@ -10,7 +10,7 @@ import { DialogAddProductComponent } from "../dialogs/dialogAddProduct.component
     templateUrl: './adminDashboard.component.html',
   })
   export class AdminDashboardComponent {
-    @ViewChild('addProductDialog') searchDialog: TemplateRef<any>;
+    @ViewChild('addProductDialog',{static:false}) searchDialog: TemplateRef<any>;
     dialogRef: MatDialogRef<any, any>;
     products:Product[];
 

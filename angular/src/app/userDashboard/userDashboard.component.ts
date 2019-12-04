@@ -11,7 +11,7 @@ import { DialogSearchComponent } from '../dialogs/dialogSearch.component';
     templateUrl: './userDashboard.component.html',
   })
 export class UserDashboardComponent implements OnInit{
-    @ViewChild('searchProductDialog') searchDialog: TemplateRef<any>;
+    @ViewChild('searchProductDialog',{static:false}) searchDialog: TemplateRef<any>;
     dialogRef: MatDialogRef<any, any>;
 
     userName:string;

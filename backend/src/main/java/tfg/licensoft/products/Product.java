@@ -5,6 +5,7 @@ import java.util.HashMap;
 import java.util.List;
 import javax.persistence.ElementCollection;
 import javax.persistence.CascadeType;
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -34,6 +35,36 @@ public class Product {
 	
 	@ElementCollection
 	private List<String> typeSubs;
+	
+	public String getDescription() {
+		return description;
+	}
+
+	public void setDescription(String description) {
+		this.description = description;
+	}
+
+	public String getWebLink() {
+		return webLink;
+	}
+
+	public void setWebLink(String webLink) {
+		this.webLink = webLink;
+	}
+
+	public boolean isPhotoAvailable() {
+		return photoAvailable;
+	}
+
+	public void setPhotoAvailable(boolean photoAvailable) {
+		this.photoAvailable = photoAvailable;
+	}
+	
+	@Column(columnDefinition = "LONGTEXT")
+	private String description;
+	private String webLink;
+	private boolean photoAvailable;
+	
 	
 	
 	
