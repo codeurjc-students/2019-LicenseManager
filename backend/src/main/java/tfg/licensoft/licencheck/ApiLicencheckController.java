@@ -40,19 +40,24 @@ public class ApiLicencheckController {
 	
 	@RequestMapping("checkAccount")
 	public ResponseEntity checkLicensoftAccount(@RequestBody BasicUser basicUser) {
+		System.out.println(basicUser.getUserName() + " - " + basicUser.getPassword());
 		User user = userService.findByName(basicUser.getUserName());
 		if (user == null) {
+			System.out.println("Null user");
 			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
 		}
 		
 		if(new BCryptPasswordEncoder().matches(basicUser.getPassword(), user.getPasswordHash())) {
-			System.out.println("Inside good pass");
+			System.out.println("Good pass");
 			return new ResponseEntity(HttpStatus.OK);
 		}else {
+			System.out.println("Wrong pass");
 			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
 		}
 	}
 	
+	
+	//TODO Remove the password, not necessary on this method. 
 	@RequestMapping("checkLicense/{productName}/{licenseSerial}")
 	public ResponseEntity<License> checkLicense(@RequestBody BasicUser user, @PathVariable String licenseSerial, @PathVariable String productName ) {
 		Product product = this.productService.findOne(productName);
@@ -60,7 +65,7 @@ public class ApiLicencheckController {
 		if (product==null) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
-		License license = this.licenseService.findBySerialAndProductAndOwner(licenseSerial, product, user.getUserName());
+		License license = this.licenseService.findBySerialAndProductAndOwnerAndActive(licenseSerial, product, user.getUserName(),true);
 		
 		if (license==null ) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);

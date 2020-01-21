@@ -67,8 +67,8 @@ import tfg.licensoft.users.UserService;
 		return this.licRep.findByProductAndActiveAndOwner(product, active,owner);
 	}
 	
-	public License findBySerialAndProductAndOwner(String serial, Product product, String owner) {
-		return this.licRep.findBySerialAndProductAndOwner(serial, product, owner);
+	public License findBySerialAndProductAndOwnerAndActive(String serial, Product product, String owner,boolean active) {
+		return this.licRep.findBySerialAndProductAndOwnerAndActive(serial, product, owner,active);
 	}
 	
 }
