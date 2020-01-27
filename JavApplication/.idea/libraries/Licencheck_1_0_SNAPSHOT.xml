@@ -1,0 +1,9 @@
+<component name="libraryTable">
+  <library name="Licencheck-1.0-SNAPSHOT">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/../Licencheck/target/Licencheck-1.0-SNAPSHOT-jar-with-dependencies.jar!/" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>

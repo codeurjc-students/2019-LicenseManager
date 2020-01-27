@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<form xmlns="http://www.intellij.com/uidesigner/form/" version="1" bind-to-class="LoginFrame">
+  <grid id="27dc6" binding="panel1" default-binding="true" layout-manager="FlowLayout" hgap="5" vgap="10" flow-align="1">
+    <constraints>
+      <xy x="20" y="20" width="481" height="109"/>
+    </constraints>
+    <properties/>
+    <border type="none"/>
+    <children>
+      <component id="c1d4" class="javax.swing.JLabel">
+        <constraints/>
+        <properties>
+          <text value="Usuario"/>
+        </properties>
+      </component>
+      <component id="a9c68" class="javax.swing.JTextField" binding="inputUser">
+        <constraints/>
+        <properties>
+          <columns value="37"/>
+        </properties>
+      </component>
+      <component id="ba666" class="javax.swing.JLabel">
+        <constraints/>
+        <properties>
+          <text value="Password"/>
+        </properties>
+      </component>
+      <component id="462dc" class="javax.swing.JPasswordField" binding="inputPassword">
+        <constraints/>
+        <properties>
+          <columns value="30"/>
+        </properties>
+      </component>
+      <component id="43a37" class="javax.swing.JButton" binding="loginButton">
+        <constraints/>
+        <properties>
+          <label value="Login"/>
+          <text value="Login"/>
+        </properties>
+      </component>
+      <component id="1edb7" class="javax.swing.JButton" binding="exitButton">
+        <constraints/>
+        <properties>
+          <hideActionText value="true"/>
+          <label value="Exit"/>
+          <text value="Exit"/>
+        </properties>
+      </component>
+      <component id="ca716" class="javax.swing.JLabel">
+        <constraints/>
+        <properties>
+          <text value="Register here! "/>
+        </properties>
+      </component>
+    </children>
+  </grid>
+</form>
