@@ -45,7 +45,6 @@ public class Licencheck {
             wr.flush();
 
             int HttpResult = con.getResponseCode();
-            System.out.println("Request " + url.toString() + " --> " + HttpResult);
 
 
             StringBuilder sb = new StringBuilder();
@@ -59,12 +58,11 @@ public class Licencheck {
                 }
                 JsonObject jsonObject = new JsonParser().parse(sb.toString()).getAsJsonObject();
                 JsonElement type = jsonObject.get("type");
-                System.out.println("The type is --> " + type.getAsString());
+                System.out.println("The type of the license is --> " + type.getAsString());
                 br.close();
                 con.disconnect();
                 return type.getAsString();
             } else {
-                System.out.println(con.getResponseMessage());
                 con.disconnect();
                 return null;  //No existe la licencia para ese usuario (con su respectiva contraseña) y producto
             }
@@ -95,7 +93,6 @@ public class Licencheck {
             wr.flush();
 
             int HttpResult = con.getResponseCode();
-            System.out.println("Request " + url.toString() + " --> " + HttpResult);
             if (HttpResult == HttpURLConnection.HTTP_OK) {
                 con.disconnect();
                 return true;

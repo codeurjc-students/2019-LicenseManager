@@ -7,13 +7,11 @@ public class Main {
 
             public void run(){
                 JFrame loginFrame = new LoginFrame();
-                loginFrame.setVisible(true);
-                loginFrame.setSize(525,175);
-                loginFrame.setResizable(false);
-                loginFrame.setLocationRelativeTo(null);
 
             }
         });
+
+
 
     }
 }

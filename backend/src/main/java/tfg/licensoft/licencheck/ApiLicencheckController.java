@@ -61,12 +61,14 @@ public class ApiLicencheckController {
 	@RequestMapping("checkLicense/{productName}/{licenseSerial}")
 	public ResponseEntity<License> checkLicense(@RequestBody BasicUser user, @PathVariable String licenseSerial, @PathVariable String productName ) {
 		Product product = this.productService.findOne(productName);
-		
+		System.out.println(user.getUserName());
+
 		if (product==null) {
+			System.out.println("Product is null");
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}
 		License license = this.licenseService.findBySerialAndProductAndOwnerAndActive(licenseSerial, product, user.getUserName(),true);
-		
+
 		if (license==null ) {
 			return new ResponseEntity(HttpStatus.NO_CONTENT);
 		}else {
