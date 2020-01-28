@@ -6,6 +6,8 @@ import { ProductComponent } from './product/product.component';
 import { UserDashboardComponent } from './userDashboard/userDashboard.component';
 import { UserProfileComponent } from './userProfile/userProfile.component';
 import { AdminDashboardComponent } from './adminDashboard/adminDashboard.component';
+import { CatalogComponent } from './catalog/catalog.component';
+import { CatalogProductComponent } from './catalog/catalog-product/catalog-product.component';
 
 
 
@@ -17,8 +19,10 @@ const appRoutes = [
    { path: 'admin/dashboard', component: AdminDashboardComponent, },
    { path: 'user/dashboard', component: UserDashboardComponent, },
    { path: 'user/profile', component: UserProfileComponent, },
-
+   { path: 'catalog', component: CatalogComponent, },
+   { path: 'catalog/product/:name', component: CatalogProductComponent, },
 ];
 
 
 export const routing = RouterModule.forRoot(appRoutes);
+ 

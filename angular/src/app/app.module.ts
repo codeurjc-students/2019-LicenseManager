@@ -86,6 +86,8 @@ import { ErrorInterceptor } from 'src/error.interceptor';
 import { AdminDashboardComponent } from './adminDashboard/adminDashboard.component';
 import { DialogAddProductComponent } from './dialogs/dialogAddProduct.component';
 import { CardFormComponent } from './userProfile/card-form/card-form.component';
+import { CatalogComponent } from './catalog/catalog.component';
+import { CatalogProductComponent } from './catalog/catalog-product/catalog-product.component';
 
 @NgModule({
     imports: [
@@ -145,7 +147,7 @@ import { CardFormComponent } from './userProfile/card-form/card-form.component';
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent,DialogSearchComponent, AdminDashboardComponent, CardFormComponent],
+    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent,DialogSearchComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent],
     bootstrap: [AppComponent],
     entryComponents: [DialogDeleteComponent, DialogEditComponent, DialogSearchComponent,DialogAddProductComponent
     ],

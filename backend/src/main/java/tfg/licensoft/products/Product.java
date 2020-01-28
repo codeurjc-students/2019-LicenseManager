@@ -35,7 +35,25 @@ public class Product {
 	
 	@ElementCollection
 	private List<String> typeSubs;
+		
+	@Column(columnDefinition = "LONGTEXT")
+	private String description;
+	private String webLink;
+	private boolean photoAvailable;
+	private String photoSrc;
 	
+	
+	
+	
+	
+	public String getPhotoSrc() {
+		return photoSrc;
+	}
+
+	public void setPhotoSrc(String photoSrc) {
+		this.photoSrc = photoSrc;
+	}
+
 	public String getDescription() {
 		return description;
 	}
@@ -59,14 +77,7 @@ public class Product {
 	public void setPhotoAvailable(boolean photoAvailable) {
 		this.photoAvailable = photoAvailable;
 	}
-	
-	@Column(columnDefinition = "LONGTEXT")
-	private String description;
-	private String webLink;
-	private boolean photoAvailable;
-	
-	
-	
+
 	
 	public List<String> getTypeSubs() {
 		return typeSubs;

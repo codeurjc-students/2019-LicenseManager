@@ -1,5 +1,6 @@
 package tfg.licensoft;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -65,7 +66,10 @@ public class DatabaseInitializer {
 		com.stripe.model.Product productStripe = com.stripe.model.Product.create(params);*/
 		
 		p1.setProductStripeId("prod_GEsqozxWp3psL6");
-		
+		p1.setPhotoAvailable(true);
+		p1.setPhotoSrc("assets/logo.jpg");
+		p1.setDescription("THIS IS A DESCRIPTION --------------------------------------------------------------------------------------------------.");
+
 		/*params.put("currency", "eur");
 		params.put("interval", "year");
 		params.put("product", "prod_GEsqozxWp3psL6");
@@ -105,7 +109,8 @@ public class DatabaseInitializer {
 		*/
 		
 		p2.setProductStripeId("prod_GEsq8txRlM9Ng2");
-		
+		p2.setDescription("THIS IS A DESCRIPTION ---------------------------------------------------------------------------------.");
+
 		
 		/*params.put("currency", "eur");
 		params.put("interval", "year");

@@ -7,5 +7,6 @@ export interface Product{
     photoAvailable:boolean;
     description:string;
     webLink:string;
+    photoSrc:string;
     constructor();
 }
