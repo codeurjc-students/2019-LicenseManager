@@ -41,11 +41,23 @@ public class Product {
 	private String webLink;
 	private boolean photoAvailable;
 	private String photoSrc;
+	private HashMap<String,Double> plansPrices;
+	
+
+	public Product() {}
+	
+	public Product(String name) {
+		this.name=name;
+		this.licenses = new ArrayList();
+		this.plans = new HashMap();
+		this.typeSubs= new ArrayList<>();
+		this.plansPrices = new HashMap<>();
+
+	}
 	
 	
 	
-	
-	
+	//Getters & Setters
 	public String getPhotoSrc() {
 		return photoSrc;
 	}
@@ -96,17 +108,6 @@ public class Product {
 	}
 
 
-
-	public Product() {}
-	
-	public Product(String name) {
-		this.name=name;
-		this.licenses = new ArrayList();
-		this.plans = new HashMap();
-		this.typeSubs= new ArrayList<>();
-
-	}
-
 	public HashMap<String, String> getPlans() {
 		return plans;
 	}
@@ -129,6 +130,15 @@ public class Product {
 
 	public void setName(String name) {
 		this.name = name;
+	}
+
+	
+	public HashMap<String, Double> getPlansPrices() {
+		return plansPrices;
+	}
+
+	public void setPlansPrices(HashMap<String, Double> plansPrices) {
+		this.plansPrices = plansPrices;
 	}
 
 	@Override

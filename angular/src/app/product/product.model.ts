@@ -8,5 +8,6 @@ export interface Product{
     description:string;
     webLink:string;
     photoSrc:string;
+    plansPrices:Map<String,Number>;
     constructor();
 }

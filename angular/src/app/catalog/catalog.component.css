@@ -11,7 +11,7 @@ img {
 
 
 .post-container {
-    overflow: auto
+    overflow: auto;
 }
 .post-thumb {
     float: left
@@ -55,4 +55,17 @@ a:hover {
 
 p.italic {
     font-style: italic;
+}
+
+.center-div{
+    margin-left: auto;
+    margin-right: auto;
+    width: 70%;
+}
+
+.search-button{
+    background-color:rgb(255, 255, 255);
+    border: 1px;
+    border-color: black;
+    border-style: groove;
 }

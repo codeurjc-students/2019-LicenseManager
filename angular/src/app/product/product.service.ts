@@ -48,6 +48,13 @@ export class ProductService {
     .catch(error => this.handleError(error));
     }
 
+    getProductSearch(search:string){
+      let url = BASE_URL + "product/all/?search=" + search;
+      return this.http.get(url)
+    .map(response => response.json())
+    .catch(error => this.handleError(error));
+    }
+
 
 
 

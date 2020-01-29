@@ -11,8 +11,9 @@ import { Router } from '@angular/router';
 export class CatalogComponent {
 
   products:Product[];
+  searchInputTerm:string;
 
-  constructor(productService:ProductService, private router:Router){
+  constructor(private productService:ProductService, private router:Router){
       productService.getProducts().subscribe(
           resp => this.products = resp.content,
           error => console.log(error)
@@ -21,6 +22,13 @@ export class CatalogComponent {
 
   goToProduct(name:string){
     this.router.navigate(["/catalog/product/",name]);
+  }
+
+  searchProduct(){
+    this.productService.getProductSearch(this.searchInputTerm).subscribe(
+      ps => this.products = ps.content,
+      error => console.log(error)
+    )
   }
 
 

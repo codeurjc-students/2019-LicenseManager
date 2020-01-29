@@ -1,20 +1,24 @@
 <mat-selection-list>
-    <hr>
+
     <mat-list>
-        <div *ngFor="let product of products">
-            <div class="post-container" >
-                    <h3 class="post-title"><a (click)="goToProduct(product.name)" class="link">{{product.name}}</a></h3>                   
-                    <div class="post-thumb" *ngIf="product.photoAvailable"><img src="{{product.photoSrc}}" id="logoPhoto" height="150" width="150" #photo></div>
-                    <div class="post-content">
-                        <p class="italic">{{product.description}}</p>
-                        
+        <div  class="center-div">
+            <td-search-box backIcon="clear" class="search-button" placeholder="Search" [showUnderline]="false" [alwaysVisible]="false" [(ngModel)]="searchInputTerm" [debounce]="25" (searchDebounce)="searchProduct()" (search)="searchProduct()" (clear)="searchProduct()">
+            </td-search-box>
+            <hr>
+            <div  *ngFor="let product of products" >
+                    <div class="post-container">
+                        <h3 class="post-title"><a (click)="goToProduct(product.name)" class="link">{{product.name}}</a></h3>                   
+                        <div class="post-thumb" *ngIf="product.photoAvailable"><img src="{{product.photoSrc}}" id="logoPhoto" height="150" width="150" #photo></div>
+                        <div class="post-content">
+                            <p class="italic">{{product.description}}</p>
+                            
+                        </div>
+                        <div class="types">
+                            <p >Type of licenses available: <span *ngFor="let type of product.typeSubs" class="typeLicenses">{{type}} | </span></p>
+                        </div>
                     </div>
-                    <div class="types">
-                        <p >Type of licenses available: <a *ngFor="let type of product.typeSubs" class="typeLicenses">{{type}} | </a></p>
-                    </div>
-                    
-                </div>
                 <hr>
+            </div>
         </div>
     </mat-list>
   </mat-selection-list>

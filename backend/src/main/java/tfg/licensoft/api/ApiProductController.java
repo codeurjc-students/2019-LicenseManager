@@ -2,6 +2,7 @@ package tfg.licensoft.api;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -15,6 +16,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
 
 import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestParam;
+
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -36,11 +39,17 @@ public class ApiProductController {
 	
 	
 	@GetMapping("/all")
-	public Page<Product> getProducts(Pageable page){
-		return this.productServ.findAll(page);
+	public Page<Product> getProducts(Pageable page, @RequestParam Optional<String> search){
+		if (!search.isPresent()) {
+			System.out.println("Not present");
+			return productServ.findAll(page);
+		}else {
+			return this.productServ.findSearch(page,search.get());
+		}
+		
 	}
 
-	@GetMapping("/{productName}")
+	@GetMapping("/{productName}") 
 	public ResponseEntity<Product> getProduct(@PathVariable String productName) {
 		Product p = this.productServ.findOne(productName);
 		if (p != null) {

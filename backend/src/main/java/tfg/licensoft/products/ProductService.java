@@ -17,6 +17,10 @@ public class ProductService {
 		return this.productRep.findByName(name);
 	}
 	
+	public Page<Product> findSearch(Pageable page, String search) {
+		return productRep.findSearch(page, search);
+	}
+	
 	public Product save (Product product) {
 		return this.productRep.save(product);
 	}

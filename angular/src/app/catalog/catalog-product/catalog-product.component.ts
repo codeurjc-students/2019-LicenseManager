@@ -1,4 +1,7 @@
 import { Component, OnInit } from '@angular/core';
+import { Product } from '../../product/product.model';
+import { ProductService } from '../../product/product.service';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 @Component({
   selector: 'app-catalog-product',
@@ -7,9 +10,25 @@ import { Component, OnInit } from '@angular/core';
 })
 export class CatalogProductComponent implements OnInit {
 
-  constructor() { }
+  product?:Product;
+
+  constructor(private activeRoute: ActivatedRoute,private productService:ProductService) {
+    let productName;
+    this.activeRoute.paramMap.subscribe((params: ParamMap) => {
+        productName = params.get('name');
+    });
+    this.productService.getProduct(productName).subscribe(
+      prd => {this.product = prd;},
+      error => console.log(error)
+    );
+   }
 
   ngOnInit() {
+    
+  }
+
+  buy(type:string){
+    
   }
 
 }

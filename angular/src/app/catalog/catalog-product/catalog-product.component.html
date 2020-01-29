@@ -1,1 +1,30 @@
-<p>catalog-product works!</p>
+<div class="center-div">
+    <h1  style="font-family:Arial" class="content">{{product?.name}}</h1>
+    <br>
+    <span class="content"><a href="//{{product?.webLink}}">{{product?.webLink}}</a></span>
+    <br>
+    <span class="content" style="white-space: pre-line"> {{product?.description}} </span>
+    <br>
+    <div class="grid-container">
+        <div  *ngFor="let plan of product?.plansPrices | keyvalue">
+            <br>
+            <br>
+            <img src="assets/logo_A.png" id="logoPhoto" height="150" width="150" #photo>
+            <br>
+            <br>
+            
+            <span class="price">{{plan.value}} €
+                <span *ngIf="plan.key=='M'">/ month</span>
+                <span *ngIf="plan.key=='A'">/ year</span>
+                <span *ngIf="plan.key=='D'">/ day</span>
+            </span>
+            <br>
+            <br>
+            <button mat-raised-button (click)="buy(plan.key)" color="accent">BUY</button>
+            
+        </div>
+
+    </div>
+</div> 
+
+
