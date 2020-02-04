@@ -14,6 +14,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Card;
 import com.stripe.model.CardCollection;
 import com.stripe.model.Customer;
+import com.stripe.model.Order;
 import com.stripe.model.PaymentSource;
 import com.stripe.model.PaymentSourceCollection;
 import com.stripe.model.Plan;
@@ -125,9 +126,12 @@ public class UserController {
 	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName){
 		Product product = this.productServ.findOne(productName);
 		User user = userComponent.getLoggedUser();
+		if(user==null || !user.getName().equals(userName)) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 		//User user = this.userServ.findByName(userName);
 		Map<String,String> plans = product.getPlans();
-				
+				 
 		String planId = plans.get(typeSubs);
 		if (planId!=null && product!=null) {
 			List<License> list= this.licenseServ.findByProductAndOwnerAndType(product, user.getName(), typeSubs);
@@ -162,6 +166,52 @@ public class UserController {
 		}
 	}
 	
+	
+	@PutMapping("/{userName}/buy/{productName}/{token}")
+	public ResponseEntity<License> buyProduct(@PathVariable String productName, @PathVariable String userName, @PathVariable String token){
+		Product product = this.productServ.findOne(productName);
+		User user = userComponent.getLoggedUser();
+		System.out.println(user + " " + product);
+
+		if(product!=null && user!=null && user.getName().equals(userName)) {
+			System.out.println("Dentro");
+			List<Object> items = new ArrayList<>();
+			Map<String, Object> item1 = new HashMap<>();
+			item1.put("type", "sku");
+			item1.put("parent", product.getSku());
+			items.add(item1);
+			Map<String, Object> params = new HashMap<>();
+			params.put("currency", "eur");
+			params.put("items", items);
+			params.put("customer", user.getCustomerStripeId());
+
+			try {
+				Order order = Order.create(params);
+				Map<String, Object> paramsNew = new HashMap<>();
+				paramsNew.put("source", token);
+
+				order = order.pay(paramsNew); //Paying order , state changed to Paid
+				
+				paramsNew.clear();
+				
+				paramsNew.put("status", "fulfilled");
+				
+				License license = new License(true, "L", product, user.getName());
+				licenseServ.save(license);
+				
+				order = order.update(paramsNew);  //Order state changed to Fulfilled
+				
+				return new ResponseEntity<>(license,HttpStatus.OK);
+			} catch (StripeException e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.CONFLICT);
+
+			}
+		}
+		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+
+	}
+
 	
 	/* TODO
 	@GetMapping("/stripeCardsBDStripe")

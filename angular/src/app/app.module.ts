@@ -78,7 +78,6 @@ import { LicenseComponent } from './licenses/license.component';
 import { CardLicenseComponent } from './cards/cardLicense.component';
 import { DialogDeleteComponent } from './dialogs/dialogDelete.component';
 import { DialogEditComponent } from './dialogs/dialogEdit.component';
-import { DialogSearchComponent } from './dialogs/dialogSearch.component';
 import { UserProfileComponent } from './userProfile/userProfile.component';
 import { UserProfileService } from './userProfile/userProfile.service';
 import { BasicAuthInterceptor } from 'src/auth.interceptor';
@@ -88,6 +87,8 @@ import { DialogAddProductComponent } from './dialogs/dialogAddProduct.component'
 import { CardFormComponent } from './userProfile/card-form/card-form.component';
 import { CatalogComponent } from './catalog/catalog.component';
 import { CatalogProductComponent } from './catalog/catalog-product/catalog-product.component';
+import { CustomFormComponentComponent } from './custom-form-component/custom-form-component.component';
+import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
 
 @NgModule({
     imports: [
@@ -147,9 +148,9 @@ import { CatalogProductComponent } from './catalog/catalog-product/catalog-produ
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent,DialogSearchComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent],
+    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent],
     bootstrap: [AppComponent],
-    entryComponents: [DialogDeleteComponent, DialogEditComponent, DialogSearchComponent,DialogAddProductComponent
+    entryComponents: [DialogDeleteComponent, DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent
     ],
     providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,
         { provide: MAT_DIALOG_DATA, useValue: {} },

@@ -4,7 +4,6 @@ import { LoginService } from '../login/login.service';
 import { LicenseService } from '../licenses/license.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { MatDialogRef, MatDialog } from '@angular/material';
-import { DialogSearchComponent } from '../dialogs/dialogSearch.component';
 
 @Component({
     selector: 'app-userDashboard',
@@ -28,29 +27,12 @@ export class UserDashboardComponent implements OnInit{
         });
     }
 
-    openSearchDialog() {
-        this.dialogRef = this.dialog.open(DialogSearchComponent, {
-            data:{
-                user:this.loginService.user,
-            },
-        });
-        this.dialogRef.afterClosed().subscribe(
-            lics => {this.getLicenses()},
-            error => console.log(error)
-        );
-    }
 
     getLicenses(){
         this.licenseServ.getActiveLicensesOfUser(this.userName).subscribe(
             lics => this.activeLicenses = lics.content,
             error => console.log(error)
         ); 
-    }
-
-    getUserLogged(){
-        this.loginService.getUserLogged().subscribe(
-            
-        );
     }
 
     

@@ -9,7 +9,7 @@
         <div  *ngFor="let plan of product?.plansPrices | keyvalue">
             <br>
             <br>
-            <img src="assets/logo_A.png" id="logoPhoto" height="150" width="150" #photo>
+            <img src="assets/logo_{{plan.key}}.png" class="logoPhoto" height="150" width="150" #photo>
             <br>
             <br>
             
@@ -17,14 +17,22 @@
                 <span *ngIf="plan.key=='M'">/ month</span>
                 <span *ngIf="plan.key=='A'">/ year</span>
                 <span *ngIf="plan.key=='D'">/ day</span>
+                <span *ngIf="plan.key=='L'"> (forever) </span>
             </span>
             <br>
             <br>
-            <button mat-raised-button (click)="buy(plan.key)" color="accent">BUY</button>
-            
-        </div>
+            <a *ngIf="errorAdded" style="color:red;">You have to add first a valid card to pay with</a>
+            <br>
 
+            <button mat-raised-button *ngIf="plan.key=='L'" (click)="pay(plan.value)" color="accent">ADD CARD</button>
+            <button mat-raised-button *ngIf="plan.key=='L'" (click)="confirm()" color="green" [disabled]="!card">CONFIRM</button>
+            <button mat-raised-button *ngIf="plan.key!='L'" (click)="subscribeToProduct(plan.key, plan.value)" color="accent">BUY</button>
+
+            <br>
+            <br>
+            <a *ngIf="successfulMessage" style="color:green;">Payment Successful! Your license serial : {{serial}}</a>
+
+        </div> 
     </div>
 </div> 
-
 

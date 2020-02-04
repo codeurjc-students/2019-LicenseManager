@@ -12,6 +12,8 @@ import org.springframework.stereotype.Component;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.Plan;
+import com.stripe.model.Sku;
+import com.stripe.net.StripeResponse;
 
 import tfg.licensoft.licenses.License;
 import tfg.licensoft.licenses.LicenseService;
@@ -58,7 +60,50 @@ public class DatabaseInitializer {
 		
 		
 		//products
+	
+		Product pL = new Product("Photoshop");
+		Map<String, Object> paramsPl = new HashMap<String, Object>();
+		paramsPl.put("name", "Photoshop");
+		paramsPl.put("type", "good");
+		paramsPl.put("shippable", false);
+		paramsPl.put("description",
+				  "Al contrario del pensamiento popular, el texto de Lorem Ipsum no es simplemente texto aleatorio. Tiene sus raices en una pieza clásica de la literatura del Latin, que data del año 45 antes de Cristo, haciendo que este adquiera mas de 2000 años de antiguedad. Richard McClintock, un profesor de Latin de la Universidad de Hampden-Sydney en Virginia, encontró una de las palabras más oscuras de la lengua del latín, \\\"consecteur\\\", en un pasaje de Lorem Ipsum, y al seguir leyendo distintos textos del latín, descubrió la fuente indudable. Lorem Ipsum viene de las secciones 1.10.32 y 1.10.33 de \\\"de Finnibus Bonorum et Malorum\\\" (Los Extremos del Bien y El Mal) por Cicero, escrito en el año 45 antes de Cristo. Este libro es un tratado de teoría de éticas, muy popular durante el Renacimiento. La primera linea del Lorem Ipsum, \\\"Lorem ipsum dolor sit amet..\\\", viene de una linea en la sección 1.10.32\\r\\n\" + \r\n" + 
+				  "				\"\\r\\n\" + \r\n" + 
+				  "				\"El trozo de texto estándar de Lorem Ipsum usado desde el año 1500 es reproducido debajo para aquellos interesados. Las secciones 1.10.32 y 1.10.33 de \\\"de Finibus Bonorum et Malorum\\\" por Cicero son también reproducidas en su forma original exacta, acompañadas por versiones en Inglés de la traducción realizada en 1914 por H. Rackham."
+				);
+	//	com.stripe.model.Product productStripe = com.stripe.model.Product.create(paramsPl);
 		
+		Map<String, Object> inventory = new HashMap<>();
+		inventory.put("type", "infinite");
+		Map<String, Object> paramsSku = new HashMap<>();
+		paramsSku.put("price", 150000);
+		paramsSku.put("inventory", inventory);
+		paramsSku.put("currency", "eur");
+		paramsSku.put("product","prod_Gfjc8kKSdjVwwp");
+	//	paramsSku.put("product",productStripe.getId());
+ 
+	//	Sku sku = Sku.create(paramsSku);
+		
+		
+
+		pL.setSku("sku_Gfjcck60yqQGnR");
+	//	pL.setSku(sku.getId());
+
+		pL.setProductStripeId("prod_Gfjc8kKSdjVwwp");
+	//	pL.setProductStripeId(productStripe.getId());
+
+		pL.setPhotoAvailable(true);
+		pL.setPhotoSrc("assets/logo.jpg");
+		pL.setDescription("Al contrario del pensamiento popular, el texto de Lorem Ipsum no es simplemente texto aleatorio. Tiene sus raices en una pieza clásica de la literatura del Latin, que data del año 45 antes de Cristo, haciendo que este adquiera mas de 2000 años de antiguedad. Richard McClintock, un profesor de Latin de la Universidad de Hampden-Sydney en Virginia, encontró una de las palabras más oscuras de la lengua del latín, \"consecteur\", en un pasaje de Lorem Ipsum, y al seguir leyendo distintos textos del latín, descubrió la fuente indudable. Lorem Ipsum viene de las secciones 1.10.32 y 1.10.33 de \"de Finnibus Bonorum et Malorum\" (Los Extremos del Bien y El Mal) por Cicero, escrito en el año 45 antes de Cristo. Este libro es un tratado de teoría de éticas, muy popular durante el Renacimiento. La primera linea del Lorem Ipsum, \"Lorem ipsum dolor sit amet..\", viene de una linea en la sección 1.10.32\r\n" + 
+				"\r\n" + 
+				"El trozo de texto estándar de Lorem Ipsum usado desde el año 1500 es reproducido debajo para aquellos interesados. Las secciones 1.10.32 y 1.10.33 de \"de Finibus Bonorum et Malorum\" por Cicero son también reproducidas en su forma original exacta, acompañadas por versiones en Inglés de la traducción realizada en 1914 por H. Rackham.");
+
+		pL.getTypeSubs().add("L");
+		
+		pL.getPlansPrices().put("L", 1500.00);
+
+		pL.setWebLink("www.photoshop.com");
+		this.productServ.save(pL);
 		Product p1 =new Product("sw");
 		Map<String, Object> params = new HashMap<String, Object>();
 		/*params.put("name", "sw");

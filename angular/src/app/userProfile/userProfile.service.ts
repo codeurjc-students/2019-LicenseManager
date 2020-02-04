@@ -32,6 +32,15 @@ export class UserProfileService {
         
     }
 
+    //No sé si debería ir aquí
+    buyProduct(token:string,product:Product, userName:string){
+        return this.http.put(BASE_URL+userName+"/buy/" + product.name + "/" + token ,product)
+        .map(response => response.json());
+    }
+
+    test(){
+        console.log("SE");
+    }
 
     private handleError(error: any) {
         console.error(error);

@@ -3,6 +3,7 @@ package tfg.licensoft.licenses;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.UUID;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -49,11 +50,7 @@ public class License {
 	
 	public License(boolean active, String type, Product product, String owner) {
 		super();
-		try {
-			this.generateSerial(product.getName(),type,owner);
-		} catch (NoSuchAlgorithmException e) {
-			e.printStackTrace();
-		}
+		this.serial = this.generateSerial();
 		Calendar ahoraCal = Calendar.getInstance();
 		this.active = active;
 		this.type = type;
@@ -174,16 +171,20 @@ public class License {
 
 
 
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + ((endDate == null) ? 0 : endDate.hashCode());
+		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
 		result = prime * result + ((product == null) ? 0 : product.hashCode());
 		result = prime * result + ((serial == null) ? 0 : serial.hashCode());
+		result = prime * result + ((startDate == null) ? 0 : startDate.hashCode());
+		result = prime * result + ((type == null) ? 0 : type.hashCode());
 		return result;
 	}
-
-
 
 	@Override
 	public boolean equals(Object obj) {
@@ -194,6 +195,21 @@ public class License {
 		if (getClass() != obj.getClass())
 			return false;
 		License other = (License) obj;
+		if (endDate == null) {
+			if (other.endDate != null)
+				return false;
+		} else if (!endDate.equals(other.endDate))
+			return false;
+		if (id == null) {
+			if (other.id != null)
+				return false;
+		} else if (!id.equals(other.id))
+			return false;
+		if (owner == null) {
+			if (other.owner != null)
+				return false;
+		} else if (!owner.equals(other.owner))
+			return false;
 		if (product == null) {
 			if (other.product != null)
 				return false;
@@ -204,10 +220,24 @@ public class License {
 				return false;
 		} else if (!serial.equals(other.serial))
 			return false;
+		if (startDate == null) {
+			if (other.startDate != null)
+				return false;
+		} else if (!startDate.equals(other.startDate))
+			return false;
+		if (type == null) {
+			if (other.type != null)
+				return false;
+		} else if (!type.equals(other.type))
+			return false;
 		return true;
 	}
 
-	
+	private String generateSerial() {
+		return UUID.randomUUID().toString();
+	}
+
+	/*
 	private void generateSerial(String productName,String type, String userName) throws NoSuchAlgorithmException {
 		String serialNumberEncodedName = this.calculateSecurityHash(userName,"MD2") +
 			    calculateSecurityHash(userName,"MD5") +
@@ -251,6 +281,6 @@ public class License {
 		        return hexMessageEncode;
 	}
 	
-
+*/
 
 }

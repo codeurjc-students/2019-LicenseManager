@@ -9,5 +9,6 @@ export interface Product{
     webLink:string;
     photoSrc:string;
     plansPrices:Map<String,Number>;
+    sku:string;
     constructor();
 }

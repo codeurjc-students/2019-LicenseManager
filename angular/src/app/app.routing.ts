@@ -8,6 +8,7 @@ import { UserProfileComponent } from './userProfile/userProfile.component';
 import { AdminDashboardComponent } from './adminDashboard/adminDashboard.component';
 import { CatalogComponent } from './catalog/catalog.component';
 import { CatalogProductComponent } from './catalog/catalog-product/catalog-product.component';
+import { CustomFormComponentComponent } from './custom-form-component/custom-form-component.component';
 
 
 
@@ -21,6 +22,8 @@ const appRoutes = [
    { path: 'user/profile', component: UserProfileComponent, },
    { path: 'catalog', component: CatalogComponent, },
    { path: 'catalog/product/:name', component: CatalogProductComponent, },
+   { path: 'try', component: CustomFormComponentComponent, },
+   
 ];
 
 

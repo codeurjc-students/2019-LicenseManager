@@ -12,10 +12,11 @@ declare var Stripe: any;
     styleUrls: ['./app.component.css'],
 })
 
-export class AppComponent {
+export class AppComponent{
+
     mode: string;
 
-    
+
     
     constructor(private router: Router,private userProfileServ:UserProfileService) {
         if (environment.production) {
@@ -43,6 +44,5 @@ export class AppComponent {
             
         }
     }
-
     
 }

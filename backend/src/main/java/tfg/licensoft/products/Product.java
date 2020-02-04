@@ -42,6 +42,7 @@ public class Product {
 	private boolean photoAvailable;
 	private String photoSrc;
 	private HashMap<String,Double> plansPrices;
+	private String sku;
 	
 
 	public Product() {}
@@ -58,8 +59,18 @@ public class Product {
 	
 	
 	//Getters & Setters
+	
+	
 	public String getPhotoSrc() {
 		return photoSrc;
+	}
+
+	public String getSku() {
+		return sku;
+	}
+
+	public void setSku(String sku) {
+		this.sku = sku;
 	}
 
 	public void setPhotoSrc(String photoSrc) {
