@@ -15,6 +15,7 @@ public class LoginFrame extends JFrame {
     public LoginFrame(){
         super("Login");
         setVisible(true);
+        setContentPane(panel1);
         setSize(525,175);
         setResizable(false);
         setLocationRelativeTo(null);
@@ -27,7 +28,6 @@ public class LoginFrame extends JFrame {
             inputUser.setText(userDefault);
             inputPassword.setText(String.valueOf(passDefault));
         }
-        setContentPane(panel1);
         exitButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 dispose();

@@ -14,11 +14,11 @@ public class MainProgram extends JFrame{
     public MainProgram(){
         super("Main Program");
         setVisible(true);
+        setContentPane(panel);
         setSize(525,175);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setContentPane(panel);
 
 
         startButton.addActionListener(new ActionListener() {

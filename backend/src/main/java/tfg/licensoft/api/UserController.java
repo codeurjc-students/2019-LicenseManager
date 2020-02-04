@@ -172,8 +172,20 @@ public class UserController {
 		Product product = this.productServ.findOne(productName);
 		User user = userComponent.getLoggedUser();
 		System.out.println(user + " " + product);
+		Token token3 = null;
+		
+		try {
+			//TODO no funciona el cambio de email (probar en Order)
+			 token3 =
+					  Token.retrieve(token);
+			token3.setEmail(user.getName());
+		} catch (StripeException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
+		
 
-		if(product!=null && user!=null && user.getName().equals(userName)) {
+		if(token!=null && product!=null && user!=null && user.getName().equals(userName)) {
 			System.out.println("Dentro");
 			List<Object> items = new ArrayList<>();
 			Map<String, Object> item1 = new HashMap<>();
@@ -188,7 +200,7 @@ public class UserController {
 			try {
 				Order order = Order.create(params);
 				Map<String, Object> paramsNew = new HashMap<>();
-				paramsNew.put("source", token);
+				paramsNew.put("source", token3.getId());
 
 				order = order.pay(paramsNew); //Paying order , state changed to Paid
 				

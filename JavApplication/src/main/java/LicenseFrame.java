@@ -12,17 +12,18 @@ public class LicenseFrame extends JFrame {
     public LicenseFrame(){
         super("Set up license");
         setVisible(true);
+        setContentPane(panel1);
+
         setSize(525,175);
         setResizable(false);
         setLocationRelativeTo(null);
         setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        setContentPane(panel1);
         final Preferences prefs = Preferences.userNodeForPackage(LoginFrame.class);
 
         enterButton.addActionListener(new ActionListener() {
             public void actionPerformed(ActionEvent actionEvent) {
                 Licencheck licencheck = new Licencheck();
-                String typeLicense = licencheck.checkLicense(licenseSerial.getText(),"sw",prefs.get("userName","root"), prefs.get("password","root"));
+                String typeLicense = licencheck.checkLicense(licenseSerial.getText(),"Photoshop",prefs.get("userName","root"), prefs.get("password","root"));
                 if (typeLicense!=null){
                     prefs.put("serial_"+prefs.get("userName","root"),licenseSerial.getText());
                     dispose();
