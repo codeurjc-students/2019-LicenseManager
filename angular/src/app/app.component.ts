@@ -15,6 +15,7 @@ declare var Stripe: any;
 export class AppComponent{
 
     mode: string;
+    pages:Map<String,String>;
 
 
     
@@ -24,25 +25,11 @@ export class AppComponent{
         } else {
             this.mode = "Development";
         }
+        this.pages = new Map();
+        this.pages.set("Catalog","catalog");
     }
 
       
-    manageLinks(route:string){
-        switch(route){
-            case 'adminDashboard':{
-                this.router.navigate(["/admin/dashboard"]);
-                break;
-            }
-            case 'userDashboard':{
-                this.router.navigate(["user/dashboard"]);
-                break;
-            }
-            case 'userProfile':{
-                this.router.navigate(["user/profile"]);
-                break;
-            }
-            
-        }
-    }
+
     
 }

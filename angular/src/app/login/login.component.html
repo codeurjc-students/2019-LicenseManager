@@ -7,13 +7,17 @@
  </ng-container>
 
  <ng-container *ngIf="loginService.isLogged">
-        <span>
-            {{loginService.user.name}}
-        </span>
+    <button mat-button [matMenuTriggerFor]="afterMenu">{{loginService.user.name}}</button>
+    <mat-menu #afterMenu="matMenu" xPosition="after">
+      <button mat-menu-item (click)="manageLinks('userDashboard')">Dashboard</button>
+      <button mat-menu-item (click)="manageLinks('userProfile')">Profile</button>
+      <button mat-menu-item (click)="manageLinks('adminDashboard')" *ngIf="loginService.isAdmin">Admin Products</button>
+    </mat-menu>
         <span>
             <button mat-button (click)='logOut()'>
-                Logout
+                <mat-icon >exit_to_app</mat-icon>
             </button>
+            
         </span>
     </ng-container>
 

@@ -17,12 +17,16 @@ export class LoginComponent  {
   constructor(public dialog: MatDialog,private snackBar: MatSnackBar, public loginService:LoginService, private router:Router, private appComponent: AppComponent) { 
   }
 
+  getUserLogged(){
+    return this.loginService.getUserLogged();
+  }
+
   openLoginDialog() {
     this.dialogRef = this.dialog.open(this.loginDialog, {
         width: '50%',
         height: '50%',
     });
-}
+  }
 
   openSnackBar(message: string, action: string) {
     this.snackBar.open(message, action, {
@@ -39,21 +43,38 @@ export class LoginComponent  {
         },
         (error) => alert('Invalid user or password'),
     );
-}
+  }
 
-logOut() {
-    this.loginService.logOut().subscribe(
-        (response) => {
-            this.router.navigate(['/']);
-        },
-        (error) => console.log('Error when trying to log out: ' + error),
-    );
-}
+  logOut() {
+      this.loginService.logOut().subscribe(
+          (response) => {
+              this.router.navigate(['/']);
+          },
+          (error) => console.log('Error when trying to log out: ' + error),
+      );
+  }
 
-register(){
-  this.dialogRef.close();
-  this.router.navigate(['/register']);
-}
+  register(){
+    this.dialogRef.close();
+    this.router.navigate(['/register']);
+  }
 
 
+  manageLinks(route:string){
+    switch(route){
+        case 'adminDashboard':{
+            this.router.navigate(["/admin/dashboard"]);
+            break;
+        }
+        case 'userDashboard':{
+            this.router.navigate(["user/dashboard"]);
+            break;
+        }
+        case 'userProfile':{
+            this.router.navigate(["user/profile"]);
+            break;
+        }
+        
+    }
+  }
 }

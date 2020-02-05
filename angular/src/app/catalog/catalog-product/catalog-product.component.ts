@@ -72,8 +72,9 @@ export class CatalogProductComponent implements OnInit {
 
   treatmentBuyError(error:any){
       if(error.status === 428){
-          console.log("dentro error");
           alert("You have to attach a payment source before buy a license");
+      }else if (error.status === 409){
+          alert("You already have a subscription of this type to this product!")
       }
   }
   
@@ -101,7 +102,6 @@ export class CatalogProductComponent implements OnInit {
     }else{
       var handler = (<any>window).StripeCheckout.configure({
         key: 'pk_test_mAWlLKZrpvwEye9QZzRZzsSG00M6tsJ3QS',
-        locale: 'auto',
         currency:'eur',
         token: function (token: any) {
           if(token!=null){
@@ -113,8 +113,8 @@ export class CatalogProductComponent implements OnInit {
       });
   
       handler.open({
-        name: this.product.name, 
-        description: 'This license is valid for lifetime',
+        name: "Set your payment card info", 
+        description: 'Click "Pay" and "Confirm Order" later',
         amount: amount * 100
       });
       this.errorAdded=false;

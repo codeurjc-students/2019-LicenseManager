@@ -4,6 +4,11 @@
   margin-right: auto;
 }
 
+.loginButtons{
+  position: absolute;
+  right: 0;
+}
+
 form.checkout {
   max-width: 500px;
   margin: 2rem auto;

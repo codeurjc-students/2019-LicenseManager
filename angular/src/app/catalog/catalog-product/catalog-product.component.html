@@ -24,9 +24,9 @@
             <a *ngIf="errorAdded" style="color:red;">You have to add first a valid card to pay with</a>
             <br>
 
-            <button mat-raised-button *ngIf="plan.key=='L'" (click)="pay(plan.value)" color="accent">START ORDER</button>
-            <button mat-raised-button *ngIf="plan.key=='L'" (click)="confirm()" color="green" [disabled]="!card">BUY ORDER</button>
-            <button mat-raised-button *ngIf="plan.key!='L'" (click)="subscribeToProduct(plan.key, plan.value)" color="accent">BUY</button>
+            <button mat-raised-button *ngIf="plan.key=='L'" (click)="pay(plan.value)" color="primary">START ORDER</button>
+            <button mat-raised-button *ngIf="plan.key=='L'" (click)="confirm()" color="#FFFFF" [disabled]="!card">CONFIRM ORDER</button>
+            <button mat-raised-button *ngIf="plan.key!='L'" (click)="subscribeToProduct(plan.key, plan.value)" color="primary">BUY</button>
 
             <br>
             <br>

@@ -15,6 +15,7 @@ import com.stripe.model.Card;
 import com.stripe.model.CardCollection;
 import com.stripe.model.Customer;
 import com.stripe.model.Order;
+import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentSource;
 import com.stripe.model.PaymentSourceCollection;
 import com.stripe.model.Plan;
@@ -172,18 +173,7 @@ public class UserController {
 		Product product = this.productServ.findOne(productName);
 		User user = userComponent.getLoggedUser();
 		System.out.println(user + " " + product);
-		Token token3 = null;
-		
-		try {
-			//TODO no funciona el cambio de email (probar en Order)
-			 token3 =
-					  Token.retrieve(token);
-			token3.setEmail(user.getName());
-		} catch (StripeException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-		}
-		
+
 
 		if(token!=null && product!=null && user!=null && user.getName().equals(userName)) {
 			System.out.println("Dentro");
@@ -194,13 +184,14 @@ public class UserController {
 			items.add(item1);
 			Map<String, Object> params = new HashMap<>();
 			params.put("currency", "eur");
+			params.put("email", user.getName()+"@test.com");
 			params.put("items", items);
 			params.put("customer", user.getCustomerStripeId());
 
 			try {
 				Order order = Order.create(params);
 				Map<String, Object> paramsNew = new HashMap<>();
-				paramsNew.put("source", token3.getId());
+				paramsNew.put("source", token);
 
 				order = order.pay(paramsNew); //Paying order , state changed to Paid
 				

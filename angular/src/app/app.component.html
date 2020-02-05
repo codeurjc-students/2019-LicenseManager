@@ -13,27 +13,25 @@
 
 <div id="appRootClass">
   <div>
-      <img src="assets/logo.jpg" id="logoPhoto"> 
+      <img src="assets/licensoftLogoFont.png" id="logoPhoto"> 
   </div>
-  <div>
-      <button mat-button [matMenuTriggerFor]="afterMenu">Links</button>
-      <mat-menu #afterMenu="matMenu" xPosition="after">
-        <button mat-menu-item (click)="manageLinks('adminDashboard')">Admin Product</button>
-        <button mat-menu-item (click)="manageLinks('userDashboard')">User Dashboard</button>
-        <button mat-menu-item (click)="manageLinks('userProfile')">User Profile</button>
-      </mat-menu>
-    <td-tab-select [(ngModel)]="value" backgroundColor="accent" stretchTabs  [disabled]="disabled">
-        <td-tab-option value="home"></td-tab-option>
-        <!--
-        <td-tab-option value="adminProduct">Admin Product</td-tab-option>
-        <td-tab-option value="userDashboard">User Dashboard</td-tab-option>
-        <td-tab-option value="userProfile">User Profile</td-tab-option>
-      -->
-    </td-tab-select>
 
 
-    <app-login></app-login>
-  </div>
+  <td-layout-nav>
+    <div td-toolbar-content layout="row" layout-align="start center" flex>
+      <a mat-icon-button [routerLink]="['/']">
+        <mat-icon>home</mat-icon>
+      </a>
+      <div *ngFor="let page of pages | keyvalue">
+        <a mat-button [routerLink]="['/',page.value]">
+          {{page.key}}
+        </a>
+      </div>
+      <app-login class="loginButtons"></app-login>
+    </div>
+    <router-outlet></router-outlet>
+  </td-layout-nav>
+
   <router-outlet></router-outlet>
 </div>
 
