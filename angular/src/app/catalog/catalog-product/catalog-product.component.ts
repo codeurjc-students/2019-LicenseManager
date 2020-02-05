@@ -103,10 +103,12 @@ export class CatalogProductComponent implements OnInit {
       var handler = (<any>window).StripeCheckout.configure({
         key: 'pk_test_mAWlLKZrpvwEye9QZzRZzsSG00M6tsJ3QS',
         currency:'eur',
-        token: function (token: any) {
+        email:this.user.name +'@email.com',
+        token: (token: any) =>{
           if(token!=null){
             localStorage.setItem("token",token.id);
             localStorage.setItem("added","true");
+            this.confirm();
           }
         }
 
