@@ -5,7 +5,7 @@ import { ActivatedRoute, ParamMap } from '@angular/router';
 import { LoginService, User } from '../../login/login.service';
 import { UserProfileService } from '../../userProfile/userProfile.service';
 import { DialogService } from 'src/app/dialogs/dialog.service';
-import { LoginComponent } from 'src/app/login/login.component';
+
 
 @Component({
   selector: 'app-catalog-product',
@@ -24,6 +24,7 @@ export class CatalogProductComponent implements OnInit {
   serial:string;
   tk:string;
   loading:boolean;
+  numberOfPlans:number;
 
   constructor(private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
     let productName;
@@ -31,7 +32,7 @@ export class CatalogProductComponent implements OnInit {
         productName = params.get('name');
     });
     this.productService.getProduct(productName).subscribe(
-      prd => {this.product = prd;},
+      prd => {this.product = prd; let s= Object.keys(this.product.plansPrices); this.numberOfPlans=s.length},
       error => console.log(error)
     );
     this.errorAdded=false;

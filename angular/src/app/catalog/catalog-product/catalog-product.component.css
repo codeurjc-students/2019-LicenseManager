@@ -11,9 +11,26 @@
 
 .grid-container {
     display: grid;
+    grid-template-columns: auto;
+    padding: 10px;
+}
+
+.grid-container2 {
+    display: grid;
+    grid-template-columns: auto auto;
+    padding: 10px;
+}
+.grid-container3 {
+    display: grid;
     grid-template-columns: auto auto auto;
     padding: 10px;
 }
+.grid-container4 {
+    display: grid;
+    grid-template-columns: auto auto auto auto;
+    padding: 10px;
+}
+
 
 .price{
     font-size: 150%;

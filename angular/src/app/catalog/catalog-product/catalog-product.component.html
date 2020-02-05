@@ -5,7 +5,7 @@
     <br>
     <span class="content" style="white-space: pre-line"> {{product?.description}} </span>
     <br>
-    <div class="grid-container">
+    <div [ngClass]="numberOfPlans == 1 ? 'grid-container' : numberOfPlans == 2 ? 'grid-container2' : numberOfPlans == 3 ? 'grid-container3' : 'grid-container4'">
         <div  *ngFor="let plan of product?.plansPrices | keyvalue">
             <br>
             <br>
