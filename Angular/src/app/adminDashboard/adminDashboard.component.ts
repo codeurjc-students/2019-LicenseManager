@@ -14,8 +14,12 @@ import { DialogAddProductComponent } from "../dialogs/dialogAddProduct.component
     dialogRef: MatDialogRef<any, any>;
     products:Product[];
 
-    constructor(public dialog: MatDialog,productService:ProductService,private router: Router){
-        productService.getProducts().subscribe(
+    constructor(public dialog: MatDialog,private productService:ProductService,private router: Router){
+        this.getProducts();
+    }
+
+    getProducts(){
+        this.productService.getProducts().subscribe(
             resp => this.products = resp.content,
             error => console.log(error)
         );
@@ -28,6 +32,7 @@ import { DialogAddProductComponent } from "../dialogs/dialogAddProduct.component
             },
         });
         this.dialogRef.afterClosed().subscribe(
+            p => this.getProducts()
 
         );
     }

@@ -1,7 +1,9 @@
 package tfg.licensoft.api;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +22,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.stripe.exception.StripeException;
+import com.stripe.model.Plan;
+import com.stripe.model.Sku;
 
 import tfg.licensoft.licenses.License;
 import tfg.licensoft.licenses.LicenseService;
@@ -63,12 +69,129 @@ public class ApiProductController {
 	@PostMapping("/")
 	public ResponseEntity<Product> postProduct(@RequestBody Product product){
 		if (this.productServ.findOne(product.getName())==null) {
-			this.productServ.save(product);
+			int count=0;
+			HashMap<String,String> plans = new HashMap<>();
+			product.setPlans(plans);
+			String productId="";
+			Map<String, Object> params = new HashMap<String, Object>();
+			com.stripe.model.Product productStripe;
+			for (Map.Entry<String, Double> plan : product.getPlansPrices().entrySet()) {
+				if(count==0) {
+					if (plan.getKey().equals("L")) {
+						params.put("name", product.getName());
+						params.put("type", "good");
+						params.put("shippable", false);
+						params.put("description",product.getDescription());
+					}else {
+						params.put("name", product.getName());
+						params.put("type", "service");
+					}
+					try {
+						productStripe = com.stripe.model.Product.create(params);
+						productId = productStripe.getId();
+					} catch (StripeException e) {
+						e.printStackTrace();
+					}
+				}
+			    switch(plan.getKey()) {
+				    case "L":{
+				    	this.createLproduct(product, plan.getValue(),productId);
+				    	break;
+				    }
+				    case "M":{
+				    	this.createMproduct(product, plan.getValue(),productId);
+				    	break;
+				    }
+				    case "D":{
+				    	this.createDproduct(product, plan.getValue(),productId);
+				    	break;
+				    }
+				    case "A":{
+				    	this.createAproduct(product, plan.getValue(), productId);
+				    	break;
+				    }
+			    }
+			    count++;
+			}
 			return new ResponseEntity<Product>(product,HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Product>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	private void createLproduct(Product product, double price, String productId ) {
+		try {
+			Map<String, Object> inventory = new HashMap<>();
+			inventory.put("type", "infinite");
+			Map<String, Object> paramsSku = new HashMap<>();
+			paramsSku.put("price",(int)(price*100) );  //Hay que ponerlo en centimos (y en entero)
+			paramsSku.put("inventory", inventory);
+			paramsSku.put("currency", "eur");
+			paramsSku.put("product",productId);
+	 
+			Sku sku = Sku.create(paramsSku);
+			product.setSku(sku.getId());
+			product.setProductStripeId(productId);
+		}catch(StripeException e) {
+			e.printStackTrace();
+		}
+		this.productServ.save(product);
+	}
+	
+	
+	//private methods to create plans
+	private void createMproduct(Product product, double price, String productId) {
+		try {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("currency", "eur");
+			params.put("interval", "month");
+			params.put("product", productId);
+			params.put("nickname", "Monthly Plan");
+			params.put("amount", (int)(price*100));
+			Plan plan1M = Plan.create(params);
+			product.getPlans().put("M",plan1M.getId());
+			
+		}catch(StripeException e) {
+			e.printStackTrace();
+		}
+		this.productServ.save(product);
+	}
+	
+	private void createAproduct(Product product, double price, String productId) {
+		try {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("currency", "eur");
+			params.put("interval", "year");
+			params.put("product",productId);
+			params.put("nickname", "Annual Plan");
+			params.put("amount", (int)(price*100));
+			Plan plan1M = Plan.create(params);
+			product.getPlans().put("A",plan1M.getId());
+			
+		}catch(StripeException e) {
+			e.printStackTrace();
+		}
+		this.productServ.save(product);
+	}
+	
+	private void createDproduct(Product product, double price, String productId) {
+		try {
+			Map<String, Object> params = new HashMap<String, Object>();
+			params.put("currency", "eur");
+			params.put("interval", "day");
+			params.put("product", productId);
+			params.put("nickname", "Daily Plan");
+			params.put("amount", (int)(price*100));
+			Plan plan1M = Plan.create(params);
+			product.getPlans().put("D",plan1M.getId());
+			
+		}catch(StripeException e) {
+			e.printStackTrace();
+		}
+		this.productServ.save(product);
+	}
+	
+	
 	
 	
 	//TODO

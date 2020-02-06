@@ -3,6 +3,7 @@ import { Http } from '@angular/http';
 import 'rxjs/Rx';
 import { Observable } from 'rxjs/Rx';
 import { License } from '../licenses/license.model';
+import { Product } from './product.model';
 
 const BASE_URL = 'http://localhost:8080/api/';
 
@@ -24,6 +25,13 @@ export class ProductService {
         return this.http.get(url)
 			.map(response => response.json())
 			.catch(error => this.handleError(error));
+    }
+
+    postProduct(product:Product){
+      let url = BASE_URL + "product/";
+      return this.http.post(url,product)
+    .map(response => response.json())
+    .catch(error => this.handleError(error));
     }
 
 

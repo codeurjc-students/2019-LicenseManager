@@ -8,7 +8,8 @@ export interface Product{
     description:string;
     webLink:string;
     photoSrc:string;
-    plansPrices:Map<String,Number>;
+    //plansPrices:Map<String,Number>;
+    plansPrices:{ [name: string]: number };
     sku:string;
-    constructor();
+
 }

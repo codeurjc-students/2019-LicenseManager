@@ -39,6 +39,8 @@ import {
     MatAutocompleteModule,
     MatSnackBar,
     MAT_DIALOG_DEFAULT_OPTIONS,
+    MAT_CHECKBOX_CLICK_ACTION,
+    MatCheckboxModule,
 } from '@angular/material';
 
 import {
@@ -92,6 +94,7 @@ import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confi
 
 @NgModule({
     imports: [
+        MatCheckboxModule,
         HttpModule,
         ReactiveFormsModule,
         CovalentVirtualScrollModule,
@@ -158,6 +161,8 @@ import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confi
         { provide: LocationStrategy, useClass: HashLocationStrategy },
         { provide: HTTP_INTERCEPTORS, useClass: BasicAuthInterceptor, multi: true },
         { provide: HTTP_INTERCEPTORS, useClass: ErrorInterceptor, multi: true },
+        { provide: MAT_CHECKBOX_CLICK_ACTION, useValue: 'check'}
+
         ,]
 })
 export class AppModule {
