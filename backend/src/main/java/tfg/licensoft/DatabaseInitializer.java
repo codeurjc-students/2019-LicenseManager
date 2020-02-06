@@ -202,7 +202,7 @@ public class DatabaseInitializer {
 		
 		licenseServ.save(new License("XX-X2",true,"A",p1,"Customer"));
 		licenseServ.save(new License("XX-X3",true,"M",p1, "C1"));
-		licenseServ.save(new License("XX-X4",true,"L",p1,"C1"));
+		licenseServ.save(new License("XX-X4",true,"D",p1,"C1"));
 		licenseServ.save(new License("XX-X1",false,"A",p2,null));
 		licenseServ.save(new License("XX-X2",true,"M",p2,"C1"));
 		licenseServ.save(new License("XX-X3",false,"A",p2,null));

@@ -12,7 +12,8 @@ const DIR_SEP = require('path').sep
 function watchPatterns (patterns, watcher) {
   let expandedPatterns = []
   patterns.map((pattern) => {
-    expandedPatterns = expandedPatterns.concat(braces.expand(pattern)) // expand ['a/{b,c}'] to ['a/b', 'a/c']
+    // expand ['a/{b,c}'] to ['a/b', 'a/c']
+    expandedPatterns = expandedPatterns.concat(braces.expand(pattern, { keepEscaping: true }))
   })
   expandedPatterns
     .map(PatternUtils.getBaseDir)
@@ -26,7 +27,7 @@ function watchPatterns (patterns, watcher) {
 }
 
 function checkAnyPathMatch (patterns, path) {
-  return patterns.some((pattern) => mm(path, pattern, {dot: true}))
+  return patterns.some((pattern) => mm(path, pattern, { dot: true }))
 }
 
 function createIgnore (patterns, excludes) {

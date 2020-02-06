@@ -41,7 +41,10 @@ public class License {
 		this.type = type;
 		this.product=product;
 		if(active) {
+			
 			this.startDate = ahoraCal.getTime();
+			System.out.println(this.startDate + " lol");
+
 			this.calculateEndDate(ahoraCal);
 			this.owner=owner;
 		}
@@ -57,6 +60,7 @@ public class License {
 		this.product=product;
 		if(active) {
 			this.startDate = ahoraCal.getTime();
+			System.out.println(this.startDate + " lol");
 			this.calculateEndDate(ahoraCal);
 			this.owner=owner;
 		}

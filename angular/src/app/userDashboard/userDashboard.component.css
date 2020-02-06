@@ -1,0 +1,20 @@
+
+.productName:hover {
+    outline: none !important;
+    COLOR:blue;
+    cursor:pointer;
+}
+
+.productName{
+    color:blue
+}
+
+mat-card{
+    border-style: solid;
+    border-width: 1px;
+    border-color:#3F51B5;
+}
+
+.lineLicense{
+    margin: 10px;
+}

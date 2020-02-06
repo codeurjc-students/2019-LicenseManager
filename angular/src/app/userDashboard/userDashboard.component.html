@@ -1,10 +1,9 @@
 <h1>{{userName}}</h1>
 <mat-card>
-    <mat-card-title>  Licenses </mat-card-title>
+    <mat-card-title> My Licenses </mat-card-title>
+    <hr>
     <mat-card-content>
-
-
-    <mat-grid-list cols="5" rowHeight="20:1">
+    <mat-grid-list cols="7"  rowHeight="4rem">
         <mat-grid-tile>
             <a><strong>PRODUCT</strong></a>
         </mat-grid-tile>
@@ -14,18 +13,18 @@
         <mat-grid-tile>
             <a><strong>TYPE</strong></a>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile colspan="2">
             <a><strong>START DATE</strong></a>
         </mat-grid-tile>
-        <mat-grid-tile>
+        <mat-grid-tile colspan="2">
                 <a><strong>END DATE</strong></a>
         </mat-grid-tile>
     </mat-grid-list>
 
-        <mat-grid-list cols="5" rowHeight="20:1">
-            <div *ngFor="let license of activeLicenses">
+        <mat-grid-list cols="7"  rowHeight="4rem">
+            <div *ngFor="let license of activeLicenses" class="lineLicense">
                 <mat-grid-tile>
-                     <a>{{license.product.name}}</a>
+                     <span (click)="manageLink(license.product.name)" class="productName">{{license.product.name}}</span>
                 </mat-grid-tile>
                 <mat-grid-tile>
                     <a>{{license.serial}}</a>
@@ -33,14 +32,15 @@
                 <mat-grid-tile>
                     <span>{{license.type}}</span>
                 </mat-grid-tile>
-                <mat-grid-tile>
-                    <a *ngIf="license.startDate">{{license.startDate}}</a>
+                <mat-grid-tile colspan="2">
+                    <a *ngIf="license.startDate">{{formatDates(license.startDate)}}</a>
                     <a *ngIf="!license.startDate">--</a>
                 </mat-grid-tile>
-                <mat-grid-tile>
-                    <a *ngIf="license.endDate">{{license.endDate}}</a>
+                <mat-grid-tile colspan="2">
+                    <a *ngIf="license.endDate">{{formatDates(license.endDate)}}</a>
                     <a *ngIf="!license.endDate">--</a>
                 </mat-grid-tile>
+                
             </div>
         </mat-grid-list>
     </mat-card-content>

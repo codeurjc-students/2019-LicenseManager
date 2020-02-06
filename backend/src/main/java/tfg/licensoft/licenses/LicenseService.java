@@ -71,4 +71,8 @@ import tfg.licensoft.users.UserService;
 		return this.licRep.findBySerialAndProductAndOwnerAndActive(serial, product, owner,active);
 	}
 	
+	public Page<License> findByProductAndOwner(Product product, String owner, Pageable page){
+		return this.licRep.findByProductAndOwner(product, owner, page);
+	}
+	
 }

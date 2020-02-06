@@ -1,6 +1,7 @@
 package tfg.licensoft.api;
 
 import java.util.Date;
+import java.util.List;
 
 import javax.annotation.PostConstruct;
 
@@ -14,6 +15,8 @@ import org.springframework.web.bind.annotation.*;
 import tfg.licensoft.licenses.*;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
+import tfg.licensoft.users.User;
+import tfg.licensoft.users.UserComponent;
 
 
 @CrossOrigin
@@ -26,6 +29,9 @@ public class ApiLicenseController {
 	
 	@Autowired
 	private ProductService productServ;
+	
+	@Autowired
+	private UserComponent userComp;
 	
 
 	@PostMapping(value = "/")
@@ -124,6 +130,26 @@ public class ApiLicenseController {
 		}else {
 			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
 		}
+	}
+	
+	@GetMapping(value="/user/{userName}/product/{productName}")
+	public ResponseEntity<Page<License>> getLicensesOfUserAndProduct(@PathVariable String productName, @PathVariable String userName, Pageable page){
+		Product p = this.productServ.findOne(productName);
+		User user = this.userComp.getLoggedUser();
+		
+		if(!user.getName().equals(userName)) { //Si no se llaman igual el usuario pasado y el logueado
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		
+		if(p==null) { //Si el producto no existe
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+		Page<License> licenses=this.licServ.findByProductAndOwner(p, userName, page);
+		return new ResponseEntity<>(licenses,HttpStatus.OK);
+		
+		
+		
 	}
 	
 	

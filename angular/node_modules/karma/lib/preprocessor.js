@@ -8,32 +8,50 @@ const CryptoUtils = require('./utils/crypto-utils')
 
 const log = require('./logger').create('preprocess')
 
-function createNextProcessor (preprocessors, file, done) {
-  return function nextPreprocessor (error, content) {
-    // normalize B-C
-    if (arguments.length === 1 && typeof error === 'string') {
-      content = error
-      error = null
+function executeProcessor (process, file, content) {
+  let done = null
+  const donePromise = new Promise((resolve, reject) => {
+    done = function (error, content) {
+      // normalize B-C
+      if (arguments.length === 1 && typeof error === 'string') {
+        content = error
+        error = null
+      }
+      if (error) {
+        reject(error)
+      } else {
+        resolve(content)
+      }
     }
+  })
 
-    if (error) {
-      file.content = null
-      file.contentPath = null
-      return done(error)
+  return (process(content, file, done) || Promise.resolve()).then((content) => {
+    if (content) {
+      // async process correctly returned content
+      return content
     }
-
-    if (!preprocessors.length) {
-      file.contentPath = null
-      file.content = content
-      file.sha = CryptoUtils.sha1(content)
-      return done()
-    }
-
-    preprocessors.shift()(content, file, nextPreprocessor)
-  }
+    // process called done() (Either old sync api or an async function that did not return content)
+    return donePromise
+  })
 }
 
-function createPreprocessor (config, basePath, injector) {
+async function runProcessors (preprocessors, file, content) {
+  try {
+    for (let process of preprocessors) {
+      content = await executeProcessor(process, file, content)
+    }
+  } catch (error) {
+    file.contentPath = null
+    file.content = null
+    throw error
+  }
+
+  file.contentPath = null
+  file.content = content
+  file.sha = CryptoUtils.sha1(content)
+}
+
+function createPriorityPreprocessor (config, preprocessorPriority, basePath, injector) {
   const emitter = injector.get('emitter')
   const alreadyDisplayedErrors = {}
   const instances = {}
@@ -44,7 +62,10 @@ function createPreprocessor (config, basePath, injector) {
       return
     }
 
-    let p
+    let p = instances[name]
+    if (p) {
+      return p
+    }
 
     try {
       p = injector.get('preprocessor:' + name)
@@ -56,6 +77,14 @@ function createPreprocessor (config, basePath, injector) {
       }
       alreadyDisplayedErrors[name] = true
       emitter.emit('load_error', 'preprocessor', name)
+    }
+
+    if (!p && !alreadyDisplayedErrors[name]) {
+      alreadyDisplayedErrors[name] = true
+      log.error(`Failed to instantiate preprocessor ${name}`)
+      emitter.emit('load_error', 'preprocessor', name)
+    } else {
+      instances[name] = p
     }
 
     return p
@@ -91,40 +120,42 @@ function createPreprocessor (config, basePath, injector) {
 
         let preprocessorNames = []
         patterns.forEach((pattern) => {
-          if (mm(file.originalPath, pattern, {dot: true})) {
+          if (mm(file.originalPath, pattern, { dot: true })) {
             preprocessorNames = _.union(preprocessorNames, config[pattern])
           }
         })
 
-        let preprocessors = []
-        const nextPreprocessor = createNextProcessor(preprocessors, file, done)
-        preprocessorNames.forEach((name) => {
-          const p = instances[name] || instantiatePreprocessor(name)
+        // Apply preprocessor priority.
+        const preprocessors = preprocessorNames
+          .map((name) => [name, preprocessorPriority[name] || 0])
+          .sort((a, b) => b[1] - a[1])
+          .map((duo) => duo[0])
+          .reduce((res, name) => {
+            const p = instantiatePreprocessor(name)
 
-          if (p == null) {
-            if (!alreadyDisplayedErrors[name]) {
-              alreadyDisplayedErrors[name] = true
-              log.error(`Failed to instantiate preprocessor ${name}`)
-              emitter.emit('load_error', 'preprocessor', name)
+            if (!isBinary || (p && p.handleBinaryFiles)) {
+              res.push(p)
+            } else {
+              log.warn(`Ignored preprocessing ${file.originalPath} because ${name} has handleBinaryFiles=false.`)
             }
-            return
-          }
+            return res
+          }, [])
 
-          instances[name] = p
-          if (!isBinary || p.handleBinaryFiles) {
-            preprocessors.push(p)
-          } else {
-            log.warn(`Ignored preprocessing ${file.originalPath} because ${name} has handleBinaryFiles=false.`)
-          }
-        })
-
-        nextPreprocessor(null, isBinary ? buffer : buffer.toString())
+        runProcessors(preprocessors, file, isBinary ? buffer : buffer.toString()).then(done, done)
       })
     }
     return fs.readFile(file.originalPath, readFileCallback)
   }
 }
 
+// Deprecated API
+function createPreprocessor (preprocessors, basePath, injector) {
+  console.log('Deprecated private createPreprocessor() API')
+  const preprocessorPriority = injector.get('config.preprocessor_priority')
+  return createPriorityPreprocessor(preprocessors, preprocessorPriority, basePath, injector)
+}
 createPreprocessor.$inject = ['config.preprocessors', 'config.basePath', 'injector']
-
 exports.createPreprocessor = createPreprocessor
+
+createPriorityPreprocessor.$inject = ['config.preprocessors', 'config.preprocessor_priority', 'config.basePath', 'injector']
+exports.createPriorityPreprocessor = createPriorityPreprocessor

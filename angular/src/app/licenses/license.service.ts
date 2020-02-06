@@ -2,6 +2,7 @@ import { Injectable } from '@angular/core';
 import { Http } from '@angular/http';
 import { Observable } from 'rxjs';
 import { License } from './license.model';
+import { Product } from '../product/product.model';
 
 const BASE_URL = 'http://localhost:8080/api/';
 
@@ -56,6 +57,14 @@ export class LicenseService {
     .map(response => response.json())
     .catch(error => this.handleError(error));
     }
+
+    getLicensesOfUserAndProduct(userName:string,productName:string){
+      let url = BASE_URL + "licenses/user/"+userName+"/product/"+productName;
+      return this.http.get(url)
+    .map(response => response.json())
+    .catch(error => this.handleError(error));
+    }
+
 
     private handleError(error: any) {
         console.error(error);

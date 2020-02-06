@@ -15,6 +15,7 @@ public interface LicenseRepository  extends JpaRepository<License, Long> {
 	License findBySerialAndProduct(String serial, Product product);
 	Page<License> findByOwner(String owner, Pageable page);
 	List<License> findByProductAndActiveAndOwner(Product product, boolean active, String owner);
+	Page<License> findByProductAndOwner(Product product, String owner,Pageable page);
 	List<License> findByProductAndOwnerAndType(Product product, String owner, String type);
 	License findBySerialAndProductAndOwnerAndActive(String serial, Product product, String owner,boolean active);
 }

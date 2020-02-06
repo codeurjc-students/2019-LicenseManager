@@ -1,10 +1,13 @@
 import { Component, OnInit, Input, OnChanges, SimpleChanges, Renderer } from '@angular/core';
 import { Product } from '../../product/product.model';
 import { ProductService } from '../../product/product.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { LoginService, User } from '../../login/login.service';
 import { UserProfileService } from '../../userProfile/userProfile.service';
 import { DialogService } from 'src/app/dialogs/dialog.service';
+import { LicenseService } from '../../licenses/license.service';
+import { License } from 'src/app/licenses/license.model';
+import { DatePipe } from '@angular/common';
 
 
 @Component({
@@ -18,6 +21,7 @@ export class CatalogProductComponent implements OnInit {
 
   product?:Product;
   user:User;
+  userLicensesOfProduct:License[];
   errorAdded:boolean;
   card:boolean;
   successfulMessage:boolean;
@@ -26,17 +30,15 @@ export class CatalogProductComponent implements OnInit {
   loading:boolean;
   numberOfPlans:number;
 
-  constructor(private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
+  constructor(private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
     let productName;
     this.activeRoute.paramMap.subscribe((params: ParamMap) => {
         productName = params.get('name');
     });
     this.productService.getProduct(productName).subscribe(
-      prd => {this.product = prd; let s= Object.keys(this.product.plansPrices); this.numberOfPlans=s.length},
+      prd => {this.product = prd; let s= Object.keys(this.product.plansPrices); this.numberOfPlans=s.length; this.getLicensesOfProductAndUser(); },
       error => console.log(error)
     );
-    this.errorAdded=false;
-    this.card=false;
     this.successfulMessage=false;
     this.loading=false;
 
@@ -45,6 +47,7 @@ export class CatalogProductComponent implements OnInit {
    ngOnInit(): void {
     this.loadStripe();
     this.user=this.loginService.getUserLogged();
+
   } 
 
 
@@ -53,13 +56,13 @@ export class CatalogProductComponent implements OnInit {
     if(this.user==null){
       alert("You have to be logged first! If you don't have an account, you can register too");
     }else{
-      this.dialogService.openConfirmDialog("You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged now " + money + "€ to your default card")
+      this.dialogService.openConfirmDialog("You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged now " + money + "€ to your default card. The subscription will be renewed automatically upon reaching the end date, but you can cancel it whenever you want (User dashboard)")
       .afterClosed().subscribe(
         res=>{
           if(res){
             this.loading=true;
             this.userProfileService.addSubscriptionToProduct(this.product,type, this.user.name).subscribe(
-                u=> {;this.loading=false},
+                u=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial},
                 error=> {this.treatmentBuyError(error);this.loading=false;},
             )
           }
@@ -94,9 +97,6 @@ export class CatalogProductComponent implements OnInit {
   }
 
   pay(amount) {    
-    localStorage.removeItem("token");
-    localStorage.removeItem("added");
-
     if(this.user==null){
       alert("You have to be logged first! If you don't have an account, you can register too");
     }else{
@@ -106,43 +106,64 @@ export class CatalogProductComponent implements OnInit {
         email:this.user.name +'@email.com',
         token: (token: any) =>{
           if(token!=null){
-            localStorage.setItem("token",token.id);
-            localStorage.setItem("added","true");
-            this.confirm();
+            this.confirm(token.id);
           }
         }
 
       });
   
       handler.open({
-        name: "Set your payment card info", 
-        description: 'Click "Pay" and "Confirm Order" later',
+        name: this.product.name, 
+        description: 'This license is valid forever',
         amount: amount * 100
       });
-      this.errorAdded=false;
-      this.card=true;
 
     }
+
+    
   
   }
 
 
-  confirm(){
-    let added = localStorage.getItem("added");
-    if(added=="true"){
-      let token = localStorage.getItem("token");
+  confirm(token:string){
       this.userProfileService.buyProduct(token,this.product,this.user.name).subscribe(
-        t => {this.successfulMessage=true; this.serial=t.serial},
-        error => console.log(error)
+        t => {this.successfulMessage=true; this.serial=t.serial;},
+        error => {alert("The purchase has not been posible");}
       )
-    }else{
-      this.errorAdded=true;
-      this.card=false;
-    }
+
 
   }
 
+  //Function to copy the license serial to the clipboard
+  copyMessage(val: string){
+    const selBox = document.createElement('textarea');
+    selBox.style.position = 'fixed';
+    selBox.style.left = '0';
+    selBox.style.top = '0';
+    selBox.style.opacity = '0';
+    selBox.value = val;
+    document.body.appendChild(selBox);
+    selBox.focus();
+    selBox.select();
+    document.execCommand('copy');
+    document.body.removeChild(selBox);
+  }
 
+  getLicensesOfProductAndUser(){
+    this.licenseServ.getLicensesOfUserAndProduct(this.user.name,this.product.name).subscribe(
+      ls=> {this.userLicensesOfProduct=ls.content},
+      error => console.log(error)
+    );
+  }
+
+  manageLicenses(){
+    this.router.navigate(["user/dashboard"]);
+  }
+
+
+  formatDates(date:Date){
+    return this.datepipe.transform(date, 'yyyy/MM/dd hh:MM'); 
+  }
 
 
 }

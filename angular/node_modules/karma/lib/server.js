@@ -11,7 +11,6 @@ const path = require('path')
 
 const BundleUtils = require('./utils/bundle-utils')
 const NetUtils = require('./utils/net-utils')
-const JsonUtils = require('./utils/json-utils')
 const root = global || window || this
 
 const cfg = require('./config')
@@ -45,7 +44,9 @@ function createSocketIoServer (webServer, executor, config) {
     destroyUpgrade: false,
     path: config.urlRoot + 'socket.io/',
     transports: config.transports,
-    forceJSONP: config.forceJSONP
+    forceJSONP: config.forceJSONP,
+    // Default is 5000 in socket.io v2.x.
+    pingTimeout: config.pingTimeout || 5000
   })
 
   // hack to overcome circular dependency
@@ -65,7 +66,7 @@ class Server extends KarmaEventEmitter {
 
     const config = cfg.parseConfig(cliOptions.configFile, cliOptions)
 
-    this.log.debug('Final config', JsonUtils.stringify(config, null, 2))
+    this.log.debug('Final config', util.inspect(config, false, /** depth **/ null))
 
     let modules = [{
       helper: ['value', helper],
@@ -76,7 +77,7 @@ class Server extends KarmaEventEmitter {
       watcher: ['value', watcher],
       launcher: ['type', Launcher],
       config: ['value', config],
-      preprocess: ['factory', preprocessor.createPreprocessor],
+      preprocess: ['factory', preprocessor.createPriorityPreprocessor],
       fileList: ['factory', FileList.factory],
       webServer: ['factory', createWebServer],
       serveFile: ['factory', createServeFile],
@@ -123,8 +124,15 @@ class Server extends KarmaEventEmitter {
         BundleUtils.bundleResourceIfNotExist('context/main.js', 'static/context.js')
       ])
       this._boundServer = await NetUtils.bindAvailablePort(config.port, config.listenAddress)
+      this._boundServer.on('connection', (socket) => {
+        // Attach an error handler to avoid UncaughtException errors.
+        socket.on('error', (err) => {
+          // Errors on this socket are retried, ignore them
+          this.log.debug('Ignoring error on webserver connection: ' + err)
+        })
+      })
       config.port = this._boundServer.address().port
-      this._injector.invoke(this._start, this)
+      await this._injector.invoke(this._start, this)
     } catch (err) {
       this.dieOnError(`Server start failed on port ${config.port}: ${err}`)
     }
@@ -142,7 +150,7 @@ class Server extends KarmaEventEmitter {
     return this._fileList ? this._fileList.changeFile(path) : Promise.resolve()
   }
 
-  _start (config, launcher, preprocess, fileList, capturedBrowsers, executor, done) {
+  async _start (config, launcher, preprocess, fileList, capturedBrowsers, executor, done) {
     if (config.detached) {
       this._detach(config, done)
       return
@@ -150,7 +158,9 @@ class Server extends KarmaEventEmitter {
 
     this._fileList = fileList
 
-    config.frameworks.forEach((framework) => this._injector.get('framework:' + framework))
+    await Promise.all(
+      config.frameworks.map((framework) => this._injector.get('framework:' + framework))
+    )
 
     const webServer = this._injector.get('webServer')
     const socketServer = this._injector.get('socketServer')
@@ -214,7 +224,7 @@ class Server extends KarmaEventEmitter {
         if (!helper.isString(message)) {
           message = util.inspect(message, { showHidden: false, colors: false })
         }
-        const logMap = {'%m': message, '%t': level.toLowerCase(), '%T': level.toUpperCase(), '%b': browser}
+        const logMap = { '%m': message, '%t': level.toLowerCase(), '%T': level.toUpperCase(), '%b': browser }
         const logString = configFormat.replace(/%[mtTb]/g, (m) => logMap[m])
         this.log.debug(`Writing browser console line: ${logString}`)
         fs.writeSync(browserLogFile, logString + '\n')
@@ -227,6 +237,10 @@ class Server extends KarmaEventEmitter {
       const replySocketEvents = events.bufferEvents(socket, ['start', 'info', 'karma_error', 'result', 'complete'])
 
       socket.on('complete', (data, ack) => ack())
+
+      socket.on('error', (err) => {
+        this.log.debug('karma server socket error: ' + err)
+      })
 
       socket.on('register', (info) => {
         let newBrowser = info.id ? (capturedBrowsers.getById(info.id) || singleRunBrowsers.getById(info.id)) : null
@@ -269,7 +283,7 @@ class Server extends KarmaEventEmitter {
 
     const emitRunCompleteIfAllBrowsersDone = () => {
       if (Object.keys(singleRunDoneBrowsers).every((key) => singleRunDoneBrowsers[key])) {
-        this.emit('run_complete', singleRunBrowsers, singleRunBrowsers.getResults(singleRunBrowserNotCaptured, config.failOnEmptyTestSuite, config.failOnFailingTestSuite))
+        this.emit('run_complete', singleRunBrowsers, singleRunBrowsers.getResults(singleRunBrowserNotCaptured, config))
       }
     }
 
@@ -295,6 +309,8 @@ class Server extends KarmaEventEmitter {
         singleRunDoneBrowsers[completedBrowser.id] = true
         emitRunCompleteIfAllBrowsersDone()
       })
+
+      // This is the normal exit trigger.
       this.on('browser_complete_with_no_more_retries', function (completedBrowser) {
         singleRunDoneBrowsers[completedBrowser.id] = true
 
@@ -372,14 +388,19 @@ class Server extends KarmaEventEmitter {
     processWrapper.on('SIGINT', () => disconnectBrowsers(process.exitCode))
     processWrapper.on('SIGTERM', disconnectBrowsers)
 
-    processWrapper.on('uncaughtException', (error) => {
-      this.log.error(error)
+    const reportError = (error) => {
+      process.emit('infrastructure_error', error)
       disconnectBrowsers(1)
-    })
+    }
 
     processWrapper.on('unhandledRejection', (error) => {
-      this.log.error(error)
-      disconnectBrowsers(1)
+      this.log.error('UnhandledRejection')
+      reportError(error)
+    })
+
+    processWrapper.on('uncaughtException', (error) => {
+      this.log.error('UncaughtException')
+      reportError(error)
     })
   }
 

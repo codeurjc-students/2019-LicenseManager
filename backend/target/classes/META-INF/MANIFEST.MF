@@ -1,10 +1,10 @@
 Manifest-Version: 1.0
+Built-By: KIKIT
+Build-Jdk: 11.0.2
 Implementation-Title: LicenseWeb
 Implementation-Version: 0.0.1-SNAPSHOT
-Built-By: KIKEAJANI
 Implementation-Vendor-Id: tfg
-Build-Jdk: 1.8.0_161
-Implementation-URL: https://projects.spring.io/spring-boot/#/spring-bo
- ot-starter-parent/license-web
+Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
+ -starter-parent/license-web
 Created-By: Maven Integration for Eclipse
 

@@ -64,7 +64,7 @@ import { routing } from './app.routing';
 import { NgxChartsModule } from '@swimlane/ngx-charts';
 import { DomSanitizer } from '@angular/platform-browser';
 import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material/dialog';
-import { LocationStrategy, HashLocationStrategy } from '@angular/common';
+import { LocationStrategy, HashLocationStrategy, DatePipe } from '@angular/common';
 import { LoginComponent } from './login/login.component';
 import { LoginService } from './login/login.service';
 import { RegisterComponent } from './register/register.component';
@@ -152,7 +152,7 @@ import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confi
     bootstrap: [AppComponent],
     entryComponents: [DialogDeleteComponent, DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent
     ],
-    providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,
+    providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
         { provide: LocationStrategy, useClass: HashLocationStrategy },

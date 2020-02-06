@@ -5,6 +5,14 @@
 
 }
 
+.typeExp{
+    width: auto;
+    padding-left: 13rem;
+    padding-right: 13rem;
+
+    margin-left: auto;
+    margin-right: auto;
+}
 .content{
     display: block;
 }
@@ -12,6 +20,12 @@
 .grid-container {
     display: grid;
     grid-template-columns: auto;
+    padding: 10px;
+}
+
+.grid-container5 {
+    display: grid;
+    grid-template-columns: auto auto auto auto auto;
     padding: 10px;
 }
 
@@ -31,11 +45,34 @@
     padding: 10px;
 }
 
-
+mat-card{
+    border-style: solid;
+    border-width: 1px;
+    border-color:#3F51B5;
+}
 .price{
     font-size: 150%;
+}
 
+.copyButton{
+    left:15px;
+}
+
+a{
+    font-family:Arial;
+}
+
+.serial{
+    border-style: dashed;
+    border-color: green;
+    border-width: 1px;
+    padding:5px;
 }
 
 
 
+.link{
+    outline: none !important;
+    COLOR:blue;
+    cursor:pointer;
+}
