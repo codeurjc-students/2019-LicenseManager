@@ -26,12 +26,10 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
 
-	@Column(unique=true)
 	private String name;
 	private String passwordHash;
 	
 	@JsonIgnore
-	@Column(unique=true)
 	private String customerStripeId;
 	
 
@@ -45,7 +43,7 @@ public class User {
 
 	protected User() {}
 
-	
+	 
 	
 
 	public Long getId() {

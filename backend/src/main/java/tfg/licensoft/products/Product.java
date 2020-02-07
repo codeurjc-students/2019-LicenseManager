@@ -30,6 +30,7 @@ public class Product {
 	
 	private String productStripeId;
 	
+	
 	@JsonIgnore
 	private HashMap<String,String> plans;
 	
@@ -43,6 +44,7 @@ public class Product {
 	private String photoSrc;
 	private HashMap<String,Double> plansPrices;
 	private String sku;
+	private boolean active;
 	
 
 	public Product() {}
@@ -53,6 +55,7 @@ public class Product {
 		this.plans = new HashMap();
 		this.typeSubs= new ArrayList<>();
 		this.plansPrices = new HashMap<>();
+		this.active=true;
  
 	}
 	
@@ -63,6 +66,14 @@ public class Product {
 	
 	public String getPhotoSrc() {
 		return photoSrc;
+	}
+
+	public boolean isActive() {
+		return active;
+	}
+
+	public void setActive(boolean active) {
+		this.active = active;
 	}
 
 	public String getSku() {

@@ -1,10 +1,11 @@
-<div class="center-div">
+<div class="center-div" *ngIf="product?.active">
     <h1  style="font-family:Arial" class="content">{{product?.name}}</h1>
     <br>
     <span class="content"><a href="//{{product?.webLink}}">{{product?.webLink}}</a></span>
     <br>
     <span class="content" style="white-space: pre-line"> {{product?.description}} </span>
     <br>
+    <a>{{userLicensesOfProduct?.length}} -- </a>
     <div *ngIf="userLicensesOfProduct?.length!=0">
         <mat-card>
             <mat-card-title> Your actual licenses of this product  <button mat-raised-button color="primary" (click)="manageLicenses()">Manage</button></mat-card-title>
@@ -102,7 +103,10 @@
                 <span (click)="manageLicenses()"><i>All subscriptions are renewed automatically. You can cancel them on your <a class="link">User Dashboard</a></i></span>
         </mat-card>
     </div>
-
-
 </div> 
+
+<div class="center-div" *ngIf="!product?.active">
+    <h1  style="font-family:Arial" class="content"><mat-icon >warning</mat-icon>The product {{product?.name}} is not Active <mat-icon>warning</mat-icon></h1>
+    <span style="font-family:Arial">If you have licenses of this product, don't worry. They are still valid.</span>
+</div>
 

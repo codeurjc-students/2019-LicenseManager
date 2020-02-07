@@ -11,5 +11,6 @@ export interface Product{
     //plansPrices:Map<String,Number>;
     plansPrices:{ [name: string]: number };
     sku:string;
+    active:boolean;
 
 }

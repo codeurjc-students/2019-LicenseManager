@@ -104,6 +104,11 @@ public class DatabaseInitializer {
 
 		pL.setWebLink("www.photoshop.com");
 		this.productServ.save(pL);
+		
+		
+		
+		
+		
 		Product p1 =new Product("sw");
 		Map<String, Object> params = new HashMap<String, Object>();
 		/*params.put("name", "sw");
@@ -192,11 +197,15 @@ public class DatabaseInitializer {
 		p2.getTypeSubs().add("A");
 		p2.getTypeSubs().add("M");
 		p2.getTypeSubs().add("D");
-
-
+		
+		p2.getPlansPrices().put("A", 1500.00);
+		p2.getPlansPrices().put("M", 150.00);
+		p2.getPlansPrices().put("D",  .63);
+		
+		
+		
 		this.productServ.save(p2);
 
-		
 		//licenses
 		licenseServ.save(new License("XX-X1",false,"A",p1,null));
 		

@@ -34,6 +34,20 @@ export class ProductService {
     .catch(error => this.handleError(error));
     }
 
+    putProduct(product:Product){
+      let url = BASE_URL + "product/";
+      return this.http.put(url,product)
+    .map(response => response.json())
+    .catch(error => this.handleError(error));
+    }
+
+    deleteProduct(product:Product){
+      let url = BASE_URL + "product/"+product.name;
+      return this.http.delete(url)
+    .map(response => response.json())
+    .catch(error => this.handleError(error));
+    }
+
 
     addLicenseToProduct(license:License){
       let url = BASE_URL + "product/" + license.product.name;
@@ -49,6 +63,7 @@ export class ProductService {
     .catch(error => this.handleError(error));
     }
 
+    //Just the active ones
     getProducts(){
       let url = BASE_URL + "product/all";
       return this.http.get(url)

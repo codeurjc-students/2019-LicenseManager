@@ -36,7 +36,11 @@ export class CatalogProductComponent implements OnInit {
         productName = params.get('name');
     });
     this.productService.getProduct(productName).subscribe(
-      prd => {this.product = prd; let s= Object.keys(this.product.plansPrices); this.numberOfPlans=s.length; this.getLicensesOfProductAndUser();console.log(this.product.plansPrices) },
+      prd => {this.product = prd; 
+        console.log(this.product)
+        let s= Object.keys(this.product.plansPrices); 
+        this.numberOfPlans=s.length; 
+        this.getLicensesOfProductAndUser(); },
       error => console.log(error)
     );
     this.successfulMessage=false;

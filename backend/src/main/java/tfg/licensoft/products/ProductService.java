@@ -32,5 +32,9 @@ public class ProductService {
 	public Page<Product> findAll(Pageable page){
 		return this.productRep.findAll(page);
 	}
+	
+	public Page<Product> findAllActives(Pageable page){
+		return this.productRep.findByActive(true,page);
+	}
 
 }

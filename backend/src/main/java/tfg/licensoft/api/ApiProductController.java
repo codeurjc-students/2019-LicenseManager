@@ -16,6 +16,8 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.DeleteMapping;
+
 
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -48,7 +50,7 @@ public class ApiProductController {
 	public Page<Product> getProducts(Pageable page, @RequestParam Optional<String> search){
 		if (!search.isPresent()) {
 			System.out.println("Not present");
-			return productServ.findAll(page);
+			return productServ.findAllActives(page);
 		}else {
 			return this.productServ.findSearch(page,search.get());
 		}
@@ -59,6 +61,7 @@ public class ApiProductController {
 	public ResponseEntity<Product> getProduct(@PathVariable String productName) {
 		Product p = this.productServ.findOne(productName);
 		if (p != null) {
+			System.out.println(p.getPlansPrices());
 			return new ResponseEntity<Product>(p,HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
@@ -81,7 +84,10 @@ public class ApiProductController {
 						params.put("name", product.getName());
 						params.put("type", "good");
 						params.put("shippable", false);
-						params.put("description",product.getDescription());
+						/*if(product.getDescription()!=null || product.getDescription()!="") {
+							params.put("description",product.getDescription());
+						}*/
+						params.put("url", product.getWebLink());
 					}else {
 						params.put("name", product.getName());
 						params.put("type", "service");
@@ -89,6 +95,8 @@ public class ApiProductController {
 					try {
 						productStripe = com.stripe.model.Product.create(params);
 						productId = productStripe.getId();
+						product.setProductStripeId(productId);
+						
 					} catch (StripeException e) {
 						e.printStackTrace();
 					}
@@ -98,7 +106,7 @@ public class ApiProductController {
 				    	this.createLproduct(product, plan.getValue(),productId);
 				    	break;
 				    }
-				    case "M":{
+				    case "M":{ 
 				    	this.createMproduct(product, plan.getValue(),productId);
 				    	break;
 				    }
@@ -118,6 +126,59 @@ public class ApiProductController {
 			return new ResponseEntity<Product>(HttpStatus.CONFLICT);
 		}
 	}
+	
+	
+	@PutMapping("/")
+	public ResponseEntity<Product> editProduct(@RequestBody Product product){
+		Product p = this.productServ.findOne(product.getName());
+		if (p==null) {
+			return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
+		}else{
+			p.setDescription(product.getDescription());
+			try {
+				com.stripe.model.Product pStripe = com.stripe.model.Product.retrieve(p.getProductStripeId());
+				Map<String, Object> params = new HashMap<>();
+				params.put("description", product.getDescription());
+				pStripe.update(params);
+			} catch (StripeException e) {
+				e.printStackTrace();
+			}
+			p.setPhotoAvailable(product.isPhotoAvailable());
+			p.setPhotoSrc(product.getPhotoSrc());
+			p.setWebLink(product.getWebLink());
+			Product newP = this.productServ.save(p);
+			return new ResponseEntity<Product>(newP,HttpStatus.OK); 
+		}	
+	}
+	
+	@DeleteMapping("/{productName}")
+	public ResponseEntity<Product> deleteProduct(@PathVariable String productName){
+		Product p = this.productServ.findOne(productName);
+		System.out.println(productName);
+		if(p==null) {
+			return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
+		}else {
+			try {
+				com.stripe.model.Product product =
+						com.stripe.model.Product.retrieve(p.getProductStripeId());
+						Map<String, Object> params = new HashMap<>();
+						params.put("active", false);
+						product.update(params);
+						p.setActive(false);
+						this.productServ.save(p);
+						return new ResponseEntity<Product>(p,HttpStatus.OK); 
+			}catch(StripeException e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+			
+		}
+
+	}
+
+
+	
+	
 	
 	private void createLproduct(Product product, double price, String productId ) {
 		try {

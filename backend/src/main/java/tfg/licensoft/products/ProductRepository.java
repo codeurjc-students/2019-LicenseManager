@@ -9,6 +9,7 @@ import org.springframework.data.repository.query.Param;
 public interface ProductRepository extends JpaRepository<Product, Long> {
 	Product findByName(String name);
 	Page<Product> findAll(Pageable page); 
-	@Query("SELECT p FROM Product p WHERE p.name LIKE %:search%")
+	@Query("SELECT p FROM Product p WHERE p.name LIKE %:search% AND p.active = TRUE")
 	Page<Product> findSearch(Pageable page, @Param("search") String search);
+	Page<Product> findByActive(boolean active,Pageable page);
 }

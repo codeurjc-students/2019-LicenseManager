@@ -1,6 +1,6 @@
-import { Component } from "@angular/core";
+import { Component, Inject } from "@angular/core";
 import { Product } from '../product/product.model';
-import { MatDialogRef } from '@angular/material';
+import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { License } from '../licenses/license.model';
 import { ProductService } from '../product/product.service';
 
@@ -25,17 +25,51 @@ import { ProductService } from '../product/product.service';
     priceAnnual:number;
     price:number;
 
-    constructor(private dialogRef:MatDialogRef<DialogAddProductComponent>, private productServ:ProductService){
-      this.daily=false;
-      this.annual=false;
-      this.monthly=false;
+    edit:boolean;
+
+    productEdit:Product;
+
+    constructor(@Inject(MAT_DIALOG_DATA) public data:any,private dialogRef:MatDialogRef<DialogAddProductComponent>, private productServ:ProductService){
+      if(data.type=="edit"){
+        this.edit=true;
+        let prod:Product = data.product;
+        this.name=prod.name;
+        this.description=prod.description;
+        this.webLink=prod.webLink;
+        this.productEdit=prod;
+        prod.typeSubs.forEach(function (value){
+          if (value=="L"){
+            this.lifetime=true;
+            this.type="lifetime";
+            this.price=prod.plansPrices["L"];
+          }else if(value=="D"){
+            this.daily=true;
+            this.type="subscription";
+            this.priceDaily=prod.plansPrices["D"];
+          }else if(value=="M"){
+            this.monthly=true;
+            this.type=="subscription";
+            this.priceMonthly=prod.plansPrices["M"];
+          }else if (value=="A"){
+            this.annual=true;
+            this.type="subscription"
+            this.priceAnnual=prod.plansPrices["A"];
+          }
+        }.bind(this))
+      }else{
+        this.edit=false;
+        this.daily=false;
+        this.annual=false;
+        this.monthly=false;
+      }
+
     }
       
   close(){
       this.dialogRef.close();
   }
 
-  save(){
+  add(){
     let licenses:License[];
     licenses=[];
     let typeSubs:string[];
@@ -58,8 +92,16 @@ import { ProductService } from '../product/product.service';
       typeSubs.push('L');
       plansPricesN['L']=this.price;
     }
-    let prod:Product = {name: this.name, licenses:licenses, typeSubs:typeSubs,photoAvailable:false,description: this.description,webLink:this.webLink,photoSrc:null,plansPrices:plansPricesN,sku:null};
+    let prod:Product = {name: this.name, licenses:licenses, typeSubs:typeSubs,photoAvailable:false,description: this.description,webLink:this.webLink,photoSrc:null,plansPrices:plansPricesN,sku:null, active:true};
     this.productServ.postProduct(prod).subscribe(
+      g => {this.dialogRef.close()},
+      error => console.log(error)
+    )
+  }
+
+  save(){
+    let prod:Product = {name: this.productEdit.name, licenses:this.productEdit.licenses, typeSubs:this.productEdit.typeSubs,photoAvailable:false,description: this.description,webLink:this.webLink,photoSrc:null,plansPrices:this.productEdit.plansPrices,sku:this.productEdit.sku, active:true};
+    this.productServ.putProduct(prod).subscribe(
       g => {this.dialogRef.close()},
       error => console.log(error)
     )

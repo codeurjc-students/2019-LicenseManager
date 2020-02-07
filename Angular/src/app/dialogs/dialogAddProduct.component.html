@@ -1,6 +1,6 @@
 <mat-dialog-content>
     <mat-form-field>
-        <input matInput placeholder="Product" [(ngModel)]="name" required> 
+        <input matInput placeholder="Product" [(ngModel)]="name" required [disabled]="edit"> 
     </mat-form-field>
     <br>
     <mat-form-field>
@@ -12,17 +12,17 @@
     </mat-form-field>  
     <br>
     <mat-form-field>
-        <mat-select [(value)]="type" placeholder="Type" required>
+        <mat-select [(value)]="type" placeholder="Type" required [disabled]="edit">
           <mat-option value="subscription">Subscription</mat-option>
           <mat-option value="lifetime">Lifetime</mat-option>
         </mat-select>
       </mat-form-field>
-    <div *ngIf="type==='subscription'" class="prices">
-        <mat-checkbox class="example-margin" [(ngModel)]="daily" color="primary"> Daily     <input matInput type="number" *ngIf="daily" placeholder="Price per day" [(ngModel)]="priceDaily" required> </mat-checkbox>         
+    <div *ngIf="type==='subscription'" class="prices" >
+        <mat-checkbox [disabled]="edit" class="example-margin" [(ngModel)]="daily" color="primary"> Daily     <input matInput type="number" *ngIf="daily" placeholder="Price per day" [(ngModel)]="priceDaily" required> </mat-checkbox>         
         <br>
-        <mat-checkbox class="example-margin" [(ngModel)]="monthly" color="primary"> Monthly <input matInput type="number" *ngIf="monthly" placeholder="Price per month" [(ngModel)]="priceMonthly" required> </mat-checkbox>
+        <mat-checkbox [disabled]="edit" class="example-margin" [(ngModel)]="monthly" color="primary"> Monthly <input matInput type="number" *ngIf="monthly" placeholder="Price per month" [(ngModel)]="priceMonthly" required> </mat-checkbox>
         <br>
-        <mat-checkbox class="example-margin" [(ngModel)]="annual" color="primary"> Annual   <input matInput type="number" *ngIf="annual" placeholder="Price per year" [(ngModel)]="priceAnnual" required></mat-checkbox>
+        <mat-checkbox [disabled]="edit" class="example-margin" [(ngModel)]="annual" color="primary"> Annual   <input matInput type="number" *ngIf="annual" placeholder="Price per year" [(ngModel)]="priceAnnual" required></mat-checkbox>
         <div>
         <br>
         <b>Prices:</b>
@@ -37,13 +37,15 @@
     </div>
     <div *ngIf="type==='lifetime'" class="prices">
         <b>Price (€): </b>
-        <input matInput type="number" placeholder="Price (€) " [(ngModel)]="price" required>
+        <input matInput [disabled]="edit" type="number" placeholder="Price (€) " [(ngModel)]="price" required>
 
     </div>
     <br>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button mat-raised-button color="primary"  (click)="save()" [disabled]="(name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
+        <button mat-raised-button color="primary"  (click)="add()" *ngIf="!edit" [disabled]="(name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
+        || (monthly && (priceMonthly==null || priceMonthly=='')) || (annual && (priceAnnual==null || priceAnnual==''))) || type==='lifetime' && (price==null || price=='')">ADD</button>
+        <button mat-raised-button color="primary"  (click)="save()" *ngIf="edit" [disabled]="(name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
         || (monthly && (priceMonthly==null || priceMonthly=='')) || (annual && (priceAnnual==null || priceAnnual==''))) || type==='lifetime' && (price==null || price=='')">SAVE</button>
         <button mat-button  (click)="close()">CANCEL</button>
     </mat-dialog-actions>
