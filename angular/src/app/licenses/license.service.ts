@@ -13,7 +13,7 @@ export class LicenseService {
     
     constructor(private http: Http) { }
 
-    getActiveLicensesOfUser(userName:string){
+    getLicensesOfUser(userName:string){
         let url = BASE_URL + "licenses/" + userName;
         return this.http.get(url)
 			.map(response => response.json())
@@ -34,8 +34,8 @@ export class LicenseService {
     .catch(error => this.handleError(error));
     }
 
-    changeStatus(serial:string,productName:string){
-      let url = BASE_URL + "licenses/changeStatus/"+serial+"/"+ productName;
+    canceltAtEndLicense(serial:string,productName:string){
+      let url = BASE_URL + "licenses/cancelAtEnd/"+serial+"/"+ productName;
       return this.http.put(url,null)
     .map(response => response.json())
     .catch(error => this.handleError(error));

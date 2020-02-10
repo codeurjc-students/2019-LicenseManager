@@ -27,6 +27,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
@@ -123,8 +125,8 @@ public class UserController {
 	
 
 	
-	@PutMapping("/{productName}/{typeSubs}/{userName}/addSubscription")
-	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName){
+	@PutMapping("/{productName}/{typeSubs}/{userName}/addSubscription/renewal/{automaticRenewal}")
+	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName, @PathVariable boolean automaticRenewal){
 		Product product = this.productServ.findOne(productName);
 		User user = userComponent.getLoggedUser();
 		if(user==null || !user.getName().equals(userName)) {
@@ -147,6 +149,8 @@ public class UserController {
 				params.put("customer", user.getCustomerStripeId());
 				params.put("items", items);
 				params.put("expand", expand);
+				params.put("cancel_at_period_end", !automaticRenewal);
+
 				try {
 					Subscription subscription = Subscription.create(params);
 				} catch (StripeException e) {
@@ -156,7 +160,11 @@ public class UserController {
 				}
 				this.productServ.save(product);			
 				License license = new License(true, typeSubs, product, user.getName());
+				license.setCancelAtEnd(!automaticRenewal);
 				licenseServ.save(license);
+				if(automaticRenewal) {
+					this.setTimerAndEndDate(license);
+				}
 				return new ResponseEntity<License>(license,HttpStatus.OK);
 			}else {
 				return new ResponseEntity<License>(HttpStatus.CONFLICT);
@@ -165,6 +173,23 @@ public class UserController {
 		}else {
 			return new ResponseEntity<License>(HttpStatus.BAD_REQUEST);
 		}
+	}
+	
+	private void setTimerAndEndDate(License license) {
+		Timer time = new Timer();
+		time.schedule(new TimerTask() {
+
+			@Override
+			public void run() {
+				license.renew();
+				System.out.println(new Date().toGMTString());
+				License newL = licenseServ.save(license);
+				setTimerAndEndDate(newL);
+			}
+			
+		}, 
+				license.getEndDate()
+		);
 	}
 	
 	

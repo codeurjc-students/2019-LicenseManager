@@ -100,7 +100,7 @@ import { DialogEditComponent } from '../dialogs/dialogEdit.component';
         }
         if(type!=null && active !=null){
             console.log(s,active,type);
-            let lic :License = {serial: s,active:active,type:type, owner:null,product:this.product,};
+            let lic :License = {serial: s,active:active,type:type, owner:null,product:this.product,cancelAtEnd:false};
             this.licenseService.addLicense(lic).subscribe(
                 lic=>{this.dialogRef.close();this.getLicenses(this.product.name)},
                 error=> console.log(error)
@@ -113,8 +113,8 @@ import { DialogEditComponent } from '../dialogs/dialogEdit.component';
 
  
 
-    changeStatus(serial:string){
-        this.licenseService.changeStatus(serial,this.product.name).subscribe(
+    canceltAtEndLicense(serial:string){
+        this.licenseService.canceltAtEndLicense(serial,this.product.name).subscribe(
             ans=>{this.getLicenses(this.product.name)},
             error=>console.log(error),
         );

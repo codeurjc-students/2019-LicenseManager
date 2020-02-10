@@ -26,8 +26,8 @@ export class UserProfileService {
 
 
 
-    addSubscriptionToProduct(product:Product,typeSubs:string,userName:string){
-        return this.http.put(BASE_URL+product.name+"/" + typeSubs + "/" + userName +"/addSubscription",product)
+    addSubscriptionToProduct(product:Product,typeSubs:string,userName:string, automaticRenewal:boolean){
+        return this.http.put(BASE_URL+product.name+"/" + typeSubs + "/" + userName +"/addSubscription/renewal/"+automaticRenewal,product)
         .map(response => response.json());
         
     }

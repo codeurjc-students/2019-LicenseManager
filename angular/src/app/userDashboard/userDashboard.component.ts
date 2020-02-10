@@ -5,6 +5,8 @@ import { LicenseService } from '../licenses/license.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { DatePipe } from '@angular/common';
+import { DialogService } from '../dialogs/dialog.service';
+import { Product } from '../product/product.model';
 
 @Component({
     selector: 'app-userDashboard',
@@ -17,12 +19,14 @@ export class UserDashboardComponent implements OnInit{
 
     userName:string;
     activeLicenses:License[];
+    loading:boolean;
     
 
-    constructor(private datepipe: DatePipe,private router:Router,public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute, public loginService:LoginService){}
+    constructor(private dialogService:DialogService,private licenseService:LicenseService,private datepipe: DatePipe,private router:Router,public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute, public loginService:LoginService){}
 
 
     ngOnInit(): void {
+        this.loading=false;
         this.activeRoute.paramMap.subscribe((params: ParamMap) => {
             this.userName = this.loginService.user.name;
             this.getLicenses();
@@ -31,7 +35,7 @@ export class UserDashboardComponent implements OnInit{
 
 
     getLicenses(){
-        this.licenseServ.getActiveLicensesOfUser(this.userName).subscribe(
+        this.licenseServ.getLicensesOfUser(this.userName).subscribe(
             lics => {this.activeLicenses = lics.content;},
             error => console.log(error)
         ); 
@@ -42,7 +46,29 @@ export class UserDashboardComponent implements OnInit{
     }
 
     formatDates(date:Date){
-        return this.datepipe.transform(date, 'yyyy/MM/dd hh:MM'); 
+        return this.datepipe.transform(date, 'long'); 
+    }
+
+    cancelAtEnd(license:License){
+        let msg;
+        if(license.cancelAtEnd){
+            msg="Do you want to activate the automatic renewal (at the end date) of your license of " + license.product.name + "?";
+        }else{
+            msg="Do you want to deactivate the automatic renewal (at the end date) of your license of " + license.product.name + "? It will still be valid until the end date."
+        }
+        this.dialogService.openConfirmDialog(msg,false)
+      .afterClosed().subscribe(
+          suc=>{
+              if(suc[0]){
+                  console.log(suc);
+                  this.loading=true;
+                this.licenseService.canceltAtEndLicense(license.serial,license.product.name).subscribe(
+                ans=>{this.getLicenses();this.loading=false;},
+                error=>{console.log(error);this.loading=false;}
+                );
+          }
+        },
+      );
     }
 
     

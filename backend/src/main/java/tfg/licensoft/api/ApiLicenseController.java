@@ -1,7 +1,13 @@
 package tfg.licensoft.api;
 
+import java.util.Calendar;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.LinkedList;
 import java.util.List;
+import java.util.Map;
+import java.util.Timer;
+import java.util.TimerTask;
 
 import javax.annotation.PostConstruct;
 
@@ -17,6 +23,11 @@ import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
 import tfg.licensoft.users.User;
 import tfg.licensoft.users.UserComponent;
+import tfg.licensoft.users.UserService;
+
+import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
+import com.stripe.model.Subscription;
 
 
 @CrossOrigin
@@ -32,6 +43,9 @@ public class ApiLicenseController {
 	
 	@Autowired
 	private UserComponent userComp;
+	
+	@Autowired
+	private UserService userServ;
 	
 
 	@PostMapping(value = "/")
@@ -94,11 +108,39 @@ public class ApiLicenseController {
 		}
 	}
 	
-	@PutMapping(value="/changeStatus/{serial}/{product}")
-	public ResponseEntity<License> changeStatusLicense(@PathVariable String serial, @PathVariable String product){
+	@PutMapping(value="/cancelAtEnd/{serial}/{product}")
+	public ResponseEntity<License> cancelAtEndLicense(@PathVariable String serial, @PathVariable String product){
 		Product p = this.productServ.findOne(product);
 		License l = this.licServ.findBySerialAndProduct(serial,p);
+		boolean newCancelAtEnd = !l.getCancelAtEnd();
 		if(l!=null && p!=null) {
+			User u = this.userServ.findByName(l.getOwner());
+			try {
+				Customer c = Customer.retrieve(u.getCustomerStripeId());
+				
+				for(Subscription s:c.getSubscriptions().getData()) {
+					System.out.println(s.getPlan().getNickname() + " ->");
+					if(s.getPlan().getNickname().equals(l.getType())) {
+							com.stripe.model.Product productStripe = com.stripe.model.Product.retrieve(s.getPlan().getProduct());
+							if(productStripe.getName().equals(p.getName())){
+								Map<String, Object> params = new HashMap<>();
+								params.put("cancel_at_period_end", newCancelAtEnd);
+								//s.cancel(params);
+								s.update(params);
+								l.setCancelAtEnd(newCancelAtEnd);
+								this.licServ.save(l);
+							}
+
+					}
+					
+
+				}
+				
+			} catch (StripeException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+			/* 
 			if(l.isActive()) {
 				l.setActive(false);
 				l.setEndDate(new Date());
@@ -106,7 +148,9 @@ public class ApiLicenseController {
 				l.setActive(true);
 				l.setStartDate(new Date());
 			}
+			
 			this.licServ.save(l);
+			*/
 			return new ResponseEntity<License>(l,HttpStatus.OK);
 		}else {
 			return new ResponseEntity<License>(HttpStatus.PRECONDITION_REQUIRED);
@@ -151,8 +195,5 @@ public class ApiLicenseController {
 		
 		
 	}
-	
-	
-	
 	
 }

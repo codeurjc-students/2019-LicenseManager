@@ -207,7 +207,7 @@ public class ApiProductController {
 			params.put("currency", "eur");
 			params.put("interval", "month");
 			params.put("product", productId);
-			params.put("nickname", "Monthly Plan");
+			params.put("nickname", "M");
 			params.put("amount", (int)(price*100));
 			Plan plan1M = Plan.create(params);
 			product.getPlans().put("M",plan1M.getId());
@@ -224,7 +224,7 @@ public class ApiProductController {
 			params.put("currency", "eur");
 			params.put("interval", "year");
 			params.put("product",productId);
-			params.put("nickname", "Annual Plan");
+			params.put("nickname", "A");
 			params.put("amount", (int)(price*100));
 			Plan plan1M = Plan.create(params);
 			product.getPlans().put("A",plan1M.getId());
@@ -241,7 +241,7 @@ public class ApiProductController {
 			params.put("currency", "eur");
 			params.put("interval", "day");
 			params.put("product", productId);
-			params.put("nickname", "Daily Plan");
+			params.put("nickname", "D");
 			params.put("amount", (int)(price*100));
 			Plan plan1M = Plan.create(params);
 			product.getPlans().put("D",plan1M.getId());

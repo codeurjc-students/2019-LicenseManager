@@ -60,12 +60,13 @@ export class CatalogProductComponent implements OnInit {
     if(this.user==null){
       alert("You have to be logged first! If you don't have an account, you can register too");
     }else{
-      this.dialogService.openConfirmDialog("You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged now " + money + "€ to your default card. The subscription will be renewed automatically upon reaching the end date, but you can cancel it whenever you want (User dashboard)")
+      this.dialogService.openConfirmDialog("You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged now " + money + "€ to your default card.",true)
       .afterClosed().subscribe(
         res=>{
           if(res){
+            console.log(res);
             this.loading=true;
-            this.userProfileService.addSubscriptionToProduct(this.product,type, this.user.name).subscribe(
+            this.userProfileService.addSubscriptionToProduct(this.product,type, this.user.name, res[1]).subscribe(
                 u=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial},
                 error=> {this.treatmentBuyError(error);this.loading=false;},
             )

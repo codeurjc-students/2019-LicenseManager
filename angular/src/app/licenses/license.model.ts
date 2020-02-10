@@ -11,4 +11,5 @@ import { Product } from '../product/product.model';
       startDate?:Date;
       endDate?:Date;
       owner:string;
+      cancelAtEnd:boolean;
   }

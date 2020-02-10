@@ -18,3 +18,15 @@ mat-card{
 .lineLicense{
     margin: 10px;
 }
+
+#spinner{
+    width: 2em;
+    height: 2em;
+    padding-right: 2em;
+}
+
+
+.an{
+    font-style: italic;
+    color: #3F51B5;
+}

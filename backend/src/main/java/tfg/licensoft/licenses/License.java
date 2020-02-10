@@ -3,6 +3,7 @@ package tfg.licensoft.licenses;
 import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.Timer;
 import java.util.UUID;
 
 import javax.persistence.CascadeType;
@@ -30,6 +31,7 @@ public class License {
 	private Date startDate;
 	private Date endDate;
 	private String owner;
+	private boolean cancelAtEnd;
 	
 	
 	
@@ -43,8 +45,6 @@ public class License {
 		if(active) {
 			
 			this.startDate = ahoraCal.getTime();
-			System.out.println(this.startDate + " lol");
-
 			this.calculateEndDate(ahoraCal);
 			this.owner=owner;
 		}
@@ -84,7 +84,7 @@ public class License {
 	public License () {}
 	
 	
-	private void calculateEndDate(Calendar ahoraCal) {
+	public void calculateEndDate(Calendar ahoraCal) {
 		switch(type) {
 			case "M": {
 				ahoraCal.add(Calendar.MONTH, 1);
@@ -103,6 +103,16 @@ public class License {
 			}
 			default: this.endDate=null;
 		}
+	}
+	
+	
+
+	public boolean getCancelAtEnd() {
+		return cancelAtEnd;
+	}
+
+	public void setCancelAtEnd(boolean cancelAtEnd) {
+		this.cancelAtEnd = cancelAtEnd;
 	}
 
 	public String getOwner() {
@@ -239,6 +249,12 @@ public class License {
 
 	private String generateSerial() {
 		return UUID.randomUUID().toString();
+	}
+	
+	public void renew() {
+		Calendar ahoraCal = Calendar.getInstance();
+		this.startDate= ahoraCal.getTime();
+		this.calculateEndDate(ahoraCal);
 	}
 
 	/*

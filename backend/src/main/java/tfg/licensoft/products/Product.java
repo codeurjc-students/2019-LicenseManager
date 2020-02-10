@@ -35,7 +35,7 @@ public class Product {
 	private HashMap<String,String> plans;
 	
 	@ElementCollection
-	private List<String> typeSubs;
+	private List<String> typeSubs; 
 		
 	@Column(columnDefinition = "LONGTEXT")
 	private String description;
