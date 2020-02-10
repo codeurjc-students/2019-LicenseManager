@@ -48,6 +48,16 @@ export class ProductService {
     .catch(error => this.handleError(error));
     }
 
+    getImage(productName:string){
+      let url = BASE_URL + "product/" + productName + "/image";
+        return this.http.get(url)
+    }
+
+    addImage(file:File,productName: string) {
+      let formdata: FormData = new FormData();
+        formdata.append('file', file);
+          return this.http.post(BASE_URL + "product/" + productName + "/image",formdata);
+    }
 
     addLicenseToProduct(license:License){
       let url = BASE_URL + "product/" + license.product.name;

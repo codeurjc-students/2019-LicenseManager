@@ -5,7 +5,6 @@
     <br>
     <span class="content" style="white-space: pre-line"> {{product?.description}} </span>
     <br>
-    <a>{{userLicensesOfProduct?.length}} -- </a>
     <div *ngIf="userLicensesOfProduct?.length!=0">
         <mat-card>
             <mat-card-title> Your actual licenses of this product  <button mat-raised-button color="primary" (click)="manageLicenses()">Manage</button></mat-card-title>

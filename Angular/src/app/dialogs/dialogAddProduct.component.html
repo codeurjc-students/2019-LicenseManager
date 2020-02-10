@@ -41,6 +41,17 @@
 
     </div>
     <br>
+    <br>
+    <br>
+    <td-file-upload accept=".jpg,.png" color="accent" 
+    #singleFileUpload [(ngModel)]="file" (select)="selectEvent($event)"
+    (upload)="uploadEvent($event)" (cancel)="cancelEvent()">
+    <mat-icon>file_upload</mat-icon>
+    <ng-template td-file-input-label>
+      <mat-icon>attach_file</mat-icon>
+      Subir imagen
+    </ng-template>
+  </td-file-upload>
     </mat-dialog-content>
     <mat-dialog-actions>
         <button mat-raised-button color="primary"  (click)="add()" *ngIf="!edit" [disabled]="(name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))

@@ -8,7 +8,7 @@
             <div  *ngFor="let product of products" >
                     <div class="post-container">
                         <h3 class="post-title"><a (click)="goToProduct(product.name)" class="link">{{product.name}}</a></h3>                   
-                        <div class="post-thumb" *ngIf="product.photoAvailable"><img src="{{product.photoSrc}}" class="logoPhoto" height="150" width="150" #photo></div>
+                        <div class="post-thumb" *ngIf="product.photoAvailable"><img src="http://localhost:8080/api/product/{{product.name}}/image" class="logoPhoto" height="150" width="150" #photo></div>
                         <div class="post-content">
                             <p class="italic">{{product.description}}</p>
                             

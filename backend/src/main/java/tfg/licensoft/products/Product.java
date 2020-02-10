@@ -11,6 +11,7 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.OneToMany;
+import javax.validation.constraints.NotNull;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
@@ -41,6 +42,7 @@ public class Product {
 	private String description;
 	private String webLink;
 	private boolean photoAvailable;
+	@NotNull
 	private String photoSrc;
 	private HashMap<String,Double> plansPrices;
 	private String sku;

@@ -1,5 +1,10 @@
 package tfg.licensoft.api;
 
+import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -9,7 +14,9 @@ import java.util.Optional;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
+import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -24,6 +31,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.multipart.MultipartFile;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.Plan;
@@ -38,7 +46,8 @@ import tfg.licensoft.products.ProductService;
 @RestController
 @RequestMapping(value = "/api/product")
 public class ApiProductController {
-	
+	private static final Path FILES_FOLDER = Paths.get(System.getProperty("user.dir"), "images");
+
 	@Autowired
 	private ProductService productServ;
 	
@@ -96,6 +105,8 @@ public class ApiProductController {
 						productStripe = com.stripe.model.Product.create(params);
 						productId = productStripe.getId();
 						product.setProductStripeId(productId);
+						product.setPhotoAvailable(false);
+						product.setPhotoSrc("");
 						
 					} catch (StripeException e) {
 						e.printStackTrace();
@@ -165,9 +176,16 @@ public class ApiProductController {
 						params.put("active", false);
 						product.update(params);
 						p.setActive(false);
+						Path path = FILES_FOLDER.resolve(product.getName()+"_photo");
+						Files.delete(path);
+						p.setPhotoAvailable(false);
 						this.productServ.save(p);
 						return new ResponseEntity<Product>(p,HttpStatus.OK); 
 			}catch(StripeException e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
@@ -293,6 +311,40 @@ public class ApiProductController {
 		}else {
 			return new ResponseEntity<Product>(HttpStatus.NOT_MODIFIED);
 		}
+	}
+	
+	@GetMapping(value = "/{productName}/image")
+	public ResponseEntity<byte[]> getImage(@PathVariable String productName)throws IOException {
+		Product p = this.productServ.findOne(productName);
+		if (p != null) {
+			if (!p.isPhotoAvailable()){
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			byte[] bytes = Files.readAllBytes(productServ.getImage(p));
+			final HttpHeaders headers = new HttpHeaders();
+			headers.setContentType(MediaType.IMAGE_JPEG);
+			return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.OK);
+		} else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@PostMapping(value = "/{productName}/image")
+	public ResponseEntity<byte[]> postImage(@RequestBody MultipartFile file, @PathVariable String productName) throws Exception {
+		if(file == null) {
+			return new ResponseEntity<>(HttpStatus.BAD_REQUEST);
+		}
+		Product p = this.productServ.findOne(productName);
+
+		if(p == null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
+		this.productServ.saveImage(file,p);
+		byte[] bytes = Files.readAllBytes(productServ.getImage(p));
+		final HttpHeaders headers = new HttpHeaders();
+		headers.setContentType(MediaType.IMAGE_JPEG);
+		return new ResponseEntity<byte[]>(bytes, headers, HttpStatus.CREATED);
 	}
  
 }

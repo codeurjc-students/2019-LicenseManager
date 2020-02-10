@@ -24,7 +24,7 @@ import { ProductService } from '../product/product.service';
     priceMonthly:number;
     priceAnnual:number;
     price:number;
-
+    file:File;
     edit:boolean;
 
     productEdit:Product;
@@ -70,6 +70,12 @@ import { ProductService } from '../product/product.service';
   }
 
   add(){
+    let isFile;
+    if(this.file!=null){
+      isFile=true;
+    }else{
+      isFile=false;
+    }
     let licenses:License[];
     licenses=[];
     let typeSubs:string[];
@@ -92,19 +98,44 @@ import { ProductService } from '../product/product.service';
       typeSubs.push('L');
       plansPricesN['L']=this.price;
     }
-    let prod:Product = {name: this.name, licenses:licenses, typeSubs:typeSubs,photoAvailable:false,description: this.description,webLink:this.webLink,photoSrc:null,plansPrices:plansPricesN,sku:null, active:true};
+    let prod:Product = {name: this.name, licenses:licenses, typeSubs:typeSubs,photoAvailable:isFile,description: this.description,webLink:this.webLink,photoSrc:"",plansPrices:plansPricesN,sku:null, active:true};
     this.productServ.postProduct(prod).subscribe(
-      g => {this.dialogRef.close()},
+      g => {
+        if(this.file!=null){
+           this.uploadEvent(this.file);
+    }this.dialogRef.close()},
       error => console.log(error)
     )
   }
 
   save(){
-    let prod:Product = {name: this.productEdit.name, licenses:this.productEdit.licenses, typeSubs:this.productEdit.typeSubs,photoAvailable:false,description: this.description,webLink:this.webLink,photoSrc:null,plansPrices:this.productEdit.plansPrices,sku:this.productEdit.sku, active:true};
+    let isFile;
+    if(this.file!=null){
+      isFile=true;
+    }else{
+      isFile=false;
+    }
+    let prod:Product = {name: this.productEdit.name, licenses:this.productEdit.licenses, typeSubs:this.productEdit.typeSubs,photoAvailable:isFile,description: this.description,webLink:this.webLink,photoSrc:"",plansPrices:this.productEdit.plansPrices,sku:this.productEdit.sku, active:true};
     this.productServ.putProduct(prod).subscribe(
-      g => {this.dialogRef.close()},
+      g => {if(this.file!=null){
+        this.uploadEvent(this.file);
+ }this.dialogRef.close()},
       error => console.log(error)
     )
+  }
+
+  selectEvent(file: File): void {
+    this.file=file;
+  }
+
+  uploadEvent(file: File): void {
+    this.productServ.addImage(this.file, this.name).subscribe(
+      u => {  },
+      error => console.log(error)
+    );
+  }
+
+  cancelEvent(): void {
   }
 
   }

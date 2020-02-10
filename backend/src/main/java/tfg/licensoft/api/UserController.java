@@ -23,6 +23,7 @@ import com.stripe.model.Subscription;
 import com.stripe.model.Token;
 
 import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
@@ -157,6 +158,7 @@ public class UserController {
 					if(e.getCode().equals("resource_missing") && e.getMessage().contains("This customer has no attached payment source")) {
 						return new ResponseEntity<License>(HttpStatus.PRECONDITION_REQUIRED); //The precondition is to have an attached payment source
 					}
+					e.printStackTrace();
 				}
 				this.productServ.save(product);			
 				License license = new License(true, typeSubs, product, user.getName());
@@ -177,7 +179,9 @@ public class UserController {
 	
 	private void setTimerAndEndDate(License license) {
 		Timer time = new Timer();
+		System.out.println(license.getEndDate());
 		time.schedule(new TimerTask() {
+			
 
 			@Override
 			public void run() {
@@ -185,10 +189,12 @@ public class UserController {
 				System.out.println(new Date().toGMTString());
 				License newL = licenseServ.save(license);
 				setTimerAndEndDate(newL);
+				
 			}
 			
 		}, 
 				license.getEndDate()
+				
 		);
 	}
 	
