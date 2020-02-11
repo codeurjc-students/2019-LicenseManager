@@ -11,6 +11,8 @@ import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
@@ -56,9 +58,8 @@ public class ApiProductController {
 	
 	
 	@GetMapping("/all")
-	public Page<Product> getProducts(Pageable page, @RequestParam Optional<String> search){
+	public Page<Product> getProducts(HttpServletRequest req,Pageable page, @RequestParam Optional<String> search){
 		if (!search.isPresent()) {
-			System.out.println("Not present");
 			return productServ.findAllActives(page);
 		}else {
 			return this.productServ.findSearch(page,search.get());

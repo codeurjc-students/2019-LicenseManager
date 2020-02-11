@@ -1,4 +1,4 @@
-package tfg.licensoft.users;
+package tfg.licensoft.configurations;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -14,6 +14,11 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import tfg.licensoft.users.User;
+import tfg.licensoft.users.UserComponent;
+import tfg.licensoft.users.UserRepository;
+import tfg.licensoft.users.UserService;
+
 
 
 /**
@@ -27,36 +32,33 @@ import org.springframework.stereotype.Component;
 public class UserRepositoryAuthProvider implements AuthenticationProvider {
 
 	@Autowired
-	private UserRepository userRepository;
+	private UserService userServ;
 
 	@Autowired
 	private UserComponent userComponent;
 
 	@Override
-	public Authentication authenticate(Authentication authentication) throws AuthenticationException {
-		String username = authentication.getName();
-		String password = (String) authentication.getCredentials();
-
-		User user = userRepository.findByName(username);
+	public Authentication authenticate(Authentication auth) throws AuthenticationException {
+		User user = userServ.findByName(auth.getName());
 
 		if (user == null) {
 			throw new BadCredentialsException("User not found");
 		}
 
+		String password = (String) auth.getCredentials();
 		if (!new BCryptPasswordEncoder().matches(password, user.getPasswordHash())) {
-
 			throw new BadCredentialsException("Wrong password");
-		} else {
-
-			userComponent.setLoggedUser(user);
-			
-			List<GrantedAuthority> roles = new ArrayList<>();
-			for (String role : user.getRoles()) {
-				roles.add(new SimpleGrantedAuthority(role));
-			}
-
-			return new UsernamePasswordAuthenticationToken(username, password, roles);
 		}
+
+		userComponent.setLoggedUser(user);
+
+		List<GrantedAuthority> roles = new ArrayList<>();
+		for (String role : user.getRoles()) {
+			roles.add(new SimpleGrantedAuthority(role));
+		}
+		
+		System.out.println("Authenticated "+ userComponent.getLoggedUser().getName() + " with roles " +roles + "| "+auth.getPrincipal());
+		return new UsernamePasswordAuthenticationToken(user.getName(), password, roles);
 	}
 
 	@Override

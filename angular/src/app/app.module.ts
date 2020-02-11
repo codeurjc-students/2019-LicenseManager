@@ -82,8 +82,8 @@ import { DialogDeleteComponent } from './dialogs/dialogDelete.component';
 import { DialogEditComponent } from './dialogs/dialogEdit.component';
 import { UserProfileComponent } from './userProfile/userProfile.component';
 import { UserProfileService } from './userProfile/userProfile.service';
-import { BasicAuthInterceptor } from 'src/auth.interceptor';
-import { ErrorInterceptor } from 'src/error.interceptor';
+import { BasicAuthInterceptor } from 'src/app/login/auth.interceptor';
+import { ErrorInterceptor } from 'src/app/login/error.interceptor';
 import { AdminDashboardComponent } from './adminDashboard/adminDashboard.component';
 import { DialogAddProductComponent } from './dialogs/dialogAddProduct.component';
 import { CardFormComponent } from './userProfile/card-form/card-form.component';
@@ -153,9 +153,9 @@ import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confi
     ],
     declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent],
     bootstrap: [AppComponent],
-    entryComponents: [DialogDeleteComponent, DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent
+    entryComponents: [DialogDeleteComponent, DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent,
     ],
-    providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,
+    providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,LoginComponent, 
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
         { provide: LocationStrategy, useClass: HashLocationStrategy },

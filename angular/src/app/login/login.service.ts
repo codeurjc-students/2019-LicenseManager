@@ -102,4 +102,11 @@ export class LoginService {
     getUserLogged(){
         return this.user;
     }
+
+    getUserLoggedBack(){
+        let url = URL + "/getUserLogged/";
+        return this.http2.get(url)
+      .map(response => response.json())
+      .catch(error => this.handleError(error));
+    }
 }

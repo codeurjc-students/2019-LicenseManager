@@ -1,11 +1,9 @@
 package tfg.licensoft.api;
 
 
-import java.util.ArrayList;
+import java.util.Collection;
 import java.util.HashMap;
-import java.util.List;
 import java.util.Map;
-import java.util.Optional;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServletRequest;
@@ -19,6 +17,9 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.authority.SimpleGrantedAuthority;
+import org.springframework.security.core.context.SecurityContext;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -53,21 +54,24 @@ public class LoginController {
 
 	
 	@RequestMapping("/api/logIn")
-	public ResponseEntity<User> logIn() {
+	public ResponseEntity<User> logIn(HttpServletRequest req) {
+		Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		System.out.println("??? ->  "+authorities + "  " + SecurityContextHolder.getContext().getAuthentication());
+	
+
 		if (!userComponent.isLoggedUser()) {
 			log.info("Not user logged");
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		} else {
 			User loggedUser = userComponent.getLoggedUser();
 			log.info("Logged as " + loggedUser.getName());
-			this.userServ.save(loggedUser);
+			//this.userServ.save(loggedUser);
 			return new ResponseEntity<>(loggedUser, HttpStatus.OK);
 		}
 	}
 
 	@RequestMapping("/api/logOut")
 	public ResponseEntity<Boolean> logOut(HttpSession session) {
-		System.out.println("--------------------------" + userComponent.getLoggedUser());
 		if (!userComponent.isLoggedUser()) {
 			log.info("No user logged");
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -134,8 +138,11 @@ public class LoginController {
 	}
 	
 	@RequestMapping("/api/getUserLogged")
-	public void getUserLogged() {
-		System.out.println("??? ->  "+this.userComponent.getLoggedUser());
+	public ResponseEntity<User> getUserLogged( HttpServletRequest request) {
+		Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
+		System.out.println("??? ->  "+authorities + "  " + SecurityContextHolder.getContext().getAuthentication());
+		return new ResponseEntity<User>(this.userComponent.getLoggedUser(),HttpStatus.OK);
+
 	}
 	
 }

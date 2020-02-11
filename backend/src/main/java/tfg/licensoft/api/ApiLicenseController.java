@@ -179,11 +179,8 @@ public class ApiLicenseController {
 	@GetMapping(value="/user/{userName}/product/{productName}")
 	public ResponseEntity<Page<License>> getLicensesOfUserAndProduct(@PathVariable String productName, @PathVariable String userName, Pageable page){
 		Product p = this.productServ.findOne(productName);
-		User user = this.userComp.getLoggedUser();
+		User user = this.userServ.findByName(userName);
 		
-		if(!user.getName().equals(userName)) { //Si no se llaman igual el usuario pasado y el logueado
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
 		
 		if(p==null) { //Si el producto no existe
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);

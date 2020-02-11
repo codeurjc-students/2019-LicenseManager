@@ -3,6 +3,8 @@ import { Product } from '../product/product.model';
 import { ProductService } from '../product/product.service';
 import { Router } from '@angular/router';
 
+const BASE_URL_PRODUCT = "http://localhost:8080/api/product/"
+
 @Component({
   selector: 'app-catalog',
   templateUrl: './catalog.component.html',
@@ -29,6 +31,10 @@ export class CatalogComponent {
       ps => this.products = ps.content,
       error => console.log(error)
     )
+  }
+
+  pathPhotos(productName:string){
+    return BASE_URL_PRODUCT + productName +"/image";
   }
 
 }

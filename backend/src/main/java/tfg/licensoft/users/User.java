@@ -33,6 +33,8 @@ public class User {
 	private String customerStripeId;
 	
 
+	@ElementCollection(fetch = FetchType.EAGER)
+	private List<String> roles;
 
 	public User(String customerStripeId,String name, String password, String... roles) {
 		this.name = name;
@@ -83,7 +85,5 @@ public class User {
 		this.roles = roles;
 	}
 
-	@ElementCollection(fetch = FetchType.EAGER)
-	private List<String> roles;
 
 } 

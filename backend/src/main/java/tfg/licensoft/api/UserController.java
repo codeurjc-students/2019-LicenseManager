@@ -129,8 +129,8 @@ public class UserController {
 	@PutMapping("/{productName}/{typeSubs}/{userName}/addSubscription/renewal/{automaticRenewal}")
 	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName, @PathVariable boolean automaticRenewal){
 		Product product = this.productServ.findOne(productName);
-		User user = userComponent.getLoggedUser();
-		if(user==null || !user.getName().equals(userName)) {
+		User user = this.userServ.findByName(userName);
+		if(user==null) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
 		//User user = this.userServ.findByName(userName);
@@ -202,11 +202,11 @@ public class UserController {
 	@PutMapping("/{userName}/buy/{productName}/{token}")
 	public ResponseEntity<License> buyProduct(@PathVariable String productName, @PathVariable String userName, @PathVariable String token){
 		Product product = this.productServ.findOne(productName);
-		User user = userComponent.getLoggedUser();
+		User user = this.userServ.findByName(userName);
 		System.out.println(user + " " + product);
 
 
-		if(token!=null && product!=null && user!=null && user.getName().equals(userName)) {
+		if(token!=null && product!=null && user!=null) {
 			System.out.println("Dentro");
 			List<Object> items = new ArrayList<>();
 			Map<String, Object> item1 = new HashMap<>();

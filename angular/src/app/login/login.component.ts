@@ -77,4 +77,10 @@ export class LoginComponent  {
         
     }
   }
+
+  getUserLoggedBack(){
+    this.loginService.getUserLoggedBack().subscribe(
+      e=> console.log(e)
+    )
+  }
 }

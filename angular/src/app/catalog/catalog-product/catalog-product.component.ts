@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Renderer } from '@angular/core';
+import { Component, OnInit, Input, OnChanges, SimpleChanges, Renderer, ViewChild, TemplateRef } from '@angular/core';
 import { Product } from '../../product/product.model';
 import { ProductService } from '../../product/product.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
@@ -8,6 +8,8 @@ import { DialogService } from 'src/app/dialogs/dialog.service';
 import { LicenseService } from '../../licenses/license.service';
 import { License } from 'src/app/licenses/license.model';
 import { DatePipe } from '@angular/common';
+import { MatDialogRef, MatDialog } from '@angular/material';
+import { LoginComponent } from '../../login/login.component';
 
 
 @Component({
@@ -29,6 +31,7 @@ export class CatalogProductComponent implements OnInit {
   tk:string;
   loading:boolean;
   numberOfPlans:number;
+  dialogRef: MatDialogRef<any, any>;
 
   constructor(private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
     let productName;
@@ -40,7 +43,8 @@ export class CatalogProductComponent implements OnInit {
         console.log(this.product)
         let s= Object.keys(this.product.plansPrices); 
         this.numberOfPlans=s.length; 
-        this.getLicensesOfProductAndUser(); },
+        if(this.loginService.isLogged){
+        this.getLicensesOfProductAndUser(); }},
       error => console.log(error)
     );
     this.successfulMessage=false;
@@ -53,12 +57,11 @@ export class CatalogProductComponent implements OnInit {
     this.user=this.loginService.getUserLogged();
 
   } 
-
-
 //METHODS TO SUBSCRIBE TO A PRODUCT
   subscribeToProduct(type:string,money:string){
     if(this.user==null){
-      alert("You have to be logged first! If you don't have an account, you can register too");
+     alert("You have to be logged first! If you don't have an account, you can register too");
+  
     }else{
       this.dialogService.openConfirmDialog("You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged now " + money + "€ to your default card.",true)
       .afterClosed().subscribe(
@@ -103,7 +106,7 @@ export class CatalogProductComponent implements OnInit {
 
   pay(amount) {    
     if(this.user==null){
-      alert("You have to be logged first! If you don't have an account, you can register too");
+       alert("You have to be logged first! If you don't have an account, you can register too");
     }else{
       var handler = (<any>window).StripeCheckout.configure({
         key: 'pk_test_mAWlLKZrpvwEye9QZzRZzsSG00M6tsJ3QS',

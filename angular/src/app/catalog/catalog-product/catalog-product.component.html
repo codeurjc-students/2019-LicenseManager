@@ -5,7 +5,7 @@
     <br>
     <span class="content" style="white-space: pre-line"> {{product?.description}} </span>
     <br>
-    <div *ngIf="userLicensesOfProduct?.length!=0">
+    <div *ngIf="userLicensesOfProduct?.length!=0 && userLicensesOfProduct!=null">
         <mat-card>
             <mat-card-title> Your actual licenses of this product  <button mat-raised-button color="primary" (click)="manageLicenses()">Manage</button></mat-card-title>
             <hr>
@@ -108,4 +108,3 @@
     <h1  style="font-family:Arial" class="content"><mat-icon >warning</mat-icon>The product {{product?.name}} is not Active <mat-icon>warning</mat-icon></h1>
     <span style="font-family:Arial">If you have licenses of this product, don't worry. They are still valid.</span>
 </div>
-
