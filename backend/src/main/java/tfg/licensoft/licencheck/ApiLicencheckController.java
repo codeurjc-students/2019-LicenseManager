@@ -37,7 +37,7 @@ public class ApiLicencheckController {
 	@Autowired
 	private ProductService productService;
 	
-	
+	/*
 	@RequestMapping("checkAccount")
 	public ResponseEntity checkLicensoftAccount(@RequestBody BasicUser basicUser) {
 		System.out.println(basicUser.getUserName() + " - " + basicUser.getPassword());
@@ -56,23 +56,22 @@ public class ApiLicencheckController {
 		}
 	}
 	
-	
+	*/
 	//TODO Remove the password, not necessary on this method. 
 	@RequestMapping("checkLicense/{productName}/{licenseSerial}")
-	public ResponseEntity<License> checkLicense(@RequestBody BasicUser user, @PathVariable String licenseSerial, @PathVariable String productName ) {
+	public ResponseEntity<License> checkLicense(@PathVariable String licenseSerial, @PathVariable String productName ) {
 		Product product = this.productService.findOne(productName);
-		System.out.println(user.getUserName());
 
 		if (product==null) {
 			System.out.println("Product is null");
-			return new ResponseEntity(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}
-		License license = this.licenseService.findBySerialAndProductAndOwnerAndActive(licenseSerial, product, user.getUserName(),true);
+		License license = this.licenseService.findBySerialAndProductAndActive(licenseSerial, product,true);
 
 		if (license==null ) {
-			return new ResponseEntity(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}else {
-			return new ResponseEntity(license,HttpStatus.OK);
+			return new ResponseEntity<>(license,HttpStatus.OK);
 		}
 	}
 
