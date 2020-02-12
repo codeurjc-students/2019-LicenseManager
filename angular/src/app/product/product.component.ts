@@ -33,7 +33,7 @@ import { CardLicenseComponent } from '../cards/cardLicense.component';
 
     getProduct(name:string){
       this.productService.getProduct(name).subscribe(
-        prod => {this.product = prod;this.cardLicense.product=prod; this.cardLicense.getLicenses(this.product.name)},
+        (prod:any) => {this.product = prod;this.cardLicense.product=prod; this.cardLicense.getLicenses(this.product.name)},
         error => console.log(error)
       )
     }

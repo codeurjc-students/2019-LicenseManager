@@ -164,9 +164,9 @@ public class ApiProductController {
 	}
 	
 	@DeleteMapping("/{productName}")
-	public ResponseEntity<Product> deleteProduct(@PathVariable String productName){
+	public ResponseEntity<Product> deleteProduct(@PathVariable String productName,HttpServletRequest request){
 		Product p = this.productServ.findOne(productName);
-		System.out.println(productName);
+		System.out.println(request.getRemoteUser());
 		if(p==null) {
 			return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
 		}else {
@@ -177,16 +177,12 @@ public class ApiProductController {
 						params.put("active", false);
 						product.update(params);
 						p.setActive(false);
-						Path path = FILES_FOLDER.resolve(product.getName()+"_photo");
-						Files.delete(path);
+						//Path path = FILES_FOLDER.resolve(product.getName()+"_photo");
+					//	Files.delete(path);
 						p.setPhotoAvailable(false);
 						this.productServ.save(p);
 						return new ResponseEntity<Product>(p,HttpStatus.OK); 
 			}catch(StripeException e) {
-				e.printStackTrace();
-				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-			} catch (IOException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}

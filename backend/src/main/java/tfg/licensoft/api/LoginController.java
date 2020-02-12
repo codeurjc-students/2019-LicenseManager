@@ -26,6 +26,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.GetMapping;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
@@ -137,7 +138,7 @@ public class LoginController {
 		return new ResponseEntity<Page<User>>(users,HttpStatus.OK);
 	}
 	
-	@RequestMapping("/api/getUserLogged")
+	@GetMapping("/api/getUserLogged")
 	public ResponseEntity<User> getUserLogged( HttpServletRequest request) {
 		Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 		System.out.println("??? ->  "+authorities + "  " + SecurityContextHolder.getContext().getAuthentication());

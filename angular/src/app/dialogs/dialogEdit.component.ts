@@ -33,7 +33,7 @@ import { User, LoginService } from '../login/login.service';
 
     getUsers(){
         this.loginServ.getUsers().subscribe(
-            users=>this.users=users.content,
+            (users:any)=>this.users=users.content,
             error=>console.log(error),
         );
     }

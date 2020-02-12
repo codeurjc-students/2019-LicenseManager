@@ -25,7 +25,7 @@ export class LoginService {
     user: User;
     auth: string;
 
-    constructor(private http: HttpClient,private http2: Http) {
+    constructor(private http: HttpClient) {
         let user = JSON.parse(localStorage.getItem('currentUser'));
         if (user) {
             this.setCurrentUser(user);
@@ -75,9 +75,7 @@ export class LoginService {
 
     getUsers(){
         let url = URL + "/users/";
-      return this.http2.get(url)
-    .map(response => response.json())
-    .catch(error => this.handleError(error));
+      return this.http.get(url)
     }
 
     
@@ -105,8 +103,6 @@ export class LoginService {
 
     getUserLoggedBack(){
         let url = URL + "/getUserLogged/";
-        return this.http2.get(url)
-      .map(response => response.json())
-      .catch(error => this.handleError(error));
+        return this.http.get(url);
     }
 }

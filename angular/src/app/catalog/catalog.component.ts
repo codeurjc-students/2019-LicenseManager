@@ -16,19 +16,19 @@ export class CatalogComponent {
   searchInputTerm:string;
 
   constructor(private productService:ProductService, private router:Router){
-      productService.getProducts().subscribe(
-          resp => this.products = resp.content,
+      productService.getProducts().subscribe( 
+          (resp:any) =>{console.log(resp); this.products = resp.content},
           error => console.log(error)
       );
   }
 
   goToProduct(name:string){
-    this.router.navigate(["/catalog/product/",name]);
+    this.router.navigate(["/product/",name]);
   }
 
   searchProduct(){
     this.productService.getProductSearch(this.searchInputTerm).subscribe(
-      ps => this.products = ps.content,
+      (ps:any) => this.products = ps.content,
       error => console.log(error)
     )
   }

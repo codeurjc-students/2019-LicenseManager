@@ -13,7 +13,7 @@ const BASE_URL = 'http://localhost:8080/api/user/';
 export class UserProfileService {
 
     
-    constructor(private http: Http, private loginServ:LoginService) { 
+    constructor(private http: HttpClient, private loginServ:LoginService) { 
         
     }
 
@@ -28,14 +28,12 @@ export class UserProfileService {
 
     addSubscriptionToProduct(product:Product,typeSubs:string,userName:string, automaticRenewal:boolean){
         return this.http.put(BASE_URL+product.name+"/" + typeSubs + "/" + userName +"/addSubscription/renewal/"+automaticRenewal,product)
-        .map(response => response.json());
         
     }
 
     //No sé si debería ir aquí
     buyProduct(token:string,product:Product, userName:string){
         return this.http.put(BASE_URL+userName+"/buy/" + product.name + "/" + token ,product)
-        .map(response => response.json());
     }
 
     test(){

@@ -34,7 +34,7 @@ import { DialogEditComponent } from '../dialogs/dialogEdit.component';
     
     getLicenses(name:string){
     this.productService.getLicensesByProduct(name).subscribe(
-        lics => {this.product.licenses=lics.content;},
+        (lics:any) => {this.product.licenses=lics.content;},
         error => console.log(error)
     ); 
 
@@ -123,7 +123,7 @@ import { DialogEditComponent } from '../dialogs/dialogEdit.component';
     getOneLicense(serial:string, productName:string):License{
         let license:License;
         this.licenseService.getOneLicense(serial,productName).subscribe(
-            lic=>{license=lic},
+            (lic:any)=>{license=lic},
             error=> console.log(error)
         );
         return license;

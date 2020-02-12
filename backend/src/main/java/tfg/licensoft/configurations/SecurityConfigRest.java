@@ -12,28 +12,43 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Order(1)
 public class SecurityConfigRest extends WebSecurityConfigurerAdapter{
    
-    @Autowired
+	@Autowired
     protected UserRepositoryAuthProvider userAuthentication;
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
-		http.httpBasic();
 
         http.antMatcher("/api/**");
 
 		// User
-	//	http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/logIn").hasAnyRole("USER","ADMIN");
-      //  http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/login").permitAll();
-     //   http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/register").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/login").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/register").permitAll();
         
-       // http.authorizeRequests().antMatchers(HttpMethod.GET,"/api/product/all").hasAnyRole("USER","ADMIN");
-        
+        //Product
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/product/**").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/product/").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/product/**").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/product/**").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/product/**/license/**").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/product/**/image").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/product/**/image").hasRole("ADMIN");
 
-        http.authorizeRequests().anyRequest().permitAll();
+        //License
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/licenses/").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/product/**").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/**/**").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/licenses/product/**").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/**").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/licenses/cancelAtEnd/**/**").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/licenses/update/").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/user/**/product/**").hasAnyRole("ADMIN","USER");
+
+
         // Do not redirect when logout
 		http.logout().logoutSuccessHandler((rq, rs, a) -> { });
 		
 		// Use HTTP basic authentication
+		http.httpBasic();
 
         // Disable CSRF
         http.csrf().disable();

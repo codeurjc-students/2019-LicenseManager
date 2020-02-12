@@ -36,13 +36,13 @@ export class UserDashboardComponent implements OnInit{
 
     getLicenses(){
         this.licenseServ.getLicensesOfUser(this.userName).subscribe(
-            lics => {this.activeLicenses = lics.content;},
+            (lics:any) => {this.activeLicenses = lics.content;},
             error => console.log(error)
         ); 
     }
 
     manageLink(productName:string){
-        this.router.navigate(["catalog/product/",productName]);
+        this.router.navigate(["product/",productName]);
     }
 
     formatDates(date:Date){

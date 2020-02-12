@@ -26,7 +26,6 @@ export class AppComponent{
             this.mode = "Development";
         }
         this.pages = new Map();
-        this.pages.set("Catalog","catalog");
     }
 
       

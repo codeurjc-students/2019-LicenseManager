@@ -20,8 +20,9 @@ const appRoutes = [
    { path: 'admin/dashboard', component: AdminDashboardComponent, },
    { path: 'user/dashboard', component: UserDashboardComponent, },
    { path: 'user/profile', component: UserProfileComponent, },
-   { path: 'catalog', component: CatalogComponent, },
-   { path: 'catalog/product/:name', component: CatalogProductComponent, },
+  // { path: 'catalog', component: CatalogComponent, },
+   { path: '', component: CatalogComponent, },
+   { path: 'product/:name', component: CatalogProductComponent, },
    { path: 'try', component: CustomFormComponentComponent, },
    
 ];

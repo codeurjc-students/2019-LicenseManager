@@ -39,7 +39,7 @@ export class CatalogProductComponent implements OnInit {
         productName = params.get('name');
     });
     this.productService.getProduct(productName).subscribe(
-      prd => {this.product = prd; 
+      (prd:any) => {this.product = prd; 
         console.log(this.product)
         let s= Object.keys(this.product.plansPrices); 
         this.numberOfPlans=s.length; 
@@ -70,7 +70,7 @@ export class CatalogProductComponent implements OnInit {
             console.log(res);
             this.loading=true;
             this.userProfileService.addSubscriptionToProduct(this.product,type, this.user.name, res[1]).subscribe(
-                u=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial},
+                (u:any)=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial},
                 error=> {this.treatmentBuyError(error);this.loading=false;},
             )
           }
@@ -135,7 +135,7 @@ export class CatalogProductComponent implements OnInit {
 
   confirm(token:string){
       this.userProfileService.buyProduct(token,this.product,this.user.name).subscribe(
-        t => {this.successfulMessage=true; this.serial=t.serial;},
+        (t:any) => {this.successfulMessage=true; this.serial=t.serial;},
         error => {alert("The purchase has not been posible");}
       )
 
@@ -159,7 +159,7 @@ export class CatalogProductComponent implements OnInit {
 
   getLicensesOfProductAndUser(){
     this.licenseServ.getLicensesOfUserAndProduct(this.user.name,this.product.name).subscribe(
-      ls=> {this.userLicensesOfProduct=ls.content},
+      (ls:any)=> {this.userLicensesOfProduct=ls.content},
       error => console.log(error)
     );
   }
