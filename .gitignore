@@ -1,6 +1,7 @@
 backend/target/classes/META-INF/MANIFEST.MF
-angular/node_modules
+frontend/node_modules/
 Licencheck/.idea
 Licencheck/target/
 JavApplication/target
 JavApplication/.idea/
+

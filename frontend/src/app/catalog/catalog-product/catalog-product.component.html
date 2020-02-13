@@ -1,0 +1,110 @@
+<div class="center-div" *ngIf="product?.active">
+    <h1  style="font-family:Arial" class="content">{{product?.name}}</h1>
+    <br>
+    <span class="content"><a href="//{{product?.webLink}}">{{product?.webLink}}</a></span>
+    <br>
+    <span class="content" style="white-space: pre-line"> {{product?.description}} </span>
+    <br>
+    <div *ngIf="userLicensesOfProduct?.length!=0 && userLicensesOfProduct!=null">
+        <mat-card>
+            <mat-card-title> Your actual licenses of this product  <button mat-raised-button color="primary" (click)="manageLicenses()">Manage</button></mat-card-title>
+            <hr>
+            <mat-card-content>
+                <mat-grid-list cols="7" rowHeight="4rem">
+                    <mat-grid-tile>
+                        <a><strong>SERIAL</strong></a>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <a><strong>STATUS</strong></a>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <a><strong>TYPE</strong></a>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="2">
+                        <a><strong>START DATE</strong></a>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="2">
+                            <a><strong>END DATE</strong></a>
+                    </mat-grid-tile>
+                    <br>
+                </mat-grid-list>
+        
+                <mat-grid-list cols="7" rowHeight="4rem">
+                   <div *ngFor="let license of userLicensesOfProduct">
+                        <mat-grid-tile>
+                            <a>{{license.serial}}</a>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <span *ngIf="license.active"><mat-icon>check</mat-icon></span> 
+                            <span *ngIf="!license.active"><mat-icon>remove</mat-icon></span> 
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <span>{{license.type}}</span>
+                        </mat-grid-tile>
+                        <mat-grid-tile colspan="2">
+                                <a *ngIf="license.startDate">{{formatDates(license.startDate)}}</a>
+                                <a *ngIf="!license.startDate">--</a>
+        
+                        </mat-grid-tile>
+                        <mat-grid-tile colspan="2">
+                                <a *ngIf="license.endDate">{{formatDates(license.endDate)}}</a>
+                                <a *ngIf="!license.endDate">--</a>
+                        </mat-grid-tile>
+                   </div>
+                </mat-grid-list>
+            </mat-card-content>
+        </mat-card>
+    </div>
+
+    <br>
+    <div [ngClass]="numberOfPlans == 1 ? 'grid-container' : numberOfPlans == 2 ? 'grid-container2' : numberOfPlans == 3 ? 'grid-container3' : 'grid-container4'">
+        <div  *ngFor="let plan of product?.plansPrices | keyvalue">
+            <br>
+            <br>
+            <img src="assets/logo_{{plan.key}}.png" class="logoPhoto" height="150" width="150" #photo>
+            <br>
+            <br>
+            
+            <span class="price">{{plan.value}} €
+                <span *ngIf="plan.key=='M'">/ month</span>
+                <span *ngIf="plan.key=='A'">/ year</span>
+                <span *ngIf="plan.key=='D'">/ day</span>
+                <span *ngIf="plan.key=='L'"> (forever) </span>
+            </span>
+            <br>
+            <br>
+            <a *ngIf="errorAdded" style="color:red;">You have to add first a valid card to pay with</a>
+            <br>
+
+            <button mat-raised-button  *ngIf="plan.key=='L' && !loading" (click)="pay(plan.value)" color="primary" >PURCHASE</button>
+            <button mat-raised-button *ngIf="plan.key!='L' && !loading" (click)="subscribeToProduct(plan.key, plan.value)" color="primary">SUBSCRIBE</button>
+
+            <br>
+            <br>
+        </div> 
+    </div>
+    <div *ngIf="successfulMessage">
+        <a  style="color:green;">Payment Successful! Your license serial : <span class="serial">{{serial}}</span></a>
+        <button mat-raised-button color="primary" (click)="copyMessage(serial)" value="click to copy" class="copyButton">Copy license serial</button>
+    </div>
+
+    <div class="typeExp" *ngIf="numberOfPlans!=0">
+        <mat-card>
+            <mat-card-title>Type of subscriptions</mat-card-title>
+            <hr>
+                <div *ngFor="let plan of product?.plansPrices | keyvalue">
+                    <span *ngIf="plan.key=='M'">M = monthly: Your subscription will be valid for 1 month</span>
+                    <span *ngIf="plan.key=='A'">A = annual: Your subscription will be valid for 1 year</span>
+                    <span *ngIf="plan.key=='D'">D = daily: Your subscription will be valid for 1 day</span>
+                    <span *ngIf="plan.key=='L'">L = lifetime: Your subscription will be valid forever </span>
+                </div>
+                <br>
+                <span (click)="manageLicenses()"><i>All subscriptions are renewed automatically. You can cancel them on your <a class="link">User Dashboard</a></i></span>
+        </mat-card>
+    </div>
+</div> 
+
+<div class="center-div" *ngIf="!product?.active">
+    <h1  style="font-family:Arial" class="content"><mat-icon >warning</mat-icon>The product {{product?.name}} is not Active <mat-icon>warning</mat-icon></h1>
+    <span style="font-family:Arial">If you have licenses of this product, don't worry. They are still valid.</span>
+</div>
