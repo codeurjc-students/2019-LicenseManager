@@ -66,7 +66,7 @@ export class CatalogProductComponent implements OnInit {
       this.dialogService.openConfirmDialog("You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged now " + money + "€ to your default card.",true)
       .afterClosed().subscribe(
         res=>{
-          if(res){
+          if(res[0]){
             console.log(res);
             this.loading=true;
             this.userProfileService.addSubscriptionToProduct(this.product,type, this.user.name, res[1]).subscribe(
@@ -86,6 +86,8 @@ export class CatalogProductComponent implements OnInit {
           alert("You have to attach a payment source before buy a license");
       }else if (error.status === 409){
           alert("You already have a subscription of this type to this product!")
+      }else{
+        alert("There has been an error with the subscription and it couldn't be successful.")
       }
   }
   

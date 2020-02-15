@@ -37,6 +37,8 @@
     </build>
     <properties>
         <exec.mainClass>src.main.java.Main</exec.mainClass>
+        <maven.compiler.source>1.6</maven.compiler.source>
+        <maven.compiler.target>1.6</maven.compiler.target>
     </properties>
 
 

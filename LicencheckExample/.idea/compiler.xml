@@ -9,5 +9,8 @@
         <module name="LicencheckExample" />
       </profile>
     </annotationProcessing>
+    <bytecodeTargetLevel>
+      <module name="LicencheckExample" target="6" />
+    </bytecodeTargetLevel>
   </component>
 </project>

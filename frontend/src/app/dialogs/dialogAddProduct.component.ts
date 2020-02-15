@@ -104,7 +104,7 @@ import { ProductService } from '../product/product.service';
         if(this.file!=null){
            this.uploadEvent(this.file);
     }this.dialogRef.close()},
-      error => console.log(error)
+      error => {console.log(error); if(error.status===409){alert("There is already a product (active or inactive) with this product name")}}
     )
   }
 

@@ -8,7 +8,7 @@
     </mat-form-field>  
     <br>
     <mat-form-field>
-        <textarea matInput placeholder="Description" [(ngModel)]="description"> </textarea>
+        <textarea matInput placeholder="Description" [(ngModel)]="description" required> </textarea>
     </mat-form-field>  
     <br>
     <mat-form-field>
@@ -54,9 +54,9 @@
   </td-file-upload>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button mat-raised-button color="primary"  (click)="add()" *ngIf="!edit" [disabled]="(name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
+        <button mat-raised-button color="primary"  (click)="add()" *ngIf="!edit" [disabled]="description==null || (name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
         || (monthly && (priceMonthly==null || priceMonthly=='')) || (annual && (priceAnnual==null || priceAnnual==''))) || type==='lifetime' && (price==null || price=='')">ADD</button>
-        <button mat-raised-button color="primary"  (click)="save()" *ngIf="edit" [disabled]="(name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
+        <button mat-raised-button color="primary"  (click)="save()" *ngIf="edit" [disabled]="description==null || (name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
         || (monthly && (priceMonthly==null || priceMonthly=='')) || (annual && (priceAnnual==null || priceAnnual==''))) || type==='lifetime' && (price==null || price=='')">SAVE</button>
         <button mat-button  (click)="close()">CANCEL</button>
     </mat-dialog-actions>

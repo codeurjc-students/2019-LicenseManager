@@ -104,7 +104,7 @@
     </div>
 </div> 
 
-<div class="center-div" *ngIf="!product?.active">
+<div class="center-div" *ngIf="!product?.active && product?.active!=null">
     <h1  style="font-family:Arial" class="content"><mat-icon >warning</mat-icon>The product {{product?.name}} is not Active <mat-icon>warning</mat-icon></h1>
     <span style="font-family:Arial">If you have licenses of this product, don't worry. They are still valid.</span>
 </div>

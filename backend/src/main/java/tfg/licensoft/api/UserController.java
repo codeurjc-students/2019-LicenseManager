@@ -154,11 +154,13 @@ public class UserController {
 
 				try {
 					Subscription subscription = Subscription.create(params);
-				} catch (StripeException e) {
+				} catch (StripeException e) { 
+					e.printStackTrace();
 					if(e.getCode().equals("resource_missing") && e.getMessage().contains("This customer has no attached payment source")) {
 						return new ResponseEntity<License>(HttpStatus.PRECONDITION_REQUIRED); //The precondition is to have an attached payment source
+					}else {
+						return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
 					}
-					e.printStackTrace();
 				}
 				this.productServ.save(product);			
 				License license = new License(true, typeSubs, product, user.getName());

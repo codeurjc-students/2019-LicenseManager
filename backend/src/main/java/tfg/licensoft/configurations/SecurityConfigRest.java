@@ -12,7 +12,7 @@ import org.springframework.security.config.annotation.web.configuration.WebSecur
 @Order(1)
 public class SecurityConfigRest extends WebSecurityConfigurerAdapter{
    
-	@Autowired
+	@Autowired 
     protected UserRepositoryAuthProvider userAuthentication;
 
     @Override
@@ -33,7 +33,7 @@ public class SecurityConfigRest extends WebSecurityConfigurerAdapter{
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/product/**/image").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/product/**/image").hasRole("ADMIN");
 
-        //License
+        //License  
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/licenses/").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/product/**").hasAnyRole("ADMIN","USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/**/**").hasAnyRole("ADMIN","USER");

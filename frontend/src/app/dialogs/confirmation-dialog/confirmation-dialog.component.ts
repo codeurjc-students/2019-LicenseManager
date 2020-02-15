@@ -29,5 +29,11 @@ export class ConfirmationDialogComponent{
     this.dialogRef.close(this.exit);
   }
 
+  no(){
+    this.exit[0] =false;
+    this.dialogRef.close(this.exit);
+
+  }
+
 
 }

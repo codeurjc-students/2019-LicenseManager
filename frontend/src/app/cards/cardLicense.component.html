@@ -1,7 +1,7 @@
 <mat-card>
-    <mat-card-title> Licenses </mat-card-title>
+    <mat-card-title> Licenses of <b>{{product?.name}}</b></mat-card-title>
     <mat-card-content>
-        <mat-grid-list cols="7" rowHeight="5:1">
+        <mat-grid-list cols="6" rowHeight="5:1">
             <mat-grid-tile>
                 <a><strong>SERIAL</strong></a>
             </mat-grid-tile>
@@ -20,12 +20,11 @@
             <mat-grid-tile>
                     <a><strong>END DATE</strong></a>
             </mat-grid-tile>
-            <mat-grid-tile>
-            </mat-grid-tile>
+
             <br>
         </mat-grid-list>
 
-        <mat-grid-list cols="7" rowHeight="5:1">
+        <mat-grid-list cols="6" rowHeight="5:1">
            <div *ngFor="let license of product?.licenses">
                 <mat-grid-tile>
                     <a>{{license.serial}}</a>
@@ -50,7 +49,7 @@
                         <a *ngIf="license.endDate">{{license.endDate}}</a>
                         <a *ngIf="!license.endDate">--</a>
                 </mat-grid-tile>
-                <mat-grid-tile>
+               <!-- <mat-grid-tile>
                         <button mat-icon-button *ngIf="loginService.isAdmin && license.active" (click)="changeStatus(license.serial,license.product?.name)">
                                 <mat-icon fxFlex="10%">pause</mat-icon>
                         </button>
@@ -63,13 +62,13 @@
                         <button mat-icon-button *ngIf="loginService.isAdmin" (click)="openEditDialog(license)">
                                 <mat-icon fxFlex="10%">edit</mat-icon>
                         </button>
-                </mat-grid-tile>
+                </mat-grid-tile> -->
                 <br>
             </div>
             
         </mat-grid-list>
     </mat-card-content>
-    <button mat-raised-button color="primary" (click)="openAddDialog()">ADD</button>
+   <!-- <button mat-raised-button color="primary" (click)="openAddDialog()">ADD</button> -->
 
 <ng-template #addLicenseDialog let-addLicenseDialog="addLicenseDialog">
         <h1>Add License</h1>
