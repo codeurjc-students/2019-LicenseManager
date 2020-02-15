@@ -4,4 +4,8 @@ Licencheck/.idea
 Licencheck/target/
 JavApplication/target
 JavApplication/.idea/
-
+/docker/data
+backend/src/main/resources/static/assets/*
+backend/src/main/resources/static/*
+backend/target/
+frontend/dist
