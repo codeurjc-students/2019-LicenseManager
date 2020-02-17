@@ -14,7 +14,6 @@ export interface User {
     roles: string[];
     authdata: string;
     userStripeId:string;
-    stripeCards:StripeCard[];
 }
 
 @Injectable()

@@ -29,20 +29,20 @@
             <mat-card-content>
                     <form>
                         <div layout="column">
-                        <h4>Introduce tu usuario</h4>
+                        <h4>Introduce your user name</h4>
                         <mat-form-field>
-                            <mat-label>Usuario</mat-label>
-                                <input #user matInput placeholder="Usuario">
+                            <mat-label>User</mat-label>
+                                <input #user matInput placeholder="User">
                         </mat-form-field>
-                        <h4>Introduce tu contraseña</h4>
+                        <h4>Introduce your password</h4>
                         <mat-form-field>
-                            <mat-label>Contraseña</mat-label>
-                                <input #pass matInput placeholder="Contraseña" type="password">
+                            <mat-label>Password</mat-label>
+                                <input #pass matInput placeholder="Password" type="password">
                         </mat-form-field>
                         
                         <div layout="column">
                                 <a mat-stroked-button class="text-upper" color="primary" (click)="register()">
-                                    <span>Registro</span>
+                                    <span>Register</span>
                                 </a>
                         </div>
                     </div> 
@@ -51,7 +51,7 @@
             <mat-card-actions>
                 <div layout="column">
                         <a mat-raised-button (click)="logIn($event, user.value, pass.value)" class="text-upper" color="primary">
-                            <span>Acceder</span>
+                            <span>Access</span>
                         </a>
                 </div>
             </mat-card-actions>

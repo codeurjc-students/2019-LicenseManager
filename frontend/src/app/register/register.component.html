@@ -4,20 +4,20 @@
               <mat-card-content>
                       <form>
                           <div layout="column">
-                          <h4>Introduce tu usuario</h4>
+                          <h4>Introduce your user</h4>
                           <mat-form-field>
-                              <mat-label>Usuario</mat-label>
-                                  <input #user  name='user' matInput placeholder="Usuario">
+                              <mat-label>User</mat-label>
+                                  <input #user  name='user' matInput placeholder="User">
                           </mat-form-field>
-                          <h4>Introduce tu contraseña</h4>
+                          <h4>Introduce your password</h4>
                           <mat-form-field>
-                              <mat-label>Contraseña</mat-label>
-                                  <input #pass1 type="password"   name='pass1' matInput placeholder="Contraseña">
+                              <mat-label>Password</mat-label>
+                                  <input #pass1 type="password"   name='pass1' matInput placeholder="Password">
                           </mat-form-field>
-                          <h4>Confirma la contraseña</h4>
+                          <h4>Confirm password</h4>
                           <mat-form-field>
-                              <mat-label>Contraseña</mat-label>
-                                  <input type="password" name='pass2' #pass2 matInput placeholder="Contraseña" >
+                              <mat-label>Password</mat-label>
+                                  <input type="password" name='pass2' #pass2 matInput placeholder="Password" >
                           </mat-form-field>
                           
                           
@@ -30,7 +30,7 @@
               <mat-card-actions>
                   <div layout="column">
                       <a mat-raised-button (click)="register(user.value,pass1.value,pass2.value)" class="text-upper" color="primary" [routerLink]="['/login']">
-                        <span>Crear usuario</span>
+                        <span>Create user</span>
                     </a>
                   </div>
               </mat-card-actions>
