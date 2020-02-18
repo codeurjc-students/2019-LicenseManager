@@ -7,7 +7,7 @@ public class TestLicencheck{
 
     @Test
     public void testCheckLicense(){
-        Licencheck l = new Licencheck("http://localhost:8080");
+        Licencheck l = new Licencheck("http://localhost:8080/");
         Assert.assertNotNull(l.checkLicense("XX-X3","sw"));
     }
 

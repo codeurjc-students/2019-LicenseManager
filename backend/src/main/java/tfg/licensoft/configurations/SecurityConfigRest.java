@@ -21,16 +21,22 @@ public class SecurityConfigRest extends WebSecurityConfigurerAdapter{
         http.antMatcher("/api/**");
 
 		// User
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/login").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/register").permitAll();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/login").authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/register").authenticated();
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/user/addCard/**").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/user/**/buy/**/**").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/user/**/**/**/addSubscription/renewal/**").hasAnyRole("ADMIN","USER"); //Revisar esto
+
+
         
         //Product
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/product/**/image").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/product/**").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/product/").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/product/**").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/product/**").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/product/**/license/**").hasRole("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/product/**/image").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/product/**/image").hasRole("ADMIN");
 
         //License  

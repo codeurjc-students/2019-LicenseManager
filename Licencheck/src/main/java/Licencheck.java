@@ -15,6 +15,12 @@ public class Licencheck {
 
 
     public Licencheck(String url){
+        System.out.println(url.charAt(url.length()-1));
+        if(url.charAt(url.length()-1)=='/'){
+            //Remove the last dash '/'
+            url = url.substring(0,url.length()-1);
+        }
+        System.out.println(url);
         this.baseEndpoint = url + "/licencheck/";
     }
 

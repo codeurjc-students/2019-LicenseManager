@@ -55,57 +55,6 @@ public class UserController {
 	private ProductService productServ;
 	
 	
-	/*
-	//TODO error
-	@PutMapping("/")
-	private ResponseEntity<User> updateStripeCards(@RequestBody User updatedUser) {
-		User user = userServ.findByName(updatedUser.getName());
-		User userLogged = userComponent.getLoggedUser(); 
-		if (user!=null && user.getId()==userLogged.getId()) {
-			System.out.println("++++ " + user);
-			user.getStripeCards().addAll(updatedUser.getStripeCards());
-			userServ.save(user);
-			return new ResponseEntity<User>(user,HttpStatus.OK);
-		}else {
-			return new ResponseEntity<User>(HttpStatus.NOT_FOUND);
-		}
-	}
-	
-	
-	@PostMapping("{userName}/addCard")
-	public ResponseEntity<StripeCard> addCard(@PathVariable String userName,@RequestBody StripeCard stripeCard) {
-		User user = userComponent.getLoggedUser();
-	//	User user = this.userServ.findByName(userName);
-		try {
-			Customer c = Customer.retrieve(user.getCustomerStripeId());
-			Map<String,Object> cardParam = new HashMap<String,Object>();
-			cardParam.put("number", stripeCard.getNumber());
-			cardParam.put("cvc",stripeCard.getCvv());
-			cardParam.put("exp_month",stripeCard.getExp_month());
-			cardParam.put("exp_year",stripeCard.getExp_year());
-			
-			Map<String,Object> tokenParam = new HashMap<String,Object>();
-			tokenParam.put("card", cardParam);
-			
-			Token token = Token.create(tokenParam);
-			
-			Map<String,Object> source = new HashMap<String,Object>();
-			source.put("source", token.getId());
-			
-			c.getSources().create(source);
-			
-			stripeCard.setUser(user);
-			this.stripeCardServ.save(stripeCard);
-			
-			return new ResponseEntity<StripeCard>(stripeCard,HttpStatus.OK);
-		} catch (StripeException e) {
-			e.printStackTrace();
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
-		}
-		
-		
-	}
-	*/
 	
 	@PostMapping("/addCard/{tokenId}")
 	public ResponseEntity<User> addCardStripeElements(@PathVariable String tokenId){
@@ -248,30 +197,4 @@ public class UserController {
 
 	}
 
-	
-	/* TODO
-	@GetMapping("/stripeCardsBDStripe")
-	public List<StripeCard> getCardsBDStripe(Pageable page){
-		User user = userComponent.getLoggedUser();
-		try {
-			Customer c = Customer.retrieve(user.getCustomerStripeId());
-			Map<String, Object> params = new HashMap<>();
-			params.put("object", "card");
-			params.put("limit", 100);
-
-			PaymentSourceCollection cards =
-					  c.getSources().list(params);
-			
-			List<PaymentSource> p = cards.getData();
-			List<StripeCard> pages = new ArrayList();
-			for (PaymentSource ps : p) {
-				Card card =  (Card) c.getSources().retrieve(ps.getId());
-				StripeCard cardStripe = new StripeCard();
-				
-
-			}
-		} catch (StripeException e) {
-			e.printStackTrace();
-		}
-	}*/
 }
