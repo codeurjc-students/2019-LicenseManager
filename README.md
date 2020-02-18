@@ -9,31 +9,31 @@ In Licensoft there are 2 types of roles: **ADMIN** and **USER**.
 
 ### DOMAIN
 #### Product
-Name (String)
-Description (String)
-WebLink (String)
-Licenses  (License[])
-TypeSubs (String[]) 
-PhotoAvailable (boolean)
-PlansPrices (Map<String, Number>)
-Sku (String)
-Active (boolean)
+* Name (String)
+* Description (String)
+* WebLink (String)
+* Licenses  (License[])
+* TypeSubs (String[]) 
+* PhotoAvailable (boolean)
+* PlansPrices (Map<String, Number>)
+* Sku (String)
+* Active (boolean)
 
 ### License
-Serial (String)
-Active (boolean)
-Type (String)
-Product [(Product)](README.md#product)
-StartDate (Date)
-EndDate (Date)
-Owner (String)
-CancelAtEnd (boolean)
+* Serial (String)
+* Active (boolean)
+* Type (String)
+* Product [(Product)](README.md#product)
+* StartDate (Date)
+* EndDate (Date)
+* Owner (String)
+* CancelAtEnd (boolean)
 
 ### User
-Name (String)
-Roles (String[])
-Password (String - hashed)
-UserStripeId (String)
+* Name (String)
+* Roles (String[])
+* Password (String - hashed)
+* UserStripeId (String)
 
 ## ADMIN Habilities
 ### Add Product - Subscription type
