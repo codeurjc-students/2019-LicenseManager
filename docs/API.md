@@ -27,7 +27,7 @@ This document will explain how is used the Licensoft-Web API.
 ## Authorization
 Many of the requests will need Basic Authentication (with role USER or ADMIN) . If not, will respond with code 401 or 403.
 Example: Postman
-![Postman Basic Auth](images/postmanAuth.jpg)
+![Postman Basic Auth](images/postmanAuth.JPG)
 
 ## Login
 Make the request without params, just including in Authorization UserName and Password.
