@@ -47,10 +47,19 @@ Make the request without params, just including in Authorization UserName and Pa
 - **Success Response**
   - **Code**: 200 OK
   - **Content**:
+   ```json
+	{
+	"id": 4,
+	"name": "admin",
+	"passwordHash": "$2a$10$ComJCIfcUWI3AJ.iFYPmiuYwAocId5oiYegzhRst.TJJDaaNNkqqW",
+	"roles": [
+		"ROLE_USER",
+		"ROLE_ADMIN"
+		]
+	}
 
 
 ## LogOut
-Same as LogIn.
 - **URL**  
    `/api/logOut`
 - **Method**  
@@ -66,12 +75,7 @@ Same as LogIn.
 
 - **Success Response**
   - **Code**: 200 OK
-  - **Content**:
-
-  ```json
-  {
-  }
-  ```
+  - **Content**:  `true`
 
 ## Register
 - **URL**  
