@@ -1015,7 +1015,7 @@ Switches ON/OFF the cancelAtEnd attribute of a License (automatic renewal).
     "empty": false
 	}
 
-## Check License ([Licencheck](../LicencheckGuide.md)) <a name="checkLicense"></a>
+## Check License ([Licencheck](./LicencheckGuide.md)) <a name="checkLicense"></a>
 - **URL**  
    `/licencheck/checkLicense/{productName}/{licenseSerial}`
 - **Method**  
