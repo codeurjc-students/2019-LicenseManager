@@ -96,7 +96,16 @@ Path Variables:
 - **Success Response**
   - **Code**: 200 OK
   - **Content**:
-  - 
+    ```json
+	{
+	"id": 15,
+	"name": "pepe",
+	"passwordHash": "$2a$10$3.QXn.DKdYcl7wgjdSwCveuT2.VNS7/H8hf2LjlQr/eVYNvxJmDfy",
+	"roles": [
+		"ROLE_USER"
+		]
+	}
+   
 ## Get All Users
 - **URL**  
    `/api/users`
