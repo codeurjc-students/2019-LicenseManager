@@ -24,46 +24,59 @@ The following explanations of implementations with Stripe in the back do not inc
 ### Creating a Customer
 [Stripe Customers API](https://stripe.com/docs/api/customers)
 Whenever someone registers, Customer (Stripe) and User (Licensoft) are created. Both are linked by stripeCustomerId attribute in User.
-`... `
-`Customer customer = Customer.create(customerParameter);`
-`userServ.save(new User(customer.getId(),user, pass1, "ROLE_USER"));`
+```
+... 
+Customer customer = Customer.create(customerParameter);
+userServ.save(new User(customer.getId(),user, pass1, "ROLE_USER"));
+```
 
 ### Creating a Product
 [Stripe Products API](https://stripe.com/docs/api/products)
 Stripe offers many options to create a Product. Licensoft has 2 types of products: **Good (Stripe) | Lifetime (Licensoft)** & **Service (Stripe) | Subscription (Licensoft)**. 
-`...`
-`params.put("type", "good");` OR `params.put("type", "service");`
+```
+...
+params.put("type", "good");` OR `params.put("type", "service");
+```
 Creating the Product in stripe:
 `productStripe = com.stripe.model.Product.create(params);`
 
 ### Setting Plans to a Subscription Product
 [Stripe Plans API](https://stripe.com/docs/api/plans)
 Each Subscription Product can have many different Plans (with different prices and intervals). When a Plan is created, it is linked with the Product (Licensoft) by the plans Map attribute.
-`...`
-`params.put("interval", "month");`
-`params.put("product", productId);`
-`params.put("amount", (int)(price*100));`
-`Plan plan1M = Plan.create(params);`
-`product.getPlans().put("M",plan1M.getId());`
+
+```
+...
+params.put("interval", "month");
+params.put("product", productId);
+params.put("amount", (int)(price*100));
+Plan plan1M = Plan.create(params);
+product.getPlans().put("M",plan1M.getId());
+```
 
 ### Setting SKUs to a Lifetime Product
 [Stripe SKU API](https://stripe.com/docs/api/skus)
 Lifetime Products hava associated a SKU which identifies the Product with its properties (price, availability ,etc). Each Lifetime Product (Lifensoft) has a SKU attribute whick links it with the SKU (Stripe). 
-`...`
-`paramsSku.put("price",(int)(price*100) );`
-`paramsSku.put("product",productId);`
 
-`Sku sku = Sku.create(paramsSku);`
-`product.setSku(sku.getId());`
-`product.setProductStripeId(productId);`
+```
+...
+paramsSku.put("price",(int)(price*100) );
+paramsSku.put("product",productId);
+...
+Sku sku = Sku.create(paramsSku);
+product.setSku(sku.getId());
+product.setProductStripeId(productId);
+```
 
 ### Subscribing to a Product
 [Stripe Subscription API](https://stripe.com/docs/api/subscriptions)
 User can choose which product plan to subscribe. 
 **Prerequisite**: Customer (Stripe) must have a payment source attached previously.
-`...`
-`params.put("customer", user.getCustomerStripeId());`
-`Subscription subscription = Subscription.create(params);`
+
+```
+...
+params.put("customer", user.getCustomerStripeId());
+Subscription subscription = Subscription.create(params);
+```
 
 ### Purchasing a Product
 This process is divided into 2 parts: 1. Frontend to collect card info in a **token**. 2. Make the **Order** with the token.
