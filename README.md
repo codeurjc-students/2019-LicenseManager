@@ -96,3 +96,7 @@ The delete will set the product to inactive and it will disappear from the catal
 ![Introduce serial](docs/gifs/introduceSerial.gif)
 
 ---
+---
+
+## Other documentation
+* [Stripe Integration](docs/StripeIntegration.md)
