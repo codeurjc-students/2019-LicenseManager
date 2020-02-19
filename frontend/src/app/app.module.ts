@@ -71,7 +71,6 @@ import { LoginComponent } from './login/login.component';
 import { LoginService } from './login/login.service';
 import { RegisterComponent } from './register/register.component';
 import { RegisterService } from './register/register.service';
-import { IndexComponent } from './index/index.component';
 import { ProductComponent } from './product/product.component';
 import { ProductService } from './product/product.service';
 import { LicenseService } from './licenses/license.service';

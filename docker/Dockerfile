@@ -1,6 +1,8 @@
 # Base Image
 FROM openjdk:8-jre-alpine
 
+ARG privateStripeKey
+ENV privateStripeKeyEnv="--privateStripeKey=$privateStripeKey"
 
 
 # Copy App
@@ -11,4 +13,4 @@ COPY images /images
 EXPOSE 8080
 
 #  Run app
-CMD ["java", "-jar", "license-web-0.5.0.jar"]
+CMD ["sh","-c","java -jar license-web-0.5.0.jar $privateStripeKeyEnv"]

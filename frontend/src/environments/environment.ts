@@ -1,4 +1,6 @@
 export const environment = {
     production: false,
-    apiEndpoint: 'https://dev.miapi.com'
+    apiEndpoint: 'https://dev.miapi.com',
+    stripeApiPublicKey: "kkkkkk"
+
 };
