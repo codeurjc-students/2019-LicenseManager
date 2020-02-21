@@ -2,7 +2,8 @@
 FROM openjdk:8-jre-alpine
 
 ARG privateStripeKey
-ENV privateStripeKeyEnv="--privateStripeKey=$privateStripeKey"
+ENV privateStripeKeyEnv="$privateStripeKey"
+
 
 
 # Copy App

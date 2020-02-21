@@ -6,6 +6,7 @@ import { NgForm } from '@angular/forms';
 import { UserProfileService } from './userProfile/userProfile.service';
 
 declare var Stripe: any;
+declare var publicStripeKeyEnv:string;
 @Component({
     selector: 'my-app',
     templateUrl: './app.component.html',
@@ -16,7 +17,8 @@ export class AppComponent{
 
     mode: string;
     pages:Map<String,String>;
-
+    public environment = environment.environment;
+    publicStripeKeyEnv = environment.APIKeys.publicStripeKeyEnv;
 
     
     constructor(private router: Router,private userProfileServ:UserProfileService) {
@@ -26,7 +28,7 @@ export class AppComponent{
             this.mode = "Development";
         }
         this.pages = new Map();
-        console.log(environment.stripeApiPublicKey);
+        console.log(this.publicStripeKeyEnv);
     }
 
       

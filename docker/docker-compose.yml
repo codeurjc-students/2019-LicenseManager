@@ -18,6 +18,7 @@ services:
             context: ./
             args: 
                 privateStripeKey: sk_test_HXX6s2mN8JqMUytYfvkwB0dr00CfDzVlYA
+        image: kikeajani/licensoft:latest
         links:
             - sql
         depends_on:
@@ -30,4 +31,23 @@ services:
             SPRING_DATASOURCE_URL: jdbc:mysql://sql/licensoft?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
             SPRING_DATASOURCE_USERNAME: root
             SPRING_DATASOURCE_PASSWORD: 12345pass
-            privateStripeKeyEnv: sk_test_HXX6s2mN8JqMUytYfvkwB0dr00CfDzVlYA
+            
+    
+    
+    frontend:
+        build: 
+            context: ../frontend
+            args: 
+                publicStripeKey: pk_test_mAWlLKZrpvwEye9QZzRZzsSG00M6tsJ3QS
+        #image: kikeajani/frontend-licensoft:latest
+        #environment:
+         #       publicStripeKeyEnv: environmentKey
+          #      ENVIRONMENT: compose
+           #     test: composetest
+        depends_on:
+            - licensoft
+        ports:
+            - "80:80"
+        
+        
+

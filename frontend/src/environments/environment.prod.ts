@@ -1,5 +1,7 @@
 export const environment = {
     production: true,
-    apiEndpoint: 'https://miapi.com',
-    stripeApiPublicKey: "asdasdasdads"
-};
+    environment: $ENV.ENVIRONMENT,
+    APIKeys: {
+        publicStripeKeyEnv: $ENV.publicStripeKeyEnv,
+    }
+  };

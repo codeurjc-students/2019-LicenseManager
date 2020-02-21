@@ -5,7 +5,6 @@ import { JsonpModule, HttpModule } from '@angular/http';
 import { HttpClientModule,HTTP_INTERCEPTORS } from '@angular/common/http';
 import { MatIconRegistry } from '@angular/material/icon';
 import { CovalentFileModule } from '@covalent/core/file';
-
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
@@ -155,7 +154,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     bootstrap: [AppComponent],
     entryComponents: [DialogDeleteComponent, DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent,
     ],
-    providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,LoginComponent, 
+    providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,LoginComponent,
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
         { provide: LocationStrategy, useClass: HashLocationStrategy },
