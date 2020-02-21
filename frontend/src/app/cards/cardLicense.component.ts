@@ -99,7 +99,6 @@ import { DialogEditComponent } from '../dialogs/dialogEdit.component';
             this.typeAlertNull=true;
         }
         if(type!=null && active !=null){
-            console.log(s,active,type);
             let lic :License = {serial: s,active:active,type:type, owner:null,product:this.product,cancelAtEnd:false};
             this.licenseService.addLicense(lic).subscribe(
                 lic=>{this.dialogRef.close();this.getLicenses(this.product.name)},

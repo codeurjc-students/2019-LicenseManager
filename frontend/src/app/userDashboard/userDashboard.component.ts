@@ -60,7 +60,6 @@ export class UserDashboardComponent implements OnInit{
       .afterClosed().subscribe(
           suc=>{
               if(suc[0]){
-                  console.log(suc);
                   this.loading=true;
                 this.licenseService.canceltAtEndLicense(license.serial,license.product.name).subscribe(
                 ans=>{this.getLicenses();this.loading=false;},

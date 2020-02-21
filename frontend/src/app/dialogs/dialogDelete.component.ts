@@ -15,7 +15,6 @@ import { ProductService } from '../product/product.service';
     constructor( @Inject(MAT_DIALOG_DATA) public data:any, public  licenseService:LicenseService, private dialogRef:MatDialogRef<DialogDeleteComponent>){
         this.serial=data.serial;
         this.productName=data.productName;
-        console.log(data);
     }
 
     deleteLicense(){

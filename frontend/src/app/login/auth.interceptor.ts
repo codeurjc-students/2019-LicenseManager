@@ -12,8 +12,6 @@ export class BasicAuthInterceptor implements HttpInterceptor {
         let user = JSON.parse(localStorage.getItem('currentUser'));
 
         if (user && user.authdata) {
-            console.log(user.authdata + " -> " + user.name);
-
             request = request.clone({
                 setHeaders: { 
                     Authorization: `Basic ${user.authdata}`

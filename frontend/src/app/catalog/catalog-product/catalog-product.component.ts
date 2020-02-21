@@ -42,7 +42,6 @@ export class CatalogProductComponent implements OnInit {
     });
     this.productService.getProduct(productName).subscribe(
       (prd:any) => {this.product = prd; 
-        console.log(this.product)
         let s= Object.keys(this.product.plansPrices); 
         this.numberOfPlans=s.length; 
         if(this.loginService.isLogged){
@@ -69,7 +68,6 @@ export class CatalogProductComponent implements OnInit {
       .afterClosed().subscribe(
         res=>{
           if(res[0]){
-            console.log(res);
             this.loading=true;
             this.userProfileService.addSubscriptionToProduct(this.product,type, this.user.name, res[1]).subscribe(
                 (u:any)=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial},

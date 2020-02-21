@@ -16,7 +16,6 @@ import { User, LoginService } from '../login/login.service';
     constructor( @Inject(MAT_DIALOG_DATA) public data:any, public  licenseService:LicenseService, private dialogRef:MatDialogRef<DialogEditComponent>, private loginServ:LoginService){
         this.license=data.license;
         this.getUsers();
-        console.log(data);
     }
 
 

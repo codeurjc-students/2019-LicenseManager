@@ -17,7 +17,7 @@ export class CatalogComponent {
 
   constructor(private productService:ProductService, private router:Router){
       productService.getProducts().subscribe( 
-          (resp:any) =>{console.log(resp); this.products = resp.content},
+          (resp:any) =>{this.products = resp.content},
           error => console.log(error)
       );
   }

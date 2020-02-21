@@ -32,7 +32,6 @@ export class CustomFormComponentComponent {
       this._zone.run(() => {
         if (status === 200) {
           this.token = `${response.card.id}`;
-          console.log(this.token);
         } else {
           this.message = response.error.message;
         }

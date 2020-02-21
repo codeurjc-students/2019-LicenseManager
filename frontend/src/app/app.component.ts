@@ -28,7 +28,6 @@ export class AppComponent{
             this.mode = "Development";
         }
         this.pages = new Map();
-        console.log(this.publicStripeKeyEnv);
     }
 
       

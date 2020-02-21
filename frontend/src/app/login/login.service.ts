@@ -47,7 +47,6 @@ export class LoginService {
                     this.setCurrentUser(user);
                     user.authdata = auth;
                     localStorage.setItem('currentUser', JSON.stringify(user));
-                    console.log("adasdsa");
                 }
                 return user;
             }));
@@ -65,7 +64,6 @@ export class LoginService {
     }
 
     private setCurrentUser(user: User) {
-        console.log(localStorage.length);
         this.isLogged = true;
         this.user = user;
         this.isAdmin = this.user.roles.indexOf('ROLE_ADMIN') !== -1;
