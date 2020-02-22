@@ -2,13 +2,38 @@
 Licensoft is an OpenSource online platform to allow software developers and software companies to manage paid licenses of their software. 
 With Licensoft it will be easy to charge for a software: run the web where the customers will buy the licenses and use the Licencheck library in your software to check for the validity of the licenses that users introduce.
 
-#### Roles 
+## INDEX
+* [Roles](#roles)
+* [Domain](#domain)
+    * [Product](#product)
+    * [License](#license)
+    * [User](#user)
+* [ADMIN Habilities](#admin-habilities)
+    * [Add Product - Subscription](#add-product-subs) 
+    * [Add Product - Lifetime](#add-product-lifetime)
+    * [Edit Product](#edit-product)
+    * [Delete Product](#delete-product)
+* [USER normal flow](#user-normal-flow)
+	1. [Register](#register)
+	2. [Login](#login)
+	3. [Attach payment source to user](#attach-payment-source-to-user)
+	4. [Search in catalog](#search-in-catalog)
+	5. [Subscribe to Product](#subscribe-to-product)
+	6. [Buy Lifetime Product](#buy-lifetime-product)
+	7. [Introduce license Serial into purchased software ](#introduce-license-serial-into-the-purchased-software)
+* [Other Docs](#other-documentation)
+
+
+ 
+
+
+## ROLES
 In Licensoft there are 2 types of roles: **ADMIN** and **USER**. 
 	**ADMIN** will be the Software seller. The main diference between them is that ADMIN can   
 ```Add/Edit/Delete Products (name, description, prices...). ```
 
-### DOMAIN
-#### Product
+## DOMAIN
+### Product
 * Name (String)
 * Description (String)
 * WebLink (String)
@@ -35,13 +60,14 @@ In Licensoft there are 2 types of roles: **ADMIN** and **USER**.
 * Password (String - hashed)
 * UserStripeId (String)
 
+
 ## ADMIN Habilities
-### Add Product - Subscription type
+### Add Product - Subscription type <a name="add-product-subs"></a>
 ![Add Subscription Product](docs/gifs/addProdSubs.gif)
 
 ---
 
-### Add Product - Lifetime type
+### Add Product - Lifetime type <a name="add-product-lifetime"></a>
 This flow is the same as Adding a subscription type but changing its type.
 
 ![Add Lifetime Product](docs/gifs/addProdLifetime.gif)
@@ -92,11 +118,16 @@ The delete will set the product to inactive and it will disappear from the catal
 
 ---
 
-### Introduce license Serial into the software purchased
+### Introduce license Serial into the purchased software 
 ![Introduce serial](docs/gifs/introduceSerial.gif)
 
 ---
 ---
 
-## Other documentation
+
+## OTHER DOCUMENTATION
 * [Stripe Integration](docs/StripeIntegration.md)
+* [Licencheck Guide](docs/LicencheckGuide.md)
+* [API](docs/API.md)
+
+
