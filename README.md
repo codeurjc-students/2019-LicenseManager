@@ -129,6 +129,6 @@ The delete will set the product to inactive and it will disappear from the catal
 * [Stripe Integration](docs/StripeIntegration.md)
 * [Licencheck Guide](docs/LicencheckGuide.md)
 * [API](docs/API.md)
-* [Installation Guide](docks/InstallationGuide.md)
+* [Installation Guide](docs/InstallationGuide.md)
 
 
