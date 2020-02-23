@@ -9,7 +9,7 @@ Also, Stripe give us a [checkout](https://stripe.com/docs/payments/checkout) to 
 2.  [Go to the Dashboard](https://dashboard.stripe.com/test/dashboard)
 3.  Activate your account.
 4.  Get your API Keys = Dashboard > Developers >  Api Keys
-5. Set up [Stripe&JavaBackend](#backSetup) and [Stripe&AngularFrontend](#frontSetup) 
+5. Set up [Stripe&JavaBackend](#backSetup) and [Stripe&AngularFrontend](#frontSetup) for development. (For production, look at the [Installation Guide](./InstallationGuide.md)
 ## Stripe => Licensoft Domain
 * Customer => User
 * Product => Product
@@ -17,7 +17,7 @@ Also, Stripe give us a [checkout](https://stripe.com/docs/payments/checkout) to 
 	* Sku => Product attribute
 
 ## Java Backend & Stripe - Set Up <a name="backSetup"></a>
-adas
+Just pass as first arg on running the app, the Private Stripe Api Key.
 
 ## Java Backend & Stripe - Implementations
 The following explanations of implementations with Stripe in the back do not include the complete code, only the key lines. For more information, see the Stripe API or the full code available in this repository,
@@ -108,7 +108,7 @@ As Purchasing a Product, attaching a card to a Customer (Stripe) is divided in t
 			c.getSources().create(source);
 ```
 ## Angular Frontend & Stripe - Set Up <a name="frontSetup"></a>
-...
+Go to environments folder (frontend/src/environment), and in environment.ts add your Public Stripe Api Key on publicStripeKeyEnv attribute.
 
 
 ## Angular Frontend & Stripe - Implementations
