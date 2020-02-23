@@ -9,7 +9,7 @@ Also, Stripe give us a [checkout](https://stripe.com/docs/payments/checkout) to 
 2.  [Go to the Dashboard](https://dashboard.stripe.com/test/dashboard)
 3.  Activate your account.
 4.  Get your API Keys = Dashboard > Developers >  Api Keys
-5. Set up [Stripe&JavaBackend](#backSetup) and [Stripe&AngularFrontend](#frontSetup) for development. (For production, look at the [Installation Guide](./InstallationGuide.md)
+5. Set up [Stripe&JavaBackend](#backSetup) and [Stripe&AngularFrontend](#frontSetup) for development. (For production, look at the [Installation Guide](./INSTALLATION_GUIDE.md)
 ## Stripe => Licensoft Domain
 * Customer => User
 * Product => Product
