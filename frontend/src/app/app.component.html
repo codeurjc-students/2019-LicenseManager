@@ -1,23 +1,11 @@
-  <!--<td-layout-nav>
-    <div id="toolbar" td-toolbar-content layout="row" layout-align="start center" flex>
-      <a mat-icon-button [routerLink]="['/']" matTooltip="LicenSoft">
-        <mat-icon>home</mat-icon>
-      </a>
-      <div>
-        <a mat-button matTooltip="A VER"> A VER</a>
-      </div>
-    </div>
-    <router-outlet></router-outlet>
-  </td-layout-nav>
--->
 <div id="appRootClass">
   <div>
       <img src="assets/licensoftLogoFont.png" id="logoPhoto" class="responsive"> 
   </div>
 
 
-  <td-layout-nav>
-    <div td-toolbar-content layout="row" layout-align="start center" flex>
+  <td-layout-nav >
+    <div td-toolbar-content layout="row" layout-align="start center" flex > 
       <a mat-icon-button [routerLink]="['/']">
         <mat-icon>home</mat-icon>
       </a>
@@ -26,6 +14,9 @@
           {{page.key}}
         </a>
       </div>
+    <!--  <div id="logoPhoto">
+        <img src="assets/licensoftLogoFont.png"  class="responsive"> 
+    </div>-->
       <app-login class="loginButtons"></app-login>
     </div>
     <router-outlet></router-outlet>

@@ -1,19 +1,18 @@
 package tfg.licensoft;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
 import javax.annotation.PostConstruct;
 
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 
+import com.stripe.Stripe;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
-import com.stripe.model.Plan;
-import com.stripe.model.Sku;
-import com.stripe.net.StripeResponse;
+
 
 import tfg.licensoft.licenses.License;
 import tfg.licensoft.licenses.LicenseService;
@@ -36,8 +35,19 @@ public class DatabaseInitializer {
 	@Autowired
 	ProductService productServ;
 
+	@Value("${stripe.privateKey}")
+	String privateKey;
+	
+	
+	@Value("${stripe.publicKey}")
+	String publicKey;
+	
+	
 	@PostConstruct
 	public void init() throws StripeException {
+		System.out.println("Your api key-> " + privateKey);
+		Stripe.apiKey=privateKey;
+		
 
 
 	 
@@ -222,5 +232,6 @@ public class DatabaseInitializer {
 		
 		
 	}
+
 
 }
