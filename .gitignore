@@ -9,3 +9,5 @@ backend/src/main/resources/static/assets/*
 backend/src/main/resources/static/*
 backend/target/
 frontend/dist
+backend/src/main/java/tfg/licensoft/DatabaseInitializer.java
+backend/target/classes/java/tfg/licensoft/DatabaseInitializer.class
