@@ -18,7 +18,6 @@ export class AppComponent{
     mode: string;
     pages:Map<String,String>;
     public environment = environment.environment;
-    publicStripeKeyEnv = environment.APIKeys.publicStripeKeyEnv;
 
     
     constructor(private router: Router,private userProfileServ:UserProfileService) {

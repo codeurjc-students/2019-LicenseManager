@@ -90,6 +90,7 @@ import { CatalogProductComponent } from './catalog/catalog-product/catalog-produ
 import { CustomFormComponentComponent } from './custom-form-component/custom-form-component.component';
 import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { AppService } from './app.service';
 
 @NgModule({
     imports: [
@@ -154,7 +155,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
     bootstrap: [AppComponent],
     entryComponents: [DialogDeleteComponent, DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent,
     ],
-    providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,LoginComponent,
+    providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,LoginComponent, AppService,
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
         { provide: LocationStrategy, useClass: HashLocationStrategy },

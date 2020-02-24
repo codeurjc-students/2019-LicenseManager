@@ -12,6 +12,7 @@ import { MatDialogRef, MatDialog } from '@angular/material';
 import { LoginComponent } from '../../login/login.component';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment';
+import { AppService } from '../../app.service';
 
 
 @Component({
@@ -35,7 +36,8 @@ export class CatalogProductComponent implements OnInit {
   numberOfPlans:number;
   dialogRef: MatDialogRef<any, any>;
 
-  constructor(private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
+
+  constructor(public appService:AppService,private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
     let productName;
     this.activeRoute.paramMap.subscribe((params: ParamMap) => {
         productName = params.get('name');
@@ -50,7 +52,6 @@ export class CatalogProductComponent implements OnInit {
     );
     this.successfulMessage=false;
     this.loading=false;
-
    }
 
    ngOnInit(): void {
@@ -107,12 +108,11 @@ export class CatalogProductComponent implements OnInit {
   }
 
   pay(amount) {  
-    let stripeKey = environment.APIKeys.publicStripeKeyEnv;
     if(this.user==null){
        alert("You have to be logged first! If you don't have an account, you can register too");
     }else{
       var handler = (<any>window).StripeCheckout.configure({
-        key: stripeKey,
+        key: this.appService.publicApiKey,
         currency:'eur',
         email:this.user.name +'@email.com',
         token: (token: any) =>{

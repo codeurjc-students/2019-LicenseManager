@@ -1,6 +1,6 @@
 import { Component, OnInit } from '@angular/core';
 import { UserProfileService } from '../userProfile.service';
-import { environment } from 'src/environments/environment';
+import { AppService } from '../../app.service';
 
 
 declare var Stripe: any;
@@ -13,11 +13,11 @@ declare var Stripe: any;
 export class CardFormComponent implements OnInit {
   successfulAdd:boolean;
   loading:boolean;
-  constructor(private userProfileServ:UserProfileService) { }
+  constructor(private appService:AppService,private userProfileServ:UserProfileService) { }
 
   ngOnInit() {
     // Your Stripe public key
-    const stripe = Stripe(environment.APIKeys.publicStripeKeyEnv);
+    const stripe = Stripe(this.appService.publicApiKey);
 
     // Create `card` element that will watch for updates
     // and display error messages
