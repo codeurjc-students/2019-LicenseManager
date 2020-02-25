@@ -125,14 +125,22 @@ import { ProductService } from '../product/product.service';
   }
 
   selectEvent(file: File): void {
-    this.file=file;
+    if(file.size>=1048576){
+      alert("The file is too large. Max: 1048575 bytes")
+    }else{
+      this.file=file;
+    }
   }
 
   uploadEvent(file: File): void {
-    this.productServ.addImage(this.file, this.name).subscribe(
-      u => {  },
-      error => console.log(error)
-    );
+    if(file.size>=1048576){
+      alert("The file is too large. Max: 1048575 bytes")
+    }else{
+      this.productServ.addImage(this.file, this.name).subscribe(
+        u => {  },
+        error => console.log(error)
+      );
+    }
   }
 
   cancelEvent(): void {
