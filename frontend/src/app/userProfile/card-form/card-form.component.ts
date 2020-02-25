@@ -13,10 +13,19 @@ declare var Stripe: any;
 export class CardFormComponent implements OnInit {
   successfulAdd:boolean;
   loading:boolean;
+
   constructor(private appService:AppService,private userProfileServ:UserProfileService) { }
 
   ngOnInit() {
     // Your Stripe public key
+    this.appService.getPublicStripeKey().subscribe(
+      k => this.setup(),
+      error=>console.log(error)
+    )
+    
+  }
+
+  setup(){
     const stripe = Stripe(this.appService.publicApiKey);
 
     // Create `card` element that will watch for updates
@@ -32,7 +41,6 @@ export class CardFormComponent implements OnInit {
         displayError.textContent = '';
       }
     });
-
 
     
     const paymentForm = document.getElementById('payment-form');

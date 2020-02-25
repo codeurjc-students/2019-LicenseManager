@@ -11,3 +11,4 @@ backend/target/
 frontend/dist
 backend/src/main/java/tfg/licensoft/DatabaseInitializer.java
 backend/target/classes/java/tfg/licensoft/DatabaseInitializer.class
+docker/docer-compose.yml

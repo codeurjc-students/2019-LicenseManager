@@ -1,30 +1,20 @@
 package tfg.licensoft.api;
 
-import java.util.Calendar;
-import java.util.Date;
+
 import java.util.HashMap;
-import java.util.LinkedList;
-import java.util.List;
 import java.util.Map;
-import java.util.Timer;
-import java.util.TimerTask;
-
-import javax.annotation.PostConstruct;
-
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
 import tfg.licensoft.licenses.*;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
 import tfg.licensoft.users.User;
 import tfg.licensoft.users.UserComponent;
 import tfg.licensoft.users.UserService;
-
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.Subscription;

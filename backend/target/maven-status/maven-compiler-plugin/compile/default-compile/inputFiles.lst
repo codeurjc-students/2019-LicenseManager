@@ -1,24 +1,23 @@
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/products/ProductRepository.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/configurations/AdditionalResourceWebConfiguration.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/users/UserService.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/users/UserRepository.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/api/ApiProductController.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/api/LoginController.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/users/BasicUser.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/api/ApiLicenseController.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/licenses/LicenseRepository.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/api/ApiBuyLicenseController.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/licencheck/ApiLicencheckController.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/configurations/SecurityConfigRest.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/configurations/CSRFHandlerConfiguration.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/users/User.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/users/UserComponent.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/LicenSoftApp.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/CustomWebMvcConfigurerAdapter.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/configurations/UserRepositoryAuthProvider.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/products/ProductService.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/licenses/License.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/DatabaseInitializer.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/licenses/LicenseService.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/products/Product.java
-/Users/KIKEPINA 1/Desktop/UNIVERSIDAD2/TFG/2019-LicenseManager/backend/src/main/java/tfg/licensoft/api/UserController.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\configurations\UserRepositoryAuthProvider.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\configurations\AdditionalResourceWebConfiguration.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\licenses\License.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\api\LoginController.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\api\GeneralController.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\licenses\LicenseRepository.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\users\UserService.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\users\UserComponent.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\users\UserRepository.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\configurations\CSRFHandlerConfiguration.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\products\ProductRepository.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\api\ApiLicenseController.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\api\ApiProductController.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\DatabaseInitializer.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\licenses\LicenseService.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\products\Product.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\CustomWebMvcConfigurerAdapter.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\products\ProductService.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\api\UserController.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\LicenSoftApp.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\users\User.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\configurations\SecurityConfigRest.java
+M:\UNIVERSIDAD\TFG\2019-LicenseManager\backend\src\main\java\tfg\licensoft\licencheck\ApiLicencheckController.java

@@ -38,4 +38,8 @@ public class UserService {
 		return userRep.findByName(name);
 	}
 	
+	public User findByEmail(String email) {
+		return userRep.findByEmail(email);
+	}
+	
 }

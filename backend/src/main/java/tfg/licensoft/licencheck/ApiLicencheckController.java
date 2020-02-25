@@ -6,18 +6,11 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-
 import tfg.licensoft.licenses.License;
 import tfg.licensoft.licenses.LicenseService;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
-import tfg.licensoft.users.BasicUser;
-import tfg.licensoft.users.User;
-import tfg.licensoft.users.UserRepository;
 import tfg.licensoft.users.UserService;
-
-import org.springframework.security.authentication.BadCredentialsException;
-import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 //This controller will serve an external API, which will serve an external program that wants to use LicenSoft
@@ -27,9 +20,6 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping(value = "/licencheck/")
 public class ApiLicencheckController {
 	
-	
-	@Autowired
-	private UserService userService;
 	
 	@Autowired
 	private LicenseService licenseService;

@@ -4,6 +4,11 @@
               <mat-card-content>
                       <form>
                           <div layout="column">
+                          <h4>Introduce your email</h4>
+                          <mat-form-field>
+                             <mat-label>Email</mat-label>
+                                <input matInput #email [(ngModel)]="emailLinked" name='email' matInput placeholder="Email" type="email" pattern="[a-zA-Z0-9.-_]{1,}@[a-zA-Z.-]{2,}[.]{1}[a-zA-Z]{2,}">
+                             </mat-form-field>
                           <h4>Introduce your user</h4>
                           <mat-form-field>
                               <mat-label>User</mat-label>
@@ -29,9 +34,11 @@
                       </mat-card-content>        
               <mat-card-actions>
                   <div layout="column">
-                      <a mat-raised-button (click)="register(user.value,pass1.value,pass2.value)" class="text-upper" color="primary" [routerLink]="['/login']">
+                      <a *ngIf="!loading" mat-raised-button (click)="register(user.value,pass1.value,pass2.value,email.value)" class="text-upper" color="primary"  [disabled]="user.value==null || user.value=='' || pass1.value==null 
+                      || pass1.value=='' || pass2.value==null || pass2.value=='' || pass1.value!=pass2.value || email.value==null || email.value==''">
                         <span>Create user</span>
                     </a>
+                    <img *ngIf="loading" src="assets/spinner.gif" id="spinner" width="140px" >
                   </div>
               </mat-card-actions>
           </mat-card>

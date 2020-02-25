@@ -27,5 +27,5 @@ services:
             SPRING_DATASOURCE_URL: jdbc:mysql://sql/licensoft?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
             SPRING_DATASOURCE_USERNAME: root
             SPRING_DATASOURCE_PASSWORD: 12345pass
-            STRIPE_PRIVATEKEY: sk_test_HXX6s2mN8JqMUytYfvkwB0dr00CfDzVlYA
-            STRIPE_PUBLICKEY: pk_test_mAWlLKZrpvwEye9QZzRZzsSG00M6tsJ3QS
+            STRIPE_PRIVATEKEY: sk_test_Hhbl4As40kGG4gMppomlvWWZ00Li4H7viw
+            STRIPE_PUBLICKEY: pk_test_wmUucXwN2CWr7Knrep3rCklX007zyLi28q

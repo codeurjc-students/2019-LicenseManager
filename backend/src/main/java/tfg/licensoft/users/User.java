@@ -1,6 +1,5 @@
 package tfg.licensoft.users;
 
-import javax.persistence.OneToMany;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
@@ -12,12 +11,10 @@ import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
+
 
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
-import com.stripe.model.Customer;
 
 @Entity
 public class User {
@@ -27,20 +24,26 @@ public class User {
 	private Long id;
 
 	private String name;
+	
+	@JsonIgnore
 	private String passwordHash;
 	
 	@JsonIgnore
 	private String customerStripeId;
 	
+	private String email;
 
 	@ElementCollection(fetch = FetchType.EAGER)
 	private List<String> roles;
+	
+	
 
-	public User(String customerStripeId,String name, String password, String... roles) {
+	public User(String email,String customerStripeId,String name, String password, String... roles) {
 		this.name = name;
 		this.passwordHash = new BCryptPasswordEncoder().encode(password);
 		this.roles = new ArrayList<>(Arrays.asList(roles));
 		this.customerStripeId=customerStripeId;
+		this.email=email;
 	}
 
 	protected User() {}
@@ -84,6 +87,16 @@ public class User {
 	public void setRoles(List<String> roles) {
 		this.roles = roles;
 	}
+
+	public String getEmail() {
+		return email;
+	}
+
+	public void setEmail(String email) {
+		this.email = email;
+	}
+	
+	
 
 
 } 

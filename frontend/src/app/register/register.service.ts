@@ -11,13 +11,13 @@ export class RegisterService {
 
 
 
-    register(user:string,pass1:string,pass2:string){
+    register(user:string,pass1:string,pass2:string,email:string){
         const headers = new HttpHeaders({
             Authorization: 'Basic ' + user + ':' + pass1,
             'X-Requested-With': 'XMLHttpRequest',
         });
 
-        let url = URL + "/register/" + user + "/"+ pass1 + "/" + pass2;
+        let url = URL + "/register/" + user + "/"+ pass1 + "/" + pass2 + "/" + email;
 
         return this.http.post<User>(url, { headers })
 
