@@ -29,9 +29,7 @@ You can configure the database url, user and pass on the application.properties.
 
 ---
 1. Go to docker-compose.yml file (in docker folder) 
-2. Set in licensoft:build:args:privateStripeKey your Private Stripe Api Key.
-3. Set in frontend:build:args:publicStripeKey your Public Stripe Api Key.
+2. Set in licensoft:environment:STRIPE_PRIVATEKEY your Private Stripe Api Key.
+3. Set in licensoft:environment:STRIPE_PUBLICKEY your Public Stripe Api Key.
 4. Open your Shell and go to the docker folder.
 5. Run `docker-compose up`. The application backend will be running on port 8080 and the frontend on port 80. You can change it in "ports" section on the docker-compose.
-
-**WARNING:** Dockerfiles can't be changed and must be on the path informed on each docker-compose:service:build:context. By default they are placed correctly, there is no need to change anything.
