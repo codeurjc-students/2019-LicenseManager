@@ -17,7 +17,7 @@ Also, Stripe give us a [checkout](https://stripe.com/docs/payments/checkout) to 
 	* Sku => Product attribute
 
 ## Java Backend & Stripe - Set Up <a name="backSetup"></a>
-Just pass as first arg on running the app, the Private Stripe Api Key.
+Set your Private and Public Stripe Key on the application.properties under src/main/resources (stripe.privateKey/publicKey)
 
 ## Java Backend & Stripe - Implementations
 The following explanations of implementations with Stripe in the back do not include the complete code, only the key lines. For more information, see the Stripe API or the full code available in this repository,
@@ -108,8 +108,7 @@ As Purchasing a Product, attaching a card to a Customer (Stripe) is divided in t
 			c.getSources().create(source);
 ```
 ## Angular Frontend & Stripe - Set Up <a name="frontSetup"></a>
-Go to environments folder (frontend/src/environment), and in environment.ts add your Public Stripe Api Key on publicStripeKeyEnv attribute.
-
+Frontend will automatically request to the backend the public stripe key when needed.
 
 ## Angular Frontend & Stripe - Implementations
 All the Stripe implementations in Angular consists of Stripe Elements.
