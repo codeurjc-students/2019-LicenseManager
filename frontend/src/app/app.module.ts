@@ -74,9 +74,7 @@ import { ProductComponent } from './product/product.component';
 import { ProductService } from './product/product.service';
 import { LicenseService } from './licenses/license.service';
 import { UserDashboardComponent } from './userDashboard/userDashboard.component';
-import { LicenseComponent } from './licenses/license.component';
 import { CardLicenseComponent } from './cards/cardLicense.component';
-import { DialogDeleteComponent } from './dialogs/dialogDelete.component';
 import { DialogEditComponent } from './dialogs/dialogEdit.component';
 import { UserProfileComponent } from './userProfile/userProfile.component';
 import { UserProfileService } from './userProfile/userProfile.service';
@@ -151,9 +149,9 @@ import { AppService } from './app.service';
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,LicenseComponent,CardLicenseComponent, DialogDeleteComponent, DialogEditComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent],
+    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, DialogEditComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent],
     bootstrap: [AppComponent],
-    entryComponents: [DialogDeleteComponent, DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent,
+    entryComponents: [DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent,
     ],
     providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,LoginComponent, AppService,
         { provide: MAT_DIALOG_DATA, useValue: {} },

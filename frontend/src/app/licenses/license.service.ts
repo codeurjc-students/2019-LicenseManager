@@ -16,17 +16,7 @@ export class LicenseService {
         let url = BASE_URL + "licenses/" + userName;
         return this.http.get(url)
     }
-
-    deleteLicense(serial:string,productName:string){
-      let url = BASE_URL + "licenses/" + serial+"/"+productName;
-      return this.http.delete(url)
-    }
-
-    addLicense(license:License){
-      let url = BASE_URL + "licenses/";
-      return this.http.post(url,license)
-    }
-
+    
     canceltAtEndLicense(serial:string,productName:string){
       let url = BASE_URL + "licenses/cancelAtEnd/"+serial+"/"+ productName;
       return this.http.put(url,null)

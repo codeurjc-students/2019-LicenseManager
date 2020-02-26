@@ -49,18 +49,6 @@ export class ProductService {
           return this.http.post(BASE_URL + "product/" + productName + "/image",formdata);
     }
 
-    addLicenseToProduct(license:License){
-      let url = BASE_URL + "product/" + license.product.name;
-      return this.http.put(url,license)
-    }
-
-    /* creo que no se usa
-    removeLicenseOfProduct(serial:string,productName:string){
-      let url = BASE_URL + "product/" + productName+"/license/"+serial;
-      return this.http.put(url,productName,serial)
-    .map(response => response.json())
-    .catch(error => this.handleError(error));
-    }*/
 
     //Just the active ones
     getProducts(){

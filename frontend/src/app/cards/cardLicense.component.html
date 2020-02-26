@@ -49,26 +49,11 @@
                         <a *ngIf="license.endDate">{{license.endDate}}</a>
                         <a *ngIf="!license.endDate">--</a>
                 </mat-grid-tile>
-               <!-- <mat-grid-tile>
-                        <button mat-icon-button *ngIf="loginService.isAdmin && license.active" (click)="changeStatus(license.serial,license.product?.name)">
-                                <mat-icon fxFlex="10%">pause</mat-icon>
-                        </button>
-                        <button mat-icon-button *ngIf="loginService.isAdmin && !license.active" (click)="changeStatus(license.serial,license.product?.name)">
-                                <mat-icon fxFlex="10%">play_arrow</mat-icon>
-                        </button>
-                        <button mat-icon-button *ngIf="loginService.isAdmin" (click)="openDeleteDialog(license.serial,license.product?.name)">
-                                <mat-icon fxFlex="10%">delete</mat-icon>
-                        </button>
-                        <button mat-icon-button *ngIf="loginService.isAdmin" (click)="openEditDialog(license)">
-                                <mat-icon fxFlex="10%">edit</mat-icon>
-                        </button>
-                </mat-grid-tile> -->
                 <br>
             </div>
             
         </mat-grid-list>
     </mat-card-content>
-   <!-- <button mat-raised-button color="primary" (click)="openAddDialog()">ADD</button> -->
 
 <ng-template #addLicenseDialog let-addLicenseDialog="addLicenseDialog">
         <h1>Add License</h1>

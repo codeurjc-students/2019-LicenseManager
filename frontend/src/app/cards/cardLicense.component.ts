@@ -7,7 +7,6 @@ import { LoginService } from '../login/login.service';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { LicenseService } from '../licenses/license.service';
 import { TdChipsBase } from '@covalent/core';
-import { DialogDeleteComponent } from '../dialogs/dialogDelete.component';
 import { DialogEditComponent } from '../dialogs/dialogEdit.component';
 
 @Component({
@@ -47,18 +46,6 @@ import { DialogEditComponent } from '../dialogs/dialogEdit.component';
       });
     }
 
-    openDeleteDialog(s:string,product:string){
-        this.dialogRef = this.dialog.open(DialogDeleteComponent, {
-            data:{
-                serial:s,
-                productName:product
-            },
-        });
-        this.dialogRef.afterClosed().subscribe(
-            lics => {this.getLicenses(product)},
-            error => console.log(error)
-        );
-    }
 
 
     openEditDialog(license:License){
@@ -71,43 +58,6 @@ import { DialogEditComponent } from '../dialogs/dialogEdit.component';
             lics => {this.getLicenses(this.product.name)},
             error => console.log(error)
         );
-    }
-
-
-  /*
-    addLicense(s:string,active:boolean,type:string){
-        console.log(s,active,type);
-        let lic :License = {serial: s,active:active,type:type, owner:null,product:this.product,};
-        this.productService.addLicenseToProduct(lic).subscribe(
-            lic=>{this.dialogRef.close();this.getLicenses(this.product.name)},
-            error=> console.log(error)
-        );
-    }
-
-    deleteLicense(serial:string,productName:string){
-        this.licenseService.deleteLicense(serial,productName).subscribe(
-            lic=>{this.getLicenses(this.product.name)},
-            error=> console.log(error) 
-        );
-    }*/
-
-    addLicense(s:string,active:boolean,type:string){
-        if(active==null){
-            this.statusAlertNull=true;
-        }
-        if(type==null){
-            this.typeAlertNull=true;
-        }
-        if(type!=null && active !=null){
-            let lic :License = {serial: s,active:active,type:type, owner:null,product:this.product,cancelAtEnd:false};
-            this.licenseService.addLicense(lic).subscribe(
-                lic=>{this.dialogRef.close();this.getLicenses(this.product.name)},
-                error=> console.log(error)
-            );
-            this.statusAlertNull=false;
-            this.typeAlertNull=false;
-        }
-
     }
 
  

@@ -268,7 +268,7 @@ public class ApiProductController {
 	
 	
 	
-	//TODO
+	/*
 	@PutMapping("/{productName}")
 	public ResponseEntity<Product> addLicenseToProduct(@PathVariable String productName, @RequestBody License license){
 		Product p = this.productServ.findOne(productName);
@@ -307,7 +307,7 @@ public class ApiProductController {
 			return new ResponseEntity<Product>(HttpStatus.NOT_MODIFIED);
 		}
 	}
-	
+	*/
 	@GetMapping(value = "/{productName}/image")
 	public ResponseEntity<byte[]> getImage(@PathVariable String productName)throws IOException {
 		Product p = this.productServ.findOne(productName);

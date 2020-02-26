@@ -31,13 +31,11 @@ public class ApiLicenseController {
 	@Autowired
 	private ProductService productServ;
 	
-	@Autowired
-	private UserComponent userComp;
 	
 	@Autowired
 	private UserService userServ;
 	
-
+/*
 	@PostMapping(value = "/")
 	public ResponseEntity<License> postLicense(@RequestBody License license){
 		Product p = this.productServ.findOne(license.getProduct().getName());
@@ -56,7 +54,7 @@ public class ApiLicenseController {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 	}
-	
+	*/
 	@GetMapping(value = "/product/{product}")
 	public Page<License> getLicensesOfProduct(@PathVariable String product, Pageable page){
 		Product p = this.productServ.findOne(product);
@@ -76,6 +74,7 @@ public class ApiLicenseController {
 		}
 	} 
 	
+	/*
 	@DeleteMapping(value = "/{serial}/{product}")
 	public ResponseEntity<License> deleteLicenseBySerial(@PathVariable String serial, @PathVariable String product){
 		Product p = this.productServ.findOne(product);
@@ -87,6 +86,8 @@ public class ApiLicenseController {
 			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
 		}
 	}
+	
+	*/
 	
 	@GetMapping(value = "/{userName}")
 	public ResponseEntity<Page<License>> getLicensesOfUser(@PathVariable String userName, Pageable page){
@@ -147,6 +148,7 @@ public class ApiLicenseController {
 		}
 	}
 	
+	/*
 	@PutMapping(value="/update/")
 	public ResponseEntity<License> updateLicense(@RequestBody License license){
 		Product p = this.productServ.findOne(license.getProduct().getName());
@@ -165,6 +167,7 @@ public class ApiLicenseController {
 			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
 		}
 	}
+	*/
 	
 	@GetMapping(value="/user/{userName}/product/{productName}")
 	public ResponseEntity<Page<License>> getLicensesOfUserAndProduct(@PathVariable String productName, @PathVariable String userName, Pageable page){
