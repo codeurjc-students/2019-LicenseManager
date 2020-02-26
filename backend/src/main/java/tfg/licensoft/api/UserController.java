@@ -55,7 +55,6 @@ public class UserController {
 	private ProductService productServ;
 	
 	
-	
 	@PostMapping("/addCard/{tokenId}")
 	public ResponseEntity<User> addCardStripeElements(@PathVariable String tokenId){
 		User user = userComponent.getLoggedUser();
@@ -68,7 +67,7 @@ public class UserController {
 
 		} catch (StripeException e) {
 			e.printStackTrace();
-			return new ResponseEntity(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
  
 	}
@@ -195,6 +194,44 @@ public class UserController {
 		}
 		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
+	}
+	
+	@GetMapping("/{user}/cards")
+	private ResponseEntity<List<PaymentSource>> getCardsFromUser(@PathVariable String user) {
+		User u = this.userServ.findByName(user);
+		try {
+			Customer customer =
+					  Customer.retrieve(u.getCustomerStripeId());
+				Map<String, Object> params = new HashMap<>();
+				params.put("object", "card");
+
+				List<PaymentSource> l = customer.getSources().list(params).getData();				
+				return new ResponseEntity<>(l,HttpStatus.OK);
+		}catch (StripeException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+				
+	}
+	
+	@DeleteMapping("/{user}/card/{cardStripeId}")
+	private ResponseEntity deleteStripeCard(@PathVariable String user, @PathVariable String cardStripeId) {
+		User u = this.userServ.findByName(user);
+		if(u!=null) {
+			try {
+					Customer customer =
+					Customer.retrieve(u.getCustomerStripeId());
+					Card card = (Card) customer.getSources().retrieve(cardStripeId);
+					card.delete();
+					return new ResponseEntity<>(HttpStatus.OK);
+			}catch(StripeException e) {
+				
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		}else {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
 	}
 
 }

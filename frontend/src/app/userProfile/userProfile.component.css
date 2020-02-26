@@ -10,3 +10,7 @@
     border:1px solid #3F51B5;
     margin-top:1em;
   }
+
+  .comp:hover{
+    background-color: rgb(184, 184, 184);
+  }

@@ -4,6 +4,7 @@ import { TdTabSelectBase } from '@covalent/core';
 import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { UserProfileService } from './userProfile/userProfile.service';
+import { AppService } from './app.service';
 
 declare var Stripe: any;
 declare var publicStripeKeyEnv:string;
@@ -14,19 +15,23 @@ declare var publicStripeKeyEnv:string;
 })
 
 export class AppComponent{
-
+    appName:string;
     mode: string;
     pages:Map<String,String>;
     public environment = environment.environment;
 
     
-    constructor(private router: Router,private userProfileServ:UserProfileService) {
+    constructor(private appService:AppService) {
         if (environment.production) {
             this.mode = "Production";
         } else {
             this.mode = "Development";
         }
         this.pages = new Map();
+        this.appService.getAppName().subscribe(
+            (name:any) => this.appName=name.text,
+            error=> console.log(error),
+        )
     }
 
       

@@ -5,6 +5,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { LoginService } from '../login/login.service';
 import { Product } from '../product/product.model';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 
 const BASE_URL = 'http://localhost:8080/api/user/';
 
@@ -12,18 +13,21 @@ const BASE_URL = 'http://localhost:8080/api/user/';
 @Injectable()
 export class UserProfileService {
 
-    
     constructor(private http: HttpClient, private loginServ:LoginService) { 
-        
+    }
+
+    getUserCardsStripe(user:string){
+        return this.http.get(BASE_URL + user + "/cards");
+    }
+
+    deleteStripeCard(user:string, id:string){
+        return this.http.delete(BASE_URL + user + "/card/" + id);
     }
 
 
     addCardStripeElements(tokenId:string){
-        return this.http.post(BASE_URL + 'addCard/' + tokenId,null).pipe(
-            map(response => console.log(response)),
-        );
+        return this.http.post(BASE_URL + 'addCard/' + tokenId,null);
     }
-
 
 
     addSubscriptionToProduct(product:Product,typeSubs:string,userName:string, automaticRenewal:boolean){
@@ -36,9 +40,7 @@ export class UserProfileService {
         return this.http.put(BASE_URL+userName+"/buy/" + product.name + "/" + token ,product)
     }
 
-    test(){
-        console.log("SE");
-    }
+
 
     private handleError(error: any) {
         console.error(error);

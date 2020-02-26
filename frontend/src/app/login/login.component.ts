@@ -1,6 +1,6 @@
 import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import {MatSnackBar, MatDialogRef, MatDialog} from '@angular/material';
-import { LoginService } from './login.service';
+import { LoginService, User } from './login.service';
 import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
 
@@ -14,7 +14,9 @@ export class LoginComponent  {
   @ViewChild('loginDialog',{static:false}) loginDialog: TemplateRef<any>;
   dialogRef: MatDialogRef<any, any>;
 
+  user:User;
   constructor(public dialog: MatDialog,private snackBar: MatSnackBar, public loginService:LoginService, private router:Router, private appComponent: AppComponent) { 
+    this.user=this.loginService.getUserLogged();
   }
 
   getUserLogged(){

@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { UserProfileService } from '../userProfile.service';
 import { AppService } from '../../app.service';
+import { Router } from '@angular/router';
+import { UserProfileComponent } from '../userProfile.component';
 
 
 declare var Stripe: any;
@@ -14,7 +16,7 @@ export class CardFormComponent implements OnInit {
   successfulAdd:boolean;
   loading:boolean;
 
-  constructor(private appService:AppService,private userProfileServ:UserProfileService) { }
+  constructor(private router:Router,private appService:AppService,private userProfileServ:UserProfileService, private userProfileCom:UserProfileComponent) { }
 
   ngOnInit() {
     // Your Stripe public key
@@ -59,7 +61,7 @@ export class CardFormComponent implements OnInit {
           // the payment source to a customer
 
             this.userProfileServ.addCardStripeElements(result.token.id).subscribe(
-              t=> {this.successfulAdd=true;this.loading=false;},
+              t=> {this.successfulAdd=true;this.loading=false; this.userProfileCom.getCards()},
               error=> {this.successfulAdd=false; this.loading=false;}
             );
           

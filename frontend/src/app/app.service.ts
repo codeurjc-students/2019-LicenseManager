@@ -11,7 +11,7 @@ export class AppService{
     constructor(private http: HttpClient) { 
         
         this.getPublicStripeKey().subscribe(
-            (k:any)=> {this.publicApiKey=k.key},
+            (k:any)=> {this.publicApiKey=k.text},
         )
     }
     
@@ -19,5 +19,10 @@ export class AppService{
     getPublicStripeKey(){
         let url = BASE_URL + "keys/stripe/public";
         return this.http.get<String>(url)
+    }
+
+    getAppName(){
+        let url = BASE_URL + "appName";
+        return this.http.get<string>(url)
     }
 }

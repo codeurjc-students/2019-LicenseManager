@@ -10,28 +10,31 @@ import org.springframework.web.bind.annotation.RestController;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/keys")
+@RequestMapping(value = "/api")
 public class GeneralController {
 	
-	private class Key{
-		private String key;
+	private class Response{
+		private String text;
 		
-		public String getKey() {
-			return this.key;
+		public String getText() {
+			return this.text;
 		}
 		
-		public void setKey(String k) {
-			this.key=k;
+		public void setText(String te) {
+			this.text=te;
 		}
 	}
 	
 	@Value("${stripe.publicKey}")
 	String publicKey;
 	
-	@GetMapping("/stripe/public")
-	private ResponseEntity<Key> getPublicStripeKey() {
-		Key key= new Key();
-		key.setKey(publicKey);
+	@Value("${appName}")
+	String appName;
+	
+	@GetMapping("keys/stripe/public")
+	private ResponseEntity<Response> getPublicStripeKey() {
+		Response key= new Response();
+		key.setText(publicKey);
 		if(publicKey!=null) {
 			return new ResponseEntity<>(key,HttpStatus.OK);
 		}else {
@@ -39,4 +42,14 @@ public class GeneralController {
 		}
 	}
 
+	@GetMapping("/appName")
+	private ResponseEntity<Response> getAppName() {
+		Response r= new Response();
+		r.setText(this.appName);
+		if(appName!=null) {
+			return new ResponseEntity<>(r, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
 }
