@@ -24,6 +24,8 @@ This document will explain how is used the Licensoft-Web API.
 * [Set cancelAtEnd of License](#set-cancelatend-of-license)
 * [Get Licenses of User and Product](#getLicUserProduct)
 * [Check License (Licencheck)](#checkLicense)
+* [Get Stripe Public ApiKey](#get-stripe-public-apikey)
+* [Get App Name](#get-app-name)
 
 
 ## Authorization
@@ -1160,4 +1162,53 @@ Switches ON/OFF the cancelAtEnd attribute of a License (automatic renewal).
 	    "endDate": "2020-03-18T20:39:26.000+0000",
 	    "owner": "C1",
 	    "cancelAtEnd": false
+	}
+
+# FRONTEND REQUESTS
+## Get Stripe Public ApiKey
+Method for the frontend to request Stripe Public Api Key that is stored on the backend (necessary to make Stripe Elements work).
+
+- **URL**  
+   `/api/keys/stripe/public`
+- **Method**  
+   `GET`
+- **Data Params**
+
+- **Required role**:  
+   None.
+   
+- **Authorization:**
+	None. 
+ 
+
+- **Success Response**
+  - **Code**: 200 OK
+  - **Content**:
+
+  ```json
+	{
+		"text": "pk_test_mAWlLKZrpvwEye9QZzRZzsSG00M6tsJ3QS"
+	}
+## Get App Name
+Method for the frontend to request the application(web) name that is stored on the backend, necessary to customize the "Logo" on the top-side of the Web..
+- **URL**  
+   `/api/appName`
+- **Method**  
+   `GET`
+- **Data Params**
+
+- **Required role**:  
+   None.
+   
+- **Authorization:**
+	None. 
+ 
+
+- **Success Response**
+  - **Code**: 200 OK
+  - **Content**:
+
+  ```json
+	{
+	"text": "LicenSoftTesting"
 	}
