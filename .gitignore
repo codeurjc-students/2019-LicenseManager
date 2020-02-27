@@ -11,4 +11,6 @@ backend/target/
 frontend/dist
 backend/src/main/java/tfg/licensoft/DatabaseInitializer.java
 backend/target/classes/java/tfg/licensoft/DatabaseInitializer.class
-docker/docer-compose.yml
+docker/docker-compose.yml
+backend/target/classes/META-INF/maven/tfg/license-web/pom.properties
+backend/target/classes/META-INF/MANIFEST.MF

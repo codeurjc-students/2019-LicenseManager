@@ -7,9 +7,32 @@
   right: 0;
 }
 
-.responsive {
-  max-width: 100%;
-  height: auto;
+.sticky{
+  position: -webkit-sticky;
+  position: sticky;
+  top: 0;
+  z-index: 99
+}
+
+.footerText{
+  font-size: small;
+  font-family: Arial, Helvetica, sans-serif;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.footer{
+  height: 55px;
+}
+
+.footerGit{
+  padding-left: 5px;
+  padding-top: 10px;
+}
+
+.footerCodeUrjc{
+  padding-right: 5px;
+  padding-top: 10px;
 }
 
 form.checkout {
