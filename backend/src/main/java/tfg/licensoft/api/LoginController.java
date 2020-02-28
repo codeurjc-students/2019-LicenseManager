@@ -107,7 +107,7 @@ public class LoginController {
 			customerParameter.put("email",email);
 			try {
 				Customer customer = Customer.create(customerParameter);
-				userServ.save(new User(email,customer.getId(),user, pass1, email,"ROLE_USER"));
+				userServ.save(new User(email,customer.getId(),user, pass1,"ROLE_USER"));
 			} catch (StripeException e) {
 				e.printStackTrace();
 			}

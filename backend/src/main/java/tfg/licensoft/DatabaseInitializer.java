@@ -30,6 +30,18 @@ public class DatabaseInitializer {
 	
 	@Value("${stripe.privateKey}")
 	String privateKey;
+	
+	@Value("${adminName}")
+	String adminName;
+
+	
+	@Value("${adminPass}")
+	String adminPass;
+
+	
+	@Value("${adminEmail}")
+	String adminEmail;
+
 
 	@Autowired
 	UserService userServ;
@@ -68,6 +80,12 @@ public class DatabaseInitializer {
 		userServ.save(u4);	
 		
 		
+		Map<String,Object> customerParameter = new HashMap<String,Object>();
+		customerParameter.put("name", this.adminName);
+		customerParameter.put("email",this.adminEmail);
+		Customer customer = Customer.create(customerParameter);
+		userServ.save(new User(this.adminEmail,customer.getId(),this.adminName, this.adminPass,"ROLE_USER","ROLE_ADMIN"));
+		 
 		//products
 	
 		Product pL = new Product("Photoshop");

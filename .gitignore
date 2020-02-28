@@ -14,3 +14,4 @@ backend/target/classes/java/tfg/licensoft/DatabaseInitializer.class
 docker/docker-compose.yml
 backend/target/classes/META-INF/maven/tfg/license-web/pom.properties
 backend/target/classes/META-INF/MANIFEST.MF
+*.class
