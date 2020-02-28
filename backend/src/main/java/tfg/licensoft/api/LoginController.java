@@ -132,6 +132,7 @@ public class LoginController {
 		mailSender.setPort(this.port);
 		mailSender.setUsername(this.username);
 		mailSender.setPassword(this.password);
+		mailSender.getJavaMailProperties().put("mail.smtp.starttls.enable", "true");
 		
 		//Create mail instance
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
