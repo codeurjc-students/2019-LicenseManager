@@ -6,7 +6,7 @@ import 'rxjs/Rx';
 import { Http } from '@angular/http';
 import { StripeCard } from '../stripe/stripeCard.model';
 
-const URL = 'http://localhost:8080/api';
+const URL = 'https://localhost:8443/api';
 
 export interface User {
     id?: number;
