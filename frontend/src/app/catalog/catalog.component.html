@@ -6,7 +6,9 @@
             <td-search-box backIcon="clear" class="search-button" placeholder="Search" [showUnderline]="false" [alwaysVisible]="true" [(ngModel)]="searchInputTerm" [debounce]="25" (searchDebounce)="searchProduct()" (search)="searchProduct()" (clear)="searchProduct()">
             </td-search-box>
             <div *ngIf="products?.length==0" style="text-align: center;">
-                <span style="font-family:Arial;">There aren't products available <button mat-raised-button color="primary" routerLink="/admin/dashboard">ADD</button></span>
+                <br>
+                <span style="font-family:Arial; color:red">There aren't products available </span>
+                <br>
             </div>
             <div  *ngFor="let product of products" >
                     <hr>
