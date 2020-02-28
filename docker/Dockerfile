@@ -11,7 +11,7 @@ COPY build/license-web-0.5.0.jar /
 COPY images /images
 
 # Expose port number
-EXPOSE 8080
+EXPOSE 8443
 
 #  Run app
-CMD ["sh","-c","java -jar license-web-0.5.0.jar $privateStripeKeyEnv"]
+CMD ["sh","-c","java -jar license-web-0.5.0.jar"]
