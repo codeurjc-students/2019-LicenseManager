@@ -15,3 +15,5 @@ docker/docker-compose.yml
 backend/target/classes/META-INF/maven/tfg/license-web/pom.properties
 backend/target/classes/META-INF/MANIFEST.MF
 *.class
+/.metadata/
+.DS_Store

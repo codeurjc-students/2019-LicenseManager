@@ -1,4 +1,8 @@
-<mat-selection-list>
+<div *ngIf="products?.length==0" style="text-align: center;">
+    <h1 style="font-family:Arial;">There aren't products available <button mat-raised-button color="primary" routerLink="/admin/dashboard">ADD</button></h1>
+    
+</div>
+<mat-selection-list *ngIf="products?.length>0">
     <mat-list>
         <div  class="center-div">
             <td-search-box backIcon="clear" class="search-button" placeholder="Search" [showUnderline]="false" [alwaysVisible]="true" [(ngModel)]="searchInputTerm" [debounce]="25" (searchDebounce)="searchProduct()" (search)="searchProduct()" (clear)="searchProduct()">
