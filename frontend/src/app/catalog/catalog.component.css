@@ -9,7 +9,11 @@ img {
   }
 
 
-
+  #appRootClass{
+    background-image:url('../../assets/combine_images.jpg');     
+    background-size: 100% 100%;   
+  }
+  
 .post-container {
     overflow: auto;
 }

@@ -14,6 +14,11 @@
   z-index: 99
 }
 
+#content{
+  position: relative;
+  min-height: 100%;
+}
+
 .footerText{
   font-size: small;
   font-family: Arial, Helvetica, sans-serif;
@@ -21,8 +26,9 @@
   margin-right: auto;
 }
 
-.footer{
+#footer{
   height: 55px;
+  bottom: 0;
 }
 
 .footerGit{
@@ -91,4 +97,13 @@ form.checkout button:active {
   margin-right: auto;
   font-size: 80px;
   text-align: center;
+}
+
+
+#logoBg{
+  background-color: #EBF6FC;
+}
+
+.bg{
+  background-color: #3662A1;
 }

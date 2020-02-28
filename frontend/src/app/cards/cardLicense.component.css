@@ -6,3 +6,10 @@
   .example-container > * {
     width: 100%;
   }
+
+  mat-card{
+    border-style: solid;
+    border-width: 1px;
+    border-color:#3F51B5;
+    background: rgba(255, 255, 255, 0.5);
+}

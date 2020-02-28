@@ -1,5 +1,9 @@
+<div class="background">
+<br>
+<br>
 <mat-card>
     <mat-card-title>Your credit cards <img  *ngIf="loading" src="assets/spinner.gif" width="50px"></mat-card-title>
+    <hr>
     <mat-card-content>
         <b *ngIf="stripeCards?.length==0">You don't have any card attached yet</b>
         <mat-grid-list cols="2" rowHeight="4rem" *ngIf="!loading" >
@@ -14,12 +18,23 @@
         </mat-grid-list>
     </mat-card-content>
 </mat-card>
+<br>
+<br>
 <mat-card>
     <mat-card-title>Add new Credit or debit card</mat-card-title>
+    <hr>
     <mat-card-content>
         <app-card-form></app-card-form>
     </mat-card-content>
 </mat-card>
+<br>
+<br>
+<br>
+<br>
+<br>
+<br>
 
+
+</div>
 
 

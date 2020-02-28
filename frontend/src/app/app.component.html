@@ -1,29 +1,31 @@
-  <div>
-    <a  id="name" class="font">{{appName}}</a>
+<div class="bg">
+  <div id="logoBg">
+      <a  id="name" class="font">{{appName}}</a>
   </div>
-<div id="appRootClass">
-  <td-layout-nav class="sticky">
-    <div td-toolbar-content layout="row" layout-align="start center" flex> 
-      <a mat-icon-button [routerLink]="['/']">
-        <mat-icon>home</mat-icon>
-      </a>
-      <div *ngFor="let page of pages | keyvalue">
-        <a mat-button [routerLink]="['/',page.value]">
-          {{page.key}}
+  <div id="content">
+    <td-layout-nav class="sticky" id="appRootClass">
+      <div td-toolbar-content layout="row" layout-align="start center" flex> 
+        <a mat-icon-button [routerLink]="['/']">
+          <mat-icon>home</mat-icon>
         </a>
+        <div *ngFor="let page of pages | keyvalue">
+          <a mat-button [routerLink]="['/',page.value]">
+            {{page.key}}
+          </a>
+        </div>
+        <app-login class="loginButtons"></app-login>
       </div>
-      <app-login class="loginButtons"></app-login>
-    </div>
+      <router-outlet></router-outlet>
+    </td-layout-nav>
     <router-outlet></router-outlet>
-  </td-layout-nav>
-
-  <router-outlet></router-outlet>
-
-  <td-layout-nav class="footer">
-    <div td-toolbar-content layout="row" layout-align="start center" flex> 
-      <a class="footerGit" href="https://github.com/codeurjc-students/2019-LicenseManager" ><img src="assets/githubLogo.png" width="40px"></a>
-      <a class="footerText">Web based on LicenSoft </a>
-      <a class="footerCodeUrjc" href="https://www.codeurjc.es/" ><img src="assets/codeurjcLogo.png" width="70px"></a>
-    </div>
-  </td-layout-nav>
+    <footer>
+    <td-layout-nav id="footer">
+      <div td-toolbar-content layout="row" layout-align="start center" flex> 
+        <a class="footerGit" href="https://github.com/codeurjc-students/2019-LicenseManager" ><img src="assets/githubLogo.png" width="40px"></a>
+        <a class="footerText">Web based on LicenSoft </a>
+        <a class="footerCodeUrjc" href="https://www.codeurjc.es/" ><img src="assets/codeurjcLogo.png" width="70px"></a>
+      </div>
+    </td-layout-nav>
+  </footer>
+  </div>
 </div>

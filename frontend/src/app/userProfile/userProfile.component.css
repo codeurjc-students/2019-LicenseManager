@@ -6,11 +6,17 @@
     border-left: 5px solid #a94442; /* red */
   }
 
-  mat-card { 
-    border:1px solid #3F51B5;
-    margin-top:1em;
-  }
-
+  mat-card{
+    border-style: solid;
+    border-width: 1px;
+    border-color:#3F51B5;
+    background: rgba(255, 255, 255, 0.5);
+}
   .comp:hover{
     background-color: rgb(184, 184, 184);
+  }
+
+  .background{
+    background-image:url('/../../assets/bg_p1.jpg');     
+    background-size: 100% 100%;
   }
