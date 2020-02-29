@@ -19,3 +19,7 @@ backend/target/classes/META-INF/MANIFEST.MF
 .DS_Store
 backend/src/main/resources/application.properties
 docker/.env
+.DS_Store
+frontend/.DS_Store
+docker/.DS_Store
+backend/.DS_Store
