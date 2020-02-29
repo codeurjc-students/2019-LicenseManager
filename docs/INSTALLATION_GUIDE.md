@@ -27,7 +27,11 @@ Once this is done, properties needed will be:
 a)  **DEVELOPMENT:** On the `application.properties` file inside the backend folder (src/main/resources).
 *Example `application.properties`
 ```
-...
+spring.datasource.url=jdbc:mysql://localhost/nameOfYourScheme?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UC
+spring.datasource.username=root
+spring.datasource.password=passOfYourMySQLConnection
+spring.jpa.hibernate.ddl-auto=update
+
 stripe.privateKey=sk_***
 stripe.publicKey=pk_***
 appName=LicenSoft
