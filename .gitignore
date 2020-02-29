@@ -17,3 +17,5 @@ backend/target/classes/META-INF/MANIFEST.MF
 *.class
 /.metadata/
 .DS_Store
+backend/src/main/resources/application.properties
+docker/.env
