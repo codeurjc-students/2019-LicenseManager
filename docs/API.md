@@ -55,7 +55,6 @@ Make the request without params, just including in Authorization UserName and Pa
 	{
 	"id": 4,
 	"name": "admin",
-	"passwordHash": "$2a$10$ComJCIfcUWI3AJ.iFYPmiuYwAocId5oiYegzhRst.TJJDaaNNkqqW",
 	"roles": [
 		"ROLE_USER",
 		"ROLE_ADMIN"
@@ -82,8 +81,9 @@ Make the request without params, just including in Authorization UserName and Pa
   - **Content**:  `true`
 
 ## Register
+An account will be created and and email will be sent to the user with the credentials.
 - **URL**  
-   `/api/register/{user}/{pass}/{pass2}`
+   `/api/register/{user}/{pass}/{pass2}/{email}`
 - **Method**  
    `POST`
 - **Data Params**
@@ -91,6 +91,7 @@ Path Variables:
 	* String userName
 	* String pass
 	* String pass2 (must be the same as pass) 
+	* String email
 - **Required role**:  
    None
    
@@ -104,7 +105,6 @@ Path Variables:
 	{
 	"id": 15,
 	"name": "pepe",
-	"passwordHash": "$2a$10$3.QXn.DKdYcl7wgjdSwCveuT2.VNS7/H8hf2LjlQr/eVYNvxJmDfy",
 	"roles": [
 		"ROLE_USER"
 		]
@@ -134,7 +134,6 @@ Path Variables:
 	    {
 			"id": 1,
 			"name": "admin",
-			"passwordHash": "$2a$10$Pp35/Hj9h8lJPj2qSD.BW.ddKbXyT3vSW/modh9Bj9RDNriEg4CoO",
 			"roles": ["ROLE_USER"]
 		  }
 	],
@@ -270,7 +269,6 @@ Path Variables:
   {
 	"id": 1,
 	"name": "customer",
-	"passwordHash": "$2a$10$8B93APA0H7xmlzcAGu0Ow.9oTww0b4FKWnyWDbd39J2DVVbtiTGeq",
 	"roles": [
 		"ROLE_USER"
 	]
