@@ -2,7 +2,7 @@
 LicenSoft includes **Mail sending** , **Stripe Integration**, **Custom naming** of the app and **SSL for HttpS**. It is also needed to configure an **Admin Account**. For a correct configuration, some properties must be setted before running the code. 
 ## Where to get the properties
 * **Custom naming:**  This will be the name of your Web (the name will be shown on the header)
-![AppName Header](./images/appName.jpg)
+![AppName Header](./images/appName.JPG)
 
 * **Stripe:** Private and Public keys needed. Visit [Stripe Integration](./StripeIntegration.md#first-steps-:-creating-a-stripe-account) to know how to get them.
 
@@ -27,7 +27,11 @@ Once this is done, properties needed will be:
 a)  **DEVELOPMENT:** On the `application.properties` file inside the backend folder (src/main/resources).
 *Example `application.properties`
 ```
-...
+spring.datasource.url=jdbc:mysql://localhost/nameOfYourScheme?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UC
+spring.datasource.username=root
+spring.datasource.password=passOfYourMySQLConnection
+spring.jpa.hibernate.ddl-auto=update
+
 stripe.privateKey=sk_***
 stripe.publicKey=pk_***
 appName=LicenSoft
