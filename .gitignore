@@ -23,3 +23,4 @@ docker/.env
 frontend/.DS_Store
 docker/.DS_Store
 backend/.DS_Store
+*.class
