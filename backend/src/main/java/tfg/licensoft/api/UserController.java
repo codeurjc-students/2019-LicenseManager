@@ -99,9 +99,9 @@ public class UserController {
 				params.put("items", items);
 				params.put("expand", expand);
 				params.put("cancel_at_period_end", !automaticRenewal);
-
+				Subscription subscription;
 				try {
-					Subscription subscription = Subscription.create(params);
+					subscription = Subscription.create(params);
 				} catch (StripeException e) { 
 					e.printStackTrace();
 					if(e.getCode().equals("resource_missing") && e.getMessage().contains("This customer has no attached payment source")) {
@@ -113,6 +113,7 @@ public class UserController {
 				this.productServ.save(product);			
 				License license = new License(true, typeSubs, product, user.getName());
 				license.setCancelAtEnd(!automaticRenewal);
+				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
 				licenseServ.save(license);
 				if(automaticRenewal) {
 					this.setTimerAndEndDate(license);

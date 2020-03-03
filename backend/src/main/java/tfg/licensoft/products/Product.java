@@ -53,8 +53,8 @@ public class Product {
 	
 	public Product(String name) {
 		this.name=name;
-		this.licenses = new ArrayList();
-		this.plans = new HashMap();
+		this.licenses = new ArrayList<>();
+		this.plans = new HashMap<>();
 		this.typeSubs= new ArrayList<>();
 		this.plansPrices = new HashMap<>();
 		this.active=true;

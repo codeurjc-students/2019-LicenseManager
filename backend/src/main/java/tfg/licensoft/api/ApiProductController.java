@@ -36,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Plan;
 import com.stripe.model.Sku;
+import com.stripe.param.PlanCreateParams;
 
 import tfg.licensoft.licenses.License;
 import tfg.licensoft.licenses.LicenseService;
@@ -75,7 +76,7 @@ public class ApiProductController {
 			return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+
 	
 	@PostMapping("/")
 	public ResponseEntity<Product> postProduct(@RequestBody Product product){
@@ -127,6 +128,9 @@ public class ApiProductController {
 				    case "A":{
 				    	this.createAproduct(product, plan.getValue(), productId);
 				    	break;
+				    }
+				    case "MB":{
+				    	this.createMBproduct(product, plan.getValue(), productId);
 				    }
 			    }
 			    count++;
@@ -212,6 +216,28 @@ public class ApiProductController {
 		this.productServ.save(product);
 	}
 	
+	
+	private void createMBproduct(Product product, double price, String productId ) {
+		try {
+			long l = (long) (price*100);
+			PlanCreateParams params =
+					  PlanCreateParams.builder()
+					    .setCurrency("eur")
+					    .setInterval(PlanCreateParams.Interval.MONTH)
+					    .setProduct(productId)
+					    .setNickname("MB")
+					    .setAmount(l)
+					    .setUsageType(PlanCreateParams.UsageType.METERED)
+					    .build();
+
+			Plan plan = Plan.create(params);
+			product.getPlans().put("MB",plan.getId());
+
+		}catch(StripeException e) {
+			e.printStackTrace();
+		}
+		this.productServ.save(product);
+	}	
 	
 	//private methods to create plans
 	private void createMproduct(Product product, double price, String productId) {

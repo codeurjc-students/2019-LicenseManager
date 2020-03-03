@@ -32,6 +32,7 @@ public class License {
 	private Date endDate;
 	private String owner;
 	private boolean cancelAtEnd;
+	private String subscriptionItemId;
 	
 	
 	
@@ -68,6 +69,15 @@ public class License {
 	}
 	
 
+	
+
+	public String getSubscriptionItemId() {
+		return subscriptionItemId;
+	}
+
+	public void setSubscriptionItemId(String subscriptionId) {
+		this.subscriptionItemId = subscriptionId;
+	}
 
 	public Product getProduct() {
 		return product;

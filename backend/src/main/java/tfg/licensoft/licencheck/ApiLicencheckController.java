@@ -3,6 +3,16 @@ package tfg.licensoft.licencheck;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
+
+import com.stripe.exception.StripeException;
+import com.stripe.model.Subscription;
+import com.stripe.model.UsageRecord;
+import com.stripe.net.RequestOptions;
+
+import java.util.HashMap;
+import java.util.Map;
+import java.util.UUID;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -47,7 +57,7 @@ public class ApiLicencheckController {
 	}
 	
 	*/
-	//TODO Remove the password, not necessary on this method. 
+	
 	@RequestMapping("checkLicense/{productName}/{licenseSerial}")
 	public ResponseEntity<License> checkLicense(@PathVariable String licenseSerial, @PathVariable String productName ) {
 		Product product = this.productService.findOne(productName);
@@ -64,6 +74,48 @@ public class ApiLicencheckController {
 			return new ResponseEntity<>(license,HttpStatus.OK);
 		}
 	}
+	
+	//It checks the license too
+	@PutMapping("updateUsage/{usage}/{productName}/{licenseSerial}")
+	public ResponseEntity<Boolean> checkLicense(@PathVariable int usage,@PathVariable String licenseSerial, @PathVariable String productName ) {
+		
+		try {
+			Subscription s = Subscription.retrieve("sub_GqNjEjoveiFICt");
+		} catch (StripeException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+			System.out.println("ERROR 2");
+		}
+		
+		
+		License l = this.checkLicense(licenseSerial, productName).getBody();
+		
+		long unixTime = System.currentTimeMillis() / 1000L;
+
+		Map<String, Object> usageRecordParams = new HashMap<String, Object>();
+		usageRecordParams.put("quantity", usage);
+		usageRecordParams.put("timestamp", unixTime);
+		usageRecordParams.put("action", "increment");
+		
+		
+
+		//To avoid problems if Connection Errors (duplications, etc)
+		RequestOptions options = RequestOptions
+				  .builder()
+				  .setIdempotencyKey(UUID.randomUUID().toString())
+				  .build();
+
+		try {
+			UsageRecord.createOnSubscriptionItem(l.getSubscriptionItemId(), usageRecordParams, options);
+			return new ResponseEntity<>(true,HttpStatus.OK);
+		} catch (StripeException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+
+		}
+	}
+	
+	
 
 	
 }

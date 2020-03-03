@@ -12,4 +12,5 @@ import { Product } from '../product/product.model';
       endDate?:Date;
       owner:string;
       cancelAtEnd:boolean;
+      subscriptionId:string;
   }

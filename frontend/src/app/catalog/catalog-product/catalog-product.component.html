@@ -85,7 +85,7 @@
             <br>
         </div> 
     </div>
-    <div id="successfulMessage" *ngIf="!successfulMessage">
+    <div id="successfulMessage" *ngIf="successfulMessage">
         <a  >Payment Successful! Your license serial : <span class="serial">{{serial}}</span></a>
         <button mat-raised-button color="primary" (click)="copyMessage(serial)" value="click to copy" class="copyButton">Copy license serial</button>
     </div>
