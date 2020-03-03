@@ -71,9 +71,17 @@ a{
 
 .serial{
     border-style: dashed;
-    border-color: green;
+    border-color: darkgreen;
     border-width: 1px;
     padding:5px;
+}
+
+#successfulMessage{
+    color: darkgreen;
+    background-color:#CEDAEC ;
+    border-style: solid;
+    border-color: #3F51B5;
+    border-width: 1px;
 }
 
 

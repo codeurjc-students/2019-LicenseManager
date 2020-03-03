@@ -1,4 +1,4 @@
-<div class="background">
+<div class="background" id="appRootClass">
 <div class="center-div" *ngIf="product?.active">
     <br>    
     <h1 style="font-family:Arial" class="content">{{product?.name}}</h1>
@@ -85,8 +85,8 @@
             <br>
         </div> 
     </div>
-    <div *ngIf="successfulMessage">
-        <a  style="color:green;">Payment Successful! Your license serial : <span class="serial">{{serial}}</span></a>
+    <div id="successfulMessage" *ngIf="!successfulMessage">
+        <a  >Payment Successful! Your license serial : <span class="serial">{{serial}}</span></a>
         <button mat-raised-button color="primary" (click)="copyMessage(serial)" value="click to copy" class="copyButton">Copy license serial</button>
     </div>
 
