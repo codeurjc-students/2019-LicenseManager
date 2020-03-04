@@ -77,7 +77,7 @@ public class ApiLicencheckController {
 	
 	//It checks the license too
 	@PutMapping("updateUsage/{usage}/{productName}/{licenseSerial}")
-	public ResponseEntity<Boolean> checkLicense(@PathVariable int usage,@PathVariable String licenseSerial, @PathVariable String productName ) {
+	public ResponseEntity<Boolean> updateUsage(@PathVariable int usage,@PathVariable String licenseSerial, @PathVariable String productName ) {
 		
 		try {
 			Subscription s = Subscription.retrieve("sub_GqNjEjoveiFICt");
@@ -107,6 +107,8 @@ public class ApiLicencheckController {
 
 		try {
 			UsageRecord.createOnSubscriptionItem(l.getSubscriptionItemId(), usageRecordParams, options);
+			l.setnUsage(l.getnUsage()+usage);
+			this.licenseService.save(l);
 			return new ResponseEntity<>(true,HttpStatus.OK);
 		} catch (StripeException e) {
 			e.printStackTrace();

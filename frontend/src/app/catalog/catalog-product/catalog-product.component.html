@@ -72,9 +72,11 @@
                 <span *ngIf="plan.key=='A'">/ year</span>
                 <span *ngIf="plan.key=='D'">/ day</span>
                 <span *ngIf="plan.key=='L'"> (forever) </span>
+                <span *ngIf="plan.key=='MB'"> * use / month </span>
+
             </span>
             <br>
-            <br>
+            <br> 
             <a *ngIf="errorAdded" style="color:red;">You have to add first a valid card to pay with</a>
             <br>
 
@@ -99,9 +101,10 @@
                     <span *ngIf="plan.key=='A'">A = annual: Your subscription will be valid for 1 year</span>
                     <span *ngIf="plan.key=='D'">D = daily: Your subscription will be valid for 1 day</span>
                     <span *ngIf="plan.key=='L'">L = lifetime: Your subscription will be valid forever </span>
+                    <span *ngIf="plan.key=='MB'">MB = mettered: Your subscription will be valid for 1 month and you will be charged per use </span>
                 </div>
                 <br>
-                <span (click)="manageLicenses()"><i>All subscriptions are renewed automatically. You can cancel them on your <a class="link">User Dashboard</a></i></span>
+                <span (click)="manageLicenses()"><i>You can cancel the automatic renewal on your <a class="link">User Dashboard</a></i></span>
         </mat-card>
     </div>
     <br>

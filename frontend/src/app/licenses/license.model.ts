@@ -13,4 +13,6 @@ import { Product } from '../product/product.model';
       owner:string;
       cancelAtEnd:boolean;
       subscriptionId:string;
+      nUsage:number;
+      price:number;  
   }

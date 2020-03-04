@@ -1,12 +1,8 @@
 package tfg.licensoft.licenses;
 
-import java.security.NoSuchAlgorithmException;
 import java.util.Calendar;
 import java.util.Date;
-import java.util.Timer;
 import java.util.UUID;
-
-import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -33,6 +29,10 @@ public class License {
 	private String owner;
 	private boolean cancelAtEnd;
 	private String subscriptionItemId;
+	private String subscriptionId;
+	private int nUsage;
+	private double price;
+	
 	
 	
 	
@@ -65,11 +65,38 @@ public class License {
 			this.calculateEndDate(ahoraCal);
 			this.owner=owner;
 		}
+		this.nUsage=0;
+		this.price = product.getPlansPrices().get(type);
 
 	}
 	
 
 	
+	
+
+	public double getPrice() {
+		return price;
+	}
+
+	public void setPrice(double price) {
+		this.price = price;
+	}
+
+	public int getnUsage() {
+		return nUsage;
+	}
+
+	public void setnUsage(int nUsage) {
+		this.nUsage = nUsage;
+	}
+
+	public String getSubscriptionId() {
+		return subscriptionId;
+	}
+
+	public void setSubscriptionId(String subscriptionId) {
+		this.subscriptionId = subscriptionId;
+	}
 
 	public String getSubscriptionItemId() {
 		return subscriptionItemId;
@@ -96,6 +123,7 @@ public class License {
 	
 	public void calculateEndDate(Calendar ahoraCal) {
 		switch(type) {
+			case "MB":
 			case "M": {
 				ahoraCal.add(Calendar.MONTH, 1);
 				this.endDate = ahoraCal.getTime();
@@ -265,6 +293,7 @@ public class License {
 		Calendar ahoraCal = Calendar.getInstance();
 		this.startDate= ahoraCal.getTime();
 		this.calculateEndDate(ahoraCal);
+		this.nUsage= 0 ;
 	}
 
 	/*

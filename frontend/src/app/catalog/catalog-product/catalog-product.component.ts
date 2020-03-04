@@ -61,11 +61,18 @@ export class CatalogProductComponent implements OnInit {
   } 
 //METHODS TO SUBSCRIBE TO A PRODUCT
   subscribeToProduct(type:string,money:string){
+    let msg;
+    console.log(type);
     if(this.user==null){
      alert("You have to be logged first! If you don't have an account, you can register too");
   
     }else{
-      this.dialogService.openConfirmDialog("You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged now " + money + "€ to your default card.",true)
+      if(type==="MB"){
+        msg = "You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged in 1 month with the sum of usages * " + money + "€ to your default card."
+      }else{
+        msg="You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged now " + money + "€ to your default card.";
+      }
+      this.dialogService.openConfirmDialog(msg,true)
       .afterClosed().subscribe(
         res=>{
           if(res[0]){

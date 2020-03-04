@@ -97,6 +97,9 @@ import { ProductService } from '../product/product.service';
     }else if(this.type==='lifetime'){
       typeSubs.push('L');
       plansPricesN['L']=this.price;
+    }else if(this.type==='mettered'){
+      typeSubs.push('MB');
+      plansPricesN['MB']=this.price;
     }
     let prod:Product = {name: this.name, licenses:licenses, typeSubs:typeSubs,photoAvailable:isFile,description: this.description,webLink:this.webLink,photoSrc:"",plansPrices:plansPricesN,sku:null, active:true};
     this.productServ.postProduct(prod).subscribe(

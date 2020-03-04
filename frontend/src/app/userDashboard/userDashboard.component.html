@@ -5,11 +5,11 @@
         </mat-card-title>
         <hr>
         <mat-card-content>
-        <mat-grid-list cols="10"  rowHeight="4rem">
+        <mat-grid-list cols="14"  rowHeight="4rem">
             <mat-grid-tile>
                 <a><strong>PRODUCT</strong></a>
             </mat-grid-tile>
-            <mat-grid-tile>
+            <mat-grid-tile colspan="2">
                 <a><strong>SERIAL</strong></a>
             </mat-grid-tile>
             <mat-grid-tile>
@@ -26,15 +26,21 @@
             </mat-grid-tile>
             <mat-grid-tile colspan="2">
                 <a><strong>AUTOMATIC RENEWAL</strong></a>
-        </mat-grid-tile>
+            </mat-grid-tile>
+            <mat-grid-tile>
+                <a><strong>USAGE</strong></a>
+            </mat-grid-tile>
+            <mat-grid-tile colspan="2">
+                <a><strong>UPCOMING INVOICE</strong></a>
+            </mat-grid-tile>
         </mat-grid-list>
 
-            <mat-grid-list cols="10"  rowHeight="4rem">
+            <mat-grid-list cols="14"  rowHeight="4rem">
                 <div *ngFor="let license of activeLicenses" class="lineLicense">
                     <mat-grid-tile>
                         <span (click)="manageLink(license.product.name)" class="productName">{{license.product.name}}</span>
                     </mat-grid-tile>
-                    <mat-grid-tile>
+                    <mat-grid-tile colspan="2">
                         <a>{{license.serial}}</a>
                     </mat-grid-tile>
                     <mat-grid-tile>
@@ -58,8 +64,17 @@
                             <div *ngIf="license.cancelAtEnd && license.type!='L'"><mat-icon>cancel</mat-icon><button mat-icon-button (click)="cancelAtEnd(license)"><span class="an">(Enable)</span></button></div>
                         </div>
                     </mat-grid-tile>
+                    <mat-grid-tile>
+                        <span>{{license.nUsage}}</span>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="2">
+                        <span *ngIf="license.type!='L'">{{license.price * license.nUsage}} €</span>
+                        <span *ngIf="license.type=='L'">-</span>
+                    </mat-grid-tile>
                 </div>
             </mat-grid-list>
         </mat-card-content>
+        <i style="color: rgba(255, 0, 0, 0.61)">Upcoming invoices for MB licenses are a preview of the invoice that will be billed on the End Date. It may change if the subscription is updated. </i>
+
     </mat-card>
 </div>

@@ -14,6 +14,7 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Card;
 import com.stripe.model.CardCollection;
 import com.stripe.model.Customer;
+import com.stripe.model.Invoice;
 import com.stripe.model.Order;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentSource;
@@ -114,6 +115,7 @@ public class UserController {
 				License license = new License(true, typeSubs, product, user.getName());
 				license.setCancelAtEnd(!automaticRenewal);
 				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
+				license.setSubscriptionId(subscription.getId());
 				licenseServ.save(license);
 				if(automaticRenewal) {
 					this.setTimerAndEndDate(license);
@@ -137,7 +139,6 @@ public class UserController {
 			@Override
 			public void run() {
 				license.renew();
-				System.out.println(new Date().toGMTString());
 				License newL = licenseServ.save(license);
 				setTimerAndEndDate(newL);
 				
@@ -200,16 +201,20 @@ public class UserController {
 	@GetMapping("/{user}/cards")
 	private ResponseEntity<List<PaymentSource>> getCardsFromUser(@PathVariable String user) {
 		User u = this.userServ.findByName(user);
-		try {
-			Customer customer =
-					  Customer.retrieve(u.getCustomerStripeId());
-				Map<String, Object> params = new HashMap<>();
-				params.put("object", "card");
-
-				List<PaymentSource> l = customer.getSources().list(params).getData();				
-				return new ResponseEntity<>(l,HttpStatus.OK);
-		}catch (StripeException e) {
-			e.printStackTrace();
+		if(u!=null) {
+			try {
+				Customer customer =
+						  Customer.retrieve(u.getCustomerStripeId());
+					Map<String, Object> params = new HashMap<>();
+					params.put("object", "card");
+	
+					List<PaymentSource> l = customer.getSources().list(params).getData();				
+					return new ResponseEntity<>(l,HttpStatus.OK);
+			}catch (StripeException e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		}else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 				
@@ -225,6 +230,31 @@ public class UserController {
 					Card card = (Card) customer.getSources().retrieve(cardStripeId);
 					card.delete();
 					return new ResponseEntity<>(HttpStatus.OK);
+			}catch(StripeException e) {
+				
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+		}else {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+	}
+	
+	
+	//TODO de momento no se usa, lo dejo por si necesitamos la invoice para imprimir o lo que sea
+	@GetMapping("/{user}/invoice/subs/{subscriptionId}")
+	private ResponseEntity<String> getInvoicePreview(@PathVariable String user, @PathVariable String subscriptionId){
+		System.out.println("---");
+		User u = this.userServ.findByName(user);
+		//User uLogged = this.userComponent.getLoggedUser();
+		if(u!=null) {
+			try {
+				Map<String, Object> invoiceParams = new HashMap<>();
+				invoiceParams.put("customer", u.getCustomerStripeId());
+				invoiceParams.put("subscription", subscriptionId);
+				Invoice in = Invoice.upcoming(invoiceParams);
+				
+				return new ResponseEntity<>(in.toJson(),HttpStatus.OK);
 			}catch(StripeException e) {
 				
 				e.printStackTrace();

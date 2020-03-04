@@ -15,6 +15,7 @@
         <mat-select [(value)]="type" placeholder="Type" required [disabled]="edit">
           <mat-option value="subscription">Subscription</mat-option>
           <mat-option value="lifetime">Lifetime</mat-option>
+          <mat-option value="mettered">Mettered Billing</mat-option>
         </mat-select>
       </mat-form-field>
     <div *ngIf="type==='subscription'" class="prices" >
@@ -35,10 +36,11 @@
             <br>
         </div>
     </div>
-    <div *ngIf="type==='lifetime'" class="prices">
-        <b>Price (€): </b>
+    <div *ngIf="type==='lifetime' || type==='mettered'" class="prices">
+        <b>Price (€ <b *ngIf="type==='mettered'"> per use</b>): </b>
         <input matInput [disabled]="edit" type="number" placeholder="Price (€) " [(ngModel)]="price" required>
-
+        <hr>
+        <i *ngIf="type==='mettered'">Sum of uses will be charged in 1 month</i>
     </div>
     <br>
     <br>
