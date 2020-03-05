@@ -157,6 +157,7 @@ public class ApiProductController {
 			} catch (StripeException e) {
 				e.printStackTrace();
 			}
+			p.setTrialDays(product.getTrialDays());
 			p.setPhotoAvailable(product.isPhotoAvailable());
 			p.setPhotoSrc(product.getPhotoSrc());
 			p.setWebLink(product.getWebLink());

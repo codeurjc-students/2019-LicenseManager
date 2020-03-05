@@ -37,6 +37,7 @@ import { ProductService } from '../product/product.service';
         this.description=prod.description;
         this.webLink=prod.webLink;
         this.productEdit=prod;
+        this.trialDays=prod.trialDays;
         prod.typeSubs.forEach(function (value){
           if (value=="L"){
             this.lifetime=true;
@@ -48,12 +49,17 @@ import { ProductService } from '../product/product.service';
             this.priceDaily=prod.plansPrices["D"];
           }else if(value=="M"){
             this.monthly=true;
-            this.type=="subscription";
+            this.type="subscription";
             this.priceMonthly=prod.plansPrices["M"];
           }else if (value=="A"){
             this.annual=true;
-            this.type="subscription"
+            this.type="subscription";
             this.priceAnnual=prod.plansPrices["A"];
+          }
+          else if (value=="MB"){
+            this.monthly=true;
+            this.type="mettered";
+            this.priceAnnual=prod.plansPrices["MB"];
           }
         }.bind(this))
       }else{
@@ -70,6 +76,9 @@ import { ProductService } from '../product/product.service';
   }
 
   add(){
+    if(!this.monthly || this.type!="M"){
+      this.trialDays=0;
+    }
     let isFile;
     if(this.file!=null){
       isFile=true;

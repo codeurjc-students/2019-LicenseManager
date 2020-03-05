@@ -12,15 +12,15 @@
     </mat-form-field>  
     <br>
     <mat-form-field>
-    <mat-select [(value)]="type" placeholder="Type" required [disabled]="edit">
+    <mat-select [(ngModel)]="type" placeholder="Type" required [disabled]="edit">
       <mat-option value="subscription">Subscription</mat-option>
       <mat-option value="lifetime">Lifetime</mat-option>
       <mat-option value="mettered">Mettered Billing</mat-option>
     </mat-select>
     </mat-form-field>
     <br>
-    <mat-form-field>
-        <input matInput placeholder="Trial Days" [(ngModel)]="trialDays" required [disabled]="edit"> 
+    <mat-form-field *ngIf="monthly && type=='subscription'"> 
+        <input matInput placeholder="Trial Days" [(ngModel)]="trialDays" required> 
     </mat-form-field>
     <div *ngIf="type==='subscription'" class="prices" >
         <mat-checkbox [disabled]="edit" class="example-margin" [(ngModel)]="daily" color="primary"> Daily     <input matInput type="number" *ngIf="daily" placeholder="Price per day" [(ngModel)]="priceDaily" required> </mat-checkbox>         
@@ -60,9 +60,9 @@
   </td-file-upload>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button mat-raised-button color="primary"  (click)="add()" *ngIf="!edit" [disabled]="(trialDays==null || trialDays=='') || description==null || (name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
+        <button mat-raised-button color="primary"  (click)="add()" *ngIf="!edit" [disabled]="(monthly && (trialDays==null || trialDays=='')) || description==null || (name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
         || (monthly && (priceMonthly==null || priceMonthly=='')) || (annual && (priceAnnual==null || priceAnnual==''))) || type==='lifetime' && (price==null || price=='')">ADD</button>
-        <button mat-raised-button color="primary"  (click)="save()" *ngIf="edit" [disabled]="(trialDays==null || trialDays=='') || description==null || (name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
+        <button mat-raised-button color="primary"  (click)="save()" *ngIf="edit" [disabled]="(monthly && (trialDays==null || trialDays=='')) || description==null || (name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
         || (monthly && (priceMonthly==null || priceMonthly=='')) || (annual && (priceAnnual==null || priceAnnual==''))) || type==='lifetime' && (price==null || price=='')">SAVE</button>
         <button mat-button  (click)="close()">CANCEL</button>
     </mat-dialog-actions>

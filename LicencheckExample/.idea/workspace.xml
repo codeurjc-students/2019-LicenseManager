@@ -2,25 +2,6 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6973064f-5ff2-4f00-98b8-251b1f60f0de" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/../Licencheck/.project" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Licencheck/.settings/org.eclipse.jdt.apt.core.prefs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Licencheck/.settings/org.eclipse.jdt.core.prefs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Licencheck/.settings/org.eclipse.m2e.core.prefs" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Licencheck/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Licencheck/src/main/java/Licencheck.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/src/main/java/Licencheck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../Licencheck/src/test/java/TestLicencheck.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/src/test/java/TestLicencheck.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/LicencheckExample.iml" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/main/java/Main.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Main.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/LicencheckExample-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/LicencheckExample-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/classes/Main.class" beforeDir="false" afterPath="$PROJECT_DIR$/target/classes/Main.class" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/inputFiles.lst" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/testCompile/default-testCompile/inputFiles.lst" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/target/original-LicencheckExample-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-LicencheckExample-1.0-SNAPSHOT.jar" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/tfg/licensoft/licencheck/ApiLicencheckController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/tfg/licensoft/licencheck/ApiLicencheckController.java" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../backend/src/main/resources/keystore.jks" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/resources/keystore.jks" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/target/classes/META-INF/MANIFEST.MF" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/META-INF/MANIFEST.MF" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/target/classes/META-INF/maven/tfg/license-web/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/META-INF/maven/tfg/license-web/pom.properties" afterDir="false" />
     </list>

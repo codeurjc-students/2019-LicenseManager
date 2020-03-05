@@ -22,7 +22,7 @@ import { DialogService } from '../dialogs/dialog.service';
 
     getProducts(){
         this.productService.getProducts().subscribe(
-            (resp:any)  => {console.log(resp);this.products = resp.content},
+            (resp:any)  => {this.products = resp.content},
             error => console.log(error)
         );
     }
