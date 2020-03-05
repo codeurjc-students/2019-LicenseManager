@@ -77,16 +77,7 @@ public class ApiLicencheckController {
 	
 	//It checks the license too
 	@PutMapping("updateUsage/{usage}/{productName}/{licenseSerial}")
-	public ResponseEntity<Boolean> updateUsage(@PathVariable int usage,@PathVariable String licenseSerial, @PathVariable String productName ) {
-		
-		try {
-			Subscription s = Subscription.retrieve("sub_GqNjEjoveiFICt");
-		} catch (StripeException e1) {
-			// TODO Auto-generated catch block
-			e1.printStackTrace();
-			System.out.println("ERROR 2");
-		}
-		
+	public ResponseEntity<Integer> updateUsage(@PathVariable int usage,@PathVariable String licenseSerial, @PathVariable String productName ) {
 		
 		License l = this.checkLicense(licenseSerial, productName).getBody();
 		
@@ -109,10 +100,10 @@ public class ApiLicencheckController {
 			UsageRecord.createOnSubscriptionItem(l.getSubscriptionItemId(), usageRecordParams, options);
 			l.setnUsage(l.getnUsage()+usage);
 			this.licenseService.save(l);
-			return new ResponseEntity<>(true,HttpStatus.OK);
+			return new ResponseEntity<>(l.getnUsage(),HttpStatus.OK);
 		} catch (StripeException e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
 		}
 	}
