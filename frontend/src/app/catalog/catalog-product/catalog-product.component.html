@@ -87,6 +87,15 @@
             <br>
         </div> 
     </div>
+
+    <br>
+    <br>
+    <div>
+        <span *ngIf="product?.trialDays!=0" id="freeTrial" class="font" (click)="freeTrial()">{{product?.trialDays}}-DAY FREE TRIAL <i>(M)</i></span>
+    </div>
+    <br>
+    <br>
+
     <div id="successfulMessage" *ngIf="successfulMessage">
         <a  >Payment Successful! Your license serial : <span class="serial">{{serial}}</span></a>
         <button mat-raised-button color="primary" (click)="copyMessage(serial)" value="click to copy" class="copyButton">Copy license serial</button>

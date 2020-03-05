@@ -98,6 +98,15 @@ export class CatalogProductComponent implements OnInit {
         alert("There has been an error with the subscription and it couldn't be successful.")
       }
   }
+
+
+  freeTrial(){
+    this.loading=true;
+    this.userProfileService.addFreeTrial(this.product,this.user.name,this.product.trialDays).subscribe(
+        (u:any)=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial},
+        error=> {this.treatmentBuyError(error);this.loading=false;},
+    )
+  }
   
 
 

@@ -3,6 +3,17 @@
     background-size: 100% 100%;
   }
 
+#freeTrial{
+    font-size: 40px;
+    padding: 10px;
+    border-style: dashed;
+    border-width: 4px;
+    border-color:#3F51B5;
+    background: rgba(255, 255, 255, 0.733);
+    cursor: pointer;
+
+}
+
 .center-div{
     text-align: center;
     margin-left: 10%;

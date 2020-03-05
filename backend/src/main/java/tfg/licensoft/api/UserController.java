@@ -22,6 +22,7 @@ import com.stripe.model.PaymentSourceCollection;
 import com.stripe.model.Plan;
 import com.stripe.model.Subscription;
 import com.stripe.model.Token;
+import com.stripe.param.SubscriptionCreateParams;
 
 import java.util.ArrayList;
 import java.util.Calendar;
@@ -73,6 +74,45 @@ public class UserController {
  
 	}
 	
+	//Will be subscribed to a M subscription with x free trial days
+	@PutMapping("/{productName}/{userName}/addTrial/{days}")
+	public ResponseEntity<License> addTrial(@PathVariable String productName, @PathVariable String userName, @PathVariable long days){
+		
+		User user = this.userServ.findByName(userName);
+		Product product = this.productServ.findOne(productName);
+
+		if(user!=null && product!=null) {
+			try {
+				SubscriptionCreateParams params =
+						  SubscriptionCreateParams.builder()
+						    .setCustomer(user.getCustomerStripeId())
+						    .addItem(
+						      SubscriptionCreateParams.Item.builder()
+						        .setPlan(product.getPlans().get("M")) //Free trial is always monthly subscription
+						        .build())
+						    .setTrialPeriodDays(days)
+						    //.setDefaultSource(defaultSource)
+						    .build();
+				Subscription subscription = Subscription.create(params);
+				
+				License license = new License(true, "M", product, user.getName(),days);
+				license.setCancelAtEnd(false);  //Trial Periods have automatic renewal
+				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
+				license.setSubscriptionId(subscription.getId());
+				licenseServ.save(license);
+				this.setTimerAndEndDate(license,days);
+				return new ResponseEntity<License>(license,HttpStatus.OK);
+
+			}catch(StripeException e) {
+				e.printStackTrace();
+				return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
+			}
+		}else {
+			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
+
+		}
+	}
+
 
 	
 	@PutMapping("/{productName}/{typeSubs}/{userName}/addSubscription/renewal/{automaticRenewal}")
@@ -118,7 +158,7 @@ public class UserController {
 				license.setSubscriptionId(subscription.getId());
 				licenseServ.save(license);
 				if(automaticRenewal) {
-					this.setTimerAndEndDate(license);
+					this.setTimerAndEndDate(license,0);
 				}
 				return new ResponseEntity<License>(license,HttpStatus.OK);
 			}else {
@@ -130,7 +170,7 @@ public class UserController {
 		}
 	}
 	
-	private void setTimerAndEndDate(License license) {
+	private void setTimerAndEndDate(License license, long trialDays) {
 		Timer time = new Timer();
 		System.out.println(license.getEndDate());
 		time.schedule(new TimerTask() {
@@ -138,9 +178,9 @@ public class UserController {
 
 			@Override
 			public void run() {
-				license.renew();
+				license.renew(trialDays);
 				License newL = licenseServ.save(license);
-				setTimerAndEndDate(newL);
+				setTimerAndEndDate(newL,0);
 				
 			}
 			

@@ -59,7 +59,7 @@ export class CardFormComponent implements OnInit {
           // At this point, you should send the token ID
           // to your server so it can attach
           // the payment source to a customer
-
+          console.log(result.token);
             this.userProfileServ.addCardStripeElements(result.token.id).subscribe(
               t=> {this.successfulAdd=true;this.loading=false; this.userProfileCom.getCards()},
               error=> {this.successfulAdd=false; this.loading=false;}

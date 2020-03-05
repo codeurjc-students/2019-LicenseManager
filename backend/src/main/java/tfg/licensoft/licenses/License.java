@@ -32,8 +32,27 @@ public class License {
 	private String subscriptionId;
 	private int nUsage;
 	private double price;
+	private boolean trial;
 	
 	
+	public License(boolean active, String type, Product product, String owner, long trialDays) {
+		super();
+		this.serial = this.generateSerial();
+		Calendar ahoraCal = Calendar.getInstance();
+		this.active = active;
+		this.type = type;
+		this.product=product;
+		if(active) {
+			this.startDate = ahoraCal.getTime();
+			System.out.println(this.startDate + " lol");
+			this.calculateEndDate(ahoraCal,trialDays);
+			this.owner=owner;
+		}
+		this.nUsage=0;
+		this.price = product.getPlansPrices().get(type);
+		this.trial=true;
+
+	}
 	
 	
 	public License(String serial, boolean active, String type, Product product, String owner) {
@@ -46,7 +65,7 @@ public class License {
 		if(active) {
 			
 			this.startDate = ahoraCal.getTime();
-			this.calculateEndDate(ahoraCal);
+			this.calculateEndDate(ahoraCal,0);
 			this.owner=owner;
 		}
 
@@ -62,7 +81,7 @@ public class License {
 		if(active) {
 			this.startDate = ahoraCal.getTime();
 			System.out.println(this.startDate + " lol");
-			this.calculateEndDate(ahoraCal);
+			this.calculateEndDate(ahoraCal,0);
 			this.owner=owner;
 		}
 		this.nUsage=0;
@@ -73,6 +92,16 @@ public class License {
 
 	
 	
+
+	public boolean isTrial() {
+		return trial;
+	}
+
+
+	public void setTrial(boolean trial) {
+		this.trial = trial;
+	}
+
 
 	public double getPrice() {
 		return price;
@@ -121,26 +150,35 @@ public class License {
 	public License () {}
 	
 	
-	public void calculateEndDate(Calendar ahoraCal) {
-		switch(type) {
-			case "MB":
-			case "M": {
-				ahoraCal.add(Calendar.MONTH, 1);
-				this.endDate = ahoraCal.getTime();
-				break;
+	public void calculateEndDate(Calendar ahoraCal, long trialDays) {
+		if(trialDays==0) {
+			this.trial=false;
+
+			switch(type) {
+			
+				case "MB":
+				case "M": {
+					ahoraCal.add(Calendar.MONTH, 1);
+					this.endDate = ahoraCal.getTime();
+					break;
+				}
+				case "A":{
+					ahoraCal.add(Calendar.YEAR, 1);
+					this.endDate = ahoraCal.getTime();
+					break;	
+				} 
+				case "D":{
+					ahoraCal.add(Calendar.HOUR, 24);
+					this.endDate = ahoraCal.getTime();
+					break;	
+				}
+				default: this.endDate=null;
 			}
-			case "A":{
-				ahoraCal.add(Calendar.YEAR, 1);
-				this.endDate = ahoraCal.getTime();
-				break;	
-			} 
-			case "D":{
-				ahoraCal.add(Calendar.HOUR, 24);
-				this.endDate = ahoraCal.getTime();
-				break;	
-			}
-			default: this.endDate=null;
+		}else {
+			ahoraCal.add(Calendar.HOUR, (int)(24*trialDays));
+			this.endDate = ahoraCal.getTime();
 		}
+
 	}
 	
 	
@@ -197,7 +235,7 @@ public class License {
 	public void setStartDate(Date startDate) {
 		this.startDate = startDate;
 		Calendar ahoraCal = Calendar.getInstance();
-		this.calculateEndDate(ahoraCal);
+		this.calculateEndDate(ahoraCal,0);
 	}
 
 
@@ -289,10 +327,10 @@ public class License {
 		return UUID.randomUUID().toString();
 	}
 	
-	public void renew() {
+	public void renew(long trialDays) {
 		Calendar ahoraCal = Calendar.getInstance();
 		this.startDate= ahoraCal.getTime();
-		this.calculateEndDate(ahoraCal);
+		this.calculateEndDate(ahoraCal,trialDays);
 		this.nUsage= 0 ;
 	}
 

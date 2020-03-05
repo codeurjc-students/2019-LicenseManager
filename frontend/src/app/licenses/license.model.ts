@@ -15,4 +15,5 @@ import { Product } from '../product/product.model';
       subscriptionId:string;
       nUsage:number;
       price:number;  
+      trial:boolean;
   }

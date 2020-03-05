@@ -12,5 +12,6 @@ export interface Product{
     plansPrices:{ [name: string]: number };
     sku:string;
     active:boolean;
+    trialDays:number;
 
 }

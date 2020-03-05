@@ -47,6 +47,7 @@ public class Product {
 	private HashMap<String,Double> plansPrices;
 	private String sku;
 	private boolean active;
+	private int trialDays;
 	
 
 	public Product() {}
@@ -68,6 +69,14 @@ public class Product {
 	
 	public String getPhotoSrc() {
 		return photoSrc;
+	}
+
+	public int getTrialDays() {
+		return trialDays;
+	}
+
+	public void setTrialDays(int trialDays) {
+		this.trialDays = trialDays;
 	}
 
 	public boolean isActive() {
