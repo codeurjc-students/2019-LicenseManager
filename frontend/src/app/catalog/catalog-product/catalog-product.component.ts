@@ -13,6 +13,8 @@ import { LoginComponent } from '../../login/login.component';
 import { AppComponent } from 'src/app/app.component';
 import { environment } from 'src/environments/environment';
 import { AppService } from '../../app.service';
+import { CardFormComponent } from '../../userProfile/card-form/card-form.component';
+import { UsedCardService } from '../../usedCard/usedCard.service';
 
 
 @Component({
@@ -37,7 +39,7 @@ export class CatalogProductComponent implements OnInit {
   dialogRef: MatDialogRef<any, any>;
 
 
-  constructor(public appService:AppService,private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
+  constructor(public usedCardServ:UsedCardService,public cardForm:CardFormComponent,public appService:AppService,private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
     let productName;
     this.activeRoute.paramMap.subscribe((params: ParamMap) => {
         productName = params.get('name');
@@ -101,11 +103,25 @@ export class CatalogProductComponent implements OnInit {
 
 
   freeTrial(){
-    this.loading=true;
-    this.userProfileService.addFreeTrial(this.product,this.user.name,this.product.trialDays).subscribe(
-        (u:any)=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial},
-        error=> {this.treatmentBuyError(error);this.loading=false;},
+    this.dialogService.openFreeTrialDialog(this.product.name).afterClosed().subscribe(
+      res=> {
+        if (res!=null){
+          this.loading=true;
+          this.userProfileService.addFreeTrial(this.product,this.user.name,this.product.trialDays, res[0]).subscribe(
+              (u:any)=> {
+                this.usedCardServ.postUsedCard(res[1], res[2], res[3],this.product.name).subscribe(
+                  card => {this.loading=false;},
+                  error=>{this.loading=false;console.log(error);}
+                )
+                this.successfulMessage=true;this.loading=false;this.serial=u.serial},
+              error=> {this.treatmentBuyError(error);this.loading=false;},
+          )
+        }else{
+
+        }
+      }
     )
+
   }
   
 

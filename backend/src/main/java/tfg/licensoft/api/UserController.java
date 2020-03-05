@@ -20,6 +20,7 @@ import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentSource;
 import com.stripe.model.PaymentSourceCollection;
 import com.stripe.model.Plan;
+import com.stripe.model.Source;
 import com.stripe.model.Subscription;
 import com.stripe.model.Token;
 import com.stripe.param.SubscriptionCreateParams;
@@ -58,14 +59,14 @@ public class UserController {
 	
 	
 	@PostMapping("/addCard/{tokenId}")
-	public ResponseEntity<User> addCardStripeElements(@PathVariable String tokenId){
+	public ResponseEntity<String> addCardStripeElements(@PathVariable String tokenId){
 		User user = userComponent.getLoggedUser();
 		try {
 			Customer c = Customer.retrieve(user.getCustomerStripeId());
 			Map<String,Object> source = new HashMap<String,Object>();
 			source.put("source", tokenId);
-			c.getSources().create(source);
-			return new ResponseEntity<User>(user,HttpStatus.OK);
+			PaymentSource ps = c.getSources().create(source);
+			return new ResponseEntity<String>(ps.getId(),HttpStatus.OK);
 
 		} catch (StripeException e) {
 			e.printStackTrace();
@@ -75,14 +76,18 @@ public class UserController {
 	}
 	
 	//Will be subscribed to a M subscription with x free trial days
-	@PutMapping("/{productName}/{userName}/addTrial/{days}")
-	public ResponseEntity<License> addTrial(@PathVariable String productName, @PathVariable String userName, @PathVariable long days){
+	@PutMapping("/{productName}/{userName}/addTrial/{days}/card/{token}")
+	public ResponseEntity<License> addTrial(@PathVariable String productName, @PathVariable String userName, @PathVariable long days,  @PathVariable String token){
+		
+		
 		
 		User user = this.userServ.findByName(userName);
 		Product product = this.productServ.findOne(productName);
-
+		
 		if(user!=null && product!=null) {
 			try {
+				String src = this.addCardStripeElements(token).getBody();
+
 				SubscriptionCreateParams params =
 						  SubscriptionCreateParams.builder()
 						    .setCustomer(user.getCustomerStripeId())
@@ -91,7 +96,7 @@ public class UserController {
 						        .setPlan(product.getPlans().get("M")) //Free trial is always monthly subscription
 						        .build())
 						    .setTrialPeriodDays(days)
-						    //.setDefaultSource(defaultSource)
+						    .setDefaultSource(src)
 						    .build();
 				Subscription subscription = Subscription.create(params);
 				
@@ -127,8 +132,6 @@ public class UserController {
 				 
 		String planId = plans.get(typeSubs);
 		if (planId!=null && product!=null) {
-			List<License> list= this.licenseServ.findByProductAndOwnerAndType(product, user.getName(), typeSubs);
-			if (list.isEmpty()) {
 				Map<String, Object> item = new HashMap<>();
 				item.put("plan", planId);
 				Map<String, Object> items = new HashMap<>();
@@ -161,9 +164,6 @@ public class UserController {
 					this.setTimerAndEndDate(license,0);
 				}
 				return new ResponseEntity<License>(license,HttpStatus.OK);
-			}else {
-				return new ResponseEntity<License>(HttpStatus.CONFLICT);
-			}
 			
 		}else {
 			return new ResponseEntity<License>(HttpStatus.BAD_REQUEST);

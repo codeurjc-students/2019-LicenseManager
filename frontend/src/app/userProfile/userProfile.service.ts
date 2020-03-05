@@ -35,8 +35,8 @@ export class UserProfileService {
         
     }
 
-    addFreeTrial(product:Product,userName:string,days:number){
-        return this.http.put(BASE_URL + product.name + "/" +userName+ "/addTrial/"+days,product);
+    addFreeTrial(product:Product,userName:string,days:number, token:string){
+        return this.http.put(BASE_URL + product.name + "/" +userName+ "/addTrial/"+days + "/card/" + token,product) ;
     }
 
 

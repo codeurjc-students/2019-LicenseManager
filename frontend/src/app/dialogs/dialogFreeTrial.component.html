@@ -1,0 +1,11 @@
+<div class="confirm-dialog-container">
+    <div class="content-container">
+        <mat-icon id="close-icon" (click)="closeDialog()">close</mat-icon>
+        <span class="content-span full-width">
+        <h2>Free Trial - M Subscription</h2>
+        <a>Introduce your card info. You won't be charged until the free trial ends. You can disable automatic renewal on your User Dashboard.</a>
+        <app-card-form [calledByTrial]="true" [productName]=data.productName (valid)="setValid($event)" (token)="setToken($event)" (cardParams)="setParams($event)"></app-card-form>
+    </span>
+    </div>
+    <button mat-flat-button id="yes-button" (click)="yes()" *ngIf="valid">SUBSCRIBE</button>
+</div>

@@ -89,6 +89,8 @@ import { CustomFormComponentComponent } from './custom-form-component/custom-for
 import { ConfirmationDialogComponent } from './dialogs/confirmation-dialog/confirmation-dialog.component';
 import { NotFoundComponent } from './not-found/not-found.component';
 import { AppService } from './app.service';
+import { DialogFreeTrial } from './dialogs/dialogFreeTrial.component';
+import { UsedCardService } from './usedCard/usedCard.service';
 
 @NgModule({
     imports: [
@@ -149,11 +151,11 @@ import { AppService } from './app.service';
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, DialogEditComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent],
+    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, DialogEditComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
     bootstrap: [AppComponent],
-    entryComponents: [DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent,
+    entryComponents: [DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent, DialogFreeTrial,
     ],
-    providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,LoginComponent, AppService,
+    providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,LoginComponent, AppService, UserProfileComponent, CardFormComponent, UsedCardService,
         { provide: MAT_DIALOG_DATA, useValue: {} },
         { provide: MatDialogRef, useValue: {} },
         { provide: LocationStrategy, useClass: HashLocationStrategy },
