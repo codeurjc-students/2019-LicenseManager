@@ -15,6 +15,8 @@ import { environment } from 'src/environments/environment';
 import { AppService } from '../../app.service';
 import { CardFormComponent } from '../../userProfile/card-form/card-form.component';
 import { UsedCardService } from '../../usedCard/usedCard.service';
+import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
+import { FormGroup, FormControl, Validators } from '@angular/forms';
 
 
 @Component({
@@ -30,7 +32,7 @@ export class CatalogProductComponent implements OnInit {
   user:User;
   userLicensesOfProduct:License[];
   errorAdded:boolean;
-  card:boolean;
+  card2:boolean;
   successfulMessage:boolean;
   serial:string;
   tk:string;
@@ -39,7 +41,17 @@ export class CatalogProductComponent implements OnInit {
   dialogRef: MatDialogRef<any, any>;
 
 
-  constructor(public usedCardServ:UsedCardService,public cardForm:CardFormComponent,public appService:AppService,private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
+  elements: Elements;
+  card: StripeElement;
+  purchase:boolean;
+
+  elementsOptions: ElementsOptions = {
+    locale: 'en'
+  };
+
+
+  constructor(    private stripeService: StripeService, public usedCardServ:UsedCardService,public cardForm:CardFormComponent,public appService:AppService,private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
+    this.purchase=false;
     let productName;
     this.activeRoute.paramMap.subscribe((params: ParamMap) => {
         productName = params.get('name');
@@ -56,11 +68,47 @@ export class CatalogProductComponent implements OnInit {
     this.loading=false;
    }
 
-   ngOnInit(): void {
-    this.loadStripe();
-    this.user=this.loginService.getUserLogged();
+   public stripeForm = new FormGroup({ });
 
-  } 
+
+  setUp(){
+    this.appService.getPublicStripeKey().subscribe(
+      (key:any)=> {
+        this.stripeService.changeKey(key.text);
+        this.stripeService.elements(this.elementsOptions).subscribe(
+         elements => {
+           this.elements = elements;
+           if (!this.card) {
+             this.card = this.elements.create('card', {
+               style: {
+                 base: {
+                   iconColor: '#666EE8',
+                   color: '#31325F',
+                   fontWeight: 300,
+                   fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                   fontSize: '18px',
+                   '::placeholder': {
+                     color: '#3F51B5'
+                   }
+                 }
+               }
+             });
+             this.card.mount('#card-element');
+           }
+         }
+       );
+      }
+    );
+  }
+
+
+  ngOnInit() {
+   this.user=this.loginService.getUserLogged();
+  }
+
+
+
+
 //METHODS TO SUBSCRIBE TO A PRODUCT
   subscribeToProduct(type:string,money:string){
     let msg;
@@ -127,55 +175,36 @@ export class CatalogProductComponent implements OnInit {
 
 
 
-
 //METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT
-  loadStripe() {
-    if(!window.document.getElementById('stripe-script')) {
-        var s = window.document.createElement("script");
-        s.id = "stripe-script";
-        s.type = "text/javascript";
-        s.src = "https://checkout.stripe.com/checkout.js";
-        window.document.body.appendChild(s);
-    }
+  startPurchase(){
+    this.purchase=true;
+    this.setUp();
   }
 
-  pay(amount) {  
-    if(this.user==null){
-       alert("You have to be logged first! If you don't have an account, you can register too");
-    }else{
-      var handler = (<any>window).StripeCheckout.configure({
-        key: this.appService.publicApiKey,
-        currency:'eur',
-        email:this.user.name +'@email.com',
-        token: (token: any) =>{
-          if(token!=null){
-            this.confirm(token.id);
-          }
+  pay(){
+    const name = this.user.name
+    this.stripeService
+      .createToken(this.card, { name })
+      .subscribe(result => {
+        console.log(result);
+        if (result.token) {
+          this.loading=true;
+          this.userProfileService.pay(this.user.name,this.product, result.token.id).subscribe(
+            data => {
+              this.userProfileService.confirmPay(this.user.name,this.product,data[`id`]).subscribe(
+                (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;},
+                error => {alert("The purchase has not been posible"); console.log(error),this.loading=false; this.purchase=false;}
+              )
+            }
+          );
+          
+        } else if (result.error) {
+          
         }
-
       });
-  
-      handler.open({
-        name: this.product.name, 
-        description: 'This license is valid forever',
-        amount: amount * 100
-      });
-
-    }
-
-    
-  
   }
 
 
-  confirm(token:string){
-      this.userProfileService.buyProduct(token,this.product,this.user.name).subscribe(
-        (t:any) => {this.successfulMessage=true; this.serial=t.serial;},
-        error => {alert("The purchase has not been posible");}
-      )
-
-
-  }
 
   //Function to copy the license serial to the clipboard
   copyMessage(val: string){
@@ -205,7 +234,7 @@ export class CatalogProductComponent implements OnInit {
 
 
   formatDates(date:Date){
-    return this.datepipe.transform(date, 'yyyy/MM/dd hh:MM'); 
+    return this.datepipe.transform(date, 'yyyy/MM/dd hh:mm'); 
   }
 
 

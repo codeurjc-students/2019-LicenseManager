@@ -25,10 +25,17 @@ export class UserProfileService {
     }
 
 
-    addCardStripeElements(tokenId:string){
-        return this.http.post(BASE_URL + 'addCard/' + tokenId,null);
+    addCardStripeElements(user:string,tokenId:string){
+        return this.http.post(BASE_URL +user +'/addCard/' + tokenId,null);
     }
 
+    getDefaultCard(user:string){
+        return this.http.get(BASE_URL +user +'/getDefault/');
+    }
+
+    setDefaultCard(user:string,pmId:string){
+        return this.http.put(BASE_URL +user +'/setDefault/'+pmId,null);
+    }
 
     addSubscriptionToProduct(product:Product,typeSubs:string,userName:string, automaticRenewal:boolean){
         return this.http.put(BASE_URL+product.name+"/" + typeSubs + "/" + userName +"/addSubscription/renewal/"+automaticRenewal,product)
@@ -40,8 +47,14 @@ export class UserProfileService {
     }
 
 
-    buyProduct(token:string,product:Product, userName:string){
-        return this.http.put(BASE_URL+userName+"/buy/" + product.name + "/" + token ,product)
+    //Methods for one-time payment
+    pay(userName:string,product:Product, tokenId:string){
+        return this.http.post(BASE_URL+ userName + "/paymentIntent/"+tokenId,product)
+    }
+
+    confirmPay(userName:string,product:Product,id:string){
+        return this.http.post(BASE_URL+ userName + "/confirm/" + id + "/product/"+product.name,{})
+
     }
 
 

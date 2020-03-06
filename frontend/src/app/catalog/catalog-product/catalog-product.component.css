@@ -102,3 +102,17 @@ a{
     COLOR:blue;
     cursor:pointer;
 }
+
+
+
+
+.info{
+    padding: 15px;;
+}
+
+#buttonSubmit{
+    left: 10%;
+    right:10%;
+    text-align: center;
+    padding: 5px;
+}

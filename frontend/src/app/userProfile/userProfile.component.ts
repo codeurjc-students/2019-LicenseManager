@@ -16,8 +16,9 @@ import { DialogService } from '../dialogs/dialog.service';
 
   export class UserProfileComponent{
     user:User;
-    stripeCards:any[];
     loading:boolean;
+    paymentMethods:any[];
+    defaultPM:string;
 
     owner = new FormControl('',Validators.required);
     number = new FormControl('',[Validators.required, Validators.minLength(16), Validators.maxLength(16), Validators.pattern('[0-9]*')]);
@@ -34,7 +35,12 @@ import { DialogService } from '../dialogs/dialog.service';
      getCards(){
       this.loading=true;
       this.userProfileService.getUserCardsStripe(this.user.name).subscribe(
-        (cards:any)=> {this.stripeCards=cards;this.loading=false;},
+        (paymentMethods:any)=> {this.paymentMethods=paymentMethods;this.loading=false;
+          this.userProfileService.getDefaultCard(this.user.name).subscribe(
+            (resp:any) => this.defaultPM=resp.response,
+            error => console.log(error)
+          )
+        },
         error=> {console.log(error);this.loading=false;}
       )
      }
@@ -57,6 +63,13 @@ import { DialogService } from '../dialogs/dialog.service';
           w => {this.getCards();},
           error => {console.log(error);this.loading=false;}
         )
+     }
+
+     setDefault(pmId:string){
+       this.userProfileService.setDefaultCard(this.user.name,pmId).subscribe(
+         def => this.getCards(),
+         error => console.log(error)
+       )
      }
 
 

@@ -20,3 +20,14 @@
     background-image:url('/../../assets/bg_p1.jpg');     
     background-size: 100% 100%;
   }
+
+  #default{
+    border-radius: 20px;
+    background: #BED4F7;
+    color:#3D52AE ;
+    padding: 8px;
+  }
+
+  #setDefault{
+    color: #3D52AE;
+  }

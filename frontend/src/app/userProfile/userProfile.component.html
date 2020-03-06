@@ -7,13 +7,18 @@
     <mat-card-content>
         <b *ngIf="stripeCards?.length==0">You don't have any card attached yet</b>
         <mat-grid-list cols="2" rowHeight="4rem" *ngIf="!loading" >
-            <div *ngFor="let card of stripeCards" class="comp">
-                <mat-grid-tile > <img src="assets/{{card?.brand}}.png" width="50px"> | {{card?.brand}} that ends with {{card?.last4}} - Expiring {{card?.expMonth}}/{{card?.expYear}}</mat-grid-tile>
+            <div *ngFor="let paymentMethod of paymentMethods" class="comp">
+                <mat-grid-tile > <img src="assets/{{paymentMethod?.card.brand}}.png" width="50px"> | {{paymentMethod?.card.brand.toUpperCase()}} that ends with {{paymentMethod?.card.last4}} - Expiring {{paymentMethod?.card.expMonth}}/{{paymentMethod?.card.expYear}}</mat-grid-tile>
                 <mat-grid-tile>
                     <button mat-icon-button >
-                            <mat-icon class="icon" (click)="firstStepDelete(card?.id)" >delete</mat-icon>
-                    </button>                    
+                            <mat-icon class="icon" (click)="firstStepDelete(paymentMethod?.id)" >delete</mat-icon>
+                    </button> 
+                    <button mat-icon-button *ngIf="paymentMethod?.id!=defaultPM"  (click)="setDefault(paymentMethod?.id)">
+                         <a id="setDefault">Set as Default</a>
+                    </button>
+                    <a id="default" *ngIf="paymentMethod?.id==defaultPM">DEFAULT</a>                     
                 </mat-grid-tile>
+
             </div>
         </mat-grid-list>
     </mat-card-content>

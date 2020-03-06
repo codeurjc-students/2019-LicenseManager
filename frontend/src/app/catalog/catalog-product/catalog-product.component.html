@@ -80,16 +80,34 @@
             <a *ngIf="errorAdded" style="color:red;">You have to add first a valid card to pay with</a>
             <br>
 
-            <button mat-raised-button  *ngIf="plan.key=='L' && !loading" (click)="pay(plan.value)" color="primary" >PURCHASE</button>
+            <button mat-raised-button  *ngIf="plan.key=='L' && !loading" (click)="startPurchase()" color="primary" >PURCHASE</button>
             <button mat-raised-button *ngIf="plan.key!='L' && !loading" (click)="subscribeToProduct(plan.key, plan.value)" color="primary">SUBSCRIBE</button>
 
             <br>
             <br>
-        </div> 
+            <img *ngIf="loading" src="assets/spinner.gif" id="spinner" width="140px" >
+
+            <div class="typeExp" *ngIf="plan.key=='L' && purchase">
+                <mat-card  >
+                    <mat-card-title>{{this.product?.name}} - LIFETIME</mat-card-title>
+                    <hr>
+                    <form novalidate (ngSubmit)="pay()" [formGroup]="stripeForm" #f="ngForm">
+                        <div id="card-element" class="field info"></div>
+                        <div *ngIf="error" class="alert alert-danger">
+                            {{error}}
+                        </div>
+                        <div  id="buttonSubmit">
+                            <button mat-raised-button class="btn btn-outline-success" color="primary" type="submit" [disabled]="!f.valid">PAY {{plan.value}} €</button>
+                        </div>
+                    </form>
+                </mat-card>
+                </div>
+            </div> 
     </div>
 
     <br>
     <br>
+
     <div>
         <span *ngIf="product?.trialDays!=0" id="freeTrial" class="font" (click)="freeTrial()">{{product?.trialDays}}-DAY FREE TRIAL <i>(M)</i></span>
     </div>
@@ -123,4 +141,7 @@
     <h1  style="font-family:Arial" class="content"><mat-icon >warning</mat-icon>The product {{product?.name}} is not Active <mat-icon>warning</mat-icon></h1>
     <span style="font-family:Arial">If you have licenses of this product, don't worry. They are still valid.</span>
 </div>
+
+
+
 </div>

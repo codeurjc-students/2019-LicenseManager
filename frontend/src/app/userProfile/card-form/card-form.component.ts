@@ -4,6 +4,7 @@ import { AppService } from '../../app.service';
 import { Router } from '@angular/router';
 import { UserProfileComponent } from '../userProfile.component';
 import { UsedCardService } from '../../usedCard/usedCard.service';
+import { LoginService } from '../../login/login.service';
 
 
 declare var Stripe: any;
@@ -28,7 +29,7 @@ export class CardFormComponent implements OnInit {
   @Output() cardParams: EventEmitter<any[] > = new EventEmitter();
 
 
-  constructor(private usedCardServ:UsedCardService,private router:Router,private appService:AppService,private userProfileServ:UserProfileService, private userProfileCom:UserProfileComponent) { }
+  constructor(private loginServ:LoginService,private usedCardServ:UsedCardService,private router:Router,private appService:AppService,private userProfileServ:UserProfileService, private userProfileCom:UserProfileComponent) { }
 
   ngOnInit() {
     // Your Stripe public key
@@ -73,7 +74,6 @@ export class CardFormComponent implements OnInit {
           // At this point, you should send the token ID
           // to your server so it can attach
           // the payment source to a customer
-          console.log(result.token);
           if(this.calledByTrial){
             this.usedCardServ.checkCard(result.token.card.last4, result.token.card.exp_month, result.token.card.exp_year,this.productName).subscribe(
               resp => {
@@ -87,18 +87,14 @@ export class CardFormComponent implements OnInit {
                   this.valid.emit(true);
                   this.token.emit(result.token.id);
                   this.loading=false;
-                 /* this.usedCardServ.postUsedCard(result.token.card.last4, result.token.card.exp_month, result.token.card.exp_year,this.productName).subscribe(
-                    card => {this.loading=false;this.valid.emit(true);this.token.emit(result.token.id)},
-                    error=>{this.loading=false;console.log(error);this.valid.emit(false)}
-                  )*/
                 }
               },
               error=>{ console.log(error); this.loading=false; this.valid.emit(false)}
             )
           }else{
-            this.userProfileServ.addCardStripeElements(result.token.id).subscribe(
+            this.userProfileServ.addCardStripeElements(this.loginServ.user.name,result.token.id).subscribe(
               t=> {this.successfulAdd=true;this.loading=false; this.userProfileCom.getCards()},
-              error=> {this.successfulAdd=false; this.loading=false;}
+              error=> {console.log(error);this.successfulAdd=false; this.loading=false;}
             );
           }
 

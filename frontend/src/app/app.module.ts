@@ -8,6 +8,7 @@ import { CovalentFileModule } from '@covalent/core/file';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
 
+import { NgxStripeModule } from 'ngx-stripe';
 
 import { AppComponent } from './app.component';
 
@@ -94,6 +95,8 @@ import { UsedCardService } from './usedCard/usedCard.service';
 
 @NgModule({
     imports: [
+        NgxStripeModule.forRoot(),
+        
         MatCheckboxModule,
         HttpModule,
         ReactiveFormsModule,
@@ -165,8 +168,10 @@ import { UsedCardService } from './usedCard/usedCard.service';
 
         ,]
 })
+
 export class AppModule {
-    constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer) {
+    constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private appService:AppService ) {
         matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('/assets/symbol-defs.svg'));
+        this.appService.publicApiKey;
     }
 }
