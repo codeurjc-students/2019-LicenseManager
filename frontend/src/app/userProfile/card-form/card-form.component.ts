@@ -36,10 +36,7 @@ export class CardFormComponent implements OnInit {
     this.appService.getPublicStripeKey().subscribe(
       k => this.setup(),
       error=>console.log(error)
-    )
-
-    console.log(this.calledByTrial);
-    
+    )    
   }
 
   setup(){

@@ -18,6 +18,8 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import tfg.licensoft.licenses.License;
 import tfg.licensoft.licenses.LicenseService;
+import tfg.licensoft.licenses.LicenseSubscription;
+import tfg.licensoft.licenses.LicenseSubscriptionService;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
 import tfg.licensoft.users.UserService;
@@ -33,6 +35,9 @@ public class ApiLicencheckController {
 	
 	@Autowired
 	private LicenseService licenseService;
+	
+	@Autowired
+	private LicenseSubscriptionService licenseSubsServ;
 	
 	@Autowired
 	private ProductService productService;
@@ -69,6 +74,8 @@ public class ApiLicencheckController {
 		License license = this.licenseService.findBySerialAndProductAndActive(licenseSerial, product,true);
 
 		if (license==null ) {
+			System.out.println("License is null: " +license);
+
 			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
 		}else {
 			return new ResponseEntity<>(license,HttpStatus.OK);
@@ -78,9 +85,24 @@ public class ApiLicencheckController {
 	//It checks the license too
 	@PutMapping("updateUsage/{usage}/{productName}/{licenseSerial}")
 	public ResponseEntity<Integer> updateUsage(@PathVariable int usage,@PathVariable String licenseSerial, @PathVariable String productName ) {
+		LicenseSubscription l ;
+		try {
+			l=(LicenseSubscription) this.checkLicense(licenseSerial, productName).getBody();
+		}catch (ClassCastException c) {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		}
 		
-		License l = this.checkLicense(licenseSerial, productName).getBody();
+		if(l==null) {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
 		
+		
+		//Only permitted for MB subscribe (for now)
+		if(!l.getType().equals("MB")) {
+			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		}
+		
+
 		long unixTime = System.currentTimeMillis() / 1000L;
 
 		Map<String, Object> usageRecordParams = new HashMap<String, Object>();

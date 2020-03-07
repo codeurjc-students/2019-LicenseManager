@@ -2,6 +2,8 @@ package tfg.licensoft.api;
 
 import tfg.licensoft.licenses.License;
 import tfg.licensoft.licenses.LicenseService;
+import tfg.licensoft.licenses.LicenseSubscription;
+import tfg.licensoft.licenses.LicenseSubscriptionService;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
 import tfg.licensoft.users.User;
@@ -38,6 +40,9 @@ public class UserController {
 
 	@Autowired
 	private LicenseService licenseServ;
+	
+	@Autowired
+	private LicenseSubscriptionService licenseSubsServ;
 	
 	@Autowired
 	private UserService userServ;
@@ -174,7 +179,7 @@ public class UserController {
 						    .build();
 				Subscription subscription = Subscription.create(params);
 				
-				License license = new License(true, "M", product, user.getName(),days);
+				LicenseSubscription license = new LicenseSubscription(true, "M", product, user.getName(),days);
 				license.setCancelAtEnd(false);  //Trial Periods have automatic renewal
 				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
 				license.setSubscriptionId(subscription.getId());
@@ -187,6 +192,7 @@ public class UserController {
 				return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}else {
+			System.out.println("Nsda");
 			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
 
 		}
@@ -228,7 +234,7 @@ public class UserController {
 					}
 				}
 				this.productServ.save(product);			
-				License license = new License(true, typeSubs, product, user.getName());
+				LicenseSubscription license = new LicenseSubscription(true, typeSubs, product, user.getName(),0);
 				license.setCancelAtEnd(!automaticRenewal);
 				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
 				license.setSubscriptionId(subscription.getId());
@@ -243,7 +249,7 @@ public class UserController {
 		}
 	}
 	
-	private void setTimerAndEndDate(License license, long trialDays) {
+	private void setTimerAndEndDate(LicenseSubscription license, long trialDays) {
 		Timer time = new Timer();
 		System.out.println(license.getEndDate());
 		time.schedule(new TimerTask() {
@@ -252,7 +258,7 @@ public class UserController {
 			@Override
 			public void run() {
 				license.renew(trialDays);
-				License newL = licenseServ.save(license);
+				LicenseSubscription newL = licenseSubsServ.save(license);
 				setTimerAndEndDate(newL,0);
 				
 			}
@@ -378,6 +384,9 @@ public class UserController {
     @PostMapping("{userName}/confirm/{id}/product/{productName}")
     public ResponseEntity<License> confirm(@PathVariable String id, @PathVariable String userName, @PathVariable String productName) throws StripeException {
     	Product p = this.productServ.findOne(productName);
+    	if(p==null) {
+    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    	}
     	PaymentIntent paymentIntent = PaymentIntent.retrieve(id);
     	if(paymentIntent==null) {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -385,7 +394,7 @@ public class UserController {
         Map<String, Object> params = new HashMap<>();
         paymentIntent.confirm(params);
         
-		License license = new License(true, "L", p, userName);
+		License license = new License(true, p, userName);
 		licenseServ.save(license);
 				
 		return new ResponseEntity<>(license,HttpStatus.OK);

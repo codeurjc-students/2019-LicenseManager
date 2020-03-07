@@ -27,7 +27,8 @@ public class ApiLicenseController {
 
 	@Autowired 
 	private LicenseService licServ;
-	
+	@Autowired
+	private LicenseSubscriptionService licenseSubsServ;
 	@Autowired
 	private ProductService productServ;
 	
@@ -102,7 +103,7 @@ public class ApiLicenseController {
 	@PutMapping(value="/cancelAtEnd/{serial}/{product}")
 	public ResponseEntity<License> cancelAtEndLicense(@PathVariable String serial, @PathVariable String product){
 		Product p = this.productServ.findOne(product);
-		License l = this.licServ.findBySerialAndProduct(serial,p);
+		LicenseSubscription l = this.licenseSubsServ.findBySerialAndProduct(serial,p);
 		boolean newCancelAtEnd = !l.getCancelAtEnd();
 		if(l!=null && p!=null) {
 			User u = this.userServ.findByName(l.getOwner());
