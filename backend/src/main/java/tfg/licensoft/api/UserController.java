@@ -367,6 +367,7 @@ public class UserController {
         payment_method_types.add("card");
         params.put("payment_method_types", payment_method_types);
         params.put("customer",u.getCustomerStripeId());
+        params.put("receipt_email",u.getEmail());
         PaymentIntent paymentIntent = PaymentIntent.create(params);
         String paymentStr = paymentIntent.toJson();
         return new ResponseEntity<String>(paymentStr, HttpStatus.OK);
