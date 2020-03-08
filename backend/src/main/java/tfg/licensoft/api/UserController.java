@@ -14,12 +14,15 @@ import org.springframework.web.bind.annotation.*;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
+import com.stripe.model.InvoiceItem;
 import com.stripe.model.Order;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentMethod;
 import com.stripe.model.PaymentMethodCollection;
 import com.stripe.model.SetupIntent;
 import com.stripe.model.Subscription;
+import com.stripe.param.InvoiceCreateParams;
+import com.stripe.param.InvoiceItemCreateParams;
 import com.stripe.param.SubscriptionCreateParams;
 
 import java.util.ArrayList;
@@ -398,6 +401,35 @@ public class UserController {
 		licenseServ.save(license);
 				
 		return new ResponseEntity<>(license,HttpStatus.OK);
+    }
+    
+
+    private void sendInvoiceToPay (String customerId, Product product) {
+    	
+    	try {
+			InvoiceItemCreateParams params2 =
+					  InvoiceItemCreateParams.builder()
+					    .setAmount(product.getPlansPrices().get("L").longValue())
+					    .setCurrency("eur")
+					    .setCustomer(customerId)
+					    .setDescription(product.getName())
+					    .build();
+
+					InvoiceItem invoiceItem = InvoiceItem.create(params2);
+					
+					InvoiceCreateParams params =
+							  InvoiceCreateParams.builder()
+							    .setCustomer(customerId)
+							    .setCollectionMethod(InvoiceCreateParams.CollectionMethod.SEND_INVOICE)
+							    .setDaysUntilDue(1L)
+							    .build();
+
+							Invoice invoice = Invoice.create(params);
+							invoice.sendInvoice();
+		} catch (StripeException e) {
+			e.printStackTrace();
+		}
+    	
     }
 	
 
