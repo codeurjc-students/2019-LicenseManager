@@ -2,6 +2,7 @@ package tfg.licensoft.licenses;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.List;
 import java.util.UUID;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
@@ -10,6 +11,11 @@ import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
 import tfg.licensoft.products.Product;
+import tfg.licensoft.statistics.LicenseStatistics;
+
+import javax.persistence.OneToMany;
+
+import com.fasterxml.jackson.annotation.JsonIgnore;
 
 
 @Entity
@@ -28,6 +34,9 @@ public class License {
 	private Date startDate;
 	private String owner;
 	private double price;
+	
+	@OneToMany(mappedBy="license")
+	private List<LicenseStatistics> licenseStats;
 	
 
 	
@@ -112,23 +121,27 @@ public class License {
 
 	
 	
-	
+
+	public List<LicenseStatistics> getLicenseStats() {
+		return licenseStats;
+	}
+
+	public void setLicenseStats(List<LicenseStatistics> licenseStats) {
+		this.licenseStats = licenseStats;
+	}
+
 	//Common methods
 	protected String generateSerial() {
 		return UUID.randomUUID().toString();
 	}
 
-	
-	
-	
-	
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + (active ? 1231 : 1237);
 		result = prime * result + ((id == null) ? 0 : id.hashCode());
+		result = prime * result + ((licenseStats == null) ? 0 : licenseStats.hashCode());
 		result = prime * result + ((owner == null) ? 0 : owner.hashCode());
 		long temp;
 		temp = Double.doubleToLongBits(price);
@@ -155,6 +168,11 @@ public class License {
 			if (other.id != null)
 				return false;
 		} else if (!id.equals(other.id))
+			return false;
+		if (licenseStats == null) {
+			if (other.licenseStats != null)
+				return false;
+		} else if (!licenseStats.equals(other.licenseStats))
 			return false;
 		if (owner == null) {
 			if (other.owner != null)
@@ -185,8 +203,7 @@ public class License {
 			return false;
 		return true;
 	}
-	
-	
+
 	
 
 

@@ -1,0 +1,36 @@
+<div class="background" id="appRootClass">
+    <br>
+
+    <mat-card>
+        <mat-card-title>Statistics of {{productName}} - License Serial: {{license?.serial}}</mat-card-title>
+        <hr>
+        <a class="text">Number of Users/Different IPs: {{license?.licenseStats.length}}</a>
+        <mat-card-content>
+            <mat-grid-list cols="3"  rowHeight="4rem">
+                <mat-grid-tile>
+                    <a><strong>IP</strong></a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <a><strong>USAGE</strong></a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <a><strong>LAST USAGE DATE</strong></a>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <mat-grid-list cols="3"  rowHeight="4rem">
+
+                <div *ngFor="let user of license?.licenseStats">
+                    <mat-grid-tile>
+                        <a>{{user.ip}}</a>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <a>{{user.nUsage}}</a>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <a>{{user.lastUsage | date:'medium'}}</a>
+                    </mat-grid-tile>
+                </div>  
+            </mat-grid-list>
+        </mat-card-content>
+    </mat-card>
+</div>

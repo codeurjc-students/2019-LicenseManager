@@ -45,6 +45,10 @@ export class UserDashboardComponent implements OnInit{
         this.router.navigate(["product/",productName]);
     }
 
+    goToStats(productName:string, serial:string){
+        this.router.navigate(["user/dashboard/"+productName+"/statistics/"+serial]);
+    }
+
     formatDates(date:Date){
         return this.datepipe.transform(date, 'long'); 
     }

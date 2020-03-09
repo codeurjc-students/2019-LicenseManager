@@ -9,6 +9,7 @@ import { CatalogComponent } from './catalog/catalog.component';
 import { CatalogProductComponent } from './catalog/catalog-product/catalog-product.component';
 import { CustomFormComponentComponent } from './custom-form-component/custom-form-component.component';
 import { NotFoundComponent } from './not-found/not-found.component';
+import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistics.component';
 
 
 
@@ -23,6 +24,7 @@ const appRoutes = [
   // { path: 'catalog', component: CatalogComponent, },
    { path: '', component: CatalogComponent, },
    { path: 'product/:name', component: CatalogProductComponent, },
+   { path: 'user/dashboard/:name/statistics/:serial', component: LicenseStatisticsComponent, },
    { path: 'try', component: CustomFormComponentComponent, },
    {path: '404', component: NotFoundComponent},
    {path: '**', redirectTo: '/404'}

@@ -65,12 +65,12 @@
                         </div>
                     </mat-grid-tile>
                     <mat-grid-tile>
-                        <span *ngIf="license.type=='MB'">{{license.nUsage}}</span>
+                        <span *ngIf="license.type=='MB'">{{license.nUsage}} <i class="link" (click)="goToStats(license?.product.name,license.serial)">(View)</i></span>
                         <span *ngIf="license.type!='MB'">-</span>
                     </mat-grid-tile>
                     <mat-grid-tile colspan="2">
                         <span *ngIf="license.type!='MB' && license.type!='L'">{{license.price}} €</span>
-                        <span *ngIf="license.type=='MB'">{{license.price * license.nUsage}} €</span>
+                        <span *ngIf="license.type=='MB'">{{license.price * license.nUsage | number: '1.2'}} €</span>
                         <span *ngIf="license.type=='L'">-</span>
                     </mat-grid-tile>
                 </div>

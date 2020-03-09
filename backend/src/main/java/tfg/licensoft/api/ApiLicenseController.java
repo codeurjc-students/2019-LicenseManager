@@ -27,6 +27,7 @@ public class ApiLicenseController {
 
 	@Autowired 
 	private LicenseService licServ;
+	
 	@Autowired
 	private LicenseSubscriptionService licenseSubsServ;
 	@Autowired

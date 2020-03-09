@@ -92,9 +92,11 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AppService } from './app.service';
 import { DialogFreeTrial } from './dialogs/dialogFreeTrial.component';
 import { UsedCardService } from './usedCard/usedCard.service';
+import { LicenseStatistics } from './licenseStatistics/licenseStatistics.model';
+import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistics.component';
 
 @NgModule({
-    imports: [
+    imports: [ 
         NgxStripeModule.forRoot(),
         
         MatCheckboxModule,
@@ -154,7 +156,7 @@ import { UsedCardService } from './usedCard/usedCard.service';
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, DialogEditComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
+    declarations: [AppComponent, LicenseStatisticsComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, DialogEditComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
     bootstrap: [AppComponent],
     entryComponents: [DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent, DialogFreeTrial,
     ],

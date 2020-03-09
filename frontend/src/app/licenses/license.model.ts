@@ -2,6 +2,7 @@ import { Component } from '@angular/core';
 import { ActiveDescendantKeyManager } from '@angular/cdk/a11y';
 import { MatCalendar } from '@angular/material';
 import { Product } from '../product/product.model';
+import { LicenseStatistics } from '../licenseStatistics/licenseStatistics.model';
 
   export interface License {
       serial?:string;
@@ -16,4 +17,5 @@ import { Product } from '../product/product.model';
       nUsage?:number;
       price?:number;  
       trial?:boolean;
+      licenseStats?:LicenseStatistics[];
   }

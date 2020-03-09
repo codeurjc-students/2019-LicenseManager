@@ -9,11 +9,15 @@ import com.stripe.model.Subscription;
 import com.stripe.model.UsageRecord;
 import com.stripe.net.RequestOptions;
 
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.UUID;
 
+import javax.servlet.http.HttpServletRequest;
+
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpRequest;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import tfg.licensoft.licenses.License;
@@ -22,6 +26,8 @@ import tfg.licensoft.licenses.LicenseSubscription;
 import tfg.licensoft.licenses.LicenseSubscriptionService;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
+import tfg.licensoft.statistics.LicenseStatistics;
+import tfg.licensoft.statistics.LicenseStatisticsService;
 import tfg.licensoft.users.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -37,31 +43,14 @@ public class ApiLicencheckController {
 	private LicenseService licenseService;
 	
 	@Autowired
+	private LicenseStatisticsService licenseStatService;
+	
+	@Autowired
 	private LicenseSubscriptionService licenseSubsServ;
 	
 	@Autowired
 	private ProductService productService;
-	
-	/*
-	@RequestMapping("checkAccount")
-	public ResponseEntity checkLicensoftAccount(@RequestBody BasicUser basicUser) {
-		System.out.println(basicUser.getUserName() + " - " + basicUser.getPassword());
-		User user = userService.findByName(basicUser.getUserName());
-		if (user == null) {
-			System.out.println("Null user");
-			return new ResponseEntity(HttpStatus.NOT_ACCEPTABLE);
-		}
-		
-		if(new BCryptPasswordEncoder().matches(basicUser.getPassword(), user.getPasswordHash())) {
-			System.out.println("Good pass");
-			return new ResponseEntity(HttpStatus.OK);
-		}else {
-			System.out.println("Wrong pass");
-			return new ResponseEntity(HttpStatus.UNAUTHORIZED);
-		}
-	}
-	
-	*/
+
 	
 	@RequestMapping("checkLicense/{productName}/{licenseSerial}")
 	public ResponseEntity<License> checkLicense(@PathVariable String licenseSerial, @PathVariable String productName ) {
@@ -84,7 +73,7 @@ public class ApiLicencheckController {
 	
 	//It checks the license too
 	@PutMapping("updateUsage/{usage}/{productName}/{licenseSerial}")
-	public ResponseEntity<Integer> updateUsage(@PathVariable int usage,@PathVariable String licenseSerial, @PathVariable String productName ) {
+	public ResponseEntity<Integer> updateUsage(@PathVariable int usage,@PathVariable String licenseSerial, @PathVariable String productName , HttpServletRequest request) {
 		LicenseSubscription l ;
 		try {
 			l=(LicenseSubscription) this.checkLicense(licenseSerial, productName).getBody();
@@ -121,14 +110,28 @@ public class ApiLicencheckController {
 		try {
 			UsageRecord.createOnSubscriptionItem(l.getSubscriptionItemId(), usageRecordParams, options);
 			l.setnUsage(l.getnUsage()+usage);
-			this.licenseService.save(l);
+			License newL = this.licenseService.save(l);
+			
+			
+			//Statistics for IP&License
+			LicenseStatistics lStat = this.licenseStatService.findByLicenseAndIp(l, request.getRemoteAddr());
+			if(lStat==null) {
+				lStat = new LicenseStatistics();
+			}
+			lStat.setLicense(newL);
+			lStat.setnUsage(lStat.getnUsage()+usage);
+			lStat.setIp(request.getRemoteAddr());
+			lStat.setLastUsage(new Date());
+			this.licenseStatService.save(lStat);
+			
+			
 			return new ResponseEntity<>(l.getnUsage(),HttpStatus.OK);
 		} catch (StripeException e) {
 			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-		}
-	}
+		} 
+	} 
 	
 	
 
