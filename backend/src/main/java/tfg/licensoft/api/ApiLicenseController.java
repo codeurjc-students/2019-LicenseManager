@@ -36,27 +36,7 @@ public class ApiLicenseController {
 	
 	@Autowired
 	private UserService userServ;
-	
-/*
-	@PostMapping(value = "/")
-	public ResponseEntity<License> postLicense(@RequestBody License license){
-		Product p = this.productServ.findOne(license.getProduct().getName());
-		if (this.licServ.getSubTypes().contains(license.getType()) && p!=null) {
-			License l = this.licServ.findOne(license.getSerial());
-			if (l==null) {
-				license.setProduct(p);
-				this.licServ.save(license);
-				p.getLicenses().add(license);
-				return new ResponseEntity<>(license, HttpStatus.CREATED);
-			}
-			else {
-				return new ResponseEntity<>(HttpStatus.CONFLICT);
-			}
-		}else {
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-		}
-	}
-	*/
+
 	@GetMapping(value = "/product/{product}")
 	public Page<License> getLicensesOfProduct(@PathVariable String product, Pageable page){
 		Product p = this.productServ.findOne(product);
@@ -76,21 +56,7 @@ public class ApiLicenseController {
 		}
 	} 
 	
-	/*
-	@DeleteMapping(value = "/{serial}/{product}")
-	public ResponseEntity<License> deleteLicenseBySerial(@PathVariable String serial, @PathVariable String product){
-		Product p = this.productServ.findOne(product);
-		License license = this.licServ.findBySerialAndProduct(serial,p);
-		if (license!=null) {
-			this.licServ.delete(license);
-			return new ResponseEntity<License>(license, HttpStatus.OK);
-		}else {
-			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
-		}
-	}
-	
-	*/
-	
+
 	@GetMapping(value = "/{userName}")
 	public ResponseEntity<Page<License>> getLicensesOfUser(@PathVariable String userName, Pageable page){
 		Page<License> licenses = this.licServ.findByUsername(userName, page);
@@ -133,43 +99,13 @@ public class ApiLicenseController {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
-			/* 
-			if(l.isActive()) {
-				l.setActive(false);
-				l.setEndDate(new Date());
-			}else {
-				l.setActive(true);
-				l.setStartDate(new Date());
-			}
-			
-			this.licServ.save(l);
-			*/
+
 			return new ResponseEntity<License>(l,HttpStatus.OK);
 		}else {
 			return new ResponseEntity<License>(HttpStatus.PRECONDITION_REQUIRED);
 		}
 	}
-	
-	/*
-	@PutMapping(value="/update/")
-	public ResponseEntity<License> updateLicense(@RequestBody License license){
-		Product p = this.productServ.findOne(license.getProduct().getName());
-		License l = this.licServ.findBySerialAndProduct(license.getSerial(),p);
-		if(l!=null && p!=null) {
-			l.setType(license.getType());
-			l.setEndDate(license.getEndDate());
-			l.setOwner(license.getOwner());
-			l.setSerial(license.getSerial()); 
-			l.setStartDate(license.getStartDate());
-			l.setActive(license.isActive());
 
-			this.licServ.save(l);
-			return new ResponseEntity<License>(l,HttpStatus.OK);
-		}else {
-			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
-		}
-	}
-	*/
 	
 	@GetMapping(value="/user/{userName}/product/{productName}")
 	public ResponseEntity<Page<License>> getLicensesOfUserAndProduct(@PathVariable String productName, @PathVariable String userName, Pageable page){
@@ -177,7 +113,7 @@ public class ApiLicenseController {
 		User user = this.userServ.findByName(userName);
 		
 		
-		if(p==null) { //Si el producto no existe
+		if(p==null) { 
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
 		}
 		

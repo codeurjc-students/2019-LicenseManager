@@ -43,6 +43,8 @@ In Licensoft there are 2 types of roles: **ADMIN** and **USER**.
 * PlansPrices (Map<String, Number>)
 * Sku (String)
 * Active (boolean)
+* ProductStripeId (String)
+* TrialDays (int)
 
 ### License
 * Serial (String)
@@ -50,9 +52,24 @@ In Licensoft there are 2 types of roles: **ADMIN** and **USER**.
 * Type (String)
 * Product [(Product)](README.md#product)
 * StartDate (Date)
-* EndDate (Date)
 * Owner (String)
+* Price (double)
+
+### LicenseSubscription
+* Trial (boolean)
 * CancelAtEnd (boolean)
+* SubscriptionItemId (String)
+* SubscriptionId (String)
+* NUsage (int)
+* EndDate (Date)
+
+### LicenseStatistics
+Object with statistics of a License (by ip)
+* License (License)
+* Ip (String)
+* NUsage (int)
+* LastUsage (Date)
+
 
 ### User
 * Name (String)
@@ -60,6 +77,11 @@ In Licensoft there are 2 types of roles: **ADMIN** and **USER**.
 * Password (String - hashed)
 * UserStripeId (String)
 
+### UsedCard
+*	Last4 (int)
+*	ExpMonth (int)
+*	ExpYear (int)
+*	ProductName (int)
 
 ## ADMIN Habilities
 ### Add Product - Subscription type <a name="add-product-subs"></a>

@@ -69,7 +69,6 @@ public class LoginController {
 	public ResponseEntity<User> logIn(HttpServletRequest req) {
 		Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
 		System.out.println("??? ->  "+authorities + "  " + SecurityContextHolder.getContext().getAuthentication());
-	
 
 		if (!userComponent.isLoggedUser()) {
 			log.info("Not user logged");
@@ -150,26 +149,6 @@ public class LoginController {
 		}
 	}
 	
-	
-	/*
-	@RequestMapping(value="/api/register", method= RequestMethod.POST)
-	public ResponseEntity<User> register2(Model model, @RequestParam String user, @RequestParam String pass1,
-			@RequestParam String pass2, HttpServletRequest request, HttpServletResponse httpServletResponse) {
-		User newUser =userServ.findByName(user);
-		if ((pass1.equals(pass2)) && (newUser == null)) {
-			userServ.save(new User(user, pass1, "ROLE_USER"));
-			try {
-				request.login(user, pass1);
-			} catch (ServletException e) {
-				e.printStackTrace();
-			}
-			return new ResponseEntity<User>(newUser, HttpStatus.CREATED);
-		} else {
-			return new ResponseEntity<User>(newUser, HttpStatus.CONFLICT);
-		}
-		
-		
-	}*/
 	
 	@RequestMapping(value="/api/users", method=RequestMethod.GET)
 	public ResponseEntity<Page<User>> getAllUsers(Pageable page){

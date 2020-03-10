@@ -118,11 +118,11 @@ public class UserController {
 	}
 	
 	@PutMapping("{userName}/setDefault/{paymentMethodId}")
-	public void setDefaultPaymentMethod(@PathVariable String userName, @PathVariable String paymentMethodId) {
+	public ResponseEntity<Boolean> setDefaultPaymentMethod(@PathVariable String userName, @PathVariable String paymentMethodId) {
 		try {
 			User user = this.userServ.findByName(userName);
 			if(user==null) {
-				return;
+				return new ResponseEntity<Boolean>(false,HttpStatus.NOT_FOUND);
 			}
 			Customer c = Customer.retrieve(user.getCustomerStripeId());
 			
@@ -133,9 +133,12 @@ public class UserController {
 			params2.put("invoice_settings", params);
 			
 			c.update(params2);
-			
+			return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+
 		}catch(StripeException e ) {
 			e.printStackTrace();
+			return new ResponseEntity<Boolean>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+
 		}
 	}
 	
@@ -160,8 +163,8 @@ public class UserController {
 
 	
 	//Will be subscribed to a M subscription with x free trial days
-	@PutMapping("/{productName}/{userName}/addTrial/{days}/card/{token}")
-	public ResponseEntity<License> addTrial(@PathVariable String productName, @PathVariable String userName, @PathVariable long days,  @PathVariable String token){
+	@PutMapping("/{userName}/{productName}/addTrial/card/{token}")
+	public ResponseEntity<License> addTrial(@PathVariable String productName, @PathVariable String userName,  @PathVariable String token){
 		
 		User user = this.userServ.findByName(userName);
 		Product product = this.productServ.findOne(productName);
@@ -177,17 +180,17 @@ public class UserController {
 						      SubscriptionCreateParams.Item.builder()
 						        .setPlan(product.getPlans().get("M")) //Free trial is always monthly subscription
 						        .build())
-						    .setTrialPeriodDays(days)
+						    .setTrialPeriodDays((long)product.getTrialDays())
 						    .setDefaultPaymentMethod(pM)
 						    .build();
 				Subscription subscription = Subscription.create(params);
 				
-				LicenseSubscription license = new LicenseSubscription(true, "M", product, user.getName(),days);
+				LicenseSubscription license = new LicenseSubscription(true, "M", product, user.getName(),product.getTrialDays());
 				license.setCancelAtEnd(false);  //Trial Periods have automatic renewal
 				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
 				license.setSubscriptionId(subscription.getId());
 				licenseServ.save(license);
-				this.setTimerAndEndDate(license,days);
+				this.setTimerAndEndDate(license,product.getTrialDays());
 				return new ResponseEntity<License>(license,HttpStatus.OK);
 
 			}catch(StripeException e) {
@@ -195,7 +198,6 @@ public class UserController {
 				return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}else {
-			System.out.println("Nsda");
 			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
 
 		}
@@ -210,10 +212,12 @@ public class UserController {
 		if(user==null) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
-		Map<String,String> plans = product.getPlans();
-				 
-		String planId = plans.get(typeSubs);
-		if (planId!=null && product!=null) {
+		String planId=null;
+		if(product!=null) {
+			Map<String,String> plans = product.getPlans();		 
+			planId = plans.get(typeSubs);
+		}
+		if (planId!=null || product!=null) {
 				Map<String, Object> item = new HashMap<>();
 				item.put("plan", planId);
 				Map<String, Object> items = new HashMap<>();
@@ -319,31 +323,6 @@ public class UserController {
 	}
 	
 	
-	//TODO de momento no se usa, lo dejo por si necesitamos la invoice para imprimir o lo que sea
-	@GetMapping("/{user}/invoice/subs/{subscriptionId}")
-	private ResponseEntity<String> getInvoicePreview(@PathVariable String user, @PathVariable String subscriptionId){
-		System.out.println("---");
-		User u = this.userServ.findByName(user);
-		//User uLogged = this.userComponent.getLoggedUser();
-		if(u!=null) {
-			try {
-				Map<String, Object> invoiceParams = new HashMap<>();
-				invoiceParams.put("customer", u.getCustomerStripeId());
-				invoiceParams.put("subscription", subscriptionId);
-				Invoice in = Invoice.upcoming(invoiceParams);
-				
-				return new ResponseEntity<>(in.toJson(),HttpStatus.OK);
-			}catch(StripeException e) {
-				
-				e.printStackTrace();
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-		}else {
-			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
-		}
-	}
-	
-	
 	
 	//SUBSCRIPTION METHODS
 	
@@ -405,7 +384,6 @@ public class UserController {
     
 
     private void sendInvoiceToPay (String customerId, Product product) {
-    	
     	try {
 			InvoiceItemCreateParams params2 =
 					  InvoiceItemCreateParams.builder()
