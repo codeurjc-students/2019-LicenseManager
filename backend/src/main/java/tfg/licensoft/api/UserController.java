@@ -15,7 +15,6 @@ import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
 import com.stripe.model.InvoiceItem;
-import com.stripe.model.Order;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentMethod;
 import com.stripe.model.PaymentMethodCollection;
@@ -35,6 +34,8 @@ import java.util.TimerTask;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.context.SecurityContextHolder;
 
 @CrossOrigin
 @RestController
@@ -74,9 +75,23 @@ public class UserController {
 		
 	}
 	
+	private User getRequestUser() {
+		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+		return this.userServ.findByName(auth.getName());
+	}
+	
 	@PostMapping("{userName}/addCard/{tokenId}")
 	public ResponseEntity<SimpleResponse> addCardStripeElements(@PathVariable String userName,@PathVariable String tokenId){
 		User user = this.userServ.findByName(userName);
+		
+		// We don't know which user wants to affect -> Unauthorized
+		if(user==null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		// User to be affected != User that made the request
+		if(!user.equals(this.getRequestUser())) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
 		try {
 			//Create PaymentMethod
 			Map<String, Object> card = new HashMap<>();
@@ -121,8 +136,13 @@ public class UserController {
 	public ResponseEntity<Boolean> setDefaultPaymentMethod(@PathVariable String userName, @PathVariable String paymentMethodId) {
 		try {
 			User user = this.userServ.findByName(userName);
+			// We don't know which user wants to affect -> Unauthorized
 			if(user==null) {
-				return new ResponseEntity<Boolean>(false,HttpStatus.NOT_FOUND);
+				return new ResponseEntity<Boolean>(false,HttpStatus.UNAUTHORIZED);
+			}
+			// User to be affected != User that made the request
+			if(!user.equals(this.getRequestUser())) {
+				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 			}
 			Customer c = Customer.retrieve(user.getCustomerStripeId());
 			
@@ -145,8 +165,14 @@ public class UserController {
 	@GetMapping("{userName}/getDefault")
 	public ResponseEntity<SimpleResponse> getDefaultPaymentMethod(@PathVariable String userName) {
 		User user = this.userServ.findByName(userName);
+		
+		// We don't know which user wants to affect -> Unauthorized
 		if(user==null) {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		// User to be affected != User that made the request
+		if(!user.equals(this.getRequestUser())) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 		Customer c;
 		try {
@@ -169,7 +195,17 @@ public class UserController {
 		User user = this.userServ.findByName(userName);
 		Product product = this.productServ.findOne(productName);
 		
-		if(user!=null && product!=null) {
+		
+		// We don't know which user wants to affect -> Unauthorized
+		if(user==null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		// User to be affected != User that made the request
+		if(!user.equals(this.getRequestUser())) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
+		if(product!=null) {
 			try {
 				String pM = this.addCardStripeElements(userName,token).getBody().getResponse();
 
@@ -209,9 +245,16 @@ public class UserController {
 	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName, @PathVariable boolean automaticRenewal){
 		Product product = this.productServ.findOne(productName);
 		User user = this.userServ.findByName(userName);
+		
+		// We don't know which user wants to affect -> Unauthorized
 		if(user==null) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		// User to be affected != User that made the request
+		if(!user.equals(this.getRequestUser())) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
 		String planId=null;
 		if(product!=null) {
 			Map<String,String> plans = product.getPlans();		 
@@ -280,46 +323,61 @@ public class UserController {
 	@GetMapping("/{user}/cards")
 	private ResponseEntity<List<PaymentMethod>> getCardsFromUser(@PathVariable String user) {
 		User u = this.userServ.findByName(user);
-		if(u!=null) {
-			try {
-				Map<String, Object> params = new HashMap<>();
-				params.put("customer", u.getCustomerStripeId());
-				params.put("type", "card");
-
-				PaymentMethodCollection paymentMethods =
-				  PaymentMethod.list(params);
-				List<PaymentMethod> list = new ArrayList<>();
-				for(PaymentMethod pm : paymentMethods.getData()) {
-						list.add(pm);
-				}
-				return new ResponseEntity<>(list,HttpStatus.OK);
-			}catch (StripeException e) {
-				e.printStackTrace();
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		
+		
+		// We don't know which user wants to affect -> Unauthorized
+		if(u==null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		// User to be affected != User that made the request
+		if(!u.equals(this.getRequestUser())) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
+		try {
+			Map<String, Object> params = new HashMap<>();
+			params.put("customer", u.getCustomerStripeId());
+			params.put("type", "card");
+	
+			PaymentMethodCollection paymentMethods =
+			  PaymentMethod.list(params);
+			List<PaymentMethod> list = new ArrayList<>();
+			for(PaymentMethod pm : paymentMethods.getData()) {
+					list.add(pm);
 			}
-		}else {
+			return new ResponseEntity<>(list,HttpStatus.OK);
+		}catch (StripeException e) {
+			e.printStackTrace();
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
+		
 				
 	}
 	
 	@DeleteMapping("/{user}/card/{paymentMethodId}")
 	private ResponseEntity<SimpleResponse> deleteStripeCard(@PathVariable String user, @PathVariable String paymentMethodId) {
 		User u = this.userServ.findByName(user);
-		if(u!=null) {
-			try {
-				PaymentMethod paymentMethod =  PaymentMethod.retrieve(paymentMethodId);
-				paymentMethod.detach();
-				SimpleResponse res = new SimpleResponse("true");
-				return new ResponseEntity<>(res,HttpStatus.OK);
-			}catch(StripeException e) {
-				
-				e.printStackTrace();
-				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-			}
-		}else {
+		
+		// We don't know which user wants to affect -> Unauthorized
+		if(u==null) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		}
+		// User to be affected != User that made the request
+		if(!u.equals(this.getRequestUser())) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
+		try {
+			PaymentMethod paymentMethod =  PaymentMethod.retrieve(paymentMethodId);
+			paymentMethod.detach();
+			SimpleResponse res = new SimpleResponse("true");
+			return new ResponseEntity<>(res,HttpStatus.OK);
+		}catch(StripeException e) {
+			
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+		
 	}
 	
 	
@@ -330,8 +388,14 @@ public class UserController {
     public ResponseEntity<String> payment(@PathVariable String userName,@RequestBody Product product, @PathVariable String tokenId) throws StripeException {
     	
 		User u = this.userServ.findByName(userName);
+		
+		// We don't know which user wants to affect -> Unauthorized
 		if(u==null) {
-			return new ResponseEntity<String>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		// User to be affected != User that made the request
+		if(!u.equals(this.getRequestUser())) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 		
 		Map<String, Object> card = new HashMap<>();
@@ -347,7 +411,7 @@ public class UserController {
         params.put("amount", product.getPlansPrices().get("L").intValue()*100);
         params.put("payment_method", paymentMethod.getId());
         params.put("currency", "eur");
-        params.put("description", product.getDescription());
+        params.put("description", "Product bought: " + product.getName());
         
 
 		
@@ -366,6 +430,17 @@ public class UserController {
     @PostMapping("{userName}/confirm/{id}/product/{productName}")
     public ResponseEntity<License> confirm(@PathVariable String id, @PathVariable String userName, @PathVariable String productName) throws StripeException {
     	Product p = this.productServ.findOne(productName);
+		User user = this.userServ.findByName(userName);
+
+		// We don't know which user wants to affect -> Unauthorized
+		if(user==null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		// User to be affected != User that made the request
+		if(!user.equals(this.getRequestUser())) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+    	
     	if(p==null) {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}

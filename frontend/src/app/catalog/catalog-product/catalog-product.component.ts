@@ -112,7 +112,6 @@ export class CatalogProductComponent implements OnInit {
 //METHODS TO SUBSCRIBE TO A PRODUCT
   subscribeToProduct(type:string,money:string){
     let msg;
-    console.log(type);
     if(this.user==null){
      alert("You have to be logged first! If you don't have an account, you can register too");
   
@@ -231,12 +230,6 @@ export class CatalogProductComponent implements OnInit {
   manageLicenses(){
     this.router.navigate(["user/dashboard"]);
   }
-
-
-  formatDates(date:Date){
-    return this.datepipe.transform(date, 'yyyy/MM/dd hh:mm'); 
-  }
-
 
 }
  

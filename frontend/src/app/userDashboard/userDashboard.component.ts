@@ -49,10 +49,6 @@ export class UserDashboardComponent implements OnInit{
         this.router.navigate(["user/dashboard/"+productName+"/statistics/"+serial]);
     }
 
-    formatDates(date:Date){
-        return this.datepipe.transform(date, 'long'); 
-    }
-
     cancelAtEnd(license:License){
         let msg;
         if(license.cancelAtEnd){
