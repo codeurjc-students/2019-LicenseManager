@@ -16,7 +16,7 @@ import org.springframework.web.bind.annotation.PathVariable;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/usedcard")
+@RequestMapping(value = "/api/usedcards")
 public class ApiUsedCardController {
 	
 	@Autowired

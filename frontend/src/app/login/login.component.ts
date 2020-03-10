@@ -50,7 +50,7 @@ export class LoginComponent  {
   logOut() {
       this.loginService.logOut().subscribe(
           (response) => {
-              this.router.navigate(['/']);
+              this.router.navigate(['/products']);
           },
           (error) => console.log('Error when trying to log out: ' + error),
       );

@@ -3,7 +3,7 @@ import { Product } from '../product/product.model';
 import { ProductService } from '../product/product.service';
 import { Router } from '@angular/router';
 
-const BASE_URL_PRODUCT = "https://localhost:8443/api/product/"
+const BASE_URL_PRODUCT = "https://localhost:8443/api/products/"
 
 @Component({
   selector: 'app-catalog',
@@ -23,7 +23,7 @@ export class CatalogComponent {
   }
 
   goToProduct(name:string){
-    this.router.navigate(["/product/",name]);
+    this.router.navigate(["/products/",name]);
   }
 
   searchProduct(){

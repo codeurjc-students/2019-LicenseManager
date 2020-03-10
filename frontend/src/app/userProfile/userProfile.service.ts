@@ -7,7 +7,7 @@ import { LoginService } from '../login/login.service';
 import { Product } from '../product/product.model';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
-const BASE_URL = 'https://localhost:8443/api/user/';
+const BASE_URL = 'https://localhost:8443/api/users/';
 
 
 @Injectable()
@@ -30,20 +30,20 @@ export class UserProfileService {
     }
 
     getDefaultCard(user:string){
-        return this.http.get(BASE_URL +user +'/getDefault/');
+        return this.http.get(BASE_URL +user +'/default-card/');
     }
 
     setDefaultCard(user:string,pmId:string){
-        return this.http.put(BASE_URL +user +'/setDefault/'+pmId,null);
+        return this.http.put(BASE_URL +user +'/default-card/'+pmId,null);
     }
 
     addSubscriptionToProduct(product:Product,typeSubs:string,userName:string, automaticRenewal:boolean){
-        return this.http.put(BASE_URL+product.name+"/" + typeSubs + "/" + userName +"/addSubscription/renewal/"+automaticRenewal,product)
+        return this.http.put(BASE_URL+ userName + "/products/" + product.name+"/" + typeSubs  +"/addSubscription/renewal/"+automaticRenewal,product)
         
     }
 
     addFreeTrial(product:Product,userName:string,days:number, token:string){
-        return this.http.put(BASE_URL + userName + "/" + product.name + "/addTrial/card/" + token,product) ;
+        return this.http.put(BASE_URL + userName + "/products/" + product.name + "/addTrial/cards/" + token,product) ;
     }
 
 
@@ -53,7 +53,7 @@ export class UserProfileService {
     }
 
     confirmPay(userName:string,product:Product,id:string){
-        return this.http.post(BASE_URL+ userName + "/confirm/" + id + "/product/"+product.name,{})
+        return this.http.post(BASE_URL+ userName + "/confirm/" + id + "/products/"+product.name,{})
 
     }
 

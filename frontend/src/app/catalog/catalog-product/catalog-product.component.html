@@ -131,7 +131,7 @@
                     <span *ngIf="plan.key=='MB'">MB = mettered: Your subscription will be valid for 1 month and you will be charged per use </span>
                 </div>
                 <br>
-                <span (click)="manageLicenses()"><i>You can cancel the automatic renewal on your <a class="link">User Dashboard</a></i></span>
+                <span (click)="manageLicenses()" *ngIf="this.loginService.isLogged"><i>You can cancel the automatic renewal on your <a class="link">User Dashboard</a></i></span>
         </mat-card>
     </div>
     <br>

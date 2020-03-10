@@ -42,7 +42,7 @@ export class UserDashboardComponent implements OnInit{
     }
 
     manageLink(productName:string){
-        this.router.navigate(["product/",productName]);
+        this.router.navigate(["products/",productName]);
     }
 
     goToStats(productName:string, serial:string){

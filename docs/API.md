@@ -89,7 +89,7 @@ Make the request without params, just including in Authorization UserName and Pa
 ## Register
 An account will be created and and email will be sent to the user with the credentials.
 - **URL**  
-   `/api/register/{user}/{pass}/{pass2}/{email}`
+   `/api/register/{userName}/{pass}/{pass2}/{email}`
 - **Method**  
    `POST`
 - **Data Params**
@@ -185,7 +185,7 @@ Path Variables:
 
 ## Get All Cards from User
 - **URL**  
-   `/api/user/{userName}/cards`
+   `/api/users/cards`
 - **Method**  
    `GET`
 - **Data Params**
@@ -266,7 +266,7 @@ Path Variables:
 
 ## Delete Card of User
 - **URL**  
-   `/api/user/{userName}/card/{paymentCardId}`
+   `/api/users/{userName}/card/{paymentCardId}`
 - **Method**  
    `DELETE`
 - **Data Params**
@@ -288,7 +288,7 @@ Path Variables:
 
 ## Add Card
 - **URL**  
-   `/api/user/{userName}/addCard/{paymentCardId}`
+   `/api/users/{userName}/addCard/{paymentCardId}`
 - **Method**  
    `POST`
 - **Data Params**
@@ -313,7 +313,7 @@ Path Variables:
 
 ## Set Default Card
 - **URL**  
-   `/api/user/{userName}/setDefault/{paymentCardId}`
+   `/api/users/{userName}/default-card/{paymentCardId}`
 - **Method**  
    `PUT`
 - **Data Params**
@@ -334,7 +334,7 @@ Path Variables:
 
 ## Get Default Card
 - **URL**  
-   `/api/user/{userName}/getDefault`
+   `/api/users/{userName}/default-card`
 - **Method**  
    `GET`
 - **Data Params**
@@ -411,7 +411,7 @@ Path Variables:
 ##  Add Trial Subscription
 The user will be subscribed to a Trial-period subscription (type "M": monthly). By default, the subscription will be automatically renewed when trial period ends.
 - **URL**  
-   `/api/user/{userName}/{productName}/addTrial/card/{tokenId}`
+   `/api/users/{userName}/products/{productName}/addTrial/cards/{tokenId}`
 - **Method**  
    `PUT`
 - **Data Params**
@@ -471,7 +471,7 @@ Path Variables:
     
 ##  Add Subscription
 - **URL**  
-   `/api/user/{productName}/{typeSubs}/{userName}/addSubscription/renewal/{automaticRenewal}`
+   `/api/users/{userName}/products/{productName}/{typeSubs}/addSubscription/renewal/{automaticRenewal}`
 - **Method**  
    `PUT`
 - **Data Params**
@@ -536,7 +536,7 @@ This functionality is divided in two steps:
 ### Create Stripe's PaymentIntent
 Returns the paymentIntent, needed to confirm it later.
 - **URL**  
-   `/api/user/{userName}/paymentIntent/{tokenId}`
+   `/api/users/{userName}/paymentIntent/{tokenId}`
 - **Method**  
    `PUT`
 - **Data Params**
@@ -612,7 +612,7 @@ Returns the paymentIntent, needed to confirm it later.
 	}
 ### Confirm the Stripe's PaymentIntent
 - **URL**  
-   `/api/user/{userName}/confirm/{id}/product/{productName}`
+   `/api/users/{userName}/confirm/{id}/products/{productName}`
    
 - **Method**  
    `PUT`
@@ -661,7 +661,7 @@ Returns the paymentIntent, needed to confirm it later.
 	}
 ## Get Products
 - **URL**  
-   `/api/product/all`
+   `/api/products/all`
 - **Method**  
    `GET`
 - **Data Params**
@@ -766,7 +766,7 @@ Returns the paymentIntent, needed to confirm it later.
 
 ## Get specific Product
 - **URL**  
-   `/api/product/{productName}`
+   `/api/products/{productName}`
 - **Method**  
    `GET`
 - **Data Params**
@@ -806,7 +806,7 @@ Returns the paymentIntent, needed to confirm it later.
 
 ## Post Product
 - **URL**  
-   `/api/product/`
+   `/api/products/`
 - **Method**  
    `POST`
 - **Data body**
@@ -845,7 +845,7 @@ Returns the paymentIntent, needed to confirm it later.
 	}
 ## Edit Product
 - **URL**  
-   `/api/product/`
+   `/api/products/`
 - **Method**  
    `PUT`
 - **Data body**
@@ -885,7 +885,7 @@ Returns the paymentIntent, needed to confirm it later.
 
 ## Delete Product
 - **URL**  
-   `/api/product/{productName}`
+   `/api/products/{productName}`
 - **Method**  
    `DELETE`
 - **Data params**
@@ -925,7 +925,7 @@ Returns the paymentIntent, needed to confirm it later.
 
 ## Post image (on a Product) <a name="postImage"></a>
 - **URL**  
-   `/api/product/{productName}/image`
+   `/api/products/{productName}/image`
 - **Method**  
    `POST`
 - **Data body**
@@ -945,7 +945,7 @@ Returns the paymentIntent, needed to confirm it later.
 
 ## Get image (of a Product) <a name="getImage"></a>
 - **URL**  
-   `/api/product/{productName}/image`
+   `/api/products/{productName}/image`
 - **Method**  
    `GET`
 - **Data params**

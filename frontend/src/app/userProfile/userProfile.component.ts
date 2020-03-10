@@ -29,7 +29,9 @@ import { DialogService } from '../dialogs/dialog.service';
     
     constructor(private dialogService:DialogService,private userProfileService:UserProfileService,private activeRoute:ActivatedRoute,private loginService:LoginService){
       this.user=this.loginService.user;
-      this.getCards();
+      if(this.user!=null){
+        this.getCards();
+      }
      }
  
      getCards(){

@@ -15,15 +15,16 @@ import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistic
 
 
 const appRoutes = [
+   { path: '', redirectTo: 'products', pathMatch: 'full' },
    { path: 'register', component: RegisterComponent, },
    { path: 'login', component: LoginComponent, },
-   { path: 'admin/product/:name', component: ProductComponent, },
+   { path: 'admin/products/:name', component: ProductComponent, },
    { path: 'admin/dashboard', component: AdminDashboardComponent, },
    { path: 'user/dashboard', component: UserDashboardComponent, },
    { path: 'user/profile', component: UserProfileComponent, },
   // { path: 'catalog', component: CatalogComponent, },
-   { path: '', component: CatalogComponent, },
-   { path: 'product/:name', component: CatalogProductComponent, },
+   { path: 'products', component: CatalogComponent, },
+   { path: 'products/:name', component: CatalogProductComponent, },
    { path: 'user/dashboard/:name/statistics/:serial', component: LicenseStatisticsComponent, },
    { path: 'try', component: CustomFormComponentComponent, },
    {path: '404', component: NotFoundComponent},

@@ -10,7 +10,7 @@
                     <mat-grid-list cols="2" rowHeight="4rem" *ngIf="products?.length>0">
                             <div *ngFor="let product of products">
                                  <mat-grid-tile>
-                                     <a routerLink="/admin/product/{{product.name}}">{{product.name}}</a>
+                                     <a routerLink="/admin/products/{{product.name}}">{{product.name}}</a>
                                  </mat-grid-tile>
                                  <mat-grid-tile>
                                         <button mat-icon-button (click)="openEditProductDialog(product)">

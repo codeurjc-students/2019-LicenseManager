@@ -39,7 +39,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 
 @CrossOrigin
 @RestController
-@RequestMapping(value = "/api/user")
+@RequestMapping(value = "/api/users")
 public class UserController {
 
 	@Autowired
@@ -132,7 +132,7 @@ public class UserController {
 		}
 	}
 	
-	@PutMapping("{userName}/setDefault/{paymentMethodId}")
+	@PutMapping("{userName}/default-card/{paymentMethodId}")
 	public ResponseEntity<Boolean> setDefaultPaymentMethod(@PathVariable String userName, @PathVariable String paymentMethodId) {
 		try {
 			User user = this.userServ.findByName(userName);
@@ -162,7 +162,7 @@ public class UserController {
 		}
 	}
 	
-	@GetMapping("{userName}/getDefault")
+	@GetMapping("{userName}/default-card")
 	public ResponseEntity<SimpleResponse> getDefaultPaymentMethod(@PathVariable String userName) {
 		User user = this.userServ.findByName(userName);
 		
@@ -189,7 +189,7 @@ public class UserController {
 
 	
 	//Will be subscribed to a M subscription with x free trial days
-	@PutMapping("/{userName}/{productName}/addTrial/card/{token}")
+	@PutMapping("/{userName}/products/{productName}/addTrial/cards/{token}")
 	public ResponseEntity<License> addTrial(@PathVariable String productName, @PathVariable String userName,  @PathVariable String token){
 		
 		User user = this.userServ.findByName(userName);
@@ -241,7 +241,7 @@ public class UserController {
 
 
 	
-	@PutMapping("/{productName}/{typeSubs}/{userName}/addSubscription/renewal/{automaticRenewal}")
+	@PutMapping("{userName}/products/{productName}/{typeSubs}/addSubscription/renewal/{automaticRenewal}")
 	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName, @PathVariable boolean automaticRenewal){
 		Product product = this.productServ.findOne(productName);
 		User user = this.userServ.findByName(userName);
@@ -427,7 +427,7 @@ public class UserController {
 
 	
     
-    @PostMapping("{userName}/confirm/{id}/product/{productName}")
+    @PostMapping("{userName}/confirm/{id}/products/{productName}")
     public ResponseEntity<License> confirm(@PathVariable String id, @PathVariable String userName, @PathVariable String productName) throws StripeException {
     	Product p = this.productServ.findOne(productName);
 		User user = this.userServ.findByName(userName);
