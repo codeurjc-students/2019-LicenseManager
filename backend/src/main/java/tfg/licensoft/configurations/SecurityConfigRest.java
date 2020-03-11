@@ -23,7 +23,6 @@ public class SecurityConfigRest extends WebSecurityConfigurerAdapter{
 		// User
         http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/user/**/card/**").hasAnyRole("ADMIN","USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/login").authenticated();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/register/**").authenticated();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN");
         http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/users/**/addCard/**").hasAnyRole("ADMIN","USER");
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users/**/cards").hasAnyRole("ADMIN","USER");

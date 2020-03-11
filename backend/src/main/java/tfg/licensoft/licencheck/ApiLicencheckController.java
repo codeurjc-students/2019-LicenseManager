@@ -45,8 +45,7 @@ public class ApiLicencheckController {
 	@Autowired
 	private LicenseStatisticsService licenseStatService;
 	
-	@Autowired
-	private LicenseSubscriptionService licenseSubsServ;
+
 	
 	@Autowired
 	private ProductService productService;

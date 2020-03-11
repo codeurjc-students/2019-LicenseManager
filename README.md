@@ -7,10 +7,14 @@ With Licensoft it will be easy to charge for a software: run the web where the c
 * [Domain](#domain)
     * [Product](#product)
     * [License](#license)
+	* [LicenseSubscription](#license-subscription)
+    * [LicenseStatistics](#license-statistics)
     * [User](#user)
+	* [UsedCard](#used-card)
 * [ADMIN Habilities](#admin-habilities)
     * [Add Product - Subscription](#add-product-subs) 
     * [Add Product - Lifetime](#add-product-lifetime)
+    * [Add Product - Mettered Billing](#add-product-mb)
     * [Edit Product](#edit-product)
     * [Delete Product](#delete-product)
 * [USER normal flow](#user-normal-flow)
@@ -19,8 +23,9 @@ With Licensoft it will be easy to charge for a software: run the web where the c
 	3. [Attach payment source to user](#attach-payment-source-to-user)
 	4. [Search in catalog](#search-in-catalog)
 	5. [Subscribe to Product](#subscribe-to-product)
-	6. [Buy Lifetime Product](#buy-lifetime-product)
-	7. [Introduce license Serial into purchased software ](#introduce-license-serial-into-the-purchased-software)
+    6. [Subscribe to a Free Trial](#subscribe-to-a-free-trial)
+	7. [Buy Lifetime Product](#buy-lifetime-product)
+	8. [Introduce license Serial into purchased software ](#introduce-license-serial-into-the-purchased-software)
 * [Other Docs](#other-documentation)
 
 
@@ -55,7 +60,7 @@ In Licensoft there are 2 types of roles: **ADMIN** and **USER**.
 * Owner (String)
 * Price (double)
 
-### LicenseSubscription
+### License Subscription
 * Trial (boolean)
 * CancelAtEnd (boolean)
 * SubscriptionItemId (String)
@@ -63,7 +68,7 @@ In Licensoft there are 2 types of roles: **ADMIN** and **USER**.
 * NUsage (int)
 * EndDate (Date)
 
-### LicenseStatistics
+### License Statistics
 Object with statistics of a License (by ip)
 * License (License)
 * Ip (String)
@@ -77,7 +82,7 @@ Object with statistics of a License (by ip)
 * Password (String - hashed)
 * UserStripeId (String)
 
-### UsedCard
+### Used Card
 *	Last4 (int)
 *	ExpMonth (int)
 *	ExpYear (int)
@@ -93,6 +98,13 @@ Object with statistics of a License (by ip)
 This flow is the same as Adding a subscription type but changing its type.
 
 ![Add Lifetime Product](docs/gifs/addProdLifetime.gif)
+
+---
+
+### Add Product - Mettered Billing(Subscription) type <a name="add-product-mb"></a>
+This flow is the same as Adding a subscription type (MB is a type of Subscription).
+
+![Add MB Product](docs/gifs/addMBProd.gif)
 
 ---
 
@@ -135,6 +147,11 @@ The delete will set the product to inactive and it will disappear from the catal
 
 ---
 
+### Subscribe to a Free Trial
+![Subscribe to Trial](docs/gifs/subsTrial.gif)
+
+---
+
 ### Buy Lifetime Product
 ![Buy a Product](docs/gifs/buyProd.gif)
 
@@ -152,5 +169,3 @@ The delete will set the product to inactive and it will disappear from the catal
 * [Licencheck Guide](docs/LicencheckGuide.md)
 * [API](docs/API.md)
 * [Installation Guide](docs/INSTALLATION_GUIDE.md)
-
-
