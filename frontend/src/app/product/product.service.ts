@@ -14,7 +14,7 @@ export class ProductService {
     constructor(private http: HttpClient) { }
     
     getLicensesByProduct(productName:string){
-        let url = BASE_URL + "licenses/product/" + productName;
+        let url = BASE_URL + "licenses/products/" + productName;
         return this.http.get(url)
     }
 

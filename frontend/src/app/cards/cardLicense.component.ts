@@ -7,7 +7,6 @@ import { LoginService } from '../login/login.service';
 import { MatDialog, MatDialogRef } from '@angular/material';
 import { LicenseService } from '../licenses/license.service';
 import { TdChipsBase } from '@covalent/core';
-import { DialogEditComponent } from '../dialogs/dialogEdit.component';
 
 @Component({
     selector: 'app-card-license',
@@ -47,18 +46,6 @@ import { DialogEditComponent } from '../dialogs/dialogEdit.component';
     }
 
 
-
-    openEditDialog(license:License){
-        this.dialogRef = this.dialog.open(DialogEditComponent, {
-            data:{
-                license:license,
-            },
-        });
-        this.dialogRef.afterClosed().subscribe(
-            lics => {this.getLicenses(this.product.name)},
-            error => console.log(error)
-        );
-    }
 
  
 

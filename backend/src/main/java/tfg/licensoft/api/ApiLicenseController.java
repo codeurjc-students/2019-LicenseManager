@@ -37,7 +37,7 @@ public class ApiLicenseController {
 	@Autowired
 	private UserService userServ;
 
-	@GetMapping(value = "/product/{product}")
+	@GetMapping(value = "/products/{product}")
 	public Page<License> getLicensesOfProduct(@PathVariable String product, Pageable page){
 		Product p = this.productServ.findOne(product);
 		Page<License> licenses = this.licServ.findLicensesOfProduct(p,page);
@@ -45,7 +45,7 @@ public class ApiLicenseController {
 		
 	}
 	
-	@GetMapping(value = "/{serial}/{product}")
+	@GetMapping(value = "/{serial}/products/{product}")
 	public ResponseEntity<License> getLicenseBySerialAndProduct(@PathVariable String serial, @PathVariable String product){
 		Product p = this.productServ.findOne(product);
 		License license = this.licServ.findBySerialAndProduct(serial, p);
@@ -57,7 +57,7 @@ public class ApiLicenseController {
 	} 
 	
 
-	@GetMapping(value = "/{userName}")
+	@GetMapping(value = "/users/{userName}")
 	public ResponseEntity<Page<License>> getLicensesOfUser(@PathVariable String userName, Pageable page){
 		Page<License> licenses = this.licServ.findByUsername(userName, page);
 		if(licenses==null) {
@@ -67,7 +67,7 @@ public class ApiLicenseController {
 		}
 	}
 	
-	@PutMapping(value="/cancelAtEnd/{serial}/{product}")
+	@PutMapping(value="/cancelAtEnd/{serial}/products/{product}")
 	public ResponseEntity<License> cancelAtEndLicense(@PathVariable String serial, @PathVariable String product){
 		Product p = this.productServ.findOne(product);
 		LicenseSubscription l = this.licenseSubsServ.findBySerialAndProduct(serial,p);
@@ -107,7 +107,7 @@ public class ApiLicenseController {
 	}
 
 	
-	@GetMapping(value="/user/{userName}/product/{productName}")
+	@GetMapping(value="/users/{userName}/products/{productName}")
 	public ResponseEntity<Page<License>> getLicensesOfUserAndProduct(@PathVariable String productName, @PathVariable String userName, Pageable page){
 		Product p = this.productServ.findOne(productName);
 		User user = this.userServ.findByName(userName);
@@ -118,10 +118,7 @@ public class ApiLicenseController {
 		}
 		
 		Page<License> licenses=this.licServ.findByProductAndOwner(p, userName, page);
-		return new ResponseEntity<>(licenses,HttpStatus.OK);
-		
-		
-		
+		return new ResponseEntity<>(licenses,HttpStatus.OK);		
 	}
 	
 }

@@ -4,14 +4,12 @@ import { ProductService } from '../../product/product.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { LoginService, User } from '../../login/login.service';
 import { UserProfileService } from '../../userProfile/userProfile.service';
-import { DialogService } from 'src/app/dialogs/dialog.service';
+import { DialogService } from '../../dialogs/dialog.service';
 import { LicenseService } from '../../licenses/license.service';
-import { License } from 'src/app/licenses/license.model';
+import { License } from '../../licenses/license.model';
 import { DatePipe } from '@angular/common';
 import { MatDialogRef, MatDialog } from '@angular/material';
 import { LoginComponent } from '../../login/login.component';
-import { AppComponent } from 'src/app/app.component';
-import { environment } from 'src/environments/environment';
 import { AppService } from '../../app.service';
 import { CardFormComponent } from '../../userProfile/card-form/card-form.component';
 import { UsedCardService } from '../../usedCard/usedCard.service';
@@ -185,7 +183,6 @@ export class CatalogProductComponent implements OnInit {
     this.stripeService
       .createToken(this.card, { name })
       .subscribe(result => {
-        console.log(result);
         if (result.token) {
           this.loading=true;
           this.userProfileService.pay(this.user.name,this.product, result.token.id).subscribe(

@@ -41,12 +41,12 @@
                     <span>{{license.type}}</span>
                 </mat-grid-tile>
                 <mat-grid-tile>
-                        <a *ngIf="license.startDate">{{license.startDate}}</a>
+                        <a *ngIf="license.startDate">{{license.startDate | date:'medium'}}</a>
                         <a *ngIf="!license.startDate">--</a>
 
                 </mat-grid-tile>
                 <mat-grid-tile>
-                        <a *ngIf="license.endDate">{{license.endDate}}</a>
+                        <a *ngIf="license.endDate">{{license.endDate | date:'medium'}}</a>
                         <a *ngIf="!license.endDate">--</a>
                 </mat-grid-tile>
                 <br>

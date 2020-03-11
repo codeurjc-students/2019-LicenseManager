@@ -76,11 +76,10 @@ import { ProductService } from './product/product.service';
 import { LicenseService } from './licenses/license.service';
 import { UserDashboardComponent } from './userDashboard/userDashboard.component';
 import { CardLicenseComponent } from './cards/cardLicense.component';
-import { DialogEditComponent } from './dialogs/dialogEdit.component';
 import { UserProfileComponent } from './userProfile/userProfile.component';
 import { UserProfileService } from './userProfile/userProfile.service';
-import { BasicAuthInterceptor } from 'src/app/login/auth.interceptor';
-import { ErrorInterceptor } from 'src/app/login/error.interceptor';
+import { BasicAuthInterceptor } from './login/auth.interceptor';
+import { ErrorInterceptor } from './login/error.interceptor';
 import { AdminDashboardComponent } from './adminDashboard/adminDashboard.component';
 import { DialogAddProductComponent } from './dialogs/dialogAddProduct.component';
 import { CardFormComponent } from './userProfile/card-form/card-form.component';
@@ -156,9 +155,9 @@ import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistic
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent, LicenseStatisticsComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, DialogEditComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
+    declarations: [AppComponent, LicenseStatisticsComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
     bootstrap: [AppComponent],
-    entryComponents: [DialogEditComponent,DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent, DialogFreeTrial,
+    entryComponents: [DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent, DialogFreeTrial,
     ],
     providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,LoginComponent, AppService, UserProfileComponent, CardFormComponent, UsedCardService,
         { provide: MAT_DIALOG_DATA, useValue: {} },
