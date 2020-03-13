@@ -36,7 +36,8 @@ public class ApiUsedCardController {
 	@PostMapping("/{last4}/{expMonth}/{expYear}/product/{product}")
 	public ResponseEntity<UsedCard> postUsedCard(@PathVariable int last4, @PathVariable int expMonth, @PathVariable int expYear, @PathVariable String product){
 		UsedCard card = new UsedCard(last4,expMonth,expYear,product);
-		return new ResponseEntity<>(this.usedCardServ.save(card),HttpStatus.OK);
+		UsedCard cardN = this.usedCardServ.save(card);
+		return new ResponseEntity<>(cardN,HttpStatus.OK);
 	}
 
 

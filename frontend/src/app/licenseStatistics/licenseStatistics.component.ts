@@ -21,7 +21,7 @@ export class LicenseStatisticsComponent implements OnInit{
             this.productName = params.get('name');
             let serial = params.get('serial');
             this.licenseServ.getOneLicense(serial,this.productName).subscribe(
-                l=>{ this.license=l;console.log(l)},
+                l=>{ this.license=l;},
                 error => console.log(error)
             )
         });

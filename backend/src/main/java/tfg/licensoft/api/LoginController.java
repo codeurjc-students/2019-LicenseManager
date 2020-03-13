@@ -63,20 +63,16 @@ public class LoginController {
 	@Autowired
 	private UserService userServ;
 	
-
+ 
 	
 	@RequestMapping("/api/logIn")
 	public ResponseEntity<User> logIn(HttpServletRequest req) {
-		Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-		System.out.println("??? ->  "+authorities + "  " + SecurityContextHolder.getContext().getAuthentication());
-
 		if (!userComponent.isLoggedUser()) {
 			log.info("Not user logged");
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		} else {
 			User loggedUser = userComponent.getLoggedUser();
 			log.info("Logged as " + loggedUser.getName());
-			//this.userServ.save(loggedUser);
 			return new ResponseEntity<>(loggedUser, HttpStatus.OK);
 		}
 	}

@@ -38,7 +38,7 @@ public class License {
 	@OneToMany(mappedBy="license")
 	private List<LicenseStatistics> licenseStats;
 	
-
+ 
 	
 	public License(boolean active, Product product, String owner) {
         this.type = "L";

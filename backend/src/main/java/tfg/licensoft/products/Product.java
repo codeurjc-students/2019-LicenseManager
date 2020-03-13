@@ -58,7 +58,7 @@ public class Product {
 		this.plans = new HashMap<>();
 		this.typeSubs= new ArrayList<>();
 		this.plansPrices = new HashMap<>();
-		this.active=true;
+		this.active=true; 
  
 	}
 	

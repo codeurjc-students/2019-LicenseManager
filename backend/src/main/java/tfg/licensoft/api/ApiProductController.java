@@ -65,13 +65,12 @@ public class ApiProductController {
 	public ResponseEntity<Product> getProduct(@PathVariable String productName) {
 		Product p = this.productServ.findOne(productName);
 		if (p != null) {
-			System.out.println(p.getPlansPrices());
 			return new ResponseEntity<Product>(p,HttpStatus.OK);
 		}else {
 			return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
 		}
-	}
-
+	} 
+ 
 	
 	@PostMapping("/")
 	public ResponseEntity<Product> postProduct(@RequestBody Product product){
@@ -88,9 +87,6 @@ public class ApiProductController {
 						params.put("name", product.getName());
 						params.put("type", "good");
 						params.put("shippable", false);
-						/*if(product.getDescription()!=null || product.getDescription()!="") {
-							params.put("description",product.getDescription());
-						}*/
 						params.put("url", product.getWebLink());
 					}else {
 						params.put("name", product.getName());
@@ -151,7 +147,7 @@ public class ApiProductController {
 				pStripe.update(params);
 			} catch (StripeException e) {
 				e.printStackTrace();
-			}
+			} 
 			p.setTrialDays(product.getTrialDays());
 			p.setPhotoAvailable(product.isPhotoAvailable());
 			p.setPhotoSrc(product.getPhotoSrc());
@@ -175,8 +171,6 @@ public class ApiProductController {
 						params.put("active", false);
 						product.update(params);
 						p.setActive(false);
-						//Path path = FILES_FOLDER.resolve(product.getName()+"_photo");
-					//	Files.delete(path);
 						p.setPhotoAvailable(false);
 						this.productServ.save(p);
 						return new ResponseEntity<Product>(p,HttpStatus.OK); 
@@ -314,7 +308,7 @@ public class ApiProductController {
 		if(p == null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		
+		 
 		this.productServ.saveImage(file,p);
 		byte[] bytes = Files.readAllBytes(productServ.getImage(p));
 		final HttpHeaders headers = new HttpHeaders();

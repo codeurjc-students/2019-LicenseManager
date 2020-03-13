@@ -91,7 +91,7 @@ public class ApiLicencheckController {
 		}
 		
 
-		long unixTime = System.currentTimeMillis() / 1000L;
+		long unixTime = System.currentTimeMillis() / 1000L; 
 
 		Map<String, Object> usageRecordParams = new HashMap<String, Object>();
 		usageRecordParams.put("quantity", usage);

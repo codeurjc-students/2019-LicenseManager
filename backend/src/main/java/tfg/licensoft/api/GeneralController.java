@@ -33,18 +33,6 @@ public class GeneralController {
 	
 	
 	
-	public String getPublicKey() {
-		return publicKey;
-	}
-
-	public void setPublicKey(String publicKey) {
-		this.publicKey = publicKey;
-	}
-
-	public void setAppName(String appName) {
-		this.appName = appName;
-	}
-
 	@GetMapping("keys/stripe/public")
 	private ResponseEntity<Response> getPublicStripeKey() {
 		Response key= new Response();

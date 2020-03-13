@@ -55,7 +55,7 @@ public class DatabaseInitializer {
 	@PostConstruct
 	public void init() throws StripeException {
 
-		//Set up stripe key 
+		//Set up stripe key  
 		Stripe.apiKey=privateKey;
 		
 		//User ADMIN creator

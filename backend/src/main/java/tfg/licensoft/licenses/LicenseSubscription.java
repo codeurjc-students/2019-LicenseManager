@@ -27,7 +27,7 @@ public class LicenseSubscription extends License {
 		super(active, product, owner);
 		this.setType(type);
 		this.nUsage=0;
-		this.trial=true;
+		this.trial=true; 
 		if(active) {
 			Calendar ahoraCal = Calendar.getInstance();
 			this.calculateEndDate(ahoraCal,trialDays);

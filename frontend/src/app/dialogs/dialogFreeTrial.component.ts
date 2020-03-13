@@ -20,7 +20,6 @@ export class DialogFreeTrial {
     }
 
     yes(){
-        console.log(this.params);
         this.dialogRef.close(this.params);
     }
 
