@@ -16,6 +16,8 @@ import { DialogService } from '../dialogs/dialog.service';
     dialogRef: MatDialogRef<any, any>;
     products:Product[];
 
+    pageActual:number = 1;
+    numberOfElements = 5;
     constructor(private dialogService:DialogService,public dialog: MatDialog,private productService:ProductService,private router: Router){
         this.getProducts();
     }

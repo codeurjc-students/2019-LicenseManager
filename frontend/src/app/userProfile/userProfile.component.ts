@@ -19,6 +19,8 @@ import { DialogService } from '../dialogs/dialog.service';
     loading:boolean;
     paymentMethods:any[];
     defaultPM:string;
+    pageActual:number = 1;
+    numberOfElements = 3;
 
     owner = new FormControl('',Validators.required);
     number = new FormControl('',[Validators.required, Validators.minLength(16), Validators.maxLength(16), Validators.pattern('[0-9]*')]);

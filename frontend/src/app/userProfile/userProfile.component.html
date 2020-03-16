@@ -7,7 +7,7 @@
     <mat-card-content>
         <b *ngIf="stripeCards?.length==0">You don't have any card attached yet</b>
         <mat-grid-list cols="2" rowHeight="4rem" *ngIf="!loading" >
-            <div *ngFor="let paymentMethod of paymentMethods" class="comp">
+            <div *ngFor="let paymentMethod of paymentMethods| paginate: {itemsPerPage:numberOfElements, currentPage: pageActual}" class="comp">
                 <mat-grid-tile > <img src="assets/{{paymentMethod?.card.brand}}.png" width="50px"> | {{paymentMethod?.card.brand.toUpperCase()}} that ends with {{paymentMethod?.card.last4}} - Expiring {{paymentMethod?.card.expMonth}}/{{paymentMethod?.card.expYear}}</mat-grid-tile>
                 <mat-grid-tile>
                     <button mat-icon-button >
@@ -18,9 +18,18 @@
                     </button>
                     <a id="default" *ngIf="paymentMethod?.id==defaultPM">DEFAULT</a>                     
                 </mat-grid-tile>
-
             </div>
         </mat-grid-list>
+        <pagination-controls (pageChange)="pageActual = $event" style=" display:inline-block;">
+        </pagination-controls>
+        <a style="display:inline-block;">Elements on page:</a>
+        <div style="width: 120px; margin-left: auto; display:inline-block;">
+            <mat-select [(value)]="numberOfElements" style="display:inline-block; width: 50px;">
+                <mat-option value="3">3</mat-option>
+                <mat-option value="5">5</mat-option>
+                <mat-option value="10">10</mat-option>
+            </mat-select>
+        </div>        
     </mat-card-content>
 </mat-card>
 <br>

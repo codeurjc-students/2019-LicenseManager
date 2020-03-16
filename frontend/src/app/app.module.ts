@@ -7,9 +7,10 @@ import { MatIconRegistry } from '@angular/material/icon';
 import { CovalentFileModule } from '@covalent/core/file';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { RouterModule } from '@angular/router';
+import {MatPaginatorModule} from '@angular/material/paginator';
 
 import { NgxStripeModule } from 'ngx-stripe';
-
+import { NgxPaginationModule} from 'ngx-pagination';
 import { AppComponent } from './app.component';
 
 import {
@@ -97,7 +98,7 @@ import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistic
 @NgModule({
     imports: [ 
         NgxStripeModule.forRoot(),
-        
+        NgxPaginationModule,
         MatCheckboxModule,
         HttpModule,
         ReactiveFormsModule,
@@ -113,6 +114,7 @@ import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistic
         MatSnackBarModule,
         CovalentTabSelectModule,
         /** Material Modules */
+        MatPaginatorModule,
         MatButtonModule,
         MatListModule,
         MatIconModule,

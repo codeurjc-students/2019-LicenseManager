@@ -24,7 +24,8 @@ import { TdChipsBase } from '@covalent/core';
     typeAlertNull:boolean;
     statusAlertNull:boolean;
 
-
+    pageActual:number = 1;
+    numberOfElements = 5;
     constructor(public productService:ProductService,public licenseService:LicenseService, public loginService: LoginService,public dialog: MatDialog){
         this.typeAlertNull=false;
         this.statusAlertNull=false;

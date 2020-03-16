@@ -37,6 +37,8 @@ export class CatalogProductComponent implements OnInit {
   loading:boolean;
   numberOfPlans:number;
   dialogRef: MatDialogRef<any, any>;
+  pageActual:number = 1;
+  numberOfElements = 3;
 
 
   elements: Elements;

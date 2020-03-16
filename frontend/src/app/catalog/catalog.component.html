@@ -10,7 +10,7 @@
                 <span style="font-family:Arial; color:red">There aren't products available </span>
                 <br>
             </div>
-            <div  *ngFor="let product of products" >
+            <div  *ngFor="let product of products | paginate: {itemsPerPage:numberOfElements, currentPage: pageActual}" >
                     <hr>
                     <div class="post-container">
                         <h3 class="post-title"><a (click)="goToProduct(product.name)" class="link">{{product.name}}</a></h3>                   
@@ -22,6 +22,17 @@
                             <p >Type of licenses available: <span *ngFor="let type of product.typeSubs" class="typeLicenses">{{type}} | </span></p>
                         </div>
                     </div>
+            </div>
+            <hr>
+            <pagination-controls (pageChange)="pageActual = $event" style=" display:inline-block;">
+            </pagination-controls>
+            <a style="display:inline-block;">Elements on page:</a>
+            <div style="width: 120px; margin-left: auto; display:inline-block;">
+                <mat-select [(value)]="numberOfElements" style="display:inline-block; width: 30px;">
+                    <mat-option value=5>5</mat-option>
+                    <mat-option value=10>10</mat-option>
+                    <mat-option value=20>20</mat-option>
+                </mat-select>
             </div>
             <br>
         </div>

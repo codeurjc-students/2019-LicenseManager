@@ -8,7 +8,7 @@
                         <span>You don't have any product</span>
                 </div>
                     <mat-grid-list cols="2" rowHeight="4rem" *ngIf="products?.length>0">
-                            <div *ngFor="let product of products">
+                            <div *ngFor="let product of products | paginate: {itemsPerPage:numberOfElements, currentPage: pageActual}">
                                  <mat-grid-tile>
                                      <a routerLink="/admin/products/{{product.name}}">{{product.name}}</a>
                                  </mat-grid-tile>
@@ -24,6 +24,16 @@
                             </div>
                     </mat-grid-list>
         </mat-card-content>
+        <pagination-controls (pageChange)="pageActual = $event" style=" display:inline-block;">
+        </pagination-controls>
+        <span style="display:inline-block;">Elements on page:</span>
+        <div style="width: 120px; margin-left: auto; display:inline-block;">
+            <mat-select [(value)]="numberOfElements" style="display:inline-block; width: 50px;">
+                <mat-option value="5">5</mat-option>
+                <mat-option value="10">10</mat-option>
+                <mat-option value="15">15</mat-option>
+            </mat-select>
+        </div> 
         <div>
            <button mat-raised-button color="primary" id="buttonAdd" (click)="openAddProductDialog()">ADD PRODUCT</button>
         </div>  

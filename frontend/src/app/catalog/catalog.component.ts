@@ -14,7 +14,8 @@ export class CatalogComponent {
 
   products:Product[];
   searchInputTerm:string;
-
+  pageActual:number = 1;
+  numberOfElements = 5;
   constructor(private productService:ProductService, private router:Router){
       productService.getProducts().subscribe( 
           (resp:any) =>{this.products = resp.content},

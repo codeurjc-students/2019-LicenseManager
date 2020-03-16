@@ -20,12 +20,14 @@ export class UserDashboardComponent implements OnInit{
     userName:string;
     activeLicenses:License[];
     loading:boolean;
+    numberOfElements = 5;
     
-
+    pageActual:number;
     constructor(private dialogService:DialogService,private licenseService:LicenseService,private datepipe: DatePipe,private router:Router,public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute, public loginService:LoginService){}
 
 
     ngOnInit(): void {
+        this.pageActual=1;
         this.loading=false;
         this.activeRoute.paramMap.subscribe((params: ParamMap) => {
             this.userName = this.loginService.user.name;

@@ -25,7 +25,7 @@
         </mat-grid-list>
 
         <mat-grid-list cols="6" rowHeight="5:1">
-           <div *ngFor="let license of product?.licenses">
+           <div *ngFor="let license of product?.licenses | paginate: {itemsPerPage:numberOfElements, currentPage: pageActual}">
                 <mat-grid-tile>
                     <a>{{license.serial}}</a>
                 </mat-grid-tile>
@@ -53,6 +53,16 @@
             </div>
             
         </mat-grid-list>
+        <pagination-controls (pageChange)="pageActual = $event" style=" display:inline-block;">
+        </pagination-controls>
+        <span style="display:inline-block;">Elements on page:</span>
+        <div style="width: 120px; margin-left: auto; display:inline-block;">
+            <mat-select [(value)]="numberOfElements" style="display:inline-block; width: 50px;">
+                <mat-option value="5">5</mat-option>
+                <mat-option value="10">10</mat-option>
+                <mat-option value="15">15</mat-option>
+            </mat-select>
+        </div> 
     </mat-card-content>
 
 <ng-template #addLicenseDialog let-addLicenseDialog="addLicenseDialog">
