@@ -28,6 +28,7 @@ import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
 import tfg.licensoft.statistics.LicenseStatistics;
 import tfg.licensoft.statistics.LicenseStatisticsService;
+import tfg.licensoft.stripe.StripeServices;
 import tfg.licensoft.users.UserService;
 import org.springframework.web.bind.annotation.*;
 
@@ -45,7 +46,8 @@ public class ApiLicencheckController {
 	@Autowired
 	private LicenseStatisticsService licenseStatService;
 	
-
+	@Autowired
+	private StripeServices stripeServ;
 	
 	@Autowired
 	private ProductService productService;
@@ -107,7 +109,7 @@ public class ApiLicencheckController {
 				  .build();
 
 		try {
-			UsageRecord.createOnSubscriptionItem(l.getSubscriptionItemId(), usageRecordParams, options);
+			this.stripeServ.createOnSubscriptionItem(l.getSubscriptionItemId(), usageRecordParams, options);
 			l.setnUsage(l.getnUsage()+usage);
 			License newL = this.licenseService.save(l);
 			

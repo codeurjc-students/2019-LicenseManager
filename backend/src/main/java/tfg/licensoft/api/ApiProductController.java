@@ -39,6 +39,7 @@ import com.stripe.param.PlanCreateParams;
 
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
+import tfg.licensoft.stripe.StripeServices;
 
 @CrossOrigin
 @RestController
@@ -48,7 +49,8 @@ public class ApiProductController {
 	@Autowired
 	private ProductService productServ;
 	
-
+	@Autowired
+	private StripeServices stripeServ;
 	
 	
 	@GetMapping()
@@ -93,7 +95,7 @@ public class ApiProductController {
 						params.put("type", "service");
 					}
 					try {
-						productStripe = com.stripe.model.Product.create(params);
+						productStripe =this.stripeServ.createProduct(params);
 						productId = productStripe.getId();
 						product.setProductStripeId(productId);
 						product.setPhotoAvailable(false);
@@ -122,6 +124,7 @@ public class ApiProductController {
 				    }
 				    case "MB":{
 				    	this.createMBproduct(product, plan.getValue(), productId);
+				    	break;
 				    }
 			    }
 			    count++;
@@ -141,10 +144,10 @@ public class ApiProductController {
 		}else{
 			p.setDescription(product.getDescription());
 			try {
-				com.stripe.model.Product pStripe = com.stripe.model.Product.retrieve(p.getProductStripeId());
+				com.stripe.model.Product pStripe = this.stripeServ.retrieveProduct(p.getProductStripeId());
 				Map<String, Object> params = new HashMap<>();
 				params.put("description", product.getDescription());
-				pStripe.update(params);
+				this.stripeServ.updateProduct(pStripe, params);
 			} catch (StripeException e) {
 				e.printStackTrace();
 			} 
@@ -160,16 +163,14 @@ public class ApiProductController {
 	@DeleteMapping("/{productName}")
 	public ResponseEntity<Product> deleteProduct(@PathVariable String productName,HttpServletRequest request){
 		Product p = this.productServ.findOne(productName);
-		System.out.println(request.getRemoteUser());
 		if(p==null) {
 			return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
 		}else {
 			try {
-				com.stripe.model.Product product =
-						com.stripe.model.Product.retrieve(p.getProductStripeId());
+				com.stripe.model.Product product = this.stripeServ.retrieveProduct(p.getProductStripeId());
 						Map<String, Object> params = new HashMap<>();
 						params.put("active", false);
-						product.update(params);
+						this.stripeServ.updateProduct(product,params);
 						p.setActive(false);
 						p.setPhotoAvailable(false);
 						this.productServ.save(p);
@@ -197,7 +198,7 @@ public class ApiProductController {
 			paramsSku.put("currency", "eur");
 			paramsSku.put("product",productId);
 	 
-			Sku sku = Sku.create(paramsSku);
+			Sku sku = this.stripeServ.createSku(paramsSku);
 			product.setSku(sku.getId());
 			product.setProductStripeId(productId);
 		}catch(StripeException e) {
@@ -205,7 +206,7 @@ public class ApiProductController {
 		}
 		this.productServ.save(product);
 	}
-	
+	 
 	
 	private void createMBproduct(Product product, double price, String productId ) {
 		try {
@@ -220,7 +221,7 @@ public class ApiProductController {
 					    .setUsageType(PlanCreateParams.UsageType.METERED)
 					    .build();
 
-			Plan plan = Plan.create(params);
+			Plan plan = this.stripeServ.createPlan(params);
 			product.getPlans().put("MB",plan.getId());
 
 		}catch(StripeException e) {
@@ -238,7 +239,7 @@ public class ApiProductController {
 			params.put("product", productId);
 			params.put("nickname", "M");
 			params.put("amount", (int)(price*100));
-			Plan plan1M = Plan.create(params);
+			Plan plan1M = this.stripeServ.createPlan(params);
 			product.getPlans().put("M",plan1M.getId());
 			
 		}catch(StripeException e) {
@@ -255,7 +256,7 @@ public class ApiProductController {
 			params.put("product",productId);
 			params.put("nickname", "A");
 			params.put("amount", (int)(price*100));
-			Plan plan1M = Plan.create(params);
+			Plan plan1M =this.stripeServ.createPlan(params);
 			product.getPlans().put("A",plan1M.getId());
 			
 		}catch(StripeException e) {
@@ -272,7 +273,7 @@ public class ApiProductController {
 			params.put("product", productId);
 			params.put("nickname", "D");
 			params.put("amount", (int)(price*100));
-			Plan plan1M = Plan.create(params);
+			Plan plan1M =this.stripeServ.createPlan(params);
 			product.getPlans().put("D",plan1M.getId());
 			
 		}catch(StripeException e) {

@@ -29,9 +29,13 @@ import tfg.licensoft.licenses.LicenseService;
 import tfg.licensoft.licenses.LicenseSubscription;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
+import tfg.licensoft.statistics.LicenseStatistics;
 import tfg.licensoft.statistics.LicenseStatisticsService;
+import tfg.licensoft.stripe.StripeServices;
+
 import static org.hamcrest.Matchers.*;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
+import static org.mockito.ArgumentMatchers.any;
 
 @RunWith(SpringRunner.class)
 @SpringBootTest
@@ -54,6 +58,8 @@ public class LicencheckApiTests {
     @MockBean
     private LicenseStatisticsService licenseStatServ;
     
+    @MockBean
+    private StripeServices stripeServ;
     
     @Before
     public void initialize() {
@@ -94,6 +100,9 @@ public class LicencheckApiTests {
     	lSubsA.setSerial("sa");
     	LicenseSubscription lSubsMB = new LicenseSubscription(true,"MB",pS,"test",0);
     	lSubsMB.setSerial("smb");
+    	LicenseSubscription lSubsMB2 = new LicenseSubscription(true,"MB",pS,"test",0);
+    	lSubsMB2.setSerial("smb2");
+    	lSubsMB2.setnUsage(5);
     	LicenseSubscription lSubsMFree = new LicenseSubscription(true,"M",pS,"test",10);
     	lSubsMFree.setSerial("smfree");
 
@@ -111,9 +120,11 @@ public class LicencheckApiTests {
     	given(prodServ.findOne("no")).willReturn(null); 
     	given(prodServ.findOne(pS.getName())).willReturn(pS);
     	
+    	given(licenseService.findBySerialAndProductAndActive("smb2", pS, true)).willReturn(lSubsMB2);
+
+    	given(licenseService.findBySerialAndProductAndActive("sm", pS, true)).willReturn(lSubsM);
     	given(licenseService.findBySerialAndProductAndActive("smb", pS, true)).willReturn(lSubsMB);
     	given(licenseService.findBySerialAndProductAndActive("smb", p1, true)).willReturn(null);
-    	//given(licenseService.findBySerialAndProductAndActive("smb", pS, true)).willReturn(lSubsMB);
 
     }
     
@@ -138,4 +149,34 @@ public class LicencheckApiTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNoContent());
     }
+    
+    @Test
+    public void testUpdateUsageFirstTime() throws Exception {
+    	LicenseStatistics lStat = new LicenseStatistics();
+    	given(this.licenseStatServ.findByLicenseAndIp(any(), any())).willReturn(null);
+
+    	mvc.perform(MockMvcRequestBuilders.put("/licencheck/updateUsage/1/PS/smb")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(content().string("1"));
+    	mvc.perform(MockMvcRequestBuilders.put("/licencheck/updateUsage/1/PS/sm")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotAcceptable());
+    	mvc.perform(MockMvcRequestBuilders.put("/licencheck/updateUsage/1/PS/no")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+    
+    
+    @Test
+    public void testUpdateUsageNotFirstTime() throws Exception {
+    	LicenseStatistics lStat = new LicenseStatistics();
+    	lStat.setnUsage(5);
+    	given(this.licenseStatServ.findByLicenseAndIp(any(), any())).willReturn(lStat);
+
+    	mvc.perform(MockMvcRequestBuilders.put("/licencheck/updateUsage/2/PS/smb2")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(content().string("7"));
+    	
+    }
+    
 }

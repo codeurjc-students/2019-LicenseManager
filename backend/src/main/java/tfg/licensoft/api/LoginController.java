@@ -31,6 +31,8 @@ import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
+
+import tfg.licensoft.stripe.StripeServices;
 import tfg.licensoft.users.User;
 import tfg.licensoft.users.UserComponent;
 import tfg.licensoft.users.UserService;
@@ -63,7 +65,8 @@ public class LoginController {
 	@Autowired
 	private UserService userServ;
 	
- 
+	@Autowired
+	private StripeServices stripeServ;
 	
 	@RequestMapping("/api/logIn")
 	public ResponseEntity<User> logIn(HttpServletRequest req) {
@@ -101,7 +104,7 @@ public class LoginController {
 			customerParameter.put("name", user);
 			customerParameter.put("email",email);
 			try {
-				Customer customer = Customer.create(customerParameter);
+				Customer customer = this.stripeServ.createCustomer(customerParameter);
 				userServ.save(new User(email,customer.getId(),user, pass1,"ROLE_USER"));
 			} catch (StripeException e) {
 				e.printStackTrace();
@@ -120,7 +123,7 @@ public class LoginController {
 		
 	}
 	
-	private void emailSender(String email, String username,String pass) {
+	public void emailSender(String email, String username,String pass) {
 		try {
 		JavaMailSenderImpl mailSender = new JavaMailSenderImpl();
 		mailSender.setHost(this.host);
@@ -131,7 +134,7 @@ public class LoginController {
 		
 		//Create mail instance
 		SimpleMailMessage mailMessage = new SimpleMailMessage();
-		mailMessage.setFrom("e.pina.2016@alumnos.urjc.es");
+		mailMessage.setFrom(this.username);
 		mailMessage.setTo(email);
 		mailMessage.setSubject("New account created on a Licensoft-Web");
 		mailMessage.setText("Welcome to a Licensoft-Web! \n"

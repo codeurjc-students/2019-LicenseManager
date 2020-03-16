@@ -58,8 +58,9 @@ import { ProductService } from '../product/product.service';
           }
           else if (value=="MB"){
             this.monthly=true;
+            this.trialDays=0;
             this.type="mettered";
-            this.priceAnnual=prod.plansPrices["MB"];
+            this.price=prod.plansPrices["MB"];
           }
         }.bind(this))
       }else{
@@ -68,7 +69,6 @@ import { ProductService } from '../product/product.service';
         this.annual=false;
         this.monthly=false;
       }
-
     }
       
   close(){

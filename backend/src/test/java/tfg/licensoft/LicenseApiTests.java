@@ -21,10 +21,16 @@ import tfg.licensoft.licenses.LicenseSubscription;
 import tfg.licensoft.licenses.LicenseSubscriptionService;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
+import tfg.licensoft.stripe.StripeServices;
 import tfg.licensoft.users.User;
 import tfg.licensoft.users.UserService;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import com.stripe.exception.StripeException;
+import com.stripe.model.Customer;
+import com.stripe.model.Plan;
+import com.stripe.model.Subscription;
+import com.stripe.model.SubscriptionCollection;
+
 import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -59,8 +65,11 @@ public class LicenseApiTests {
     @MockBean
     private UserService userServ;
     
+    @MockBean
+    private StripeServices stripeServ;
+    
     @Before
-    public void initialize() {
+    public void initialize() throws StripeException {
     	User user = new User("test@gmail.com","cus_id1","test","t","ROLE_ADMIN","ROLE_USER");
     	Product p1 = new Product();
     	p1.setActive(true);
@@ -106,6 +115,8 @@ public class LicenseApiTests {
     	lSubsMB.setSerial("smb");
     	LicenseSubscription lSubsMFree = new LicenseSubscription(true,"M",pS,"test",10);
     	lSubsMFree.setSerial("smfree");
+    	
+    	
     	List<License> lics2 = new ArrayList<>();
     	lics2.add(licLife);
     	lics2.add(licLife2);
@@ -135,7 +146,7 @@ public class LicenseApiTests {
     	
     	given(licenseService.findByProductAndOwner(any(), any(), any())).willReturn(licsSubsPage);
     	//Mockear Customer, y todo lo que conlleva: Subscriptions to Products, that Products, etc.
-    	/*com.stripe.model.Product p = new com.stripe.model.Product();
+    	com.stripe.model.Product p = new com.stripe.model.Product();
     	p.setName("PS");
     	Customer c1 = new Customer();
     	c1.setId("cus_id1");
@@ -149,8 +160,15 @@ public class LicenseApiTests {
     	data.add(s);
     	sc.setData(data);
     	c1.setSubscriptions(sc);
-    	given(c.retrieve("cus_Gty4Br6upyCQG3")).willReturn(c1);*/
-    
+    	
+    	given(this.stripeServ.retrieveProduct(any())).willReturn(p);
+    	given(this.stripeServ.retrieveCustomer("cus_id1")).willReturn(c1);
+    	
+    	LicenseSubscription lSubsDWrong = new LicenseSubscription(true,"D",pS,"wrong",0);
+    	lSubsDWrong.setSerial("sdwrong");
+    	lSubsDWrong.setCancelAtEnd(false);
+    	given(licenseSubsService.findBySerialAndProduct("sdwrong",pS)).willReturn(lSubsDWrong);
+
     }
     
     
@@ -234,5 +252,23 @@ public class LicenseApiTests {
     			.andExpect(status().isNotFound());
 
     } 
+    
+    @Test
+    public void testCancelAtEnd() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.put("/api/licenses/cancelAtEnd/sd/products/PS")
+    			.contentType(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isOk())
+    			.andExpect(jsonPath("$.cancelAtEnd",is(true)));
+
+    } 
+    
+    @Test
+    public void testCancelAtEndProductNull() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.put("/api/licenses/cancelAtEnd/sd/products/no")
+    			.contentType(MediaType.APPLICATION_JSON))
+    			.andExpect(status().isPreconditionRequired());
+
+    }
+    
      
 }

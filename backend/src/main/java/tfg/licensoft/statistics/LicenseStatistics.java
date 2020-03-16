@@ -29,7 +29,9 @@ public class LicenseStatistics {
 	
 	
 	
-	public LicenseStatistics() {}
+	public LicenseStatistics() {
+		this.nUsage=0;
+	}
 	
 	
 	public Long getId() {

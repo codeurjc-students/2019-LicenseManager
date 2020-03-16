@@ -6,6 +6,7 @@ import tfg.licensoft.licenses.LicenseSubscription;
 import tfg.licensoft.licenses.LicenseSubscriptionService;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
+import tfg.licensoft.stripe.StripeServices;
 import tfg.licensoft.users.User;
 import tfg.licensoft.users.UserService;
 
@@ -51,9 +52,11 @@ public class UserController {
 	@Autowired
 	private UserService userServ;
 	
-	
 	@Autowired
 	private ProductService productServ;
+	
+	@Autowired
+	private StripeServices stripeServ;
 	
 	class SimpleResponse{
 		private String response;
@@ -75,7 +78,7 @@ public class UserController {
 		
 	}
 	
-	private User getRequestUser() {
+	public User getRequestUser() {
 		Authentication auth = SecurityContextHolder.getContext().getAuthentication();
 		return this.userServ.findByName(auth.getName());
 	}
@@ -102,7 +105,7 @@ public class UserController {
 			params.put("type", "card");
 			params.put("card", card);
 	
-			PaymentMethod paymentMethod =  PaymentMethod.create(params);
+			PaymentMethod paymentMethod = this.stripeServ.createPaymentMethod(params);
 			
 			params.clear();
 			
@@ -113,12 +116,11 @@ public class UserController {
 			params.put("payment_method", paymentMethod.getId());
 			params.put("confirm", true);
 
-
-			SetupIntent.create(params);
+			this.stripeServ.createSetupIntent(params);
 			
 			params.clear();
 			params.put("customer", user.getCustomerStripeId());
-			paymentMethod.attach(params);
+			this.stripeServ.attachPaymentMethod(paymentMethod, params);
 			
 			this.setDefaultPaymentMethod(userName, paymentMethod.getId());
 			
@@ -128,7 +130,6 @@ public class UserController {
 		} catch (StripeException e) {
 			e.printStackTrace();
 			return new ResponseEntity<SimpleResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
-
 		}
 	}
 	
@@ -142,23 +143,23 @@ public class UserController {
 			}
 			// User to be affected != User that made the request
 			if(!user.equals(this.getRequestUser())) {
-				return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+				return new ResponseEntity<>(false,HttpStatus.FORBIDDEN);
 			}
-			Customer c = Customer.retrieve(user.getCustomerStripeId());
+			
+			Customer c =this.stripeServ.retrieveCustomer(user.getCustomerStripeId());
 			
 			Map<String, Object> params = new HashMap<>();
 			params.put("default_payment_method", paymentMethodId);
 			
 			Map<String, Object> params2 = new HashMap<>();
 			params2.put("invoice_settings", params);
-			
-			c.update(params2);
+			this.stripeServ.updateCustomer(c, params2);
+
 			return new ResponseEntity<Boolean>(true,HttpStatus.OK);
 
 		}catch(StripeException e ) {
 			e.printStackTrace();
 			return new ResponseEntity<Boolean>(false,HttpStatus.INTERNAL_SERVER_ERROR);
-
 		}
 	}
 	
@@ -176,7 +177,7 @@ public class UserController {
 		}
 		Customer c;
 		try {
-			c = Customer.retrieve(user.getCustomerStripeId());
+			c = this.stripeServ.retrieveCustomer(user.getCustomerStripeId());
 			SimpleResponse r = new SimpleResponse(c.getInvoiceSettings().getDefaultPaymentMethod());
 			
 			return new ResponseEntity<>(r,HttpStatus.OK);
@@ -219,7 +220,7 @@ public class UserController {
 						    .setTrialPeriodDays((long)product.getTrialDays())
 						    .setDefaultPaymentMethod(pM)
 						    .build();
-				Subscription subscription = Subscription.create(params);
+				Subscription subscription = this.stripeServ.createSubscription(params);
 				
 				LicenseSubscription license = new LicenseSubscription(true, "M", product, user.getName(),product.getTrialDays());
 				license.setCancelAtEnd(false);  //Trial Periods have automatic renewal
@@ -274,7 +275,7 @@ public class UserController {
 				params.put("cancel_at_period_end", !automaticRenewal);
 				Subscription subscription;
 				try {
-					subscription = Subscription.create(params);
+					subscription = this.stripeServ.createSubscription(params);
 				} catch (StripeException e) { 
 					e.printStackTrace();
 					if(e.getCode().equals("resource_missing") && e.getMessage().contains("This customer has no attached payment source")) {
@@ -295,7 +296,7 @@ public class UserController {
 				return new ResponseEntity<License>(license,HttpStatus.OK);
 			
 		}else {
-			return new ResponseEntity<License>(HttpStatus.BAD_REQUEST);
+			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
 		}
 	}
 	
@@ -339,8 +340,7 @@ public class UserController {
 			params.put("customer", u.getCustomerStripeId());
 			params.put("type", "card");
 	
-			PaymentMethodCollection paymentMethods =
-			  PaymentMethod.list(params);
+			PaymentMethodCollection paymentMethods = this.stripeServ.getPaymentMethodCollection(params);
 			List<PaymentMethod> list = new ArrayList<>();
 			for(PaymentMethod pm : paymentMethods.getData()) {
 					list.add(pm);
@@ -348,10 +348,8 @@ public class UserController {
 			return new ResponseEntity<>(list,HttpStatus.OK);
 		}catch (StripeException e) {
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
-		
-				
 	}
 	
 	@DeleteMapping("/{user}/card/{paymentMethodId}")
@@ -368,21 +366,20 @@ public class UserController {
 		}
 		
 		try {
-			PaymentMethod paymentMethod =  PaymentMethod.retrieve(paymentMethodId);
-			paymentMethod.detach();
+			PaymentMethod paymentMethod =  this.stripeServ.retrievePaymentMethod(paymentMethodId);
+			this.stripeServ.detachPaymentMethod(paymentMethod);
 			SimpleResponse res = new SimpleResponse("true");
 			return new ResponseEntity<>(res,HttpStatus.OK);
 		}catch(StripeException e) {
-			
 			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
 	}
 	
 	
 	
-	//SUBSCRIPTION METHODS
+	//LIFETIME BUY METHODS
 	
     @PostMapping("{userName}/paymentIntent/{tokenId}")
     public ResponseEntity<String> payment(@PathVariable String userName,@RequestBody Product product, @PathVariable String tokenId) throws StripeException {
@@ -404,7 +401,7 @@ public class UserController {
 		paramsPM.put("type", "card");
 		paramsPM.put("card", card);
 
-		PaymentMethod paymentMethod =  PaymentMethod.create(paramsPM);
+		PaymentMethod paymentMethod =  this.stripeServ.createPaymentMethod(paramsPM);
 
 		
     	Map<String, Object> params = new HashMap<>();
@@ -420,7 +417,7 @@ public class UserController {
         params.put("payment_method_types", payment_method_types);
         params.put("customer",u.getCustomerStripeId());
         params.put("receipt_email",u.getEmail());
-        PaymentIntent paymentIntent = PaymentIntent.create(params);
+        PaymentIntent paymentIntent = this.stripeServ.createPaymentIntent(params);
         String paymentStr = paymentIntent.toJson();
         return new ResponseEntity<String>(paymentStr, HttpStatus.OK);
     }
@@ -444,46 +441,16 @@ public class UserController {
     	if(p==null) {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
-    	PaymentIntent paymentIntent = PaymentIntent.retrieve(id);
+    	PaymentIntent paymentIntent = this.stripeServ.retrievePaymentIntent(id);
     	if(paymentIntent==null) {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
         Map<String, Object> params = new HashMap<>();
-        paymentIntent.confirm(params);
+        this.stripeServ.confirmPaymentIntent(paymentIntent, params);
         
 		License license = new License(true, p, userName);
 		licenseServ.save(license);
 				
 		return new ResponseEntity<>(license,HttpStatus.OK);
     }
-    
-
-    private void sendInvoiceToPay (String customerId, Product product) {
-    	try {
-			InvoiceItemCreateParams params2 =
-					  InvoiceItemCreateParams.builder()
-					    .setAmount(product.getPlansPrices().get("L").longValue())
-					    .setCurrency("eur")
-					    .setCustomer(customerId)
-					    .setDescription(product.getName())
-					    .build();
-
-					InvoiceItem invoiceItem = InvoiceItem.create(params2);
-					
-					InvoiceCreateParams params =
-							  InvoiceCreateParams.builder()
-							    .setCustomer(customerId)
-							    .setCollectionMethod(InvoiceCreateParams.CollectionMethod.SEND_INVOICE)
-							    .setDaysUntilDue(1L)
-							    .build();
-
-							Invoice invoice = Invoice.create(params);
-							invoice.sendInvoice();
-		} catch (StripeException e) {
-			e.printStackTrace();
-		}
-    	
-    }
-	
-
 }

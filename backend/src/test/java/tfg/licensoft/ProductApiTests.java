@@ -11,28 +11,31 @@ import org.springframework.boot.test.mock.mockito.MockBean;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
 import org.springframework.http.MediaType;
-import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.mock.web.MockMultipartFile;
 import org.springframework.security.test.context.support.WithMockUser;
 import org.springframework.test.context.junit4.SpringRunner;
 import org.springframework.test.web.servlet.MockMvc;
-import org.springframework.test.web.servlet.request.MockMultipartHttpServletRequestBuilder;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
-import org.springframework.test.web.servlet.request.RequestPostProcessor;
+
+import com.google.gson.Gson;
+import com.stripe.model.Plan;
+import com.stripe.model.Sku;
+import com.stripe.model.Subscription;
+import com.stripe.model.SubscriptionCollection;
+import com.stripe.param.PlanCreateParams;
 
 import tfg.licensoft.api.ApiProductController;
 import tfg.licensoft.licenses.License;
 import tfg.licensoft.licenses.LicenseSubscription;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
+import tfg.licensoft.stripe.StripeServices;
 import tfg.licensoft.users.User;
 
 import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.jsonPath;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.ArrayList;
@@ -60,6 +63,13 @@ public class ProductApiTests {
 	@MockBean
 	private ProductService productServ;
 	
+    
+    @MockBean
+    private StripeServices stripeServ;
+	
+    private Gson jsonParser = new Gson();
+
+    
     @Before
     public void initialize() {
     	User user = new User("test@gmail.com","cus_id1","test","t","ROLE_ADMIN","ROLE_USER");
@@ -219,6 +229,213 @@ public class ProductApiTests {
         mvc.perform(
                 MockMvcRequestBuilders.multipart("/api/products/no/image")
                         .file(image)).andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void testPostProductSubM() throws Exception {
+    	com.stripe.model.Product p = new com.stripe.model.Product();
+    	SubscriptionCollection sc = new SubscriptionCollection();
+    	List<Subscription> data = new ArrayList<>();
+    	Subscription s = new Subscription();
+    	Plan pl1 = new Plan();
+    	pl1.setNickname("M");
+    	s.setPlan(pl1);
+    	data.add(s);
+    	sc.setData(data);
+    	
+    	Product pS= new Product();
+    	pS.setName("PS");
+    	HashMap<String,Double> plans2 = new HashMap<>();
+    	plans2.put("M", 10.0);
+    	pS.setPlansPrices(plans2);
+
+    	
+    	given(productServ.findOne(pS.getName())).willReturn(null);
+    	given(this.stripeServ.createProduct(any())).willReturn(p);
+    	given(this.stripeServ.createPlan((HashMap<String,Object>)any())).willReturn(pl1);
+
+    	mvc.perform(MockMvcRequestBuilders.post("/api/products/")
+    			.content(jsonParser.toJson(pS))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.plansPrices.M",is(10.0)));
+    }
+    
+    @Test
+    public void testPostProductSubD() throws Exception {
+    	com.stripe.model.Product p = new com.stripe.model.Product();
+    	SubscriptionCollection sc = new SubscriptionCollection();
+    	List<Subscription> data = new ArrayList<>();
+    	Subscription s = new Subscription();
+    	Plan pl1 = new Plan();
+    	pl1.setNickname("D");
+    	s.setPlan(pl1);
+    	data.add(s);
+    	sc.setData(data);
+    	
+    	Product pS= new Product();
+    	pS.setName("PS");
+    	HashMap<String,Double> plans2 = new HashMap<>();
+    	plans2.put("D", 10.0);
+    	pS.setPlansPrices(plans2);
+    	
+    	given(productServ.findOne(pS.getName())).willReturn(null);
+    	given(this.stripeServ.createProduct(any())).willReturn(p);
+    	given(this.stripeServ.createPlan((HashMap<String,Object>)any())).willReturn(pl1);
+ 
+    	mvc.perform(MockMvcRequestBuilders.post("/api/products/")
+    			.content(jsonParser.toJson(pS))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.plansPrices.D",is(10.0)));
+    }
+    
+    @Test
+    public void testPostProductSubA() throws Exception {
+    	com.stripe.model.Product p = new com.stripe.model.Product();
+    	SubscriptionCollection sc = new SubscriptionCollection();
+    	List<Subscription> data = new ArrayList<>();
+    	Subscription s = new Subscription();
+    	Plan pl1 = new Plan();
+    	pl1.setNickname("A");
+    	s.setPlan(pl1);
+    	data.add(s);
+    	sc.setData(data);
+    	
+    	Product pS= new Product();
+    	pS.setName("PS");
+    	HashMap<String,Double> plans2 = new HashMap<>();
+    	plans2.put("A", 10.0);
+    	pS.setPlansPrices(plans2);
+
+    	
+    	given(productServ.findOne(pS.getName())).willReturn(null);
+    	given(this.stripeServ.createProduct(any())).willReturn(p);
+    	given(this.stripeServ.createPlan((HashMap<String,Object>)any())).willReturn(pl1);
+ 
+    	mvc.perform(MockMvcRequestBuilders.post("/api/products/")
+    			.content(jsonParser.toJson(pS))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.plansPrices.A",is(10.0)));
+    }
+     
+    @Test
+    public void testPostProductSubMB() throws Exception {
+    	com.stripe.model.Product p = new com.stripe.model.Product();
+    	SubscriptionCollection sc = new SubscriptionCollection();
+    	List<Subscription> data = new ArrayList<>();
+    	Subscription s = new Subscription();
+    	Plan pl1 = new Plan();
+    	pl1.setNickname("MB");
+    	s.setPlan(pl1);
+    	data.add(s);
+    	sc.setData(data);
+    	
+    	Product pS= new Product();
+    	pS.setName("PS");
+    	HashMap<String,Double> plans2 = new HashMap<>();
+    	plans2.put("MB", 10.0);
+    	pS.setPlansPrices(plans2);
+    	
+    	given(productServ.findOne(pS.getName())).willReturn(null);
+    	given(this.stripeServ.createProduct(any())).willReturn(p);
+    	given(this.stripeServ.createPlan((PlanCreateParams)any())).willReturn(pl1);
+ 
+    	mvc.perform(MockMvcRequestBuilders.post("/api/products/")
+    			.content(jsonParser.toJson(pS))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.plansPrices.MB",is(10.0)));
+    }
+    
+    @Test
+    public void testPostProductLifetime() throws Exception {
+    	com.stripe.model.Product p = new com.stripe.model.Product();
+    	Product pS= new Product();
+    	pS.setName("PL");
+    	HashMap<String,Double> plans2 = new HashMap<>();
+    	plans2.put("L", 10.0);
+    	pS.setPlansPrices(plans2);    	
+		Sku sku = new Sku();
+ 
+     
+    	given(productServ.findOne(pS.getName())).willReturn(null);
+    	given(this.stripeServ.createProduct(any())).willReturn(p);
+    	given(this.stripeServ.createSku(any())).willReturn(sku);
+ 
+    	mvc.perform(MockMvcRequestBuilders.post("/api/products/")
+    			.content(jsonParser.toJson(pS))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.name",is("PL")));
+    }
+    
+    @Test
+    public void testPostProductSubAlreadyExistingProduct() throws Exception {
+    	Product pS= new Product();
+    	pS.setName("PS");
+
+    	mvc.perform(MockMvcRequestBuilders.post("/api/products/")
+    			.content(jsonParser.toJson(pS))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
+    
+    @Test
+    public void testEditProduct () throws Exception{
+    	com.stripe.model.Product p = new com.stripe.model.Product();
+
+    	Product pPreChanged= new Product();
+    	pPreChanged.setDescription("last Desc");
+    	pPreChanged.setName("PS");
+    	
+    	Product pS= new Product();
+    	pS.setName("PS");
+    	pS.setProductStripeId("p_id");
+    	pS.setDescription("new Desc");
+    	HashMap<String,Double> plans2 = new HashMap<>();
+    	plans2.put("MB", 10.0);
+    	pS.setPlansPrices(plans2);
+    	
+    	given(this.productServ.findOne("PS")).willReturn(pPreChanged);
+    	given(this.stripeServ.retrieveProduct("p_id")).willReturn(p);
+    	given(this.stripeServ.updateProduct(any(), any())).willReturn(p);
+    	given(this.productServ.save(pS)).willReturn(pS);
+    	mvc.perform(MockMvcRequestBuilders.put("/api/products/")
+    			.content(jsonParser.toJson(pS))
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.description",is("new Desc")));
+    }
+    
+    @Test
+    public void testEditProductNoContent () throws Exception{
+    	Product pS= new Product();
+    	pS.setName("no");
+
+    	mvc.perform(MockMvcRequestBuilders.put("/api/products/")
+    			.content(jsonParser.toJson(pS))
+    			.contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
+    }
+    
+    @Test
+    public void testDeleteProduct () throws Exception{
+    	Product pS= new Product();
+    	pS.setName("PS");
+    	pS.setProductStripeId("p_id");
+    	pS.setDescription("new Desc");
+    	pS.setActive(true);
+    	HashMap<String,Double> plans2 = new HashMap<>();
+    	plans2.put("MB", 10.0);
+    	pS.setPlansPrices(plans2);
+    	
+    	mvc.perform(MockMvcRequestBuilders.delete("/api/products/PS")
+    			.contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.active",is(false)));
+    	
+    }
+    
+    @Test
+    public void testDeleteNoContent() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.delete("/api/products/no")
+    			.contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNoContent());
     }
     
 }

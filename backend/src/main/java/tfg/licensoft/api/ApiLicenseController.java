@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.*;
 import tfg.licensoft.licenses.*;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
+import tfg.licensoft.stripe.StripeServices;
 import tfg.licensoft.users.User;
 import tfg.licensoft.users.UserService;
 import com.stripe.exception.StripeException;
@@ -31,6 +32,8 @@ public class ApiLicenseController {
 	private LicenseSubscriptionService licenseSubsServ;
 	@Autowired
 	private ProductService productServ;
+	@Autowired
+	private StripeServices stripeServ;
 	
 	
 	@Autowired 
@@ -70,39 +73,36 @@ public class ApiLicenseController {
 			return new ResponseEntity<Page<License>>(licenses,HttpStatus.OK);
 		}
 	} 
-	
+	 
 	@PutMapping(value="/cancelAtEnd/{serial}/products/{product}")
 	public ResponseEntity<License> cancelAtEndLicense(@PathVariable String serial, @PathVariable String product){
 		Product p = this.productServ.findOne(product);
 		LicenseSubscription l = this.licenseSubsServ.findBySerialAndProduct(serial,p);
-		boolean newCancelAtEnd = !l.getCancelAtEnd();
 		if(l!=null && p!=null) {
+			boolean newCancelAtEnd = !l.getCancelAtEnd();
 			User u = this.userServ.findByName(l.getOwner());
 			try {
-				Customer c = Customer.retrieve(u.getCustomerStripeId());
+				Customer c = this.stripeServ.retrieveCustomer(u.getCustomerStripeId());
 				
 				for(Subscription s:c.getSubscriptions().getData()) {
 					System.out.println(s.getPlan().getNickname() + " ->");
 					if(s.getPlan().getNickname().equals(l.getType())) {
-							com.stripe.model.Product productStripe = com.stripe.model.Product.retrieve(s.getPlan().getProduct());
+							com.stripe.model.Product productStripe = this.stripeServ.retrieveProduct(s.getPlan().getProduct());
 							if(productStripe.getName().equals(p.getName())){
 								Map<String, Object> params = new HashMap<>();
 								params.put("cancel_at_period_end", newCancelAtEnd);
-								//s.cancel(params);
-								s.update(params);
+								this.stripeServ.updateSubscription(s, params);
 								l.setCancelAtEnd(newCancelAtEnd);
 								this.licServ.save(l);
 							}
-
 					}
-					
-
+			 		
 				}
 				
 			} catch (StripeException e) {
 				e.printStackTrace();
+				return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-
 			return new ResponseEntity<License>(l,HttpStatus.OK);
 		}else {
 			return new ResponseEntity<License>(HttpStatus.PRECONDITION_REQUIRED);

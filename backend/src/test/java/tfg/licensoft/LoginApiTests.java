@@ -3,6 +3,7 @@ package tfg.licensoft;
 import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
+import org.mockito.Mockito;
 import org.mockito.Spy;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.AutoConfigureMockMvc;
@@ -22,13 +23,17 @@ import tfg.licensoft.users.User;
 import tfg.licensoft.users.UserComponent;
 import tfg.licensoft.users.UserService;
 
+import static org.springframework.security.test.web.servlet.request.SecurityMockMvcRequestPostProcessors.httpBasic;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
+import javax.servlet.http.HttpServletRequest;
+
 import static org.mockito.ArgumentMatchers.any;
 import static org.hamcrest.Matchers.*;
+import static org.mockito.BDDMockito.given;
 import static org.mockito.BDDMockito.given;
 
 @RunWith(SpringRunner.class)
@@ -49,6 +54,10 @@ public class LoginApiTests {
     @MockBean
     private UserService userServ;
     
+    @MockBean
+    private HttpServletRequest req;
+    
+    
     
     @Before
     public void initialize() {
@@ -60,6 +69,11 @@ public class LoginApiTests {
     	Page<User> usersPage = new PageImpl<User>(l);
 
     	given(this.userServ.findAll(any())).willReturn(usersPage);
+    	given(this.userServ.findByEmail("test@gmail.com")).willReturn(user);
+    	given(this.userServ.findByEmail("new@gmail.com")).willReturn(null);
+    	given(this.userServ.findByName("new")).willReturn(null);
+    	given(this.userServ.findByName("test")).willReturn(user);
+
 
     }
     
@@ -124,5 +138,21 @@ public class LoginApiTests {
                 .andExpect(jsonPath("$.email",is("test@gmail.com")));
     }
     
+    @Test
+    public void testRegister() throws Exception{
+    	Mockito.doNothing().when(req).login(any(), any());
+    	//It will throw a ServletException because there's alreay a session logged (admin)
+    	mvc.perform(MockMvcRequestBuilders.post("/api/register/new/pass/pass/kikevalps3@gmail.com")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk());
+    	//As the register process does, a mail is sent to the email introduced on the url
+    }
+    
+    @Test
+    public void testRegisterConflict() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.post("/api/register/test/pass/pass/kikevalps3@gmail.com")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isConflict());
+    }
     
 }
