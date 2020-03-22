@@ -46,6 +46,7 @@ In Licensoft there are 2 types of roles: **ADMIN** and **USER**.
 * TypeSubs (String[]) 
 * PhotoAvailable (boolean)
 * PlansPrices (Map<String, Number>)
+* Plans (Map<String,String>)
 * Sku (String)
 * Active (boolean)
 * ProductStripeId (String)
@@ -77,6 +78,7 @@ Object with statistics of a License (by ip)
 
 
 ### User
+* Email (String)
 * Name (String)
 * Roles (String[])
 * Password (String - hashed)
@@ -86,7 +88,7 @@ Object with statistics of a License (by ip)
 *	Last4 (int)
 *	ExpMonth (int)
 *	ExpYear (int)
-*	ProductName (int)
+*	ProductName (String)
 
 ## ADMIN Habilities
 ### Add Product - Subscription type <a name="add-product-subs"></a>

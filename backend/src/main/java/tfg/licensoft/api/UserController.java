@@ -426,6 +426,7 @@ public class UserController {
     
     @PostMapping("{userName}/confirm/{id}/products/{productName}")
     public ResponseEntity<License> confirm(@PathVariable String id, @PathVariable String userName, @PathVariable String productName) throws StripeException {
+    	
     	Product p = this.productServ.findOne(productName);
 		User user = this.userServ.findByName(userName);
 
