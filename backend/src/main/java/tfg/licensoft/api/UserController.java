@@ -26,6 +26,8 @@ import com.stripe.param.InvoiceItemCreateParams;
 import com.stripe.param.SubscriptionCreateParams;
 
 import java.util.ArrayList;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -300,7 +302,7 @@ public class UserController {
 		}
 	}
 	
-	private void setTimerAndEndDate(LicenseSubscription license, long trialDays) {
+	private void setTimerAndEndDate(LicenseSubscription license, long trialDays) {		
 		Timer time = new Timer();
 		System.out.println(license.getEndDate());
 		time.schedule(new TimerTask() {

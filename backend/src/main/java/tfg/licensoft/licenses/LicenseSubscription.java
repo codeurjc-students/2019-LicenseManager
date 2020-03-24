@@ -81,6 +81,25 @@ public class LicenseSubscription extends License {
 		this.nUsage= 0 ;
 	}
 
+	
+	
+	
+	public Long getId() {
+		return id;
+	}
+
+
+
+
+
+	public void setId(Long id) {
+		this.id = id;
+	}
+
+
+
+
+
 	public boolean isTrial() {
 		return trial;
 	}
