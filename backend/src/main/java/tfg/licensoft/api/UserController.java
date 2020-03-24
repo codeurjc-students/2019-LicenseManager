@@ -304,12 +304,13 @@ public class UserController {
 	
 	private void setTimerAndEndDate(LicenseSubscription license, long trialDays) {		
 		Timer time = new Timer();
-		System.out.println(license.getEndDate());
+		System.out.println("Nex renewal --> " + license.getEndDate());
 		time.schedule(new TimerTask() {
 			
 
 			@Override
 			public void run() {
+				System.out.println("Renewal doing on " + license);
 				license.renew(trialDays);
 				LicenseSubscription newL = licenseSubsServ.save(license);
 				setTimerAndEndDate(newL,0);
