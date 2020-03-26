@@ -1,4 +1,4 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, OnInit, Directive, Input } from '@angular/core';
 import { User, LoginService } from '../login/login.service';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { UserProfileService } from './userProfile.service';
@@ -12,8 +12,6 @@ import { DialogService } from '../dialogs/dialog.service';
     styleUrls: ['./userProfile.component.css']
 
   })
-
-
   export class UserProfileComponent{
     user:User;
     loading:boolean;
@@ -28,6 +26,9 @@ import { DialogService } from '../dialogs/dialog.service';
     exp_month = new FormControl('',Validators.required);
     exp_year = new FormControl('',Validators.required);
 
+    visaError:boolean = false;
+    amexError:boolean = false;
+    mcError:boolean = false;
     
     constructor(private dialogService:DialogService,private userProfileService:UserProfileService,private activeRoute:ActivatedRoute,private loginService:LoginService){
       this.user=this.loginService.user;
@@ -74,6 +75,16 @@ import { DialogService } from '../dialogs/dialog.service';
          def => this.getCards(),
          error => console.log(error)
        )
+     }
+
+     updateUrl(brand:string){
+       if(brand=='visa'){
+        this.visaError=true;
+       }else if(brand=='mastercard'){
+         this.mcError=true;
+       }else if(brand=='amex'){
+         this.amexError=true;
+        }
      }
 
 
