@@ -229,7 +229,7 @@ public class UserController {
 				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
 				license.setSubscriptionId(subscription.getId());
 				licenseServ.save(license);
-				this.setTimerAndEndDate(license,product.getTrialDays());
+				this.setTimerAndEndDate(license.getSerial(),license.getProduct(),product.getTrialDays());
 				return new ResponseEntity<License>(license,HttpStatus.OK);
 
 			}catch(StripeException e) {
@@ -292,9 +292,8 @@ public class UserController {
 				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
 				license.setSubscriptionId(subscription.getId());
 				licenseServ.save(license);
-				if(automaticRenewal) {
-					this.setTimerAndEndDate(license,0);
-				}
+				this.setTimerAndEndDate(license.getSerial(),license.getProduct(),0);
+				
 				return new ResponseEntity<License>(license,HttpStatus.OK);
 			
 		}else {
@@ -302,25 +301,38 @@ public class UserController {
 		}
 	}
 	
-	private void setTimerAndEndDate(LicenseSubscription license, long trialDays) {		
+	private void setTimerAndEndDate(String licenseSerial, Product product,long trialDays) {	
+		LicenseSubscription license = licenseSubsServ.findBySerialAndProduct(licenseSerial, product);
+		System.out.println("Setting " + license.getSerial() + " timer");
+		
 		Timer time = new Timer();
-		System.out.println("Nex renewal --> " + license.getEndDate());
-		time.schedule(new TimerTask() {
-			
-
-			@Override
-			public void run() {
-				System.out.println("Renewal doing on " + license);
-				license.renew(trialDays);
-				LicenseSubscription newL = licenseSubsServ.save(license);
-				setTimerAndEndDate(newL,0);
+			time.schedule(new TimerTask() {
 				
-			}
-			
-		}, 
-				license.getEndDate()
+				@Override
+				public void run() {
+					LicenseSubscription license = licenseSubsServ.findBySerialAndProduct(licenseSerial, product);
+					if(license==null) {
+						return;
+					}else {
+						if(license.getCancelAtEnd()) {
+							System.out.println("Setting license inactive...");
+							license.setActive(false);
+							licenseSubsServ.save(license);
+						}else {
+							System.out.println("Renewal doing on " + license);
+							license.renew(trialDays);
+							licenseSubsServ.save(license);
+							setTimerAndEndDate(licenseSerial,product,0);
+						}
+					}
+					
+				}
 				
-		);
+			}, 
+					
+					license.getEndDate()
+					
+			);
 	}
 	
 	

@@ -100,6 +100,7 @@ public class License {
 		return active;
 	}
 	public void setActive(boolean active) {
+		System.out.println("SETTING ACTIVE: " + active);
 		this.active = active;
 	}
 

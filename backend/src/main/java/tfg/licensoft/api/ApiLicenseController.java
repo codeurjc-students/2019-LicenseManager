@@ -85,7 +85,6 @@ public class ApiLicenseController {
 				Customer c = this.stripeServ.retrieveCustomer(u.getCustomerStripeId());
 				
 				for(Subscription s:c.getSubscriptions().getData()) {
-					System.out.println(s.getPlan().getNickname() + " ->");
 					if(s.getPlan().getNickname().equals(l.getType())) {
 							com.stripe.model.Product productStripe = this.stripeServ.retrieveProduct(s.getPlan().getProduct());
 							if(productStripe.getName().equals(p.getName())){
