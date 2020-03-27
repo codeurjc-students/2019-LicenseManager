@@ -82,21 +82,13 @@ public class ApiLicenseController {
 			boolean newCancelAtEnd = !l.getCancelAtEnd();
 			User u = this.userServ.findByName(l.getOwner());
 			try {
-				Customer c = this.stripeServ.retrieveCustomer(u.getCustomerStripeId());
+				Map<String, Object> params = new HashMap<>();
+				params.put("cancel_at_period_end", newCancelAtEnd);
+				Subscription s = this.stripeServ.retrieveSubscription(l.getSubscriptionId());
+				this.stripeServ.updateSubscription(s, params);
+				l.setCancelAtEnd(newCancelAtEnd);
+				this.licServ.save(l);
 				
-				for(Subscription s:c.getSubscriptions().getData()) {
-					if(s.getPlan().getNickname().equals(l.getType())) {
-							com.stripe.model.Product productStripe = this.stripeServ.retrieveProduct(s.getPlan().getProduct());
-							if(productStripe.getName().equals(p.getName())){
-								Map<String, Object> params = new HashMap<>();
-								params.put("cancel_at_period_end", newCancelAtEnd);
-								this.stripeServ.updateSubscription(s, params);
-								l.setCancelAtEnd(newCancelAtEnd);
-								this.licServ.save(l);
-							}
-					}
-			 		
-				}
 				
 			} catch (StripeException e) {
 				e.printStackTrace();

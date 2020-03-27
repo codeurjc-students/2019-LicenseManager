@@ -31,6 +31,7 @@ import com.stripe.param.SubscriptionCreateParams;
 
 import tfg.licensoft.api.UserController;
 import tfg.licensoft.licenses.LicenseService;
+import tfg.licensoft.licenses.LicenseSubscription;
 import tfg.licensoft.licenses.LicenseSubscriptionService;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
@@ -174,6 +175,10 @@ public class UserApiTests {
     	given(this.stripeServ.createPaymentIntent(any())).willReturn(pi);
     	
     	given(this.stripeServ.retrievePaymentIntent("pi_id")).willReturn(pi);
+    	
+    	
+    	LicenseSubscription licS = new LicenseSubscription(true,"D",pS,"user",0);
+    	given(this.licenseSubsServ.findBySerialAndProduct(any(), any())).willReturn(licS);
 
     }
     

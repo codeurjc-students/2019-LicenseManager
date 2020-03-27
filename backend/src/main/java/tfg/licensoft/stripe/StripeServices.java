@@ -83,6 +83,10 @@ public class StripeServices {
 		return Subscription.create(params);
 	}
 	
+	public Subscription retrieveSubscription(String subscriptionId) throws StripeException {
+		return Subscription.retrieve(subscriptionId);
+	}
+	
 	public PaymentMethodCollection getPaymentMethodCollection(Map<String, Object> params) throws StripeException {
 		return PaymentMethod.list(params);
 	}
