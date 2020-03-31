@@ -171,7 +171,9 @@ public class LicencheckApiTests {
     public void testUpdateUsageNotFirstTime() throws Exception {
     	LicenseStatistics lStat = new LicenseStatistics();
     	lStat.setnUsage(5);
-    	given(this.licenseStatServ.findByLicenseAndIp(any(), any())).willReturn(lStat);
+    	List<LicenseStatistics> lStats = new ArrayList<>();
+    	lStats.add(lStat);
+    	given(this.licenseStatServ.findByLicenseAndIp(any(), any())).willReturn(lStats);
 
     	mvc.perform(MockMvcRequestBuilders.put("/licencheck/updateUsage/2/PS/smb2")
                 .contentType(MediaType.APPLICATION_JSON))

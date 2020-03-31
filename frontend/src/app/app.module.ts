@@ -94,6 +94,8 @@ import { DialogFreeTrial } from './dialogs/dialogFreeTrial.component';
 import { UsedCardService } from './usedCard/usedCard.service';
 import { LicenseStatistics } from './licenseStatistics/licenseStatistics.model';
 import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistics.component';
+import { PieChartComponent } from './charts/pie-chart.component';
+import { BarChartComponent } from './charts/bar-chart.component';
 
 @NgModule({
     imports: [ 
@@ -157,7 +159,7 @@ import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistic
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent, LicenseStatisticsComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
+    declarations: [AppComponent,BarChartComponent, PieChartComponent, LicenseStatisticsComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
     bootstrap: [AppComponent],
     entryComponents: [DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent, DialogFreeTrial,
     ],

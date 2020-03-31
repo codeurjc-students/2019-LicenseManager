@@ -5,5 +5,8 @@ export interface LicenseStatistics{
 	license:License;
 	ip:string;
 	nUsage:number;
-	lastUsage:Date;
+	usages:Date[];
+	userName:string;
+	usagePerTime:Map<String,number>;
+
 }

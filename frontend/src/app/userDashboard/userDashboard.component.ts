@@ -23,6 +23,8 @@ export class UserDashboardComponent implements OnInit{
     numberOfElements = 5;
     
     pageActual:number;
+
+
     constructor(private dialogService:DialogService,private licenseService:LicenseService,private datepipe: DatePipe,private router:Router,public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute, public loginService:LoginService){}
 
 

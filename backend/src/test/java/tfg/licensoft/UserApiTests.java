@@ -260,7 +260,7 @@ public class UserApiTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
-
+    
     @Test
     public void testAddTrialForbidden() throws Exception {
     	mvc.perform(MockMvcRequestBuilders.put("/api/users/test/products/PS/addTrial/cards/tok_visa")

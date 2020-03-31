@@ -1,17 +1,16 @@
 package tfg.licensoft.licencheck;
 
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
-
 import com.stripe.exception.StripeException;
 import com.stripe.model.Subscription;
 import com.stripe.model.UsageRecord;
 import com.stripe.net.RequestOptions;
 
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.UUID;
 
 import javax.servlet.http.HttpServletRequest;
@@ -74,7 +73,7 @@ public class ApiLicencheckController {
 	
 	//It checks the license too
 	@PutMapping("updateUsage/{usage}/{productName}/{licenseSerial}")
-	public ResponseEntity<Integer> updateUsage(@PathVariable int usage,@PathVariable String licenseSerial, @PathVariable String productName , HttpServletRequest request) {
+	public ResponseEntity<Integer> updateUsage(@PathVariable int usage,@PathVariable String licenseSerial, @PathVariable String productName , HttpServletRequest request,  @RequestParam Optional<String> userName) {
 		LicenseSubscription l ;
 		try {
 			l=(LicenseSubscription) this.checkLicense(licenseSerial, productName).getBody();
@@ -113,19 +112,31 @@ public class ApiLicencheckController {
 			l.setnUsage(l.getnUsage()+usage);
 			License newL = this.licenseService.save(l);
 			
-			
-			//Statistics for IP&License
-			LicenseStatistics lStat = this.licenseStatService.findByLicenseAndIp(l, request.getRemoteAddr());
-			if(lStat==null) {
-				lStat = new LicenseStatistics();
+			String user;
+			//Statistics for UserName&IP&License
+			if(userName.isPresent()) {
+				user = userName.get();
+			}else {
+				user = null;
 			}
-			lStat.setLicense(newL);
-			lStat.setnUsage(lStat.getnUsage()+usage);
-			lStat.setIp(request.getRemoteAddr());
-			lStat.setLastUsage(new Date());
-			this.licenseStatService.save(lStat);
+			LicenseStatistics lStats = this.licenseStatService.findByLicenseAndIpAndUserName(l, request.getRemoteAddr(), user);
+			if(lStats==null) {
+				lStats = new LicenseStatistics(newL);
+				System.out.println("Creating new");
+			}
 			
-			
+			lStats.setnUsage(lStats.getnUsage()+usage);
+			lStats.setIp(request.getRemoteAddr());
+			lStats.getUsages().add(new Date());					
+			lStats.setUserName(user);	
+			String formatedDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+			if (lStats.getUsagePerTime().containsKey(formatedDate)) {
+				lStats.getUsagePerTime().put(formatedDate, lStats.getUsagePerTime().get(formatedDate)+usage);
+			}else {
+				lStats.getUsagePerTime().put(formatedDate, usage);
+			}
+			this.licenseStatService.save(lStats);
+					
 			return new ResponseEntity<>(l.getnUsage(),HttpStatus.OK);
 		} catch (StripeException e) {
 			e.printStackTrace();

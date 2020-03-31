@@ -7,3 +7,12 @@ mat-card{
 
 .text{padding: 15px;}
 
+.center-div-pie{
+    margin-left: auto;
+    margin-right: auto;
+    width: 700px;
+  }
+
+#barChart{
+    height: 400px;
+}

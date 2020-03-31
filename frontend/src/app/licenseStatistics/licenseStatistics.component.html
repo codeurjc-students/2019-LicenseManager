@@ -1,14 +1,52 @@
 <div class="background" id="appRootClass">
-    <br>
+<br>
 
-    <mat-card>
-        <mat-card-title>Statistics of {{productName}} - License Serial: {{license?.serial}}</mat-card-title>
-        <hr>
-        <a class="text">Number of Users/Different IPs: {{license?.licenseStats.length}}</a>
+<mat-card>
+    <mat-card-title>Statistics of {{productName}} - License Serial: {{license?.serial}}</mat-card-title>
+    <hr>
+    <mat-tab-group>
+        <mat-tab label="By IP">
+            <mat-card-content>
+                <a class="text">Number of Different IPs: {{licensesByIpMap.size}}</a>
+                <div class="center-div-pie">     
+                    <app-pie-chart *ngIf="licensesByIpMap?.size!=0" [statsMap]="licensesByIpMap"  (setLineChart)="setLineChart($event)"></app-pie-chart>
+                </div>
+                <mat-grid-list cols="3"  rowHeight="4rem">
+                    <mat-grid-tile>
+                        <a><strong>IP</strong></a>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <a><strong>USAGE</strong></a>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <a><strong>LAST USAGE DATE</strong></a>
+                    </mat-grid-tile>
+                </mat-grid-list>
+                <mat-grid-list cols="3"  rowHeight="4rem">
+
+                    <div *ngFor="let item of statListMapIP | keyvalue">
+                        <mat-grid-tile>
+                            <a>{{item.key}}</a>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <a>{{item.value.nUsage}}</a>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <a>{{item.value.usages[item.value.usages.length-1] | date:'medium'}}</a>
+                        </mat-grid-tile>
+                    </div>  
+                </mat-grid-list>
+            </mat-card-content>
+        </mat-tab>
+    <mat-tab label="By Name">
         <mat-card-content>
+            <a class="text">Number of Different UserNames: {{licensesByNameMap.size}}</a>
+            <div class="center-div-pie">     
+                <app-pie-chart *ngIf="licensesByNameMap?.size!=0" [statsMap]="licensesByNameMap"   (setLineChart)="setLineChart($event)"></app-pie-chart>
+            </div>
             <mat-grid-list cols="3"  rowHeight="4rem">
                 <mat-grid-tile>
-                    <a><strong>IP</strong></a>
+                    <a><strong>NAME</strong></a>
                 </mat-grid-tile>
                 <mat-grid-tile>
                     <a><strong>USAGE</strong></a>
@@ -19,18 +57,32 @@
             </mat-grid-list>
             <mat-grid-list cols="3"  rowHeight="4rem">
 
-                <div *ngFor="let user of license?.licenseStats">
+                <div *ngFor="let item of statListMapName |keyvalue">
                     <mat-grid-tile>
-                        <a>{{user.ip}}</a>
+                        <a>{{item.key}}</a>
                     </mat-grid-tile>
                     <mat-grid-tile>
-                        <a>{{user.nUsage}}</a>
+                        <a>{{item.value.nUsage}}</a>
                     </mat-grid-tile>
                     <mat-grid-tile>
-                        <a>{{user.lastUsage | date:'medium'}}</a>
+                        <a>{{item.value.usages[item.value.usages.length-1] | date:'medium'}}</a>
                     </mat-grid-tile>
                 </div>  
             </mat-grid-list>
         </mat-card-content>
-    </mat-card>
+    </mat-tab>
+</mat-tab-group>    
+
+</mat-card>
+
+<mat-card *ngIf="selected!=''" id="barChart">
+    <mat-card-title>Usage chart of : {{selected}}</mat-card-title>
+    <hr>
+    <div>
+    <mat-card-content> 
+        <bar-chart-component *ngIf="!loading" [statsMap]="lineChartMap"></bar-chart-component>
+    </mat-card-content>
+    </div>
+</mat-card>
+
 </div>
