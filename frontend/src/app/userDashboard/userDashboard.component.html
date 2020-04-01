@@ -65,8 +65,8 @@
                         </div>
                     </mat-grid-tile>
                     <mat-grid-tile>
-                        <span *ngIf="license.type=='MB' && license.active">{{license.nUsage}} <i class="link" (click)="goToStats(license?.product.name,license.serial)">(View)</i></span>
-                        <span *ngIf="license.type!='MB' && license.active">-</span>
+                        <span *ngIf="license.type!='L' && license.active">{{license.nUsage}} <i class="link" (click)="goToStats(license?.product.name,license.serial)">(View)</i></span>
+                        <span *ngIf="license.type=='L' && license.active">-</span>
                         <span *ngIf="!license.active">-</span>
 
                     </mat-grid-tile>

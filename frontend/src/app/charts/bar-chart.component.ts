@@ -18,7 +18,7 @@ import { Component, Input, SimpleChanges, OnInit, Output, EventEmitter, HostList
     gradient = false;
     showLegend = false;
     showXAxisLabel = true;
-    xAxisLabel = 'Date (MM/dd/yyyy)';
+    xAxisLabel = 'Date';
     showYAxisLabel = true;
     yAxisLabel = 'Usages';
   

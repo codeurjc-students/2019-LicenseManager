@@ -87,62 +87,71 @@ public class ApiLicencheckController {
 		
 		
 		//Only permitted for MB subscribe (for now)
-		if(!l.getType().equals("MB")) {
+		/*if(!l.getType().equals("MB")) {
 			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
+		}*/
+		
+		if(l.getType().equals("MB")) {
+
+			long unixTime = System.currentTimeMillis() / 1000L; 
+	
+			Map<String, Object> usageRecordParams = new HashMap<String, Object>();
+			usageRecordParams.put("quantity", usage);
+			usageRecordParams.put("timestamp", unixTime);
+			usageRecordParams.put("action", "increment");
+			
+			
+	
+			//To avoid problems if Connection Errors (duplications, etc)
+			RequestOptions options = RequestOptions
+					  .builder()
+					  .setIdempotencyKey(UUID.randomUUID().toString())
+					  .build();
+	
+			
+			try {
+	
+				this.stripeServ.createOnSubscriptionItem(l.getSubscriptionItemId(), usageRecordParams, options);
+			} catch (StripeException e) {
+				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+	
+			} 
 		}
 		
-
-		long unixTime = System.currentTimeMillis() / 1000L; 
-
-		Map<String, Object> usageRecordParams = new HashMap<String, Object>();
-		usageRecordParams.put("quantity", usage);
-		usageRecordParams.put("timestamp", unixTime);
-		usageRecordParams.put("action", "increment");
+		l.setnUsage(l.getnUsage()+usage);
+		License newL = this.licenseService.save(l);
 		
+		String user;
+		//Statistics for UserName&IP&License
+		if(userName.isPresent()) {
+			user = userName.get();
+		}else {
+			user = null;
+		}
+		LicenseStatistics lStats = this.licenseStatService.findByLicenseAndIpAndUserName(l, request.getRemoteAddr(), user);
+		if(lStats==null) {
+			lStats = new LicenseStatistics(newL);
+			System.out.println("Creating new");
+		}
 		
+		lStats.setnUsage(lStats.getnUsage()+usage);
+		lStats.setIp(request.getRemoteAddr());
+		lStats.getUsages().add(new Date());					
+		lStats.setUserName(user);	
+		
+		String formatedDate =lStats.getFormattedDate(new Date());
+		
+		//String formatedDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
+		if (lStats.getUsagePerTime().containsKey(formatedDate)) {
+			lStats.getUsagePerTime().put(formatedDate, lStats.getUsagePerTime().get(formatedDate)+usage);
+		}else {
+			lStats.getUsagePerTime().put(formatedDate, usage);
+		}
+		this.licenseStatService.save(lStats);
+				
+		return new ResponseEntity<>(l.getnUsage(),HttpStatus.OK);
 
-		//To avoid problems if Connection Errors (duplications, etc)
-		RequestOptions options = RequestOptions
-				  .builder()
-				  .setIdempotencyKey(UUID.randomUUID().toString())
-				  .build();
-
-		try {
-			this.stripeServ.createOnSubscriptionItem(l.getSubscriptionItemId(), usageRecordParams, options);
-			l.setnUsage(l.getnUsage()+usage);
-			License newL = this.licenseService.save(l);
-			
-			String user;
-			//Statistics for UserName&IP&License
-			if(userName.isPresent()) {
-				user = userName.get();
-			}else {
-				user = null;
-			}
-			LicenseStatistics lStats = this.licenseStatService.findByLicenseAndIpAndUserName(l, request.getRemoteAddr(), user);
-			if(lStats==null) {
-				lStats = new LicenseStatistics(newL);
-				System.out.println("Creating new");
-			}
-			
-			lStats.setnUsage(lStats.getnUsage()+usage);
-			lStats.setIp(request.getRemoteAddr());
-			lStats.getUsages().add(new Date());					
-			lStats.setUserName(user);	
-			String formatedDate = new SimpleDateFormat("MM/dd/yyyy").format(new Date());
-			if (lStats.getUsagePerTime().containsKey(formatedDate)) {
-				lStats.getUsagePerTime().put(formatedDate, lStats.getUsagePerTime().get(formatedDate)+usage);
-			}else {
-				lStats.getUsagePerTime().put(formatedDate, usage);
-			}
-			this.licenseStatService.save(lStats);
-					
-			return new ResponseEntity<>(l.getnUsage(),HttpStatus.OK);
-		} catch (StripeException e) {
-			e.printStackTrace();
-			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-
-		} 
 	} 
 	
 	

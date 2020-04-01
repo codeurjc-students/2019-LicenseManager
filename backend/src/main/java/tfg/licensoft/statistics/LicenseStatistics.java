@@ -54,7 +54,6 @@ public class LicenseStatistics {
 	private void setUsagePerTimeReady() {
 		this.usagePerTime = new HashMap<>();
 	    try{
-			List<Date> datesInRange = new ArrayList<>();
 		    Calendar calendar = new GregorianCalendar();
 		    calendar.setTime(this.license.getStartDate());
 		     
@@ -62,11 +61,31 @@ public class LicenseStatistics {
 		    LicenseSubscription ls = (LicenseSubscription)(this.license);
 		    endCalendar.setTime(ls.getEndDate());
 		    
+		    int numberAdd;
+		    switch(this.license.getType()) {
+		    	case "MB":
+			    case "M":{
+			    	numberAdd = Calendar.DATE;
+			    	break;
+			    }
+			    case "D":{
+			    	numberAdd = Calendar.HOUR_OF_DAY;
+			    	break;
+			    }
+			    case "A":{
+			    	numberAdd = Calendar.MONTH;
+			    	break;
+			    }
+			    default:{
+			    	numberAdd = Calendar.DATE;
+			    	break;
+			    }
+		    }
+		    
 		    while (calendar.before(endCalendar)) {
 		        Date result = calendar.getTime();
-		        String formatedDate = new SimpleDateFormat("MM/dd/yyyy").format(result);
-		        this.usagePerTime.put(formatedDate,0);
-		        calendar.add(Calendar.DATE, 1);
+		        this.usagePerTime.put(this.getFormattedDate(result),0);
+		        calendar.add(numberAdd, 1);
 		    }
 		    System.out.println(this.usagePerTime);
 		}catch (ClassCastException e) {
@@ -75,6 +94,24 @@ public class LicenseStatistics {
 
 	 
 
+	}
+	
+	public String getFormattedDate(Date result) {
+		 switch(this.license.getType()) {
+	    	case "MB":
+		    case "M":{
+		        return new SimpleDateFormat("MM/dd/yyyy").format(result);
+		    }
+		    case "D":{
+		        return new SimpleDateFormat("MM/dd HH").format(result) + "h";
+		    }
+		    case "A":{
+		    	return new SimpleDateFormat("yyyy/MM").format(result);
+		    }
+		    default:{
+		    	return new SimpleDateFormat("MM/dd/yyyy").format(result);
+		    }
+	    }
 	}
 	
 
