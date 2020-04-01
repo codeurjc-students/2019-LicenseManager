@@ -71,6 +71,47 @@
             </mat-grid-list>
         </mat-card-content>
     </mat-tab>
+    <mat-tab label="By Name & IP">
+        <mat-card-content>
+            <a class="text">Number of Different UserName+IP: {{licensesByIpAndNameMap.size}}</a>
+            <div class="center-div-pie">     
+                <app-pie-chart *ngIf="licensesByIpAndNameMap?.size!=0" [statsMap]="licensesByIpAndNameMap"   (setLineChart)="setLineChart($event)"></app-pie-chart>
+            </div>
+            <mat-grid-list cols="4"  rowHeight="4rem">
+                <mat-grid-tile>
+                    <a><strong>NAME</strong></a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <a><strong>IP</strong></a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <a><strong>USAGE</strong></a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <a><strong>LAST USAGE DATE</strong></a>
+                </mat-grid-tile>
+            </mat-grid-list>
+            <mat-grid-list cols="4"  rowHeight="4rem">
+
+            <div *ngFor="let item of statListMapIPName | keyvalue">
+                <mat-grid-tile>
+                    <a>{{item.key.split('%')[0]}}</a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <a>{{item.key.split('%')[1]}}</a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <a>{{item.value.nUsage}}</a>
+                </mat-grid-tile>
+                <mat-grid-tile>
+                    <a>{{item.value.usages[item.value.usages.sort().length-1] | date:'medium'}}</a>
+                </mat-grid-tile>
+            </div>
+            </mat-grid-list>
+
+
+        </mat-card-content>
+    </mat-tab>
 </mat-tab-group>    
 
 </mat-card>

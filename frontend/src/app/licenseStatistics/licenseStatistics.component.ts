@@ -26,9 +26,11 @@ export class LicenseStatisticsComponent implements OnInit{
 
     licensesByNameMap: Map<String,Number> = new Map();
     licensesByIpMap: Map<String,Number> = new Map();
+    licensesByIpAndNameMap: Map<String,Number> = new Map();
 
     statListMapIP: Map<String,Stats> = new Map();
     statListMapName: Map<String,Stats> = new Map();
+    statListMapIPName: Map<String,Stats> = new Map();
 
     selected:string = "";
     lineChartMap:Map<string,number> = new Map();
@@ -42,7 +44,7 @@ export class LicenseStatisticsComponent implements OnInit{
             this.productName = params.get('name');
             let serial = params.get('serial');
             this.licenseServ.getOneLicense(serial,this.productName).subscribe(
-                l=>{ this.license=l;console.log(this.license); this.mapByIp(); this.mapByName(); this.listByName(); this.listIP()},
+                l=>{ this.license=l;console.log(this.license); this.mapByIp(); this.mapByName(); this.listByName(); this.listIP(); this.listByIPAndName();this.mapByNameIP()},
                 error => console.log(error)
             )
         });
@@ -55,8 +57,6 @@ export class LicenseStatisticsComponent implements OnInit{
             let stat:Stats;
             if(obj==null){
                 let map=this.mixUsagePerTimes(Object.entries(value.usagePerTime),null);
-                console.log(map);
-
                 stat= {nUsage:value.nUsage, usages: value.usages, usagePerTime: map };
             }else{
                 let aux = value.usages.concat(obj.usages).sort();
@@ -71,8 +71,6 @@ export class LicenseStatisticsComponent implements OnInit{
     }
 
     mixUsagePerTimes(entries1:any,entries2:any){
-        console.log(entries1);
-        console.log(entries2);
         let map = new Map();
         for(let i =0; i<entries1.length;i++){
             map.set(entries1[i][0],entries1[i][1]);
@@ -143,14 +141,50 @@ export class LicenseStatisticsComponent implements OnInit{
 
     }
 
+    listByIPAndName(){
+        this.license.licenseStats.forEach( function(value) {
+            if(value.userName==null){
+                value.userName= "Others";
+            }
+            let obj = this.statListMapIPName.get(value.userName+"%"+value.ip);
+            let stat:Stats;
+            if(obj==null){
+                let map=this.mixUsagePerTimes(Object.entries(value.usagePerTime),null);
+                stat= {nUsage:value.nUsage, usages: value.usages , usagePerTime: map};
+            }else{
+                console.log("no debería imprimirse esto");
+                let map:Map<String,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
+                let aux = value.usages.concat(obj.usages).sort();
+                stat = {nUsage:value.nUsage + obj.nUsage, usages: aux , usagePerTime:map};
+            }       
+            this.statListMapIPName.set(value.userName+"%"+value.ip,stat);
+
+        }.bind(this));
+        console.log(this.statListMapIPName);
+    }
+
+    mapByNameIP(){
+        this.license.licenseStats.forEach(
+            function(value) {
+                let x = this.licensesByIpAndNameMap.get(value.userName+"%"+value.ip);
+                if(x!=null){
+                    this.licensesByIpAndNameMap.set(value.userName+"%"+value.ip,x+value.nUsage);
+                }else{
+                    this.licensesByIpAndNameMap.set(value.userName+"%"+value.ip,value.nUsage);
+                }
+            }.bind(this)
+        );
+    }
+
 
     setLineChart($event: any){
         this.loading = true;
-        
         this.lineChartMap = new Map();
         this.selected=$event;
         let x;
-        if($event.match("[0-9.:]*")!=""){
+        if($event.includes("%")){
+            x= this.statListMapIPName.get($event);
+        }else if($event.match("[0-9.:]*")!=""){
             x = this.statListMapIP.get($event);
         }else{
             x = this.statListMapName.get($event);
