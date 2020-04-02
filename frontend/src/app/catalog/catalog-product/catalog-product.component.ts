@@ -8,13 +8,14 @@ import { DialogService } from '../../dialogs/dialog.service';
 import { LicenseService } from '../../licenses/license.service';
 import { License } from '../../licenses/license.model';
 import { DatePipe } from '@angular/common';
-import { MatDialogRef, MatDialog } from '@angular/material';
+import { MatDialogRef, MatDialog, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { LoginComponent } from '../../login/login.component';
 import { AppService } from '../../app.service';
 import { CardFormComponent } from '../../userProfile/card-form/card-form.component';
 import { UsedCardService } from '../../usedCard/usedCard.service';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+const BASE_URL_PRODUCT = "https://localhost:8443/api/products/"
 
 
 @Component({
@@ -50,7 +51,7 @@ export class CatalogProductComponent implements OnInit {
   };
 
 
-  constructor(    private stripeService: StripeService, public usedCardServ:UsedCardService,public cardForm:CardFormComponent,public appService:AppService,private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
+  constructor(private snackbar:MatSnackBar,private stripeService: StripeService, public usedCardServ:UsedCardService,public cardForm:CardFormComponent,public appService:AppService,private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
     this.purchase=false;
     let productName;
     this.activeRoute.paramMap.subscribe((params: ParamMap) => {
@@ -71,6 +72,9 @@ export class CatalogProductComponent implements OnInit {
    public stripeForm = new FormGroup({ });
 
 
+   pathPhotos(productName:string){
+    return BASE_URL_PRODUCT + productName +"/image";
+  }
   setUp(){
     this.appService.getPublicStripeKey().subscribe(
       (key:any)=> {
@@ -223,6 +227,9 @@ export class CatalogProductComponent implements OnInit {
     selBox.select();
     document.execCommand('copy');
     document.body.removeChild(selBox);
+    let conf:MatSnackBarConfig= new MatSnackBarConfig();
+    conf.duration=3000;
+    this.snackbar.open('Copied!',"X",conf);
   }
 
   getLicensesOfProductAndUser(){

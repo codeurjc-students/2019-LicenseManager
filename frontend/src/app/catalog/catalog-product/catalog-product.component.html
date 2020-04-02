@@ -5,6 +5,8 @@
     <br>
     <span class="content"><a href="//{{product?.webLink}}">{{product?.webLink}}</a></span>
     <br>
+    <div class="post-thumb" *ngIf="product?.photoAvailable"><img [src]="pathPhotos(product.name)" class="logoPhoto" height="150" width="150"></div>
+    <br>
     <span class="content" style="white-space: pre-line"> {{product?.description}} </span>
     <br>
     <div *ngIf="userLicensesOfProduct?.length!=0 && userLicensesOfProduct!=null">

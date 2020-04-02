@@ -2,7 +2,7 @@ import { Component, ViewChild, TemplateRef } from "@angular/core";
 import { Product } from "../product/product.model";
 import { ProductService } from "../product/product.service";
 import { Router } from '@angular/router';
-import { MatDialog, MatDialogRef } from "@angular/material";
+import { MatDialog, MatDialogRef, MatSnackBar, MatSnackBarConfig } from '@angular/material';
 import { DialogAddProductComponent } from "../dialogs/dialogAddProduct.component";
 import { DialogService } from '../dialogs/dialog.service';
 
@@ -18,8 +18,12 @@ import { DialogService } from '../dialogs/dialog.service';
 
     pageActual:number = 1;
     numberOfElements = 5;
-    constructor(private dialogService:DialogService,public dialog: MatDialog,private productService:ProductService,private router: Router){
+
+    conf:MatSnackBarConfig= new MatSnackBarConfig();
+
+    constructor(private snackbar:MatSnackBar,private dialogService:DialogService,public dialog: MatDialog,private productService:ProductService,private router: Router){
         this.getProducts();
+        this.conf.duration=3000;
     }
 
     getProducts(){
@@ -36,7 +40,7 @@ import { DialogService } from '../dialogs/dialog.service';
             },
         });
         this.dialogRef.afterClosed().subscribe(
-            p => this.getProducts()
+            (p:any) => {if(p){this.getProducts();this.snackbar.open("Product added","X",this.conf)}}
 
         );
     }
@@ -49,7 +53,7 @@ import { DialogService } from '../dialogs/dialog.service';
             },
         });
         this.dialogRef.afterClosed().subscribe(
-            p => this.getProducts()
+            p =>{ this.getProducts();this.snackbar.open("Product updated","X",this.conf)}
 
         );
     }
@@ -60,7 +64,7 @@ import { DialogService } from '../dialogs/dialog.service';
             res=> {
                 if (res[0]){
                     this.productService.deleteProduct(prod).subscribe(
-                    s=> this.getProducts(),
+                    s=> {this.getProducts();this.snackbar.open("Product deleted","X",this.conf)},
                     error => console.log(error),)
                 }
             }

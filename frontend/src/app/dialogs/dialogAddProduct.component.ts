@@ -73,7 +73,7 @@ import { DialogService } from './dialog.service';
     }
       
   close(){
-      this.dialogRef.close();
+      this.dialogRef.close(false);
   }
 
   add(){
@@ -116,7 +116,7 @@ import { DialogService } from './dialog.service';
       g => {
         if(this.file!=null){
            this.uploadEvent(this.file);
-    }this.dialogRef.close()},
+    }this.dialogRef.close(true)},
       error => {console.log(error); if(error.status===409){alert("There is already a product (active or inactive) with this product name")}}
     )
   }
@@ -132,7 +132,7 @@ import { DialogService } from './dialog.service';
     this.productServ.putProduct(prod).subscribe(
       g => {if(this.file!=null){
         this.uploadEvent(this.file);
- }this.dialogRef.close()},
+ }this.dialogRef.close(true)},
       error => console.log(error)
     )
   }
