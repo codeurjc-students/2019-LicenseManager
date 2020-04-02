@@ -3,6 +3,7 @@ import {MatSnackBar} from '@angular/material';
 import { RegisterService } from './register.service';
 import { LoginService } from '../login/login.service';
 import { Router } from '@angular/router';
+import { DialogService } from '../dialogs/dialog.service';
 
 @Component({
   selector: 'app-register',
@@ -15,7 +16,7 @@ export class RegisterComponent implements OnInit {
   emailLinked:string;
   loading:boolean;
 
-  constructor(private router:Router,private snackBar: MatSnackBar, private registerService:RegisterService, private loginService:LoginService) { 
+  constructor(private router:Router,private snackBar: MatSnackBar, private registerService:RegisterService, private loginService:LoginService, private dialogService:DialogService) { 
     
   }
   openSnackBar(message: string, action: string) {
@@ -29,10 +30,10 @@ export class RegisterComponent implements OnInit {
 
   register(userName:string,pass1:string,pass2:string,email:string){
     if (userName=='' || pass1=='' || pass2=='' || email==''){
-      alert("One o more fields were not introduced")
+      this.dialogService.openConfirmDialog("One o more fields were not introduced",false,false)
     }else{
       if(!this.emailLinked.match('[a-zA-Z0-9.-_]*@[a-zA-Z.-]*.[a-zA-Z]*')){
-        alert("Introduce valid email")
+        this.dialogService.openConfirmDialog("Introduce valid email",false,false)
       }else{
         this.loading=true;
         this.registerService.register(userName,pass1,pass2,email).subscribe(
@@ -46,7 +47,7 @@ export class RegisterComponent implements OnInit {
 
   treatmentError(error:any){
     if(error.status === 409){
-      alert("Email or Username already exist")
+      this.dialogService.openConfirmDialog("Email or Username already exist",false,false);
     }
   }
 }

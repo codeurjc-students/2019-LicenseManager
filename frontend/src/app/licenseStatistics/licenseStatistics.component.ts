@@ -19,6 +19,15 @@ export interface Stats{
   })
 export class LicenseStatisticsComponent implements OnInit{
 
+    numberOfElementsIP = 10;    
+    pageActualIP:number = 1;
+
+    numberOfElementsName = 10;    
+    pageActualName:number = 1;
+
+    numberOfElementsIPName = 10;    
+    pageActualIPName:number = 1;
+
     productName:string;
     license:License;
 
@@ -191,6 +200,16 @@ export class LicenseStatisticsComponent implements OnInit{
         }
         this.lineChartMap = x.usagePerTime;
         this.loading = false;
+    }
+
+    resetIndexPage($event:any){
+        this.pageActualIP=1;
+        this.pageActualIPName=1;
+        this.pageActualName=1;
+
+        this.numberOfElementsIP=5;
+        this.numberOfElementsIPName=5;
+        this.numberOfElementsName=5;
     }
 
 

@@ -9,10 +9,13 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
 export class ConfirmationDialogComponent{
   exit:boolean[]=[];
   checkboxStatus:boolean;
-  constructor(@Inject(MAT_DIALOG_DATA) public data,
-  public dialogRef: MatDialogRef<ConfirmationDialogComponent>) { 
+  noButton:boolean;
+  constructor(@Inject(MAT_DIALOG_DATA) public data, public dialogRef: MatDialogRef<ConfirmationDialogComponent>) { 
     if(data.checkbox){
       this.checkboxStatus=false;
+    }
+    if(data.noButton){
+      this.noButton=true;
     }
   }
 

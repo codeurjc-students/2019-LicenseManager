@@ -55,7 +55,7 @@ import { DialogService } from '../dialogs/dialog.service';
     }
 
     deleteProduct(prod:Product){
-        this.dialogService.openConfirmDialog("This action will set the product "+prod.name+" to inactive, so new customers won't be able to purchase or subscribe to it and it won't appear on the catalog, but customers that already have it will still be able to use it. Are you sure you want to do this?",false)
+        this.dialogService.openConfirmDialog("This action will set the product "+prod.name+" to inactive, so new customers won't be able to purchase or subscribe to it and it won't appear on the catalog, but customers that already have it will still be able to use it. Are you sure you want to do this?",false,true)
         .afterClosed().subscribe(
             res=> {
                 if (res[0]){

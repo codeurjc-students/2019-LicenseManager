@@ -3,6 +3,7 @@ import {MatSnackBar, MatDialogRef, MatDialog} from '@angular/material';
 import { LoginService, User } from './login.service';
 import { Router } from '@angular/router';
 import { AppComponent } from '../app.component';
+import { DialogService } from '../dialogs/dialog.service';
 
 
 @Component({
@@ -15,7 +16,7 @@ export class LoginComponent  {
   dialogRef: MatDialogRef<any, any>;
 
   user:User;
-  constructor(public dialog: MatDialog,private snackBar: MatSnackBar, public loginService:LoginService, private router:Router, private appComponent: AppComponent) { 
+  constructor(public dialog: MatDialog,private snackBar: MatSnackBar, public loginService:LoginService, private router:Router, private appComponent: AppComponent, private dialogService:DialogService) { 
     this.user=this.loginService.getUserLogged();
   }
 
@@ -43,7 +44,7 @@ export class LoginComponent  {
         (u) => {
             this.dialogRef.close();
         },
-        (error) => alert('Invalid user or password'),
+        (error) => this.dialogService.openConfirmDialog('Invalid user or password',false,false),
     );
   }
 

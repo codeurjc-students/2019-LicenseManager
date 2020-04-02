@@ -51,7 +51,7 @@ import { DialogService } from '../dialogs/dialog.service';
      }
 
      firstStepDelete(cardId:string){
-      this.dialogService.openConfirmDialog("Do you want to remove this card?",false)
+      this.dialogService.openConfirmDialog("Do you want to remove this card?",false,true)
       .afterClosed().subscribe(
         res=>{
           if(res[0]){

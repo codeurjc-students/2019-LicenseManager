@@ -3,6 +3,7 @@ import { Product } from '../product/product.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { License } from '../licenses/license.model';
 import { ProductService } from '../product/product.service';
+import { DialogService } from './dialog.service';
 
 @Component({
     selector: 'app-dialogAddProduct',
@@ -29,7 +30,7 @@ import { ProductService } from '../product/product.service';
     trialDays:number;
     productEdit:Product;
 
-    constructor(@Inject(MAT_DIALOG_DATA) public data:any,private dialogRef:MatDialogRef<DialogAddProductComponent>, private productServ:ProductService){
+    constructor(@Inject(MAT_DIALOG_DATA) public data:any,private dialogRef:MatDialogRef<DialogAddProductComponent>, private productServ:ProductService,private dialogService:DialogService){
       if(data.type=="edit"){
         this.edit=true;
         let prod:Product = data.product;
@@ -138,7 +139,7 @@ import { ProductService } from '../product/product.service';
 
   selectEvent(file: File): void {
     if(file.size>=1048576){
-      alert("The file is too large. Max: 1048575 bytes")
+      this.dialogService.openConfirmDialog("The file is too large. Max: 1048575 bytes",false,false)
     }else{
       this.file=file;
     }
@@ -146,7 +147,7 @@ import { ProductService } from '../product/product.service';
 
   uploadEvent(file: File): void {
     if(file.size>=1048576){
-      alert("The file is too large. Max: 1048575 bytes")
+      this.dialogService.openConfirmDialog("The file is too large. Max: 1048575 bytes",false,false)
     }else{
       this.productServ.addImage(this.file, this.name).subscribe(
         u => {  },

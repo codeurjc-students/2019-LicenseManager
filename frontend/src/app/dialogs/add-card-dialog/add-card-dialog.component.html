@@ -1,0 +1,11 @@
+<div class="confirm-dialog-container">
+    <div class="content-container">
+      <span>You don't have any card attached to your account. Insert one to pay this subscription. It will be saved as your default card (You can change it on your UserProfile)</span>  
+      <mat-icon id="close-icon" (click)="closeDialog()">close</mat-icon>
+    </div>
+    <div>     
+        <app-card-form [calledByTrial]="false" (cardAdded)="cardAddedHandler($event)"></app-card-form>
+    </div>
+    <br>
+    <button mat-flat-button id="yes-button" (click)="yes()" *ngIf="cardAdded">SUBSCRIBE</button>
+  </div>

@@ -60,7 +60,7 @@ export class UserDashboardComponent implements OnInit{
         }else{
             msg="Do you want to deactivate the automatic renewal (at the end date) of your license of " + license.product.name + "? It will still be valid until the end date."
         }
-        this.dialogService.openConfirmDialog(msg,false)
+        this.dialogService.openConfirmDialog(msg,false,true)
       .afterClosed().subscribe(
           suc=>{
               if(suc[0]){

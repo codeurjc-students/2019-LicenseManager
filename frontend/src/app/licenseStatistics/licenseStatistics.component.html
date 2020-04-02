@@ -4,7 +4,7 @@
 <mat-card>
     <mat-card-title>Statistics of {{productName}} - License Serial: {{license?.serial}}</mat-card-title>
     <hr>
-    <mat-tab-group>
+    <mat-tab-group (selectedTabChange)="resetIndexPage($event)"> 
         <mat-tab label="By IP">
             <mat-card-content>
                 <a class="text">Number of Different IPs: {{licensesByIpMap.size}}</a>
@@ -24,7 +24,7 @@
                 </mat-grid-list>
                 <mat-grid-list cols="3"  rowHeight="4rem">
 
-                    <div *ngFor="let item of statListMapIP | keyvalue">
+                    <div *ngFor="let item of statListMapIP | keyvalue | paginate: {itemsPerPage:numberOfElementsIP, currentPage: pageActualIP}">
                         <mat-grid-tile>
                             <a>{{item.key}}</a>
                         </mat-grid-tile>
@@ -36,6 +36,18 @@
                         </mat-grid-tile>
                     </div>  
                 </mat-grid-list>
+                <div *ngIf=" statListMapIP.size > numberOfElementsIP">
+                <pagination-controls (pageChange)="pageActualIP = $event" style=" display:inline-block;">
+                </pagination-controls>
+                <a style="display:inline-block;">Elements on page:</a>
+                <div style="width: 120px; margin-left: auto; display:inline-block;">
+                    <mat-select [(value)]="numberOfElementsIP" style="display:inline-block; width: 50px;">
+                        <mat-option value="5">5</mat-option>
+                        <mat-option value="10">10</mat-option>
+                        <mat-option value="25">25</mat-option>
+                    </mat-select>
+                </div> 
+                </div>
             </mat-card-content>
         </mat-tab>
     <mat-tab label="By Name">
@@ -57,7 +69,7 @@
             </mat-grid-list>
             <mat-grid-list cols="3"  rowHeight="4rem">
 
-                <div *ngFor="let item of statListMapName |keyvalue">
+                <div *ngFor="let item of statListMapName |keyvalue | paginate: {itemsPerPage:numberOfElementsName, currentPage: pageActualName}">
                     <mat-grid-tile>
                         <a>{{item.key}}</a>
                     </mat-grid-tile>
@@ -69,6 +81,18 @@
                     </mat-grid-tile>
                 </div>  
             </mat-grid-list>
+            <div *ngIf=" statListMapName.size > numberOfElementsName">
+            <pagination-controls (pageChange)="pageActualName = $event" style=" display:inline-block;">
+            </pagination-controls>
+            <a style="display:inline-block;">Elements on page:</a>
+            <div style="width: 120px; margin-left: auto; display:inline-block;">
+                <mat-select [(value)]="numberOfElementsName" style="display:inline-block; width: 50px;">
+                    <mat-option value="5">5</mat-option>
+                    <mat-option value="10">10</mat-option>
+                    <mat-option value="25">25</mat-option>
+                </mat-select>
+            </div> 
+            </div>
         </mat-card-content>
     </mat-tab>
     <mat-tab label="By Name & IP">
@@ -93,7 +117,7 @@
             </mat-grid-list>
             <mat-grid-list cols="4"  rowHeight="4rem">
 
-            <div *ngFor="let item of statListMapIPName | keyvalue">
+            <div *ngFor="let item of statListMapIPName | keyvalue | paginate: {itemsPerPage:numberOfElementsIPName, currentPage: pageActualIPName}">
                 <mat-grid-tile>
                     <a>{{item.key.split('%')[0]}}</a>
                 </mat-grid-tile>
@@ -108,7 +132,18 @@
                 </mat-grid-tile>
             </div>
             </mat-grid-list>
-
+            <div *ngIf=" statListMapIPName.size > numberOfElementsIPName">
+            <pagination-controls (pageChange)="pageActualIPName = $event" style=" display:inline-block;">
+            </pagination-controls>
+            <a style="display:inline-block;">Elements on page:</a>
+            <div style="width: 120px; margin-left: auto; display:inline-block;">
+                <mat-select [(value)]="numberOfElementsIPName" style="display:inline-block; width: 50px;">
+                    <mat-option value="5">5</mat-option>
+                    <mat-option value="10">10</mat-option>
+                    <mat-option value="25">25</mat-option>
+                </mat-select>
+            </div> 
+            </div>
 
         </mat-card-content>
     </mat-tab>

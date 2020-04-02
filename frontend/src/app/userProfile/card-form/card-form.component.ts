@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { UserProfileComponent } from '../userProfile.component';
 import { UsedCardService } from '../../usedCard/usedCard.service';
 import { LoginService } from '../../login/login.service';
+import { DialogService } from '../../dialogs/dialog.service';
 
 
 declare var Stripe: any;
@@ -28,8 +29,10 @@ export class CardFormComponent implements OnInit {
   @Output() token: EventEmitter<string> = new EventEmitter();
   @Output() cardParams: EventEmitter<any[] > = new EventEmitter();
 
+  @Output() cardAdded: EventEmitter<boolean> = new EventEmitter<boolean>();
 
-  constructor(private loginServ:LoginService,private usedCardServ:UsedCardService,private router:Router,private appService:AppService,private userProfileServ:UserProfileService, private userProfileCom:UserProfileComponent) { }
+
+  constructor(private dialogService:DialogService, private loginServ:LoginService,private usedCardServ:UsedCardService,private router:Router,private appService:AppService,private userProfileServ:UserProfileService, private userProfileCom:UserProfileComponent) { }
 
   ngOnInit() {
     // Your Stripe public key
@@ -75,7 +78,7 @@ export class CardFormComponent implements OnInit {
             this.usedCardServ.checkCard(result.token.card.last4, result.token.card.exp_month, result.token.card.exp_year,this.productName).subscribe(
               resp => {
                 if(resp){
-                  alert("This card has already been used to get a Free Trial Subscription for this product");
+                  this.dialogService.openConfirmDialog("This card has already been used to get a Free Trial Subscription for this product",false,false);
                   this.loading=false;
                   this.valid.emit(false);
                 }else{
@@ -90,7 +93,7 @@ export class CardFormComponent implements OnInit {
             )
           }else{
             this.userProfileServ.addCardStripeElements(this.loginServ.user.name,result.token.id).subscribe(
-              t=> {this.successfulAdd=true;this.loading=false; this.userProfileCom.getCards()},
+              t=> {this.successfulAdd=true;this.loading=false; this.userProfileCom.getCards(); this.cardAdded.emit(true);},
               error=> {console.log(error);this.successfulAdd=false; this.loading=false;}
             );
           }

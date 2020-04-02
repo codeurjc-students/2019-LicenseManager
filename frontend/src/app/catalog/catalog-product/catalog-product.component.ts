@@ -113,7 +113,7 @@ export class CatalogProductComponent implements OnInit {
   subscribeToProduct(type:string,money:string){
     let msg;
     if(this.user==null){
-     alert("You have to be logged first! If you don't have an account, you can register too");
+     this.dialogService.openConfirmDialog("You have to be logged first! If you don't have an account, you can register too",false,false);
   
     }else{
       if(type==="MB"){
@@ -121,14 +121,14 @@ export class CatalogProductComponent implements OnInit {
       }else{
         msg="You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged now " + money + "€ to your default card.";
       }
-      this.dialogService.openConfirmDialog(msg,true)
+      this.dialogService.openConfirmDialog(msg,true,true)
       .afterClosed().subscribe(
         res=>{
           if(res[0]){
             this.loading=true;
             this.userProfileService.addSubscriptionToProduct(this.product,type, this.user.name, res[1]).subscribe(
                 (u:any)=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial},
-                error=> {this.treatmentBuyError(error);this.loading=false;},
+                error=> {this.treatmentBuyError(error, type,money);this.loading=false;},
             )
           }
         }
@@ -138,13 +138,19 @@ export class CatalogProductComponent implements OnInit {
   }
 
 
-  treatmentBuyError(error:any){
+  treatmentBuyError(error:any,type:string,money:string){
       if(error.status === 428){
-          alert("You have to attach a payment source before buy a license");
+          this.dialogService.openAddCardDialog().afterClosed().subscribe(
+            res=> {console.log(res);
+                    if(res){
+                      this.subscribeToProduct(type,money);
+                    }
+            }
+          );
       }else if (error.status === 409){
-          alert("You already have a subscription of this type to this product!")
+          this.dialogService.openConfirmDialog("You already have a subscription of this type to this product!",false,false)
       }else{
-        alert("There has been an error with the subscription and it couldn't be successful.")
+        this.dialogService.openConfirmDialog("There has been an error with the subscription and it couldn't be successful.",false,false)
       }
   }
 
@@ -161,7 +167,7 @@ export class CatalogProductComponent implements OnInit {
                   error=>{this.loading=false;console.log(error);}
                 )
                 this.successfulMessage=true;this.loading=false;this.serial=u.serial},
-              error=> {this.treatmentBuyError(error);this.loading=false;},
+              error=> {this.treatmentBuyError(error,null,null);this.loading=false;},
           )
         }else{
 
@@ -191,7 +197,7 @@ export class CatalogProductComponent implements OnInit {
             data => {
               this.userProfileService.confirmPay(this.user.name,this.product,data[`id`]).subscribe(
                 (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;},
-                error => {alert("The purchase has not been posible"); console.log(error),this.loading=false; this.purchase=false;}
+                error => {this.dialogService.openConfirmDialog("The purchase has not been posible",false,false); console.log(error),this.loading=false; this.purchase=false;}
               )
             }
           );
