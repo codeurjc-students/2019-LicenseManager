@@ -10,7 +10,7 @@ $logo_font: 'Summertime';
   }
 
 #appRootClass{
-  min-height: calc(100vh - 55px - 80px - 60px)
+  min-height: calc(100vh - 55px  - 60px)
 }
 
 .background{
@@ -18,3 +18,8 @@ $logo_font: 'Summertime';
   background-size: 100% 100%;
 }
 
+.font-size-medium{
+  font-size: 40px;
+  font-family: $logo_font;
+
+}

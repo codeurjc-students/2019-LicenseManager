@@ -55,6 +55,9 @@
                         </a>
                 </div>
             </mat-card-actions>
+            <div *ngIf="error">
+                <span style="color: red;margin:180px;">Wrong credentials. Try again</span>
+            </div>
         </mat-card>
   </div>
 </div>

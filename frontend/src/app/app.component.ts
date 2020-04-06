@@ -5,6 +5,7 @@ import { Router } from '@angular/router';
 import { NgForm } from '@angular/forms';
 import { UserProfileService } from './userProfile/userProfile.service';
 import { AppService } from './app.service';
+import { LoginService } from './login/login.service';
 
 declare var Stripe: any;
 declare var publicStripeKeyEnv:string;
@@ -17,22 +18,58 @@ declare var publicStripeKeyEnv:string;
 export class AppComponent{
     appName:string;
     mode: string;
-    pages:Map<String,String>;
+    selected:string;
     public environment = environment.environment;
 
     
-    constructor(private appService:AppService) {
+    constructor(private router:Router,private appService:AppService, private loginService:LoginService) {
         if (environment.production) {
             this.mode = "Production";
         } else {
             this.mode = "Development";
         }
-        this.pages = new Map();
+        this.selected="PRODUCTS";
+        
         this.appService.getAppName().subscribe(
-            (name:any) => this.appName=name.text,
+            (name:any) => {
+                this.appName=name.text;
+                this.loginService.resetPages();
+            },
             error=> console.log(error),
         )
+        
+
     }
+
+
+
+    manageLinks(route:string){
+        this.selected=route;
+        switch(route){
+            case this.appName:{
+                this.selected="PRODUCTS";
+                this.router.navigate(["/"]);
+                break;
+            }
+            case 'ADMIN':{
+                this.router.navigate(["/admin/dashboard"]);
+                break;
+            }
+            case 'DASHBOARD':{
+                this.router.navigate(["user/dashboard"]);
+                break;
+            }
+            case 'PROFILE':{
+                this.router.navigate(["user/profile"]);
+                break;
+            }
+            case 'PRODUCTS':{
+                this.router.navigate(["/"]);
+                break;
+            }
+            
+        }
+      }
 
       
 

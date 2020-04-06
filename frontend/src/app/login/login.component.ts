@@ -2,8 +2,7 @@ import { Component, OnInit, ViewChild, TemplateRef } from '@angular/core';
 import {MatSnackBar, MatDialogRef, MatDialog} from '@angular/material';
 import { LoginService, User } from './login.service';
 import { Router } from '@angular/router';
-import { AppComponent } from '../app.component';
-import { DialogService } from '../dialogs/dialog.service';
+
 
 
 @Component({
@@ -16,8 +15,10 @@ export class LoginComponent  {
   dialogRef: MatDialogRef<any, any>;
 
   user:User;
-  constructor(public dialog: MatDialog,private snackBar: MatSnackBar, public loginService:LoginService, private router:Router, private appComponent: AppComponent, private dialogService:DialogService) { 
+  error:boolean;
+  constructor(public dialog: MatDialog,private snackBar: MatSnackBar, public loginService:LoginService, private router:Router) { 
     this.user=this.loginService.getUserLogged();
+    this.error=false;
   }
 
   getUserLogged(){
@@ -25,6 +26,7 @@ export class LoginComponent  {
   }
 
   openLoginDialog() {
+    this.error=false;
     this.dialogRef = this.dialog.open(this.loginDialog, {
         width: '50%',
         height: '50%',
@@ -42,9 +44,9 @@ export class LoginComponent  {
 
     this.loginService.logIn(user, pass).subscribe(
         (u) => {
-            this.dialogRef.close();
+            this.dialogRef.close(); this.error=false;;
         },
-        (error) => this.dialogService.openConfirmDialog('Invalid user or password',false,false),
+        (error) => this.error=true,
     );
   }
 

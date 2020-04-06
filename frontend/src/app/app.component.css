@@ -109,3 +109,11 @@ form.checkout button:active {
 .bg{
   background-color: #3662A1;
 }
+
+.selBorder{
+  background-color: #547CBA;
+}
+
+.buttons{
+  margin: 10px;
+}

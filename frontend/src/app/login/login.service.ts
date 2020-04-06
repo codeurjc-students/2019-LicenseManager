@@ -3,8 +3,6 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import 'rxjs/Rx';
-import { Http } from '@angular/http';
-import { StripeCard } from '../stripe/stripeCard.model';
 
 const URL = 'https://localhost:8443/api';
 
@@ -24,6 +22,7 @@ export class LoginService {
     isAdmin = false;
     user: User;
     auth: string;
+    pages:String[]=[];
 
     constructor(private http: HttpClient) {
         let user = JSON.parse(localStorage.getItem('currentUser'));
@@ -48,7 +47,9 @@ export class LoginService {
                     this.setCurrentUser(user);
                     user.authdata = auth;
                     localStorage.setItem('currentUser', JSON.stringify(user));
+                    this.addPages(this.isAdmin);
                 }
+                
                 return user;
             }));
            
@@ -58,6 +59,7 @@ export class LoginService {
         
         return this.http.get(URL + '/logOut').pipe(
             map(response => {
+                this.resetPages();
                 this.removeCurrentUser();
                 return response;
             }),
@@ -97,5 +99,19 @@ export class LoginService {
     getUserLoggedBack(){
         let url = URL + "/getUserLogged/";
         return this.http.get(url);
+    }
+
+    resetPages(){
+        this.pages=[];
+        this.pages.push("PRODUCTS");
+    }
+
+    addPages(admin:boolean){
+        this.pages.push("DASHBOARD");
+        this.pages.push("PROFILE");
+                     
+        if(admin){
+            this.pages.push("ADMIN");
+        }
     }
 }
