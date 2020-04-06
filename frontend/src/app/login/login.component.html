@@ -8,12 +8,7 @@
  <!--<button mat-button (click)="getUserLoggedBack()">User logged back</button>-->
 
  <ng-container *ngIf="loginService.isLogged">
-    <button mat-button [matMenuTriggerFor]="afterMenu">{{loginService.user.name}}</button>
-    <mat-menu #afterMenu="matMenu" xPosition="after">
-      <button mat-menu-item (click)="manageLinks('userDashboard')">Dashboard</button>
-      <button mat-menu-item (click)="manageLinks('userProfile')">Profile</button>
-      <button mat-menu-item (click)="manageLinks('adminDashboard')" *ngIf="loginService.isAdmin">Admin Products</button>
-    </mat-menu>
+    <a>{{loginService.user.name}}</a>
         <span>
             <button mat-button (click)='logOut()'>
                 <mat-icon >exit_to_app</mat-icon>
