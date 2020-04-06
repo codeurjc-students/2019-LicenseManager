@@ -34,6 +34,9 @@ export class AppComponent{
             (name:any) => {
                 this.appName=name.text;
                 this.loginService.resetPages();
+                if(this.loginService.isLogged){
+                    this.loginService.addPages(this.loginService.isAdmin)
+                }
             },
             error=> console.log(error),
         )
