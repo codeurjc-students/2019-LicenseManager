@@ -2,7 +2,6 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 import { License } from '../licenses/license.model';
 import { LicenseService } from '../licenses/license.service';
-import { LicenseStatistics } from './licenseStatistics.model';
 import { DatePipe } from '@angular/common';
 
 export interface Stats{

@@ -4,6 +4,8 @@ import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
 import java.util.UUID;
+
+import javax.persistence.Column;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -15,7 +17,10 @@ import tfg.licensoft.statistics.LicenseStatistics;
 
 import javax.persistence.OneToMany;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import javax0.license3j.Feature;
+import javax0.license3j.crypto.LicenseKeyPair;
+import javax0.license3j.io.KeyPairReader;
 
 
 @Entity
@@ -34,6 +39,8 @@ public class License {
 	private Date startDate;
 	private String owner;
 	private double price;
+	@Column(columnDefinition = "LONGTEXT")
+	private String licenseString;
 	
 	@OneToMany(mappedBy="license")
 	private List<LicenseStatistics> licenseStats;
@@ -55,6 +62,8 @@ public class License {
 		}catch(NullPointerException e) {
 			this.price=0;
 		}
+		this.licenseString =  this.generateLicenseFile("licenseFile-"+this.getProduct().getName()+".txt");
+
 
 	}
 	
@@ -121,7 +130,14 @@ public class License {
 	}
 
 	
-	
+
+	public String getLicenseString() {
+		return licenseString;
+	}
+
+	public void setLicenseString(String licenseString) {
+		this.licenseString = licenseString;
+	}
 
 	public List<LicenseStatistics> getLicenseStats() {
 		return licenseStats;
@@ -135,6 +151,26 @@ public class License {
 	protected String generateSerial() {
 		return UUID.randomUUID().toString();
 	}
+	
+	protected String generateLicenseFile(String path) {
+		javax0.license3j.License license = new javax0.license3j.License();
+        license.add(Feature.Create.stringFeature("serial",this.getSerial()));
+        license.add(Feature.Create.dateFeature("startDate",this.getStartDate()));
+        license.add(Feature.Create.stringFeature("product",this.getProduct().getName()));
+        license.add(Feature.Create.stringFeature("type",this.getType()));
+        license.setLicenseId(UUID.fromString(license.get("serial").getString()));
+
+        try {
+            KeyPairReader kpr = new KeyPairReader("M:\\UNIVERSIDAD\\TFG\\License3jRepl-master\\private.key");
+            LicenseKeyPair lkp = kpr.readPrivate();
+            license.sign(lkp.getPair().getPrivate(),"SHA-512");
+            kpr.close();
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+        return license.toString();
+	}
+	
 
 	@Override
 	public int hashCode() {

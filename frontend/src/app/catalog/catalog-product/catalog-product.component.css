@@ -116,3 +116,30 @@ a{
     text-align: center;
     padding: 5px;
 }
+
+.fakeButton{
+    font-family: Roboto, "Helvetica Neue",sans-serif;
+    font-weight: 500;
+    text-decoration: none;
+    background-color: #3F51B5;
+    color: rgb(255, 255, 255);
+    border-radius: 4px;
+    padding: 10px 15px 10px 15px;
+    margin: 6px 8px 6px 8px;
+    min-width: 88px;
+    border-radius: 3px;
+    font-size: 14px;
+    text-align: center;
+    border: none;
+    outline: none;
+    width: 115px;
+    height: 250px;
+}
+
+.scContent{
+    padding:15px;
+}
+
+.filemsg{
+    padding:5px;
+}

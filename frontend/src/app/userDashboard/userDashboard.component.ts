@@ -7,6 +7,7 @@ import { MatDialogRef, MatDialog } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { DialogService } from '../dialogs/dialog.service';
 import { Product } from '../product/product.model';
+import { DomSanitizer } from '@angular/platform-browser';
 
 @Component({
     selector: 'app-userDashboard',
@@ -23,9 +24,10 @@ export class UserDashboardComponent implements OnInit{
     numberOfElements = 5;
     
     pageActual:number;
+    fileurl;
+    fileName:string;
 
-
-    constructor(private dialogService:DialogService,private licenseService:LicenseService,private datepipe: DatePipe,private router:Router,public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute, public loginService:LoginService){}
+    constructor(private sanitizer: DomSanitizer,private dialogService:DialogService,private licenseService:LicenseService,private datepipe: DatePipe,private router:Router,public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute, public loginService:LoginService){}
 
 
     ngOnInit(): void {
@@ -72,6 +74,20 @@ export class UserDashboardComponent implements OnInit{
           }
         },
       );
+    }
+
+    downloadDialog(license:License){
+        this.fileName="license-"+license.product.name+".txt";
+        const blob = new Blob([license.licenseString], { type: 'application/octet-stream' });
+        this.fileurl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
+        this.dialogService.openConfirmDialog("You are going to download the License File of " + license.product.name + "'s license with serial: " + license.serial + ".\n This file cannot be modified. If done, it will NOT work.",false,false).afterClosed().subscribe(
+            res => {
+                if(res){
+                    let element: HTMLElement = document.getElementById('download') as HTMLElement;
+                    element.click();
+                }
+            }
+        )
     }
 
     

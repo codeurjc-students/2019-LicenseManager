@@ -1,9 +1,34 @@
 import org.junit.Assert;
 import org.junit.Test;
 
+import java.io.File;
 import java.io.IOException;
 
 public class TestLicencheck{
+
+    @Test
+    public void checkOfflineFalse() throws IOException {
+        Licencheck l = new Licencheck();
+        File lic = new File("M:\\UNIVERSIDAD\\TFG\\2019-LicenseManager\\Licencheck\\src\\main\\resources\\license-plainChecked.txt");
+        Assert.assertFalse(l.checkLicenseOffline(lic));
+    }
+
+    @Test
+    public void checkOfflineTrue() throws IOException {
+        Licencheck l = new Licencheck();
+        File lic = new File("C:\\Users\\KIKIT\\Downloads\\license-ImageLifetime (2).txt");
+        Assert.assertTrue(l.checkLicenseOffline(lic));
+    }
+
+    @Test
+    public void testFlujoEntero() throws IOException {
+        Licencheck l = new Licencheck();
+
+        l.createLicense("license-plainChecked-v2.txt");
+
+        File lic = new File("license-plainChecked-v2.txt");
+        Assert.assertTrue(l.checkLicenseOffline(lic));
+    }
 /*
 
 

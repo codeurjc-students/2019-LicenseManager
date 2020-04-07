@@ -15,6 +15,7 @@ import { CardFormComponent } from '../../userProfile/card-form/card-form.compone
 import { UsedCardService } from '../../usedCard/usedCard.service';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { DomSanitizer } from '@angular/platform-browser';
 const BASE_URL_PRODUCT = "https://localhost:8443/api/products/"
 
 
@@ -25,8 +26,7 @@ const BASE_URL_PRODUCT = "https://localhost:8443/api/products/"
 })
 export class CatalogProductComponent implements OnInit {
 
-
-
+  fileurl;
   product?:Product;
   user:User;
   userLicensesOfProduct:License[];
@@ -40,6 +40,7 @@ export class CatalogProductComponent implements OnInit {
   dialogRef: MatDialogRef<any, any>;
   pageActual:number = 1;
   numberOfElements = 3;
+  licenseFileString:string="";
 
 
   elements: Elements;
@@ -50,8 +51,9 @@ export class CatalogProductComponent implements OnInit {
     locale: 'en'
   };
 
+  fileName:string;
 
-  constructor(private snackbar:MatSnackBar,private stripeService: StripeService, public usedCardServ:UsedCardService,public cardForm:CardFormComponent,public appService:AppService,private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
+  constructor(private sanitizer: DomSanitizer,private snackbar:MatSnackBar,private stripeService: StripeService, public usedCardServ:UsedCardService,public cardForm:CardFormComponent,public appService:AppService,private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
     this.purchase=false;
     let productName;
     this.activeRoute.paramMap.subscribe((params: ParamMap) => {
@@ -62,7 +64,8 @@ export class CatalogProductComponent implements OnInit {
         let s= Object.keys(this.product.plansPrices); 
         this.numberOfPlans=s.length; 
         if(this.loginService.isLogged){
-        this.getLicensesOfProductAndUser(); }},
+        this.getLicensesOfProductAndUser();
+        this.fileName= "license-"+this.product.name + ".txt"; }},
       error => console.log(error)
     );
     this.successfulMessage=false;
@@ -131,7 +134,7 @@ export class CatalogProductComponent implements OnInit {
           if(res[0]){
             this.loading=true;
             this.userProfileService.addSubscriptionToProduct(this.product,type, this.user.name, res[1]).subscribe(
-                (u:any)=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial},
+                (u:any)=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial; this.licenseFileString=u.licenseString; console.log(u.licenseString);this.createFile()},
                 error=> {this.treatmentBuyError(error, type,money);this.loading=false;},
             )
           }
@@ -139,6 +142,11 @@ export class CatalogProductComponent implements OnInit {
       )
     }
 
+  }
+
+  createFile(){
+    const blob = new Blob([this.licenseFileString], { type: 'application/octet-stream' });
+    this.fileurl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
   }
 
 
@@ -170,7 +178,7 @@ export class CatalogProductComponent implements OnInit {
                   card => {this.loading=false;},
                   error=>{this.loading=false;console.log(error);}
                 )
-                this.successfulMessage=true;this.loading=false;this.serial=u.serial},
+                this.successfulMessage=true;this.loading=false;this.serial=u.serial;this.licenseFileString=u.licenseString; this.createFile()},
               error=> {this.treatmentBuyError(error,null,null);this.loading=false;},
           )
         }else{
@@ -200,7 +208,7 @@ export class CatalogProductComponent implements OnInit {
           this.userProfileService.pay(this.user.name,this.product, result.token.id).subscribe(
             data => {
               this.userProfileService.confirmPay(this.user.name,this.product,data[`id`]).subscribe(
-                (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;},
+                (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile()},
                 error => {this.dialogService.openConfirmDialog("The purchase has not been posible",false,false); console.log(error),this.loading=false; this.purchase=false;}
               )
             }

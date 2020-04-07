@@ -2,12 +2,15 @@
     <div class="content-container">
       <mat-icon id="close-icon" (click)="closeDialog()">close</mat-icon>
       <span class="content-span full-width">{{data.message}}
-        <br *ngIf="data.checkbox">
-      <mat-checkbox *ngIf="data.checkbox" class="example-margin" [(ngModel)]="checkboxStatus" color="primary"> Automatic renewal</mat-checkbox>
-      
+        <div *ngIf="data.checkbox">
+          <br>
+          <mat-checkbox class="example-margin" [(ngModel)]="checkboxStatus" color="primary"> Automatic renewal</mat-checkbox>
+          <br>
+          <br>
+
+        </div>
       <div *ngIf="!noButton" >
         <br>
-        
         <button class="center-div" mat-flat-button id="yes-button" (click)="yes()">OK</button>
       </div>  
     </span>

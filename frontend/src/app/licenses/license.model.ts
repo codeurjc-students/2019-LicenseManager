@@ -18,4 +18,5 @@ import { LicenseStatistics } from '../licenseStatistics/licenseStatistics.model'
       price?:number;  
       trial?:boolean;
       licenseStats?:LicenseStatistics[];
+      licenseString?:string;
   }

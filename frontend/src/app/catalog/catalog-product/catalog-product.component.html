@@ -127,8 +127,15 @@
     <br>
 
     <div id="successfulMessage" *ngIf="successfulMessage">
-        <a  >Payment Successful! Your license serial : <span class="serial">{{serial}}</span></a>
-        <button mat-raised-button color="primary" (click)="copyMessage(serial)" value="click to copy" class="copyButton">Copy license serial</button>
+        <div class="scContent">
+            <a  >Payment Successful! Your license serial : <span class="serial">{{serial}}</span></a>
+            <button mat-raised-button color="primary" (click)="copyMessage(serial)" value="click to copy" class="copyButton">Copy license serial</button>
+            <hr>
+            <div class="filemsg" *ngIf="licenseFileString!=''">
+                <a>For use without Internet conexion, download the license as a file. It can't be modified (won't work if done)</a>
+                <a class="fakeButton" [href]="fileurl" download={{fileName}}>Download File</a>
+            </div>
+        </div>
     </div>
 
     <div class="typeExp" *ngIf="numberOfPlans!=0">

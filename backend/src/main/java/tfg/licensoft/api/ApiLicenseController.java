@@ -16,7 +16,6 @@ import tfg.licensoft.stripe.StripeServices;
 import tfg.licensoft.users.User;
 import tfg.licensoft.users.UserService;
 import com.stripe.exception.StripeException;
-import com.stripe.model.Customer;
 import com.stripe.model.Subscription;
 
 
