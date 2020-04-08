@@ -1,5 +1,6 @@
 package tfg.licensoft.licenses;
 
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.List;
@@ -12,19 +13,24 @@ import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.ManyToOne;
 
+import tfg.licensoft.configurations.PropertiesLoader;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.statistics.LicenseStatistics;
 
 import javax.persistence.OneToMany;
+import javax.persistence.Transient;
 
+import org.springframework.beans.factory.annotation.Value;
 
 import javax0.license3j.Feature;
 import javax0.license3j.crypto.LicenseKeyPair;
 import javax0.license3j.io.KeyPairReader;
+import net.bytebuddy.asm.Advice.This;
 
-
+import org.springframework.context.annotation.PropertySource;
+@PropertySource("classpath:/application.properties")
 @Entity
-public class License {
+public class License {	
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
 	private Long id;
@@ -153,6 +159,15 @@ public class License {
 	}
 	
 	protected String generateLicenseFile(String path) {
+		if(this instanceof LicenseSubscription) {
+			return null;
+		}
+		String privateKeyPath="";
+		try {
+			privateKeyPath= PropertiesLoader.loadProperties("application.properties").getProperty("licencheck.keys.private");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		javax0.license3j.License license = new javax0.license3j.License();
         license.add(Feature.Create.stringFeature("serial",this.getSerial()));
         license.add(Feature.Create.dateFeature("startDate",this.getStartDate()));
@@ -161,14 +176,16 @@ public class License {
         license.setLicenseId(UUID.fromString(license.get("serial").getString()));
 
         try {
-            KeyPairReader kpr = new KeyPairReader("M:\\UNIVERSIDAD\\TFG\\License3jRepl-master\\private.key");
+            KeyPairReader kpr = new KeyPairReader(privateKeyPath);
             LicenseKeyPair lkp = kpr.readPrivate();
             license.sign(lkp.getPair().getPrivate(),"SHA-512");
             kpr.close();
+            return license.toString();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return license.toString();
+        
 	}
 	
 

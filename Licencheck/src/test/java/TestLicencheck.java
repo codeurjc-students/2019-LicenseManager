@@ -16,7 +16,7 @@ public class TestLicencheck{
     @Test
     public void checkOfflineTrue() throws IOException {
         Licencheck l = new Licencheck();
-        File lic = new File("C:\\Users\\KIKIT\\Downloads\\license-ImageLifetime (2).txt");
+        File lic = new File("C:\\Users\\KIKIT\\Downloads\\license-Subscription (11).txt");
         Assert.assertTrue(l.checkLicenseOffline(lic));
     }
 

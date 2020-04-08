@@ -2,6 +2,7 @@ package tfg.licensoft.licenses;
 
 
 import java.io.File;
+import java.io.IOException;
 import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
@@ -16,6 +17,7 @@ import javax0.license3j.crypto.LicenseKeyPair;
 import javax0.license3j.io.IOFormat;
 import javax0.license3j.io.KeyPairReader;
 import javax0.license3j.io.LicenseWriter;
+import tfg.licensoft.configurations.PropertiesLoader;
 import tfg.licensoft.products.Product;
 
 @Entity
@@ -157,29 +159,29 @@ public class LicenseSubscription extends License {
 	}
 	
 	protected String generateLicenseFile2(String path) {
+		String privateKeyPath="";
+		try {
+			privateKeyPath= PropertiesLoader.loadProperties("application.properties").getProperty("licencheck.keys.private");
+		} catch (IOException e) {
+			e.printStackTrace();
+		}
 		javax0.license3j.License license = new javax0.license3j.License();
         license.add(Feature.Create.stringFeature("serial",this.getSerial()));
-        license.add(Feature.Create.dateFeature("endDate",this.getEndDate()));
         license.add(Feature.Create.dateFeature("startDate",this.getStartDate()));
         license.add(Feature.Create.stringFeature("product",this.getProduct().getName()));
         license.add(Feature.Create.stringFeature("type",this.getType()));
-        license.setExpiry(license.get("endDate").getDate());
         license.setLicenseId(UUID.fromString(license.get("serial").getString()));
 
-
         try {
-            KeyPairReader kpr = new KeyPairReader("M:\\UNIVERSIDAD\\TFG\\License3jRepl-master\\private.key");
+            KeyPairReader kpr = new KeyPairReader(privateKeyPath);
             LicenseKeyPair lkp = kpr.readPrivate();
             license.sign(lkp.getPair().getPrivate(),"SHA-512");
-            System.out.println(path);
-            LicenseWriter licenseWriter = new LicenseWriter(path);
-            licenseWriter.write(license,IOFormat.STRING);
-            licenseWriter.close();
             kpr.close();
+            return license.toString();
         } catch (Exception e) {
             e.printStackTrace();
+            return null;
         }
-        return license.toString();
 	}
 
 	@Override
