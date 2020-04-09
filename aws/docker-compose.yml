@@ -1,0 +1,40 @@
+version: "2.1"
+
+services:
+    sql:
+        image: mysql:5.6
+        command: --default-authentication-plugin=mysql_native_password
+        healthcheck:
+            test: "/usr/bin/mysql --user=root --password=12345pass --execute \"SHOW DATABASES\""
+            interval: 5s
+            timeout: 30s
+            retries: 5
+        environment:
+            MYSQL_ROOT_PASSWORD: 12345pass
+            MYSQL_DATABASE: licensoft
+
+    licensoft:
+        image: kikeajani/licensoft-http:latest
+        links:
+            - sql
+        depends_on:
+            sql:
+               condition: service_healthy
+        ports:
+            - "8080:8080"
+        restart: always
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:mysql://sql/licensoft?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+            SPRING_DATASOURCE_USERNAME: root
+            SPRING_DATASOURCE_PASSWORD: 12345pass
+            SPRING_JPA_HIBERNATE_DDL-AUTO: update
+            STRIPE_PRIVATEKEY: sk_test_Hhbl4As40kGG4gMppomlvWWZ00Li4H7viw
+            STRIPE_PUBLICKEY: pk_test_wmUucXwN2CWr7Knrep3rCklX007zyLi28q
+            APPNAME: Licensoft
+            ADMINEMAIL: ad-dc@email.com
+            ADMINNAME: adDc
+            ADMINPASS: adDcPass
+            SPRING_MAIL_USERNAME: licensoft.urjc@gmail.com
+            SPRING_MAIL_PASSWORD: ContraPub
+            SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
+            SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
