@@ -83,6 +83,7 @@ export class LoginService {
         localStorage.removeItem('currentUser');
         this.isLogged = false;
         this.isAdmin = false;
+        this.user = null;
     }
 
 

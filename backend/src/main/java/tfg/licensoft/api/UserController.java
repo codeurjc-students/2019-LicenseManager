@@ -246,6 +246,8 @@ public class UserController {
 	
 	@PutMapping("{userName}/products/{productName}/{typeSubs}/addSubscription/renewal/{automaticRenewal}")
 	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName, @PathVariable boolean automaticRenewal){
+
+		
 		Product product = this.productServ.findOne(productName);
 		User user = this.userServ.findByName(userName);
 		
@@ -256,6 +258,12 @@ public class UserController {
 		// User to be affected != User that made the request
 		if(!user.equals(this.getRequestUser())) {
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
+		//Check for MB subs if user has a payment method attached
+		List<PaymentMethod> lPayments = this.getCardsFromUser(userName).getBody();
+		if(typeSubs.equals("MB") && lPayments!=null && lPayments.size()==0) {
+			return new ResponseEntity<License>(HttpStatus.PRECONDITION_REQUIRED); //The precondition is to have an attached payment source
 		}
 		
 		String planId=null;

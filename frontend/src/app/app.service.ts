@@ -9,7 +9,6 @@ export class AppService{
 
     public publicApiKey:string;
     constructor(private http: HttpClient) { 
-        console.log(BASE_URL);
         this.getPublicStripeKey().subscribe(
             (k:any)=> {this.publicApiKey=k.text},
         )

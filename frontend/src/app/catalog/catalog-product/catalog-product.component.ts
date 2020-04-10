@@ -119,7 +119,7 @@ export class CatalogProductComponent implements OnInit {
 //METHODS TO SUBSCRIBE TO A PRODUCT
   subscribeToProduct(type:string,money:string){
     let msg;
-    if(this.user==null){
+    if(this.loginService.getUserLogged()==null){
      this.dialogService.openConfirmDialog("You have to be logged first! If you don't have an account, you can register too",false,false);
   
     }else{
@@ -133,10 +133,12 @@ export class CatalogProductComponent implements OnInit {
         res=>{
           if(res[0]){
             this.loading=true;
-            this.userProfileService.addSubscriptionToProduct(this.product,type, this.user.name, res[1]).subscribe(
-                (u:any)=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial; this.licenseFileString=u.licenseString; console.log(u.licenseString);this.createFile()},
+            this.userProfileService.addSubscriptionToProduct(this.product,type,this.loginService.getUserLogged().name, res[1]).subscribe(
+                (u:any)=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial; this.licenseFileString=u.licenseString; this.createFile()},
                 error=> {this.treatmentBuyError(error, type,money);this.loading=false;},
             )
+          }else{
+            this.loading=false;
           }
         }
       )
@@ -153,7 +155,7 @@ export class CatalogProductComponent implements OnInit {
   treatmentBuyError(error:any,type:string,money:string){
       if(error.status === 428){
           this.dialogService.openAddCardDialog().afterClosed().subscribe(
-            res=> {console.log(res);
+            res=> {
                     if(res){
                       this.subscribeToProduct(type,money);
                     }
@@ -168,25 +170,29 @@ export class CatalogProductComponent implements OnInit {
 
 
   freeTrial(){
-    this.dialogService.openFreeTrialDialog(this.product.name).afterClosed().subscribe(
-      res=> {
-        if (res!=null){
-          this.loading=true;
-          this.userProfileService.addFreeTrial(this.product,this.user.name,this.product.trialDays, res[0]).subscribe(
-              (u:any)=> {
-                this.usedCardServ.postUsedCard(res[1], res[2], res[3],this.product.name).subscribe(
-                  card => {this.loading=false;},
-                  error=>{this.loading=false;console.log(error);}
-                )
-                this.successfulMessage=true;this.loading=false;this.serial=u.serial;this.licenseFileString=u.licenseString; this.createFile()},
-              error=> {this.treatmentBuyError(error,null,null);this.loading=false;},
-          )
-        }else{
+    if(this.loginService.getUserLogged()==null){
+      this.dialogService.openConfirmDialog("You have to be logged first! If you don't have an account, you can register too",false,false);
+   
+     }else{
+      this.dialogService.openFreeTrialDialog(this.product.name).afterClosed().subscribe(
+        res=> {
+          if (res!=null){
+            this.loading=true;
+            this.userProfileService.addFreeTrial(this.product,this.loginService.getUserLogged().name,this.product.trialDays, res[0]).subscribe(
+                (u:any)=> {
+                  this.usedCardServ.postUsedCard(res[1], res[2], res[3],this.product.name).subscribe(
+                    card => {this.loading=false;},
+                    error=>{this.loading=false;console.log(error);}
+                  )
+                  this.successfulMessage=true;this.loading=false;this.serial=u.serial;this.licenseFileString=u.licenseString; this.createFile()},
+                error=> {this.treatmentBuyError(error,null,null);this.loading=false;},
+            )
+          }else{
 
+          }
         }
-      }
-    )
-
+      )
+    }
   }
   
 
@@ -194,20 +200,25 @@ export class CatalogProductComponent implements OnInit {
 
 //METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT
   startPurchase(){
-    this.purchase=true;
-    this.setUp();
+    if(this.loginService.getUserLogged()==null){
+      this.dialogService.openConfirmDialog("You have to be logged first! If you don't have an account, you can register too",false,false);
+   
+     }else{
+      this.purchase=true;
+      this.setUp();
+     }
   }
 
   pay(){
-    const name = this.user.name
+    const name = this.loginService.getUserLogged().name
     this.stripeService
       .createToken(this.card, { name })
       .subscribe(result => {
         if (result.token) {
           this.loading=true;
-          this.userProfileService.pay(this.user.name,this.product, result.token.id).subscribe(
+          this.userProfileService.pay(name,this.product, result.token.id).subscribe(
             data => {
-              this.userProfileService.confirmPay(this.user.name,this.product,data[`id`]).subscribe(
+              this.userProfileService.confirmPay(name,this.product,data[`id`]).subscribe(
                 (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile()},
                 error => {this.dialogService.openConfirmDialog("The purchase has not been posible",false,false); console.log(error),this.loading=false; this.purchase=false;}
               )
@@ -241,7 +252,7 @@ export class CatalogProductComponent implements OnInit {
   }
 
   getLicensesOfProductAndUser(){
-    this.licenseServ.getLicensesOfUserAndProduct(this.user.name,this.product.name).subscribe(
+    this.licenseServ.getLicensesOfUserAndProduct(this.loginService.getUserLogged().name,this.product.name).subscribe(
       (ls:any)=> {this.userLicensesOfProduct=ls.content},
       error => console.log(error)
     );

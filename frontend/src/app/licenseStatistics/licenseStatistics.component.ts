@@ -52,7 +52,7 @@ export class LicenseStatisticsComponent implements OnInit{
             this.productName = params.get('name');
             let serial = params.get('serial');
             this.licenseServ.getOneLicense(serial,this.productName).subscribe(
-                l=>{ this.license=l;console.log(this.license); this.mapByIp(); this.mapByName(); this.listByName(); this.listIP(); this.listByIPAndName();this.mapByNameIP()},
+                l=>{ this.license=l; this.mapByIp(); this.mapByName(); this.listByName(); this.listIP(); this.listByIPAndName();this.mapByNameIP()},
                 error => console.log(error)
             )
         });

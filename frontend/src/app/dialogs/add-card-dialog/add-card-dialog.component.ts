@@ -20,7 +20,6 @@ import { MatDialogRef } from "@angular/material";
     }
 
     cardAddedHandler($event:any){
-        console.log($event);
         this.cardAdded=$event;
     }
 } 
