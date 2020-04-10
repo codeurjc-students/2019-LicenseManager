@@ -244,8 +244,8 @@ public class UserController {
 
 
 	
-	@PutMapping("{userName}/products/{productName}/{typeSubs}/addSubscription/renewal/{automaticRenewal}")
-	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName, @PathVariable boolean automaticRenewal){
+	@PutMapping("{userName}/products/{productName}/{typeSubs}/addSubscription/renewal/{automaticRenewal}/paymentMethods/{pmId}")
+	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName, @PathVariable boolean automaticRenewal, @PathVariable String pmId){
 
 		
 		Product product = this.productServ.findOne(productName);
@@ -281,6 +281,9 @@ public class UserController {
 				Map<String, Object> params = new HashMap<>();
 				params.put("customer", user.getCustomerStripeId());
 				params.put("items", items);
+				if(!pmId.equals("default")) {
+					params.put("default_payment_method", pmId);
+				}
 				params.put("expand", expand);
 				params.put("cancel_at_period_end", !automaticRenewal);
 				Subscription subscription;

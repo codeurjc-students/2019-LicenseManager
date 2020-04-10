@@ -124,16 +124,15 @@ export class CatalogProductComponent implements OnInit {
   
     }else{
       if(type==="MB"){
-        msg = "You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged in 1 month with the sum of usages * " + money + "€ to your default card."
+        msg = "You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged in 1 month with the sum of usages * " + money + "€ to the card selected:"
       }else{
-        msg="You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged now " + money + "€ to your default card.";
+        msg="You are going to subscribe to " + this.product.name + " with a " + type + " subscription. You will be charged now " + money + "€ to the card selected:";
       }
-      this.dialogService.openConfirmDialog(msg,true,true)
-      .afterClosed().subscribe(
+      this.dialogService.openCardSelectDialog(this.loginService.getUserLogged().name, msg,true).afterClosed().subscribe(
         res=>{
           if(res[0]){
             this.loading=true;
-            this.userProfileService.addSubscriptionToProduct(this.product,type,this.loginService.getUserLogged().name, res[1]).subscribe(
+            this.userProfileService.addSubscriptionToProduct(this.product,type,this.loginService.getUserLogged().name, res[1], res[2]).subscribe(
                 (u:any)=> {this.successfulMessage=true;this.loading=false;this.serial=u.serial; this.licenseFileString=u.licenseString; this.createFile()},
                 error=> {this.treatmentBuyError(error, type,money);this.loading=false;},
             )

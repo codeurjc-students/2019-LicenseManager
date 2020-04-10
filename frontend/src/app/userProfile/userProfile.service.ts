@@ -37,8 +37,11 @@ export class UserProfileService {
         return this.http.put(BASE_URL +user +'/default-card/'+pmId,null);
     }
 
-    addSubscriptionToProduct(product:Product,typeSubs:string,userName:string, automaticRenewal:boolean){
-        return this.http.put(BASE_URL+ userName + "/products/" + product.name+"/" + typeSubs  +"/addSubscription/renewal/"+automaticRenewal,product)
+    addSubscriptionToProduct(product:Product,typeSubs:string,userName:string, automaticRenewal:boolean, pmId:string){
+        if(pmId==null){
+            pmId="default";
+        }
+        return this.http.put(BASE_URL+ userName + "/products/" + product.name+"/" + typeSubs  +"/addSubscription/renewal/"+automaticRenewal+"/paymentMethods/"+pmId,product)
         
     }
 

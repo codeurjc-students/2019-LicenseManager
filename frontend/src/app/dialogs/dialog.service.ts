@@ -4,6 +4,7 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
 import { LoginComponent } from '../login/login.component';
 import { DialogFreeTrial } from './dialogFreeTrial.component';
 import { AddCardDialogComponent } from './add-card-dialog/add-card-dialog.component';
+import { CardSelectDialog } from './card-select-dialog/card-select-dialog.component';
 
 @Injectable({
     providedIn:'root'
@@ -34,6 +35,17 @@ export class DialogService {
 
     openAddCardDialog(){
       return this.dialog.open(AddCardDialogComponent);
+    }
+
+    openCardSelectDialog(userName:string, msg:string, cb:boolean){
+      return this.dialog.open(CardSelectDialog,{
+        width: '60vw',
+        data:{
+          user: userName,
+          msg: msg,
+          checkbox:cb
+        }
+      });
     }
 
     openFreeTrialDialog(productName:string){
