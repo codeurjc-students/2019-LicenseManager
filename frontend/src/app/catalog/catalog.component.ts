@@ -3,7 +3,7 @@ import { Product } from '../product/product.model';
 import { ProductService } from '../product/product.service';
 import { Router } from '@angular/router';
 
-const BASE_URL_PRODUCT = "https://localhost:8443/api/products/"
+const BASE_URL_PRODUCT = "/api/products/"
 
 @Component({
   selector: 'app-catalog',

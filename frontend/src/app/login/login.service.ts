@@ -4,7 +4,7 @@ import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import 'rxjs/Rx';
 
-const URL = 'https://localhost:8443/api';
+const URL = '/api';
 
 export interface User {
     id?: number;

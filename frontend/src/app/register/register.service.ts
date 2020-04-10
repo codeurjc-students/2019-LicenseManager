@@ -3,7 +3,7 @@ import { HttpClient, HttpHeaders } from '@angular/common/http';
 import { User } from '../login/login.service';
 
 
-    const URL = 'https://localhost:8443/api';
+    const URL = '/api';
 
 @Injectable()
 export class RegisterService {

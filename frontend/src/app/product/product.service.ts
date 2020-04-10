@@ -6,7 +6,7 @@ import { License } from '../licenses/license.model';
 import { Product } from './product.model';
 import { HttpClient } from '@angular/common/http';
 
-const BASE_URL = 'https://localhost:8443/api/';
+const BASE_URL = '/api/';
 
 @Injectable()
 export class ProductService {

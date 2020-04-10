@@ -40,7 +40,7 @@
   "scripts": {
     "ng": "ng",
     "start": "ng serve --proxy-config proxy.conf.json",
-    "build": "ng build --prod",
+    "build": "ng build",
     "docker-build": "ng build --configuration=docker",
     "docker-run": "ng serve --configuration=docker",
     "test": "ng test",

@@ -16,7 +16,7 @@ import { UsedCardService } from '../../usedCard/usedCard.service';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
 import { FormGroup, FormControl, Validators } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
-const BASE_URL_PRODUCT = "https://localhost:8443/api/products/"
+const BASE_URL_PRODUCT = "/api/products/"
 
 
 @Component({

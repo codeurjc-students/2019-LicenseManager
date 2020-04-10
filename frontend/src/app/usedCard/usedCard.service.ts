@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient } from "@angular/common/http";
 
-const BASE_URL = 'https://localhost:8443/api/usedcards/';
+const BASE_URL = '/api/usedcards/';
 
 
 @Injectable({

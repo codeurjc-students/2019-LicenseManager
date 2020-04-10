@@ -1,7 +1,7 @@
 import { Injectable } from "@angular/core";
 import { HttpClient, HttpHeaders } from "@angular/common/http";
 
-const BASE_URL = 'https://localhost:8443/api';
+const BASE_URL = 'api';
 
 
 @Injectable()
@@ -9,7 +9,7 @@ export class AppService{
 
     public publicApiKey:string;
     constructor(private http: HttpClient) { 
-        
+        console.log(BASE_URL);
         this.getPublicStripeKey().subscribe(
             (k:any)=> {this.publicApiKey=k.text},
         )

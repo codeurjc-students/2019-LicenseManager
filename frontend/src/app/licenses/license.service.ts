@@ -3,7 +3,7 @@ import { Observable } from 'rxjs';
 import { License } from './license.model';
 import { HttpClient } from '@angular/common/http';
 
-const BASE_URL = 'https://localhost:8443/api/licenses/';
+const BASE_URL = '/api/licenses/';
 
 
 @Injectable()

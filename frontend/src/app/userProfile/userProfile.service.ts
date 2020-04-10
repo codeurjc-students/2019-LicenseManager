@@ -7,7 +7,7 @@ import { LoginService } from '../login/login.service';
 import { Product } from '../product/product.model';
 import { ActivatedRoute, ParamMap } from '@angular/router';
 
-const BASE_URL = 'https://localhost:8443/api/users/';
+const BASE_URL = '/api/users/';
 
 
 @Injectable()
