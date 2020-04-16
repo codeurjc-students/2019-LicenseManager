@@ -21,7 +21,7 @@ services:
             sql:
                condition: service_healthy
         ports:
-            - "8080:8080"
+            - "80:80"
         restart: always
         environment:
             SPRING_DATASOURCE_URL: jdbc:mysql://sql/licensoft?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
@@ -38,3 +38,4 @@ services:
             SPRING_MAIL_PASSWORD: ContraPub
             SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: "true"
             SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: "true"
+            LICENCHECK_KEYS_PRIVATE: /keys/private.key

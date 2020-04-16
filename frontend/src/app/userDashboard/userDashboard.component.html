@@ -60,7 +60,7 @@
                     <mat-grid-tile colspan="2">
                         <div *ngIf="!loading">
                             <div *ngIf="!license.cancelAtEnd && license.type!='L' && license.active"><mat-icon>check</mat-icon><button mat-icon-button  (click)="cancelAtEnd(license)" ><span class="an">(Disable)</span></button></div>
-                            <div *ngIf="license.cancelAtEnd && license.type!='L' && license.active"><mat-icon>cancel</mat-icon><button mat-icon-button (click)="cancelAtEnd(license)"><span class="an">(Enable)</span></button></div>
+                            <div *ngIf="license.cancelAtEnd && license.type!='L' && license.active"><mat-icon>remove</mat-icon><button mat-icon-button (click)="cancelAtEnd(license)"><span class="an">(Enable)</span></button></div>
                             <span *ngIf="!license.active">-</span>
                         </div>
                     </mat-grid-tile>

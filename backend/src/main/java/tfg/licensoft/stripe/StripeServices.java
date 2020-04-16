@@ -83,6 +83,10 @@ public class StripeServices {
 		return Subscription.create(params);
 	}
 	
+	public Subscription cancelSubscription(Subscription subs) throws StripeException{
+		return subs.cancel();
+	}
+	
 	public Subscription retrieveSubscription(String subscriptionId) throws StripeException {
 		return Subscription.retrieve(subscriptionId);
 	}

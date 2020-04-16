@@ -298,14 +298,24 @@ public class UserController {
 					}
 				}
 				this.productServ.save(product);			
-				LicenseSubscription license = new LicenseSubscription(true, typeSubs, product, user.getName(),0);
-				license.setCancelAtEnd(!automaticRenewal);
-				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
-				license.setSubscriptionId(subscription.getId());
-				licenseServ.save(license);
-				this.setTimerAndEndDate(license.getSerial(),license.getProduct(),0);
-				
-				return new ResponseEntity<License>(license,HttpStatus.OK);
+					if (subscription.getStatus().equals("active")) {
+					LicenseSubscription license = new LicenseSubscription(true, typeSubs, product, user.getName(),0);
+					license.setCancelAtEnd(!automaticRenewal);
+					license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
+					license.setSubscriptionId(subscription.getId());
+					licenseServ.save(license);
+					this.setTimerAndEndDate(license.getSerial(),license.getProduct(),0);
+					
+					return new ResponseEntity<License>(license,HttpStatus.OK);
+				}else {
+					try {
+						this.stripeServ.cancelSubscription(subscription);
+					} catch (StripeException e) {
+						e.printStackTrace();
+					}
+					return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+				}
 			
 		}else {
 			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);

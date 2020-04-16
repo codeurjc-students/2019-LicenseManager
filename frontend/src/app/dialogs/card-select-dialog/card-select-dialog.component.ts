@@ -20,8 +20,8 @@ export class CardSelectDialog {
 
     constructor(@Inject(MAT_DIALOG_DATA) public data,public dialogRef: MatDialogRef<CardSelectDialog>, private userProfileServ:UserProfileService){ 
         this.loading=true;
-        this.userProfileServ.getUserCardsStripe("ad").subscribe(
-            (cards:any) => {this.paymentMethods=cards;this.loading=false; this.userProfileServ.getDefaultCard("ad").subscribe(
+        this.userProfileServ.getUserCardsStripe(data.user).subscribe(
+            (cards:any) => {this.paymentMethods=cards;this.loading=false; this.userProfileServ.getDefaultCard(data.user).subscribe(
                 (def:any) => {this.defaultPM=def.response; this.pmSelected=this.defaultPM} 
             )},
             error=> {console.log(error);this.loading=false}

@@ -21,7 +21,7 @@
 		<dependency>
 		  <groupId>com.stripe</groupId>
 		  <artifactId>stripe-java</artifactId>
-		  <version>15.5.0</version>
+  			<version>18.14.0</version>
 		</dependency>
 
 		<dependency>

@@ -42,4 +42,8 @@ public class UserService {
 		return userRep.findByEmail(email);
 	}
 	
+	public User findByCustomerStripeId(String customerStripeId) {
+		return userRep.findByCustomerStripeId(customerStripeId);
+	}
+	
 }
