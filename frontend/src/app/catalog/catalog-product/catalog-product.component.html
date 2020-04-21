@@ -92,7 +92,7 @@
             <a *ngIf="errorAdded" style="color:red;">You have to add first a valid card to pay with</a>
             <br>
 
-            <button mat-raised-button  *ngIf="plan.key=='L' && !loading" (click)="startPurchase()" color="primary" >PURCHASE</button>
+            <button mat-raised-button  *ngIf="plan.key=='L' && !loading" (click)="pay2(plan.value)" color="primary" >PURCHASE</button>
             <button mat-raised-button *ngIf="plan.key!='L' && !loading" (click)="subscribeToProduct(plan.key, plan.value)" color="primary">SUBSCRIBE</button>
 
             <br>
@@ -138,7 +138,7 @@
         </div>
     </div>
 
-    <div class="typeExp" *ngIf="numberOfPlans!=0">
+    <div id="exp" class="typeExp" *ngIf="numberOfPlans!=0">
         <mat-card>
             <mat-card-title>Type of subscriptions</mat-card-title>
             <hr>

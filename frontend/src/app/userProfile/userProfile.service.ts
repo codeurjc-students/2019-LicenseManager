@@ -60,6 +60,16 @@ export class UserProfileService {
 
     }
 
+    check3dsPayment(userName:string,product:Product,paymentIntentId:string){
+        return this.http.post(BASE_URL+ userName + "/paymentIntents/" + paymentIntentId + "/products/" + product.name,{});
+
+    }
+
+    check3dsSubs(userName:string,product:Product,paymentIntentId:string, automaticRenewal:boolean, type:string, subscriptionId:string){
+        return this.http.post(BASE_URL+ userName + "/paymentIntents/" + paymentIntentId + "/products/" + product.name + "?automaticRenewal="+automaticRenewal + "&type=" + type + "&subscriptionId=" + subscriptionId,{});
+
+    }
+
 
 
     private handleError(error: any) {

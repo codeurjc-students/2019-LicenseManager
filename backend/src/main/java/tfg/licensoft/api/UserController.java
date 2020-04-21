@@ -31,6 +31,7 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
+import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
@@ -59,6 +60,9 @@ public class UserController {
 	
 	@Autowired
 	private StripeServices stripeServ;
+	
+	@Autowired
+	private GeneralController generalController;
 	
 	class SimpleResponse{
 		private String response;
@@ -297,8 +301,20 @@ public class UserController {
 						return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 				}
-				this.productServ.save(product);			
-					if (subscription.getStatus().equals("active")) {
+				this.productServ.save(product);	
+				System.out.println(subscription.getStatus()+ " :D");
+				String status = subscription.getStatus();
+				PaymentIntent piReturned = null;
+				try {
+					Invoice s = this.stripeServ.getLatestInvoice(subscription.getLatestInvoice());
+					piReturned = this.stripeServ.retrievePaymentIntent(s.getPaymentIntent());
+					piReturned.getStatus();
+				} catch (StripeException e1) {
+					// TODO Auto-generated catch block
+					e1.printStackTrace();
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+				}
+				if (status.equals("active")) {  //Payment finalized
 					LicenseSubscription license = new LicenseSubscription(true, typeSubs, product, user.getName(),0);
 					license.setCancelAtEnd(!automaticRenewal);
 					license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
@@ -307,14 +323,37 @@ public class UserController {
 					this.setTimerAndEndDate(license.getSerial(),license.getProduct(),0);
 					
 					return new ResponseEntity<License>(license,HttpStatus.OK);
-				}else {
-					try {
-						this.stripeServ.cancelSubscription(subscription);
-					} catch (StripeException e) {
-						e.printStackTrace();
+				}else if (status.equals("incomplete")) {
+					if(piReturned != null && piReturned.getStatus().equals("requires_action")) {   //SCA 3DSecure authentication needed
+						
+						PaymentIntent piReturned2 =null;
+				        Map<String, Object> params2 = new HashMap<>();				 
+				        params2.put("return_url", this.generalController.appDomain+"/products/"+productName);
+				        try {
+							piReturned2 = this.stripeServ.confirmPaymentIntent(piReturned, params2);
+						} catch (StripeException e) {
+							// TODO Auto-generated catch block
+							e.printStackTrace();
+						}
+				        
+				        
+						LicenseSubscription fakeLicense = new LicenseSubscription(true,typeSubs,product,userName,0);
+						fakeLicense.setType("RequiresAction");
+						fakeLicense.setSerial(piReturned2.getNextAction().getRedirectToUrl().getUrl());
+						fakeLicense.setOwner(piReturned2.getId());
+						fakeLicense.setSubscriptionId(subscription.getId());
+						return new ResponseEntity<>(fakeLicense,HttpStatus.OK);
+					}else { //Payment failed
+						try {
+							this.stripeServ.cancelSubscription(subscription);
+						} catch (StripeException e) {
+							e.printStackTrace();
+						}
+						return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
 					}
-					return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
-
+					
+				}else { // Other unknown cases
+					return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR); 
 				}
 			
 		}else {
@@ -466,6 +505,100 @@ public class UserController {
     	Product p = this.productServ.findOne(productName);
 		User user = this.userServ.findByName(userName);
 
+    	ResponseEntity<License> check = this.checkProductAndUser(p, user);
+    	if(check.getStatusCode()!=HttpStatus.OK) {
+    		return check;
+    	}
+    	PaymentIntent paymentIntent = this.stripeServ.retrievePaymentIntent(id);
+    	if(paymentIntent==null) {
+    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+    	}
+        Map<String, Object> params = new HashMap<>();
+        params.put("return_url", this.generalController.appDomain+"/products/"+productName);
+        PaymentIntent piReturned = this.stripeServ.confirmPaymentIntent(paymentIntent, params);
+        String status = piReturned.getStatus();
+		License license = new License(true, p, userName);
+
+        if(status.equals("succeeded")) {
+			licenseServ.save(license);
+			return new ResponseEntity<>(license,HttpStatus.OK);
+        }else if(status.equals("requires_payment_method")) {
+            System.out.println(piReturned.getLastPaymentError().getMessage());
+    		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
+        }else if(status.equals("requires_action")) {
+        	System.out.println("requires actoin");
+        	//Fake license
+        	License license2 = new License();
+        	license2.setType("RequiresAction");
+        	license2.setSerial(piReturned.getNextAction().getRedirectToUrl().getUrl());
+    		return new ResponseEntity<>(license2,HttpStatus.OK);
+        }else {
+        	System.out.println("error");
+        	return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+    }
+    
+    
+    @PostMapping("/{username}/paymentIntents/{paymentIntentId}/products/{product}")
+    public ResponseEntity<License> confirm3dsPaymentResponse(@PathVariable String paymentIntentId, @PathVariable String username, @PathVariable String product,  @RequestParam Optional<String> type, 
+    		@RequestParam Optional<String> subscriptionId,  @RequestParam Optional<String> automaticRenewal){
+    	Product p = this.productServ.findOne(product);
+		User user = this.userServ.findByName(username);
+
+    	ResponseEntity<License> check = this.checkProductAndUser(p, user);
+    	if(check.getStatusCode()!=HttpStatus.OK) {
+    		return check;
+    	}
+    	try {
+	    	PaymentIntent paymentIntent;
+			paymentIntent = this.stripeServ.retrievePaymentIntent(paymentIntentId);
+	
+	    	if(paymentIntent==null) {
+	    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+	    	}
+	    	
+	    	PaymentIntent pi = this.stripeServ.retrievePaymentIntent(paymentIntentId);
+	    	if(pi.getStatus().equals("succeeded")) {
+	    		System.out.println(type.isPresent() + " | " + type.get());
+		    	if(!type.isPresent()) {
+		    		License license = new License(true, p, username);
+		    		this.licenseServ.save(license);
+					return new ResponseEntity<>(license,HttpStatus.OK);
+	    		}else {
+	    			System.out.println("HOAL0");
+	    			boolean automaticR;
+	    			if (automaticRenewal.get().equals("true")) {
+	    				automaticR=true;
+	    			}else {
+	    				automaticR=false;
+	    			}
+					LicenseSubscription license = new LicenseSubscription(true, type.get(), p, user.getName(),0);
+					Subscription subscription = this.stripeServ.retrieveSubscription(subscriptionId.get());
+					license.setCancelAtEnd(!automaticR);
+					license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
+					license.setSubscriptionId(subscriptionId.get());
+					licenseServ.save(license);
+					return new ResponseEntity<>(license,HttpStatus.OK);
+
+	    		}
+				
+	    	}else {
+	    		pi.cancel();
+				return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
+	    	}
+    	}catch(StripeException e) {
+    		e.printStackTrace();
+    		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+    	}
+    	
+    	
+    	
+    }
+    
+    
+    private ResponseEntity<License> checkProductAndUser(Product p , User user){
+
 		// We don't know which user wants to affect -> Unauthorized
 		if(user==null) {
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
@@ -478,16 +611,8 @@ public class UserController {
     	if(p==null) {
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
-    	PaymentIntent paymentIntent = this.stripeServ.retrievePaymentIntent(id);
-    	if(paymentIntent==null) {
-    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-    	}
-        Map<String, Object> params = new HashMap<>();
-        this.stripeServ.confirmPaymentIntent(paymentIntent, params);
-        
-		License license = new License(true, p, userName);
-		licenseServ.save(license);
-				
-		return new ResponseEntity<>(license,HttpStatus.OK);
+    	
+    	return new ResponseEntity<>(HttpStatus.OK);
+
     }
 }

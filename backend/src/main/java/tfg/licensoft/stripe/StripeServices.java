@@ -7,6 +7,7 @@ import org.springframework.stereotype.Service;
 
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
+import com.stripe.model.Invoice;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentMethod;
 import com.stripe.model.PaymentMethodCollection;
@@ -115,7 +116,17 @@ public class StripeServices {
 		return  paymentIntent.confirm(params);
 	}
 	
+	public PaymentIntent updatePaymentIntent(Map<String, Object> params, PaymentIntent paymentIntent) throws StripeException {
+		return paymentIntent.update(params);
+	}
+	
 	public UsageRecord createOnSubscriptionItem(String subsItemId,Map<String, Object> usageRecordParams,RequestOptions options ) throws StripeException {
 		return UsageRecord.createOnSubscriptionItem(subsItemId, usageRecordParams, options);
 	}
+	
+	public Invoice getLatestInvoice(String id) throws StripeException {
+		return Invoice.retrieve(id);
+	}
+	
+
 }

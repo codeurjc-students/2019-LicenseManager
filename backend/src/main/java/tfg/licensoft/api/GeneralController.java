@@ -33,7 +33,9 @@ public class GeneralController {
 	@Value("${appName}")
 	String appName;
 	
-
+	@Value("${app.domain}")
+	String appDomain;
+	
 	@GetMapping("keys/stripe/public")
 	private ResponseEntity<Response> getPublicStripeKey() {
 		Response key= new Response();
@@ -50,6 +52,17 @@ public class GeneralController {
 		Response r= new Response();
 		r.setText(this.appName);
 		if(appName!=null) {
+			return new ResponseEntity<>(r, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/appDomain")
+	private ResponseEntity<Response> getAppDomain() {
+		Response r= new Response();
+		r.setText(this.appDomain);
+		if(appDomain!=null) {
 			return new ResponseEntity<>(r, HttpStatus.OK);
 		}else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
