@@ -8,6 +8,7 @@ import java.util.Date;
 import java.util.UUID;
 
 import javax.persistence.Entity;
+import javax.persistence.Transient;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -17,6 +18,7 @@ import javax0.license3j.crypto.LicenseKeyPair;
 import javax0.license3j.io.IOFormat;
 import javax0.license3j.io.KeyPairReader;
 import javax0.license3j.io.LicenseWriter;
+import tfg.licensoft.api.GeneralController;
 import tfg.licensoft.configurations.PropertiesLoader;
 import tfg.licensoft.products.Product;
 
@@ -31,7 +33,7 @@ public class LicenseSubscription extends License {
 	private String subscriptionId;
 	private int nUsage;
 	private Date endDate;
-
+	
 	public LicenseSubscription(boolean active, String type,  Product product, String owner,long trialDays) {
 		super(active, product, owner);
 		this.setType(type);
@@ -162,9 +164,22 @@ public class LicenseSubscription extends License {
 		String privateKeyPath="";
 		try {
 			privateKeyPath= PropertiesLoader.loadProperties("application.properties").getProperty("licencheck.keys.private");
+			System.out.println(privateKeyPath + " : Got by loadProperties");
+
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		if (privateKeyPath==null) {
+			privateKeyPath = System.getenv("LICENCHECK.KEYS.PRIVATE");
+			System.out.println(privateKeyPath + " : Got by system.getenv(caps)");
+
+		}
+		if(privateKeyPath==null) {
+			privateKeyPath = System.getenv("licencheck.keys.private");
+			System.out.println(privateKeyPath + " : Got by system.getenv(minus)");
+
+		}
+		System.out.println(privateKeyPath);
 		javax0.license3j.License license = new javax0.license3j.License();
         license.add(Feature.Create.stringFeature("serial",this.getSerial()));
         license.add(Feature.Create.dateFeature("startDate",this.getStartDate()));

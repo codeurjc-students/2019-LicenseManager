@@ -14,16 +14,17 @@ services:
             MYSQL_DATABASE: licensoft
 
     licensoft:
-        image: kikeajani/licensoft:latest
+        image: kikeajani/licensoft-http
         volumes:
             - ./certs:/certs
+            - ./keys:/keys
         links:
             - sql
         depends_on:
             sql:
                condition: service_healthy
         ports:
-            - "8443:8443"
+            - "80:80"
         restart: always
         environment:
             SPRING_DATASOURCE_URL: jdbc:mysql://sql/licensoft?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
@@ -40,6 +41,4 @@ services:
             SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
             SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH}
             SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
-            SERVER_SSL_KEY-STORE: ${SSLKEYSTORE}
-            SERVER_SSL_KEY-STORE-PASSWORD: ${SSLKEYSTOREPASS}
-            SERVER_SSL_KEY-PASSWORD: ${SSLKEYPASS}
+            LICENCHECK_KEYS_PRIVATE: ${LICENCHECK_KEYS_PRIVATE}

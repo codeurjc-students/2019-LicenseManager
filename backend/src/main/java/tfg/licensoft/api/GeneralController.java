@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api")
 public class GeneralController {
 	
-	private class Response{
+	public class Response{
 		private String text;
 		
 		public String getText() {
@@ -35,6 +35,9 @@ public class GeneralController {
 	
 	@Value("${app.domain}")
 	String appDomain;
+	
+	@Value("${licencheck.keys.private}")
+	String privateKey;
 	
 	@GetMapping("keys/stripe/public")
 	private ResponseEntity<Response> getPublicStripeKey() {
@@ -63,6 +66,17 @@ public class GeneralController {
 		Response r= new Response();
 		r.setText(this.appDomain);
 		if(appDomain!=null) {
+			return new ResponseEntity<>(r, HttpStatus.OK);
+		}else {
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+		}
+	}
+	
+	@GetMapping("/privateKey")
+	public ResponseEntity<Response> getPrivateKeyPath() {
+		Response r= new Response();
+		r.setText(this.privateKey);
+		if(privateKey!=null) {
 			return new ResponseEntity<>(r, HttpStatus.OK);
 		}else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
