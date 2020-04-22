@@ -14,9 +14,8 @@ services:
             MYSQL_DATABASE: licensoft
 
     licensoft:
-        image: kikeajani/licensoft-http
+        image: kikeajani/licensoft-http:latest
         volumes:
-            - ./certs:/certs
             - ./keys:/keys
         links:
             - sql
@@ -34,6 +33,7 @@ services:
             STRIPE_PRIVATEKEY: ${STRIPE_PRIVATEKEY}
             STRIPE_PUBLICKEY: ${STRIPE_PUBLICKEY}
             APPNAME: ${APPNAME}
+            APP_DOMAIN: ${APPDOMAIN}
             ADMINEMAIL: ${ADMINEMAIL}
             ADMINNAME: ${ADMINNAME}
             ADMINPASS: ${ADMINPASS}
