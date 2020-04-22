@@ -233,7 +233,7 @@ public class UserController {
 				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
 				license.setSubscriptionId(subscription.getId());
 				licenseServ.save(license);
-				this.setTimerAndEndDate(license.getSerial(),license.getProduct(),product.getTrialDays());
+				this.setTimerAndEndDate(license.getSerial(),license.getProduct(),product.getTrialDays(),0);
 				return new ResponseEntity<License>(license,HttpStatus.OK);
 
 			}catch(StripeException e) {
@@ -320,7 +320,7 @@ public class UserController {
 					license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
 					license.setSubscriptionId(subscription.getId());
 					licenseServ.save(license);
-					this.setTimerAndEndDate(license.getSerial(),license.getProduct(),0);
+					this.setTimerAndEndDate(license.getSerial(),license.getProduct(),0,0);
 					
 					return new ResponseEntity<License>(license,HttpStatus.OK);
 				}else if (status.equals("incomplete")) {
@@ -361,7 +361,7 @@ public class UserController {
 		}
 	}
 	
-	private void setTimerAndEndDate(String licenseSerial, Product product,long trialDays) {	
+	private void setTimerAndEndDate(String licenseSerial, Product product,long trialDays, int nRetry) {	
 		LicenseSubscription license = licenseSubsServ.findBySerialAndProduct(licenseSerial, product);
 		System.out.println("Setting " + license.getSerial() + " timer");
 		
@@ -379,10 +379,32 @@ public class UserController {
 							license.setActive(false);
 							licenseSubsServ.save(license);
 						}else {
-							System.out.println("Renewal doing on " + license);
-							license.renew(trialDays);
-							licenseSubsServ.save(license);
-							setTimerAndEndDate(licenseSerial,product,0);
+							try {
+								Subscription subs = stripeServ.retrieveSubscription(license.getSubscriptionId());
+								String status = subs.getStatus();
+								if(status.equals("active")) {  //Already paid
+									System.out.println("Renewal doing on " + license);
+									license.renew(trialDays);
+									licenseSubsServ.save(license);
+									setTimerAndEndDate(licenseSerial,product,0,0);
+								}else if (status.equals("past_due")) {  //Needs 3Dsecure 
+									Invoice inv = stripeServ.getLatestInvoice(subs.getLatestInvoice());
+									if (inv.getStatus().equals("requires_action") && nRetry<3) {  //Max retries when requires action is 3.
+										Date dt = new Date();
+										Calendar c = Calendar.getInstance(); 
+										c.setTime(dt); 
+										c.add(Calendar.DATE, 1);
+										dt = c.getTime();
+										license.setEndDate(dt);
+										setTimerAndEndDate(licenseSerial,product,0,nRetry+1);
+										System.out.println("Subscription " + subs.getId() + " needs SCA autenthication. This is the " + nRetry + " retry of 3 max.");
+									}
+								}else {//Subs canceled because max retries
+									stripeServ.cancelSubscription(subs);
+								}
+							}catch(StripeException ex) {
+								ex.printStackTrace();
+							}
 						}
 					}
 					
@@ -527,7 +549,6 @@ public class UserController {
     		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
         }else if(status.equals("requires_action")) {
-        	System.out.println("requires actoin");
         	//Fake license
         	License license2 = new License();
         	license2.setType("RequiresAction");
@@ -560,13 +581,11 @@ public class UserController {
 	    	
 	    	PaymentIntent pi = this.stripeServ.retrievePaymentIntent(paymentIntentId);
 	    	if(pi.getStatus().equals("succeeded")) {
-	    		System.out.println(type.isPresent() + " | " + type.get());
 		    	if(!type.isPresent()) {
 		    		License license = new License(true, p, username);
 		    		this.licenseServ.save(license);
 					return new ResponseEntity<>(license,HttpStatus.OK);
 	    		}else {
-	    			System.out.println("HOAL0");
 	    			boolean automaticR;
 	    			if (automaticRenewal.get().equals("true")) {
 	    				automaticR=true;
