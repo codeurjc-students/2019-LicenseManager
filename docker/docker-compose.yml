@@ -14,7 +14,7 @@ services:
             MYSQL_DATABASE: licensoft
 
     licensoft:
-        image: kikeajani/licensoft-http:upgrade
+        image: kikeajani/licensoft-http:latest
         volumes:
             - ./keys:/keys
         links:

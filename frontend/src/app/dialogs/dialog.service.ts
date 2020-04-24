@@ -40,7 +40,6 @@ export class DialogService {
 
     openCardSelectDialog(userName:string, msg:string, cb:boolean){
       return this.dialog.open(CardSelectDialog,{
-        width: '60vw',
         data:{
           user: userName,
           msg: msg,
@@ -51,7 +50,6 @@ export class DialogService {
 
     openCardSubscriptionSelectDialog(userName:string, msg:string, subsId:string){
       return this.dialog.open(CardSubscriptionSelectDialog,{
-        width: '60vw',
         data:{
           user: userName,
           msg: msg,
