@@ -178,7 +178,7 @@ export class CatalogProductComponent implements OnInit {
           if(res[0]){
             this.loading=true;
             this.userProfileService.addSubscriptionToProduct(this.product,type,this.loginService.getUserLogged().name, res[1], res[2]).subscribe(
-                (u:any)=> { console.log(u);
+                (u:any)=> { 
                   if(u.type!="RequiresAction"){
                     this.successfulMessage=true;
                     this.loading=false;
@@ -374,13 +374,6 @@ export class CatalogProductComponent implements OnInit {
                       this.licenseFileString=t.licenseString; 
                       this.createFile()
                     }else{
-                     /* console.log("jaja");
-                      
-                      var iframe = document.createElement('iframe');
-                      iframe.src = t.serial;
-                      iframe.width = "600";
-                      iframe.height = "400";
-                      window.document.body.appendChild(iframe);*/
                       localStorage.setItem("pi",data['id']);
                       console.log(t.serial);
                       window.location=t.serial;

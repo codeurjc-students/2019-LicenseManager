@@ -302,18 +302,9 @@ public class UserController {
 					}
 				}
 				this.productServ.save(product);	
-				System.out.println(subscription.getStatus()+ " :D");
 				String status = subscription.getStatus();
 				PaymentIntent piReturned = null;
-				try {
-					Invoice s = this.stripeServ.getLatestInvoice(subscription.getLatestInvoice());
-					piReturned = this.stripeServ.retrievePaymentIntent(s.getPaymentIntent());
-					piReturned.getStatus();
-				} catch (StripeException e1) {
-					// TODO Auto-generated catch block
-					e1.printStackTrace();
-					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
-				}
+
 				if (status.equals("active")) {  //Payment finalized
 					LicenseSubscription license = new LicenseSubscription(true, typeSubs, product, user.getName(),0);
 					license.setCancelAtEnd(!automaticRenewal);
@@ -324,6 +315,14 @@ public class UserController {
 					
 					return new ResponseEntity<License>(license,HttpStatus.OK);
 				}else if (status.equals("incomplete")) {
+					try {
+						Invoice s = this.stripeServ.getLatestInvoice(subscription.getLatestInvoice());
+						piReturned = this.stripeServ.retrievePaymentIntent(s.getPaymentIntent());
+					} catch (StripeException e1) {
+						// TODO Auto-generated catch block
+						e1.printStackTrace();
+						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+					}
 					if(piReturned != null && piReturned.getStatus().equals("requires_action")) {   //SCA 3DSecure authentication needed
 						
 						PaymentIntent piReturned2 =null;

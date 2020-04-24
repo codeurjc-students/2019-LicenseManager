@@ -168,6 +168,19 @@ public class License {
 		} catch (IOException e) {
 			e.printStackTrace();
 		}
+		if (privateKeyPath==null) {
+			privateKeyPath = System.getenv("LICENCHECK.KEYS.PRIVATE");
+		}
+		if(privateKeyPath==null) {
+			privateKeyPath = System.getenv("licencheck.keys.private");
+		}
+		if(privateKeyPath==null) {
+			privateKeyPath = System.getenv("licencheck_keys_private");
+		}
+
+		if (privateKeyPath==null) {
+			privateKeyPath = System.getenv("LICENCHECK_KEYS_PRIVATE");
+		}
 		javax0.license3j.License license = new javax0.license3j.License();
         license.add(Feature.Create.stringFeature("serial",this.getSerial()));
         license.add(Feature.Create.dateFeature("startDate",this.getStartDate()));

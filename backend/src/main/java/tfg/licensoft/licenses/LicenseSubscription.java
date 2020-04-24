@@ -164,15 +164,22 @@ public class LicenseSubscription extends License {
 		String privateKeyPath="";
 		try {
 			privateKeyPath= PropertiesLoader.loadProperties("application.properties").getProperty("licencheck.keys.private");
-
 		} catch (IOException e) {
 			e.printStackTrace();
+		}
+		if (privateKeyPath==null) {
+			privateKeyPath = System.getenv("LICENCHECK.KEYS.PRIVATE");
+		}
+		if(privateKeyPath==null) {
+			privateKeyPath = System.getenv("licencheck.keys.private");
+		}
+		if(privateKeyPath==null) {
+			privateKeyPath = System.getenv("licencheck_keys_private");
 		}
 
 		if (privateKeyPath==null) {
 			privateKeyPath = System.getenv("LICENCHECK_KEYS_PRIVATE");
 		}
-		System.out.println(privateKeyPath);
 		javax0.license3j.License license = new javax0.license3j.License();
         license.add(Feature.Create.stringFeature("serial",this.getSerial()));
         license.add(Feature.Create.dateFeature("startDate",this.getStartDate()));
