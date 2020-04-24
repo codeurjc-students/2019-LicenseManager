@@ -11,7 +11,6 @@ import { CustomFormComponentComponent } from './custom-form-component/custom-for
 import { NotFoundComponent } from './not-found/not-found.component';
 import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistics.component';
 import { Component } from '@angular/core';
-import { CardSelectDialog } from './dialogs/card-select-dialog/card-select-dialog.component';
 
 
 

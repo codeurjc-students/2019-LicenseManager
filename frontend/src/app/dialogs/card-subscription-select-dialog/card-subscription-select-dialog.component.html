@@ -10,13 +10,14 @@
                         </mat-radio-button>
                 </div>
                 </mat-radio-group>
+
+
+                <button mat-raised-button (click)="insertCard()" color="primary" *ngIf="!inserted">Insert new card</button>
+                <div *ngIf="inserted">
+                    <app-card-form [calledByTrial]="false" (cardAdded)="cardAddedHandler($event)"></app-card-form>
+                </div>
                 <br>
-                <div *ngIf="data.checkbox">
-                    <br>
-                    <mat-checkbox class="example-margin" [(ngModel)]="checkboxStatus" color="primary"> Automatic renewal</mat-checkbox>
-                    <br>
-                  </div>
         </span>
     </div>
-    <button mat-flat-button id="yes-button" (click)="yes()">CONFIRM</button>
+    <button mat-flat-button id="yes-button" (click)="yes()">CONFIRM CHANGES</button>
 </div>

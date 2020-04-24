@@ -97,7 +97,8 @@ import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistic
 import { PieChartComponent } from './charts/pie-chart.component';
 import { BarChartComponent } from './charts/bar-chart.component';
 import { AddCardDialogComponent } from './dialogs/add-card-dialog/add-card-dialog.component';
-import { CardSelectDialog } from './dialogs/card-select-dialog/card-select-dialog.component';
+import { CardSubscriptionSelectDialog } from './dialogs/card-subscription-select-dialog/card-subscription-select-dialog.component';
+import { CardSelectDialog } from './dialogs/card-select-dialog copy/card-select-dialog.component';
 
 @NgModule({
     imports: [ 
@@ -161,9 +162,9 @@ import { CardSelectDialog } from './dialogs/card-select-dialog/card-select-dialo
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,CardSelectDialog,AddCardDialogComponent,BarChartComponent, PieChartComponent, LicenseStatisticsComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
+    declarations: [AppComponent,CardSubscriptionSelectDialog,CardSelectDialog,AddCardDialogComponent,BarChartComponent, PieChartComponent, LicenseStatisticsComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
     bootstrap: [AppComponent],
-    entryComponents: [DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent, DialogFreeTrial, AddCardDialogComponent,CardSelectDialog,
+    entryComponents: [DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent, DialogFreeTrial, AddCardDialogComponent,CardSelectDialog,CardSubscriptionSelectDialog,
     ],
     providers:[ LoginService, RegisterService, ProductService, LicenseService, UserProfileService,DatePipe,LoginComponent, AppService, UserProfileComponent, CardFormComponent, UsedCardService,
         { provide: MAT_DIALOG_DATA, useValue: {} },

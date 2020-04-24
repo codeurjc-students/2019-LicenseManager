@@ -4,7 +4,8 @@ import { ConfirmationDialogComponent } from './confirmation-dialog/confirmation-
 import { LoginComponent } from '../login/login.component';
 import { DialogFreeTrial } from './dialogFreeTrial.component';
 import { AddCardDialogComponent } from './add-card-dialog/add-card-dialog.component';
-import { CardSelectDialog } from './card-select-dialog/card-select-dialog.component';
+import { CardSelectDialog } from './card-select-dialog copy/card-select-dialog.component';
+import { CardSubscriptionSelectDialog } from './card-subscription-select-dialog/card-subscription-select-dialog.component';
 
 @Injectable({
     providedIn:'root'
@@ -44,6 +45,17 @@ export class DialogService {
           user: userName,
           msg: msg,
           checkbox:cb
+        }
+      });
+    }
+
+    openCardSubscriptionSelectDialog(userName:string, msg:string, subsId:string){
+      return this.dialog.open(CardSubscriptionSelectDialog,{
+        width: '60vw',
+        data:{
+          user: userName,
+          msg: msg,
+          subsId:subsId,
         }
       });
     }

@@ -40,8 +40,8 @@ public class StripeServices {
 		return 	c.update(params);
 	}
 	
-	public void updateSubscription(Subscription s,Map<String, Object> params) throws StripeException {
-		s.update(params);
+	public Subscription updateSubscription(Subscription s,Map<String, Object> params) throws StripeException {
+		return s.update(params);
 	}
 	
 	public Product createProduct(Map<String, Object> params) throws StripeException {

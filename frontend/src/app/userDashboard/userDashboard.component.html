@@ -5,7 +5,7 @@
         </mat-card-title>
         <hr>
         <mat-card-content>
-        <mat-grid-list cols="16"  rowHeight="4rem">
+        <mat-grid-list cols="17"  rowHeight="4rem">
             <mat-grid-tile>
                 <a><strong>PRODUCT</strong></a>
             </mat-grid-tile>
@@ -34,7 +34,7 @@
                 <a><strong>UPCOMING INVOICE</strong></a>
             </mat-grid-tile>
         </mat-grid-list>
-            <mat-grid-list cols="16"  rowHeight="4rem">
+            <mat-grid-list cols="17"  rowHeight="4rem">
                 <div *ngFor="let license of activeLicenses | paginate: {itemsPerPage:numberOfElements, currentPage: pageActual}" class="lineLicense">
                     <mat-grid-tile>
                         <span (click)="manageLink(license.product.name)" class="productName">{{license.product.name}}</span>
@@ -79,6 +79,9 @@
                     <mat-grid-tile colspan="2">
                         <button mat-raised-button color="primary" (click)="downloadDialog(license)">Get LicenseFile</button>
                         <a id="download" [href]="fileurl" download={{fileName}} style="display: none;">Download License File</a>
+                    </mat-grid-tile>
+                    <mat-grid-tile colspan="1">
+                        <button mat-raised-button color="primary" (click)="editPaymentMethod(license.subscriptionId)"><mat-icon>create</mat-icon></button>
                     </mat-grid-tile>
                 </div>
             </mat-grid-list>

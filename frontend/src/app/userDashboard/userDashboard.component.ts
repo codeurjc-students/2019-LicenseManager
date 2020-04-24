@@ -3,11 +3,12 @@ import { License } from '../licenses/license.model';
 import { LoginService } from '../login/login.service';
 import { LicenseService } from '../licenses/license.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
-import { MatDialogRef, MatDialog } from '@angular/material';
+import { MatDialogRef, MatDialog, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { DialogService } from '../dialogs/dialog.service';
 import { Product } from '../product/product.model';
 import { DomSanitizer } from '@angular/platform-browser';
+import { UserProfileService } from '../userProfile/userProfile.service';
 
 @Component({
     selector: 'app-userDashboard',
@@ -27,7 +28,10 @@ export class UserDashboardComponent implements OnInit{
     fileurl;
     fileName:string;
 
-    constructor(private sanitizer: DomSanitizer,private dialogService:DialogService,private licenseService:LicenseService,private datepipe: DatePipe,private router:Router,public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute, public loginService:LoginService){}
+    conf:MatSnackBarConfig= new MatSnackBarConfig();
+
+
+    constructor(private snackbar:MatSnackBar,private sanitizer: DomSanitizer,private dialogService:DialogService,private licenseService:LicenseService,private datepipe: DatePipe,private router:Router,public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute, public loginService:LoginService, public userProfileService:UserProfileService){}
 
 
     ngOnInit(): void {
@@ -85,6 +89,19 @@ export class UserDashboardComponent implements OnInit{
                 if(res){
                     let element: HTMLElement = document.getElementById('download') as HTMLElement;
                     element.click();
+                }
+            }
+        )
+    }
+
+    editPaymentMethod(subsId:string){
+        this.dialogService.openCardSubscriptionSelectDialog(this.userName,"Cards available",subsId).afterClosed().subscribe(
+            res => {
+                if(res[0]){
+                    this.userProfileService.setPaymentMethodOfSubs(subsId,this.userName,res[1]).subscribe(
+                        (res:any) => {this.conf.duration=3000,this.snackbar.open("Method of payment changed succesfully","X",this.conf)},
+                        error => console.log(error) 
+                    )
                 }
             }
         )

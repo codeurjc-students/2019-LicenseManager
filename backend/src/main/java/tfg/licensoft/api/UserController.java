@@ -633,4 +633,64 @@ public class UserController {
     	return new ResponseEntity<>(HttpStatus.OK);
 
     }
+    
+    private ResponseEntity<License> checkUser(User user){
+
+		// We don't know which user wants to affect -> Unauthorized
+		if(user==null) {
+			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
+		}
+		// User to be affected != User that made the request
+		if(!user.equals(this.getRequestUser())) {
+			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
+		}
+		
+		return new ResponseEntity<>(HttpStatus.OK);
+    }
+    
+    
+    
+    @GetMapping("/{username}/subscriptions/{subsId}/paymentMethod")
+	public ResponseEntity<SimpleResponse> getPaymentMethodOfSubscription(@PathVariable String username, @PathVariable String subsId) {
+		User user = this.userServ.findByName(username);
+		HttpStatus status = this.checkUser(user).getStatusCode();
+		if (status!=HttpStatus.OK) {
+			return new ResponseEntity<>(status);
+		}
+		try {
+			Subscription subs = this.stripeServ.retrieveSubscription(subsId);
+			if(subs==null) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			return new ResponseEntity<>(new SimpleResponse(subs.getDefaultPaymentMethod()),HttpStatus.OK);
+		} catch (StripeException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+    }
+    
+    @PostMapping("/{username}/subscriptions/{subsId}/paymentMethods/{pmId}")
+	public ResponseEntity<SimpleResponse> postPaymentMethodOfSubscription(@PathVariable String username, @PathVariable String subsId, @PathVariable String pmId) {
+		User user = this.userServ.findByName(username);
+		HttpStatus status = this.checkUser(user).getStatusCode();
+		if (status!=HttpStatus.OK) {
+			return new ResponseEntity<>(status);
+		}
+		try {
+			Subscription subs = this.stripeServ.retrieveSubscription(subsId);
+			if(subs==null) {
+				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+			}
+			Map<String, Object> params = new HashMap<>();
+			params.put("default_payment_method", pmId);
+			Subscription subsReturned= this.stripeServ.updateSubscription(subs, params);
+			return new ResponseEntity<>(new SimpleResponse(subsReturned.getDefaultPaymentMethod()),HttpStatus.OK);
+		} catch (StripeException e) {
+			e.printStackTrace();
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+		}
+		
+    }
+    
 }

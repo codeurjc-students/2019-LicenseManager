@@ -16,12 +16,21 @@ export class CardSelectDialog {
     defaultPM:string;
     res:any[]=[];
     checkboxStatus:boolean=false;
+    inserted:boolean=false;
+    cardAdded:boolean = false;
+    user:string;
 
 
     constructor(@Inject(MAT_DIALOG_DATA) public data,public dialogRef: MatDialogRef<CardSelectDialog>, private userProfileServ:UserProfileService){ 
         this.loading=true;
-        this.userProfileServ.getUserCardsStripe(data.user).subscribe(
-            (cards:any) => {this.paymentMethods=cards;this.loading=false; this.userProfileServ.getDefaultCard(data.user).subscribe(
+        this.user=data.user;
+        this.getCards(this.user);
+
+    }
+
+    getCards(user:any){
+        this.userProfileServ.getUserCardsStripe(user).subscribe(
+            (cards:any) => {this.paymentMethods=cards;this.loading=false; this.userProfileServ.getDefaultCard(user).subscribe(
                 (def:any) => {this.defaultPM=def.response; this.pmSelected=this.defaultPM} 
             )},
             error=> {console.log(error);this.loading=false}
@@ -38,5 +47,14 @@ export class CardSelectDialog {
     closeDialog() {
         this.res[0]=false;
         this.dialogRef.close(this.res);
+    }
+
+    insertCard(){
+        this.inserted=true;
+    }
+
+    cardAddedHandler($event:any){
+        this.cardAdded=$event;
+        this.getCards(this.user);
     }
 }

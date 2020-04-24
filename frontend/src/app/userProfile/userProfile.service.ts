@@ -70,6 +70,13 @@ export class UserProfileService {
 
     }
 
+    getPaymentMethodOfSubs(subsId:string, userName:string){
+        return this.http.get(BASE_URL + userName + "/subscriptions/" + subsId + "/paymentMethod") 
+    }
+
+    setPaymentMethodOfSubs(subsId:string,userName:string, pmId:string){
+        return this.http.post(BASE_URL + userName + "/subscriptions/" + subsId + "/paymentMethods/" + pmId,{}) 
+    }
 
 
     private handleError(error: any) {
