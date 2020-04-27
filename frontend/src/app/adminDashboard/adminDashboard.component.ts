@@ -53,7 +53,7 @@ import { DialogService } from '../dialogs/dialog.service';
             },
         });
         this.dialogRef.afterClosed().subscribe(
-            p =>{ this.getProducts();this.snackbar.open("Product updated","X",this.conf)}
+            p =>{ this.getProducts(); if(p){this.snackbar.open("Product updated","X",this.conf)}}
 
         );
     }
