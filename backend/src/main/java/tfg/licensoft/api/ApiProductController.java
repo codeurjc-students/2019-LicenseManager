@@ -2,17 +2,14 @@ package tfg.licensoft.api;
 
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import java.util.Optional;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -54,11 +51,11 @@ public class ApiProductController {
 	
 	
 	@GetMapping()
-	public Page<Product> getProducts(HttpServletRequest req,Pageable page, @RequestParam Optional<String> search){
+	public List<Product> getProducts(HttpServletRequest req,@RequestParam Optional<String> search){
 		if (!search.isPresent()) {
-			return productServ.findAllActives(page);
+			return productServ.findAllActives();
 		}else {
-			return this.productServ.findSearch(page,search.get());
+			return this.productServ.findSearch(search.get());
 		}
 		
 	}

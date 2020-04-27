@@ -1,11 +1,8 @@
 package tfg.licensoft.licenses;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import tfg.licensoft.products.Product;
@@ -32,8 +29,8 @@ public class LicenseSubscriptionService {
 		this.licRep.delete(license);
 	}
 	
-	public Page<LicenseSubscription> findLicensesOfProduct(Product product, Pageable page) {
-		return this.licRep.findByProduct(product,page);
+	public List<LicenseSubscription> findLicensesOfProduct(Product product) {
+		return this.licRep.findByProduct(product);
 	}
 	
 	public LicenseSubscription findBySerialAndProduct(String serial, Product product) {
@@ -45,9 +42,9 @@ public class LicenseSubscriptionService {
 	}
 	
 	
-	public Page<LicenseSubscription> findByUsername(String username, Pageable page){
+	public List<LicenseSubscription> findByUsername(String username){
 		if (this.userServ.findByName(username)!=null) {
-			return this.licRep.findByOwner(username, page);
+			return this.licRep.findByOwner(username);
 		}else {
 			return null;
 		}
@@ -64,10 +61,10 @@ public class LicenseSubscriptionService {
 	public LicenseSubscription findBySerialAndProductAndActive(String serial, Product product, boolean active) {
 		return this.licRep.findBySerialAndProductAndActive(serial, product,active);
 	}
+	 
 	
-	
-	public Page<LicenseSubscription> findByProductAndOwner(Product product, String owner, Pageable page){
-		return this.licRep.findByProductAndOwner(product, owner, page);
+	public List<LicenseSubscription> findByProductAndOwner(Product product, String owner){
+		return this.licRep.findByProductAndOwner(product, owner);
 	}
 	
 }

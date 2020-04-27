@@ -18,7 +18,7 @@ export class CatalogComponent {
   numberOfElements = 5;
   constructor(private productService:ProductService, private router:Router){
       productService.getProducts().subscribe( 
-          (resp:any) =>{this.products = resp.content},
+          (resp:any) =>{this.products = resp},
           error => console.log(error)
       );
   }
@@ -29,7 +29,7 @@ export class CatalogComponent {
 
   searchProduct(){
     this.productService.getProductSearch(this.searchInputTerm).subscribe(
-      (ps:any) => this.products = ps.content,
+      (ps:any) => this.products = ps,
       error => console.log(error)
     )
   }

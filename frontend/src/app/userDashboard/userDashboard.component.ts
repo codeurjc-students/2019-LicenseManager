@@ -46,7 +46,7 @@ export class UserDashboardComponent implements OnInit{
 
     getLicenses(){
         this.licenseServ.getLicensesOfUser(this.userName).subscribe(
-            (lics:any) => {this.activeLicenses = lics.content;},
+            (lics:any) => {this.activeLicenses = lics;},
             error => console.log(error)
         ); 
     }

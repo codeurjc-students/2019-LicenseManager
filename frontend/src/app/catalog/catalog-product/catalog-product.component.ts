@@ -164,8 +164,15 @@ export class CatalogProductComponent implements OnInit {
 //METHODS TO SUBSCRIBE TO A PRODUCT
   subscribeToProduct(type:string,money:string){
     let msg;
+
     if(this.loginService.getUserLogged()==null){
-     this.dialogService.openConfirmDialog("You have to be logged first! If you don't have an account, you can register too",false,false);
+     this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
+      res => {    
+        let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
+        element.click();
+      },
+      error => console.log(error)
+    );
   
     }else{
       if(type==="MB"){
@@ -229,7 +236,13 @@ export class CatalogProductComponent implements OnInit {
 
   freeTrial(){
     if(this.loginService.getUserLogged()==null){
-      this.dialogService.openConfirmDialog("You have to be logged first! If you don't have an account, you can register too",false,false);
+      this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
+       res => {    
+         let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
+         element.click();
+       },
+       error => console.log(error)
+     );
    
      }else{
       this.dialogService.openFreeTrialDialog(this.product.name).afterClosed().subscribe(
@@ -323,7 +336,7 @@ export class CatalogProductComponent implements OnInit {
 
   getLicensesOfProductAndUser(){
     this.licenseServ.getLicensesOfUserAndProduct(this.loginService.getUserLogged().name,this.product.name).subscribe(
-      (ls:any)=> {this.userLicensesOfProduct=ls.content},
+      (ls:any)=> {this.userLicensesOfProduct=ls},
       error => console.log(error)
     );
   }
@@ -351,8 +364,15 @@ export class CatalogProductComponent implements OnInit {
 
   pay2(amount) {  
     let user=this.loginService.getUserLogged();
-    if(user==null){
-      this.dialogService.openConfirmDialog("You have to be logged first! If you don't have an account, you can register too",false,false);
+    if(this.loginService.getUserLogged()==null){
+      this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
+       res => {    
+         let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
+         element.click();
+       },
+       error => console.log(error)
+     );
+      
     }else{
       var handler = (<any>window).StripeCheckout.configure({
         key: this.appService.publicApiKey,

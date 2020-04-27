@@ -3,10 +3,9 @@ package tfg.licensoft.products;
 import java.io.File;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
@@ -22,8 +21,8 @@ public class ProductService {
 		return this.productRep.findByName(name);
 	}
 	
-	public Page<Product> findSearch(Pageable page, String search) {
-		return productRep.findSearch(page, search);
+	public List<Product> findSearch(String search) {
+		return productRep.findSearch(search);
 	}
 	
 	public Product save (Product product) {
@@ -34,12 +33,12 @@ public class ProductService {
 		this.productRep.delete(product);
 	}
 	
-	public Page<Product> findAll(Pageable page){
-		return this.productRep.findAll(page);
+	public List<Product> findAll(){
+		return this.productRep.findAll();
 	}
 	
-	public Page<Product> findAllActives(Pageable page){
-		return this.productRep.findByActive(true,page);
+	public List<Product> findAllActives(){
+		return this.productRep.findByActive(true);
 	}
 	
 	public void saveImage(MultipartFile file, Product product) throws Exception{

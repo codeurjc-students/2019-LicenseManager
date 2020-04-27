@@ -2,10 +2,9 @@ package tfg.licensoft.api;
 
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.data.domain.Page;
-import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -39,12 +38,12 @@ public class ApiLicenseController {
 	private UserService userServ; 
 
 	@GetMapping(value = "/products/{product}")
-	public ResponseEntity<Page<License>> getLicensesOfProduct(@PathVariable String product, Pageable page){
+	public ResponseEntity<List<License>> getLicensesOfProduct(@PathVariable String product){
 		Product p = this.productServ.findOne(product);
 		if(p==null) {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-		Page<License> licenses = this.licServ.findLicensesOfProduct(p,page);
+		List<License> licenses = this.licServ.findLicensesOfProduct(p);
 		return new ResponseEntity<>(licenses, HttpStatus.OK);
 		 
 	}
@@ -62,14 +61,14 @@ public class ApiLicenseController {
 	
 
 	@GetMapping(value = "/users/{userName}")
-	public ResponseEntity<Page<License>> getLicensesOfUser(@PathVariable String userName, Pageable page){
+	public ResponseEntity<List<License>> getLicensesOfUser(@PathVariable String userName){
 		User user = this.userServ.findByName(userName);
 		
 		if(user==null) {
-			return new ResponseEntity<Page<License>>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<List<License>>(HttpStatus.NOT_FOUND);
 		}else { 
-			Page<License> licenses = this.licServ.findByUsername(userName, page); 
-			return new ResponseEntity<Page<License>>(licenses,HttpStatus.OK);
+			List<License> licenses = this.licServ.findByUsername(userName); 
+			return new ResponseEntity<List<License>>(licenses,HttpStatus.OK);
 		}
 	} 
 	 
@@ -79,7 +78,6 @@ public class ApiLicenseController {
 		LicenseSubscription l = this.licenseSubsServ.findBySerialAndProduct(serial,p);
 		if(l!=null && p!=null) {
 			boolean newCancelAtEnd = !l.getCancelAtEnd();
-			User u = this.userServ.findByName(l.getOwner());
 			try {
 				Map<String, Object> params = new HashMap<>();
 				params.put("cancel_at_period_end", newCancelAtEnd);
@@ -101,7 +99,7 @@ public class ApiLicenseController {
 
 	
 	@GetMapping(value="/users/{userName}/products/{productName}")
-	public ResponseEntity<Page<License>> getLicensesOfUserAndProduct(@PathVariable String productName, @PathVariable String userName, Pageable page){
+	public ResponseEntity<List<License>> getLicensesOfUserAndProduct(@PathVariable String productName, @PathVariable String userName){
 		Product p = this.productServ.findOne(productName);
 		User user = this.userServ.findByName(userName);
 		
@@ -110,7 +108,7 @@ public class ApiLicenseController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		Page<License> licenses=this.licServ.findByProductAndOwner(p, userName, page);
+		List<License> licenses=this.licServ.findByProductAndOwner(p, userName);
 		return new ResponseEntity<>(licenses,HttpStatus.OK);		
 	}
 	

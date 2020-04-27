@@ -33,7 +33,7 @@ import { TdChipsBase } from '@covalent/core';
     
     getLicenses(name:string){
     this.productService.getLicensesByProduct(name).subscribe(
-        (lics:any) => {this.product.licenses=lics.content;},
+        (lics:any) => {this.product.licenses=lics;},
         error => console.log(error)
     ); 
 

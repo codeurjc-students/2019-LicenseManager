@@ -28,7 +28,7 @@ import { DialogService } from '../dialogs/dialog.service';
 
     getProducts(){
         this.productService.getProducts().subscribe(
-            (resp:any)  => {this.products = resp.content},
+            (resp:any)  => {this.products = resp},
             error => console.log(error)
         );
     }
