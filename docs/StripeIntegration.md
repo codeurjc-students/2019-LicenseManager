@@ -14,7 +14,6 @@ Also, Stripe give us a [checkout](https://stripe.com/docs/payments/checkout) to 
 * Customer => User
 * Product => Product
 	* Plans => Product attribute
-	* Sku => Product attribute
 
 ## Java Backend & Stripe - Set Up <a name="backSetup"></a>
 Set your Private and Public Stripe Key on the application.properties under src/main/resources (stripe.privateKey/publicKey)
@@ -53,19 +52,6 @@ Plan plan1M = Plan.create(params);
 product.getPlans().put("M",plan1M.getId());
 ```
 
-### Setting SKUs to a Lifetime Product
-[Stripe SKU API](https://stripe.com/docs/api/skus)
-Lifetime Products hava associated a SKU which identifies the Product with its properties (price, availability ,etc). Each Lifetime Product (Lifensoft) has a SKU attribute whick links it with the SKU (Stripe). 
-
-```
-...
-paramsSku.put("price",(int)(price*100) );
-paramsSku.put("product",productId);
-...
-Sku sku = Sku.create(paramsSku);
-product.setSku(sku.getId());
-product.setProductStripeId(productId);
-```
 
 ### Subscribing to a Product
 [Stripe Subscription API](https://stripe.com/docs/api/subscriptions)
@@ -79,23 +65,61 @@ Subscription subscription = Subscription.create(params);
 ```
 
 ### Purchasing a Product
-This process is divided into 2 parts: 1. Frontend to collect card info in a **token**. 2. Make the **Order** with the token.
+This process is divided into 4 parts: 
+1. Transforming card data info to a Stripe **token**.
+2. Creation of a **PaymentMethod** with the **token** created in the Frontend and passed to the backend, and the data of the transaction (amount, user info, options...).
+3. Creation of a **PaymentIntent** and attach the recent PaymentMethod created to it.
+4. Confirm the **PaymentIntent**, and check if they payment was succeded, failed or needs extra actions (3DSecure, confirmation SMS).
 Purchasing a Lifetime Product consists in ordering it. 
 [Stripe Order API](https://stripe.com/docs/api/orders)
 It's not necessary to have a payment source attached into it, because Stripe Elements (frontend)  will collect the card information to do the Order.
-**1st part:** [Frontend card info recopilation](StripeIntegration.md#collection-card-info)
+
+**1st part:** 
+
+[Frontend card info recopilation](StripeIntegration.md#collection-card-info)
+
 **2nd part:**
 
+	Map<String, Object> card = new HashMap<>();
+	card.put("token", tokenId);
+	Map<String, Object> paramsPM = new HashMap<>();
+	paramsPM.put("type", "card");
+	paramsPM.put("card", card);
+	PaymentMethod paymentMethod =  this.stripeServ.createPaymentMethod(paramsPM);
+
+**3rd part:**	
+
+        Map<String, Object> params = new HashMap<>();
+        params.put("amount", product.getPlansPrices().get("L").intValue()*100);
+        params.put("payment_method", paymentMethod.getId());
+        params.put("currency", "eur");
+        params.put("description", "Product bought: " + product.getName());
+		
+        List<Object> payment_method_types = new ArrayList<>();
+        payment_method_types.add("card");
+        params.put("payment_method_types", payment_method_types);
+	
+        params.put("customer",u.getCustomerStripeId());
+        params.put("receipt_email",u.getEmail());
+        PaymentIntent paymentIntent = this.stripeServ.createPaymentIntent(params);
+	
+**4th part:**
+	
 			...
-			item1.put("type", "sku");
-			item1.put("parent", product.getSku());
+        PaymentIntent piReturned = this.stripeServ.confirmPaymentIntent(paymentIntent, params);
+        String status = piReturned.getStatus();
 			...
-			params.put("customer", user.getCustomerStripeId());
+        if(status.equals("succeeded")) {
 			...
-			Order order = Order.create(params);
+        }else if(status.equals("requires_payment_method")) {
 			...
-			paramsNew.put("source", token);
-			order = order.pay(paramsNew)
+
+        }else if(status.equals("requires_action")) {
+        		...
+        }else {
+        	return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+        }
+       
 
 ### Attach card to Customer
 As Purchasing a Product, attaching a card to a Customer (Stripe) is divided in the same two parts.
