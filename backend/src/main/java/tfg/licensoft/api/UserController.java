@@ -522,7 +522,7 @@ public class UserController {
     
     @PostMapping("{userName}/confirm/{id}/products/{productName}")
     public ResponseEntity<License> confirm(@PathVariable String id, @PathVariable String userName, @PathVariable String productName) throws StripeException {
-    	
+   
     	Product p = this.productServ.findOne(productName);
 		User user = this.userServ.findByName(userName);
 
@@ -554,7 +554,6 @@ public class UserController {
         	license2.setSerial(piReturned.getNextAction().getRedirectToUrl().getUrl());
     		return new ResponseEntity<>(license2,HttpStatus.OK);
         }else {
-        	System.out.println("error");
         	return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
     }
@@ -571,26 +570,20 @@ public class UserController {
     		return check;
     	}
     	try {
-	    	PaymentIntent paymentIntent;
-			paymentIntent = this.stripeServ.retrievePaymentIntent(paymentIntentId);
+	    	PaymentIntent pi;
+			pi = this.stripeServ.retrievePaymentIntent(paymentIntentId);
 	
-	    	if(paymentIntent==null) {
+	    	if(pi==null) {
 	    		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 	    	}
 	    	
-	    	PaymentIntent pi = this.stripeServ.retrievePaymentIntent(paymentIntentId);
 	    	if(pi.getStatus().equals("succeeded")) {
 		    	if(!type.isPresent()) {
 		    		License license = new License(true, p, username);
 		    		this.licenseServ.save(license);
 					return new ResponseEntity<>(license,HttpStatus.OK);
 	    		}else {
-	    			boolean automaticR;
-	    			if (automaticRenewal.get().equals("true")) {
-	    				automaticR=true;
-	    			}else {
-	    				automaticR=false;
-	    			}
+	    			boolean automaticR= Boolean.parseBoolean(automaticRenewal.get());
 					LicenseSubscription license = new LicenseSubscription(true, type.get(), p, user.getName(),0);
 					Subscription subscription = this.stripeServ.retrieveSubscription(subscriptionId.get());
 					license.setCancelAtEnd(!automaticR);
@@ -602,7 +595,7 @@ public class UserController {
 	    		}
 				
 	    	}else {
-	    		pi.cancel();
+	    		this.stripeServ.cancelPaymentIntent(pi);
 				return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 	    	}
     	}catch(StripeException e) {

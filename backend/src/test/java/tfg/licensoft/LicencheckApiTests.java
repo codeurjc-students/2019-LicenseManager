@@ -4,6 +4,7 @@ import static org.mockito.BDDMockito.given;
 import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 
@@ -113,8 +114,8 @@ public class LicencheckApiTests {
     	licsSubs.add(lSubsD);
     	licsSubs.add(lSubsMB);
     	licsSubs.add(lSubsM);
-    	Page<License> licsSubsPage = new PageImpl<License>(licsSubs);
 
+    	
     	
     	given(prodServ.findOne(p1.getName())).willReturn(p1);
     	given(prodServ.findOne("no")).willReturn(null); 
@@ -126,6 +127,11 @@ public class LicencheckApiTests {
     	given(licenseService.findBySerialAndProductAndActive("smb", pS, true)).willReturn(lSubsMB);
     	given(licenseService.findBySerialAndProductAndActive("smb", p1, true)).willReturn(null);
 
+    	
+    	LicenseSubscription l = new LicenseSubscription(true,"M",pS,"user",0);
+    	LicenseStatistics lStat = new LicenseStatistics(l);
+    	
+    	given(this.licenseService.save(any())).willReturn(lSubsMB);
     }
     
     @Test
@@ -152,15 +158,11 @@ public class LicencheckApiTests {
     
     @Test
     public void testUpdateUsageFirstTime() throws Exception {
-    	LicenseStatistics lStat = new LicenseStatistics();
-    	given(this.licenseStatServ.findByLicenseAndIp(any(), any())).willReturn(null);
+    	//given(this.licenseStatServ.findByLicenseAndIp(any(), any())).willReturn(null);
 
     	mvc.perform(MockMvcRequestBuilders.put("/licencheck/updateUsage/1/PS/smb")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(content().string("1"));
-    	mvc.perform(MockMvcRequestBuilders.put("/licencheck/updateUsage/1/PS/sm")
-                .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNotAcceptable());
     	mvc.perform(MockMvcRequestBuilders.put("/licencheck/updateUsage/1/PS/no")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());

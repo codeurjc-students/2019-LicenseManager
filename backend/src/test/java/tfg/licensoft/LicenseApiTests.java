@@ -128,9 +128,8 @@ public class LicenseApiTests {
     	licsSubs.add(lSubsD);
     	licsSubs.add(lSubsMB);
     	licsSubs.add(lSubsM);
-    	Page<License> licsSubsPage = new PageImpl<License>(licsSubs);
 
-    	given(licenseService.findLicensesOfProduct(any(),any())).willReturn(licsSubsPage);
+    	given(licenseService.findLicensesOfProduct(any())).willReturn(licsSubs);
     	given(licenseService.findBySerialAndProduct("s1",p1)).willReturn(licLife);
     	given(licenseSubsService.findBySerialAndProduct("sd",pS)).willReturn(lSubsD);
     	given(licenseService.findBySerialAndProduct("sxxx",p1)).willReturn(null);
@@ -141,10 +140,10 @@ public class LicenseApiTests {
 
     	given(userServ.findByName("test")).willReturn(user);
     	given(userServ.findByName("no")).willReturn(null);
-    	given(licenseService.findByUsername(any(), any())).willReturn(licsSubsPage);
+    	given(licenseService.findByUsername(any())).willReturn(licsSubs);
     	
     	
-    	given(licenseService.findByProductAndOwner(any(), any(), any())).willReturn(licsSubsPage);
+    	given(licenseService.findByProductAndOwner(any(), any())).willReturn(licsSubs);
     	//Mockear Customer, y todo lo que conlleva: Subscriptions to Products, that Products, etc.
     	com.stripe.model.Product p = new com.stripe.model.Product();
     	p.setName("PS");
@@ -177,9 +176,9 @@ public class LicenseApiTests {
        	mvc.perform(MockMvcRequestBuilders.get("/api/licenses/products/P1")
                  .contentType(MediaType.APPLICATION_JSON))
                  .andExpect(status().isOk())
-                 .andExpect(jsonPath("$.content[0].serial",is("smfree")))
-                 .andExpect(jsonPath("$.content[1].serial",is("sa")))
-                 .andExpect(jsonPath("$.numberOfElements",is(5)))
+                 .andExpect(jsonPath("$[0].serial",is("smfree")))
+                 .andExpect(jsonPath("$[1].serial",is("sa")))
+                 .andExpect(jsonPath("$",hasSize(5)))
      			.andReturn().getResponse().getContentAsString();
     }
     
@@ -212,12 +211,12 @@ public class LicenseApiTests {
     	mvc.perform(MockMvcRequestBuilders.get("/api/licenses/users/test")
     			.contentType(MediaType.APPLICATION_JSON))
     			.andExpect(status().isOk())
-                .andExpect(jsonPath("$.numberOfElements",is(5)))
-    			.andExpect(jsonPath("$.content[0].owner",is("test")))
-				.andExpect(jsonPath("$.content[1].owner",is("test")))
-				.andExpect(jsonPath("$.content[2].owner",is("test")))
-				.andExpect(jsonPath("$.content[3].owner",is("test")))
-				.andExpect(jsonPath("$.content[4].owner",is("test")));
+                .andExpect(jsonPath("$",hasSize(5)))
+    			.andExpect(jsonPath("$[0].owner",is("test")))
+				.andExpect(jsonPath("$[1].owner",is("test")))
+				.andExpect(jsonPath("$[2].owner",is("test")))
+				.andExpect(jsonPath("$[3].owner",is("test")))
+				.andExpect(jsonPath("$[4].owner",is("test")));
 
     }
     
@@ -234,15 +233,15 @@ public class LicenseApiTests {
     	mvc.perform(MockMvcRequestBuilders.get("/api/licenses/users/test/products/PS")
     			.contentType(MediaType.APPLICATION_JSON))
 				.andExpect(status().isOk())
-    			.andExpect(jsonPath("$.content[0].owner",is("test")))
-				.andExpect(jsonPath("$.content[1].owner",is("test")))
-				.andExpect(jsonPath("$.content[2].owner",is("test")))
-				.andExpect(jsonPath("$.content[3].owner",is("test")))
-    			.andExpect(jsonPath("$.content[0].product.name",is("PS")))
-				.andExpect(jsonPath("$.content[1].product.name",is("PS")))
-				.andExpect(jsonPath("$.content[2].product.name",is("PS")))
-				.andExpect(jsonPath("$.content[3].product.name",is("PS")))
-				.andExpect(jsonPath("$.totalElements", is(5)));
+    			.andExpect(jsonPath("$[0].owner",is("test")))
+				.andExpect(jsonPath("$[1].owner",is("test")))
+				.andExpect(jsonPath("$[2].owner",is("test")))
+				.andExpect(jsonPath("$[3].owner",is("test")))
+    			.andExpect(jsonPath("$[0].product.name",is("PS")))
+				.andExpect(jsonPath("$[1].product.name",is("PS")))
+				.andExpect(jsonPath("$[2].product.name",is("PS")))
+				.andExpect(jsonPath("$[3].product.name",is("PS")))
+				.andExpect(jsonPath("$", hasSize(5)));
     }
     
     @Test

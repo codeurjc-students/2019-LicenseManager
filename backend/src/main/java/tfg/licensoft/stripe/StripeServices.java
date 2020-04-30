@@ -128,5 +128,14 @@ public class StripeServices {
 		return Invoice.retrieve(id);
 	}
 	
+	public PaymentIntent cancelPaymentIntent(PaymentIntent pi) {
+		try {
+			return pi.cancel();
+		} catch (StripeException e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
 
 }

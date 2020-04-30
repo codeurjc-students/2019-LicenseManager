@@ -42,6 +42,7 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+import static org.hamcrest.Matchers.hasSize;
 import static org.hamcrest.Matchers.is;
 import static org.mockito.ArgumentMatchers.any;
 
@@ -110,7 +111,6 @@ public class ProductApiTests {
     	List<Product> prods = new ArrayList<>();
     	prods.add(pS);
     	prods.add(p1);
-    	Page<Product> prodsPage = new PageImpl<>(prods);
     	
     	LicenseSubscription lSubsD = new LicenseSubscription(true,"D",pS,"test",0);
     	lSubsD.setSerial("sd");
@@ -134,10 +134,9 @@ public class ProductApiTests {
     	licsSubs.add(lSubsD);
     	licsSubs.add(lSubsMB);
     	licsSubs.add(lSubsM);
-    	Page<License> licsSubsPage = new PageImpl<License>(licsSubs);
     	
-    	given(productServ.findAllActives(any())).willReturn(prodsPage);
-    	given(productServ.findSearch(any(),any())).willReturn(prodsPage);
+    	given(productServ.findAllActives()).willReturn(prods);
+    	given(productServ.findSearch(any())).willReturn(prods);
     	
     	given(productServ.findOne(p1.getName())).willReturn(p1);
     	given(productServ.findOne("no")).willReturn(null); 
@@ -152,7 +151,7 @@ public class ProductApiTests {
     	mvc.perform(MockMvcRequestBuilders.get("/api/products")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalElements",is(2)));
+                .andExpect(jsonPath("$",hasSize(2)));
     }
     
     @Test
@@ -160,7 +159,7 @@ public class ProductApiTests {
     	mvc.perform(MockMvcRequestBuilders.get("/api/products?search=p")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk())
-                .andExpect(jsonPath("$.totalElements",is(2)));
+                .andExpect(jsonPath("$",hasSize(2)));
     }
     
     @Test

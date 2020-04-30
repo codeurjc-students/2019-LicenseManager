@@ -18,11 +18,15 @@ import com.google.gson.Gson;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.Customer.InvoiceSettings;
+import com.stripe.model.Invoice;
 import com.stripe.model.PaymentIntent;
+import com.stripe.model.PaymentIntent.NextAction;
+import com.stripe.model.PaymentIntent.NextActionRedirectToUrl;
 import com.stripe.model.PaymentMethod;
 import com.stripe.model.PaymentMethodCollection;
 import com.stripe.model.Plan;
 import com.stripe.model.SetupIntent;
+import com.stripe.model.StripeError;
 import com.stripe.model.Subscription;
 import com.stripe.model.SubscriptionCollection;
 import com.stripe.model.SubscriptionItem;
@@ -99,6 +103,7 @@ public class UserApiTests {
     	
     	Subscription s1 = new Subscription();
     	s1.setId("subs_id");
+    	s1.setStatus("active");
     	SubscriptionCollection sc = new SubscriptionCollection();
     	List<Subscription> data = new ArrayList<>();
     	Subscription s = new Subscription();
@@ -154,8 +159,14 @@ public class UserApiTests {
     	p1.setTrialDays(0);
     	p1.setWebLink("p1.com");
     	
-    	PaymentIntent pi = new PaymentIntent();
-    	pi.setId("pi_id");
+    	PaymentIntent piSucceeded = new PaymentIntent();
+    	piSucceeded.setId("pi_id_succeeded");
+    	piSucceeded.setStatus("succeeded");
+    	
+    	PaymentIntent piNotSucceeded = new PaymentIntent();
+    	piNotSucceeded.setId("pi_id_not_succeeded");
+    	piNotSucceeded.setStatus("not_succeeded");
+    	
     	
     	
     	given(this.userServ.findByName("user")).willReturn(user);
@@ -172,13 +183,36 @@ public class UserApiTests {
     	given(this.stripeServ.createSubscription((HashMap)any())).willReturn(s1);
     	given(this.stripeServ.createSubscription((SubscriptionCreateParams)any())).willReturn(s1);
     	
-    	given(this.stripeServ.createPaymentIntent(any())).willReturn(pi);
+    	given(this.stripeServ.createPaymentIntent(any())).willReturn(piSucceeded);
     	
-    	given(this.stripeServ.retrievePaymentIntent("pi_id")).willReturn(pi);
-    	
+    	given(this.stripeServ.retrievePaymentIntent("pi_id_succeeded")).willReturn(piSucceeded);
+    	given(this.stripeServ.retrievePaymentIntent("pi_id_not_succeeded")).willReturn(piNotSucceeded);
+
     	
     	LicenseSubscription licS = new LicenseSubscription(true,"D",pS,"user",0);
     	given(this.licenseSubsServ.findBySerialAndProduct(any(), any())).willReturn(licS);
+    	
+    	PaymentMethodCollection pmc = new PaymentMethodCollection();
+    	PaymentMethod pm1 = new PaymentMethod();
+    	pm1.setId("pm1_id");
+    	PaymentMethod pm2 = new PaymentMethod();
+    	pm2.setId("pm2_id");
+    	List<PaymentMethod> data3 = new ArrayList<>();
+    	data3.add(pm1);
+    	data3.add(pm2);
+    	pmc.setData(data3);
+    	given(this.stripeServ.getPaymentMethodCollection(any())).willReturn(pmc);
+    	
+    	
+    	s1.setDefaultPaymentMethod("pm1_id");
+    	given(this.stripeServ.retrieveSubscription("subId")).willReturn(s1);
+    	
+    	
+    	Subscription s2 = new Subscription();
+    	s2.setId("s2_id");
+    	s2.setDefaultPaymentMethod("pm2_id");
+    	given(this.stripeServ.updateSubscription(any(), any())).willReturn(s2);
+
 
     }
     
@@ -276,44 +310,68 @@ public class UserApiTests {
     }
     
     @Test
-    public void testAddSubscription() throws Exception{
-    	mvc.perform(MockMvcRequestBuilders.put("/api/users/user/products/PS/M/addSubscription/renewal/true")
+    public void testAddSubscriptionActive() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.put("/api/users/user/products/PS/M/addSubscription/renewal/true/paymentMethods/pm_card_visa")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
     
     @Test
+    public void testAddSubscriptionIncomplete() throws Exception{
+    	Subscription s = new Subscription();
+    	s.setStatus("incomplete");
+    	s.setLatestInvoice("id_latInv");
+    	given(this.stripeServ.createSubscription((HashMap)any())).willReturn(s);
+    	Invoice inv = new Invoice();
+    	inv.setPaymentIntent("id_pi");
+    	given(this.stripeServ.getLatestInvoice(any())).willReturn(inv);
+    	
+    	PaymentIntent piRequires = new PaymentIntent();
+    	piRequires.setId("piRequires");
+    	piRequires.setStatus("requires_action"); //3DSecure
+    	NextAction nextAction = new NextAction();
+    	NextActionRedirectToUrl redirectToUrl = new NextActionRedirectToUrl();
+    	redirectToUrl.setUrl("url_mocked");
+    	nextAction.setRedirectToUrl(redirectToUrl);
+    	piRequires.setNextAction(nextAction);
+    	given(this.stripeServ.retrievePaymentIntent(any())).willReturn(piRequires);
+    	given(this.stripeServ.confirmPaymentIntent(any(), any())).willReturn(piRequires);
+
+
+    	mvc.perform(MockMvcRequestBuilders.put("/api/users/user/products/PS/M/addSubscription/renewal/true/paymentMethods/pm_card_visa")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.type",is("RequiresAction")));
+    	
+    	//Testing if incomplete, not bc requires action
+    	given(this.stripeServ.retrievePaymentIntent(any())).willReturn(null);
+    	mvc.perform(MockMvcRequestBuilders.put("/api/users/user/products/PS/M/addSubscription/renewal/true/paymentMethods/pm_card_visa")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError());
+    }
+    
+    @Test
     public void testAddSubscriptionUnauthorized() throws Exception{
-    	mvc.perform(MockMvcRequestBuilders.put("/api/users/no/products/PS/M/addSubscription/renewal/true")
+    	mvc.perform(MockMvcRequestBuilders.put("/api/users/no/products/PS/M/addSubscription/renewal/true/paymentMethods/pm_card_visa")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
     
     @Test
     public void testAddSubscriptionForbidden() throws Exception{
-    	mvc.perform(MockMvcRequestBuilders.put("/api/users/test/products/PS/M/addSubscription/renewal/true")
+    	mvc.perform(MockMvcRequestBuilders.put("/api/users/test/products/PS/M/addSubscription/renewal/true/paymentMethods/pm_card_visa")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
     
     @Test
     public void testAddSubscriptionProductNotFound() throws Exception{
-    	mvc.perform(MockMvcRequestBuilders.put("/api/users/user/products/no/M/addSubscription/renewal/true")
+    	mvc.perform(MockMvcRequestBuilders.put("/api/users/user/products/no/M/addSubscription/renewal/true/paymentMethods/pm_card_visa")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
     
     @Test
     public void testGetCardsFromUser() throws Exception {
-    	PaymentMethodCollection pmc = new PaymentMethodCollection();
-    	PaymentMethod pm1 = new PaymentMethod();
-    	pm1.setId("pm1_id");
-    	PaymentMethod pm2 = new PaymentMethod();
-    	List<PaymentMethod> data = new ArrayList<>();
-    	data.add(pm1);
-    	data.add(pm2);
-    	pmc.setData(data);
-    	given(this.stripeServ.getPaymentMethodCollection(any())).willReturn(pmc);
     	mvc.perform(MockMvcRequestBuilders.get("/api/users/user/cards")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(jsonPath("$[0].id",is("pm1_id")));
@@ -368,7 +426,13 @@ public class UserApiTests {
     }
     
     @Test
-    public void testConfirmPayment() throws Exception {
+    public void testConfirmPaymentSuccededAndUserAuth() throws Exception {
+    	PaymentIntent piSucceed = new PaymentIntent();
+    	piSucceed.setId("piSucceed");
+    	piSucceed.setStatus("succeeded");
+    	given(this.stripeServ.confirmPaymentIntent(any(), any())).willReturn(piSucceed);
+    	given(this.stripeServ.retrievePaymentIntent(any())).willReturn(piSucceed);
+
     	mvc.perform(MockMvcRequestBuilders.post("/api/users/user/confirm/pi_id/products/P1")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.product.name",is("P1")));
@@ -377,8 +441,58 @@ public class UserApiTests {
                 .andExpect(status().isForbidden());
     	mvc.perform(MockMvcRequestBuilders.post("/api/users/no/confirm/pi_id/products/P1")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isUnauthorized());
+                .andExpect(status().isUnauthorized());	
     }
+    
+    @Test
+    public void testConfirmPaymentRequiresAction() throws Exception {
+    	PaymentIntent piRequires = new PaymentIntent();
+    	piRequires.setId("piRequires");
+    	piRequires.setStatus("requires_action"); //3DSecure
+    	NextAction nextAction = new NextAction();
+    	NextActionRedirectToUrl redirectToUrl = new NextActionRedirectToUrl();
+    	redirectToUrl.setUrl("url_mocked");
+    	nextAction.setRedirectToUrl(redirectToUrl);
+    	piRequires.setNextAction(nextAction);
+    	given(this.stripeServ.confirmPaymentIntent(any(), any())).willReturn(piRequires);
+    	given(this.stripeServ.retrievePaymentIntent(any())).willReturn(piRequires);
+
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/user/confirm/pi_id/products/P1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.type",is("RequiresAction")));	
+    }
+    
+    @Test
+    public void testConfirmPaymentErrors() throws Exception {
+    	PaymentIntent piRequires = new PaymentIntent();
+    	piRequires.setId("piRequires");
+    	piRequires.setStatus("requires_payment_method"); //Failed pm
+    	
+    	StripeError lastPaymentError = new StripeError();
+    	lastPaymentError.setMessage("Failed PM_ Msg Mocked");
+    	piRequires.setLastPaymentError(lastPaymentError);
+    	given(this.stripeServ.confirmPaymentIntent(any(), any())).willReturn(piRequires);
+    	given(this.stripeServ.retrievePaymentIntent("pi_id")).willReturn(piRequires);
+
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/user/confirm/pi_id/products/P1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isInternalServerError());	
+    	
+    	
+    	PaymentIntent piError = new PaymentIntent();
+    	piError.setId("piError");
+    	piError.setStatus("other");
+    	given(this.stripeServ.confirmPaymentIntent(any(), any())).willReturn(piError);
+    	
+    	//PaymentIntent not found
+    	given(this.stripeServ.retrievePaymentIntent(any())).willReturn(null);
+
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/user/confirm/pi_id/products/P1")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());	
+    }
+    
+    
     
     @Test
     public void testConfirmPaymentNotFound() throws Exception {
@@ -389,4 +503,91 @@ public class UserApiTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }
+    
+    @Test
+    public void testConfirm3DsPaymentResponseLifetime() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/user/paymentIntents/pi_id_succeeded/products/PS")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.type",is("L")));
+    }
+    
+    @Test
+    public void testConfirm3DsPaymentResponseSubs() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/user/paymentIntents/pi_id_succeeded/products/PS")
+                .contentType(MediaType.APPLICATION_JSON)
+                .param("automaticRenewal", "true")
+                .param("subscriptionId", "subId")
+                .param("type", "D"))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.type",is("D")));
+    }
+    
+    @Test
+    public void testConfirm3DsPaymentResponseUserCheckFails() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/test/paymentIntents/pi_id_succeeded/products/PS")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/no/paymentIntents/pi_id_succeeded/products/PS")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());	
+    }
+    
+    
+    @Test
+    public void testConfirm3DsPaymentResponseNotSucceeded() throws Exception{
+    	given(this.stripeServ.cancelPaymentIntent(any())).willReturn(null);
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/user/paymentIntents/pi_id_not_succeeded/products/PS")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isPreconditionFailed());
+    }
+    
+    @Test 
+    public void testGetPaymentMethodOfSubscription() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.get("/api/users/user/subscriptions/subId/paymentMethod")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.response",is("pm1_id")));
+    }
+    
+    @Test 
+    public void testGetPaymentMethodOfSubscriptionNotFound() throws Exception{
+    	given(this.stripeServ.retrieveSubscription(any())).willReturn(null);
+    	mvc.perform(MockMvcRequestBuilders.get("/api/users/user/subscriptions/subId/paymentMethod")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isNotFound());
+    }
+    
+    @Test 
+    public void testGetPaymentMethodOfSubscriptionCheckUserFails() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.get("/api/users/test/subscriptions/subId/paymentMethod")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    	mvc.perform(MockMvcRequestBuilders.get("/api/users/no/subscriptions/subId/paymentMethod")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());	
+    }
+    
+    @Test
+    public void testPostPaymentMethodOfSubscription() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/user/subscriptions/subId/paymentMethods/pm1_id")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isOk()).andExpect(jsonPath("$.response",is("pm2_id")));
+    }
+    
+    @Test
+    public void testPostPaymentMethodOfSubscriptionNotFound() throws Exception{
+    	given(this.stripeServ.retrieveSubscription(any())).willReturn(null);
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/user/subscriptions/subId/paymentMethods/pm1_id")
+                .contentType(MediaType.APPLICATION_JSON))
+        		.andExpect(status().isNotFound());
+    }
+    
+    @Test
+    public void testPostPaymentMethodOfSubscriptionCheckUserFails() throws Exception{
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/test/subscriptions/subId/paymentMethods/pm1_id")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isForbidden());
+    	mvc.perform(MockMvcRequestBuilders.post("/api/users/no/subscriptions/subId/paymentMethods/pm1_id")
+                .contentType(MediaType.APPLICATION_JSON))
+                .andExpect(status().isUnauthorized());	
+    }
+    
 }

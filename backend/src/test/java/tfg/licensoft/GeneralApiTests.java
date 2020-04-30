@@ -21,7 +21,7 @@ import org.springframework.security.test.context.support.WithMockUser;
 @SpringBootTest
 @AutoConfigureMockMvc
 @WithMockUser(roles="ADMIN")
-@TestPropertySource(properties = {"appName=Name!", "stripe.publicKey=pk_test"})
+@TestPropertySource(properties = {"appName=Name!", "stripe.publicKey=pk_test", "app.domain=http://testdomain.com","licencheck.keys.private=path/to/key"})
 public class GeneralApiTests {
 	
     @Autowired
@@ -52,6 +52,22 @@ public class GeneralApiTests {
 				.contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.text", is("pk_test")));
+	}
+	
+	@Test
+	public void testGetAppDomain() throws Exception {
+	mvc.perform(MockMvcRequestBuilders.get("/api/appDomain")
+				.contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.text", is("http://testdomain.com")));
+	}
+	
+	@Test
+	public void testGetPublicPrivateKeyPath() throws Exception {
+	mvc.perform(MockMvcRequestBuilders.get("/api/privateKey")
+				.contentType(MediaType.APPLICATION_JSON))
+        .andExpect(status().isOk())
+        .andExpect(jsonPath("$.text", is("path/to/key")));
 	}
 
 
