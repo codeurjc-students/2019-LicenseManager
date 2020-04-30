@@ -4,6 +4,8 @@ services:
     sql:
         image: mysql:latest
         command: --default-authentication-plugin=mysql_native_password
+        restart: always
+
         healthcheck:
             test: "/usr/bin/mysql --user=root --password=12345pass --execute \"SHOW DATABASES\""
             interval: 5s
