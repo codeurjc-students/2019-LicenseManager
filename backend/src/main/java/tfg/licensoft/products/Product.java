@@ -1,4 +1,6 @@
 package tfg.licensoft.products;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -18,6 +20,7 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import tfg.licensoft.licenses.License;
 
 @Entity
+@ApiModel("Product")
 public class Product {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)
@@ -27,8 +30,10 @@ public class Product {
 	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
 	private List<License>licenses;
 
+	@ApiModelProperty(example="NameMocked",required=true)
 	private String name;
 	
+	@ApiModelProperty(example="p_id",required=false)
 	private String productStripeId;
 	
 	
@@ -36,17 +41,39 @@ public class Product {
 	private HashMap<String,String> plans;
 	
 	@ElementCollection
+	@ApiModelProperty(example="[\r\n" + 
+			"            \"M\",\"D\", \"A\"\r\n" + 
+			"        ]",required=true)
 	private List<String> typeSubs; 
 		
+	@ApiModelProperty(example="Description Mocked for Swagger test execution",required=true)
 	@Column(columnDefinition = "LONGTEXT")
 	private String description;
+	
+	@ApiModelProperty(example="www.testSwagger.com",required=true)
 	private String webLink;
+	
+	@ApiModelProperty(example="false",required=true)
 	private boolean photoAvailable;
+	
+	@ApiModelProperty(example="testPath",required=true)
 	@NotNull
 	private String photoSrc;
+	
+	@ApiModelProperty(example="{\r\n" + 
+			"            \"A\": 122.0,\r\n" + 
+			"            \"D\": 1.0,\r\n" + 
+			"            \"M\": 12.0\r\n" + 
+			"        }",required=true)
 	private HashMap<String,Double> plansPrices;
+	
+	@ApiModelProperty(example="skuTest",required=true)
 	private String sku;
+	
+	@ApiModelProperty(example="true",required=true)
 	private boolean active;
+	
+	@ApiModelProperty(example="7",required=true)
 	private int trialDays;
 	
 

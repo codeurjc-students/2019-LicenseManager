@@ -15,7 +15,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping(value = "/api")
 public class GeneralController implements IGeneralController{
 	
-	public class Response{
+	public class SimpleResponse{
 		private String response;
 		
 		public String getResponse() {
@@ -40,8 +40,8 @@ public class GeneralController implements IGeneralController{
 	String privateKey;
 	
 	@GetMapping("/keys/stripe/public")
-	public ResponseEntity<Response> getPublicStripeKey() {
-		Response key= new Response();
+	public ResponseEntity<SimpleResponse> getPublicStripeKey() {
+		SimpleResponse key= new SimpleResponse();
 		key.setResponse(publicKey);
 		if(publicKey!=null) {
 			return new ResponseEntity<>(key,HttpStatus.OK);
@@ -51,8 +51,8 @@ public class GeneralController implements IGeneralController{
 	}
 
 	@GetMapping("/appName")
-	public ResponseEntity<Response> getAppName() {
-		Response r= new Response();
+	public ResponseEntity<SimpleResponse> getAppName() {
+		SimpleResponse r= new SimpleResponse();
 		r.setResponse(this.appName);
 		if(appName!=null) {
 			return new ResponseEntity<>(r, HttpStatus.OK);
@@ -62,8 +62,8 @@ public class GeneralController implements IGeneralController{
 	}
 	
 	@GetMapping("/appDomain")
-	public ResponseEntity<Response> getAppDomain() {
-		Response r= new Response();
+	public ResponseEntity<SimpleResponse> getAppDomain() {
+		SimpleResponse r= new SimpleResponse();
 		r.setResponse(this.appDomain);
 		if(appDomain!=null) {
 			return new ResponseEntity<>(r, HttpStatus.OK);
@@ -73,9 +73,9 @@ public class GeneralController implements IGeneralController{
 	}
 	/*
 	@GetMapping("/privateKey")
-	public ResponseEntity<Response> getPrivateKeyPath() {
+	public ResponseEntity<SimpleResponse> getPrivateKeyPath() {
 		System.out.println("-----------------------ACTION---------------------------");
-		Response r= new Response();
+		SimpleResponse r= new SimpleResponse();
 		r.setResponse(this.privateKey);
 		if(privateKey!=null) {
 			return new ResponseEntity<>(r, HttpStatus.OK);

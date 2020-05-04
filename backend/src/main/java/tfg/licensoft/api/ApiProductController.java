@@ -34,6 +34,10 @@ import com.stripe.model.Plan;
 import com.stripe.model.Sku;
 import com.stripe.param.PlanCreateParams;
 
+import io.swagger.annotations.ApiImplicitParam;
+import io.swagger.annotations.ApiOperation;
+import io.swagger.annotations.ApiResponse;
+import io.swagger.annotations.ApiResponses;
 import tfg.licensoft.products.Product;
 import tfg.licensoft.products.ProductService;
 import tfg.licensoft.stripe.StripeServices;
@@ -41,7 +45,7 @@ import tfg.licensoft.stripe.StripeServices;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/products")
-public class ApiProductController {
+public class ApiProductController implements IProductController{
 
 	@Autowired
 	private ProductService productServ;
@@ -51,11 +55,11 @@ public class ApiProductController {
 	
 	
 	@GetMapping()
-	public List<Product> getProducts(HttpServletRequest req,@RequestParam Optional<String> search){
+	public ResponseEntity<List<Product>> getProducts(HttpServletRequest req,@RequestParam Optional<String> search){
 		if (!search.isPresent()) {
-			return productServ.findAllActives();
+			return new ResponseEntity<>(productServ.findAllActives(), HttpStatus.OK);
 		}else {
-			return this.productServ.findSearch(search.get());
+			return new ResponseEntity<>(this.productServ.findSearch(search.get()),HttpStatus.OK);
 		}
 		
 	}
@@ -71,6 +75,8 @@ public class ApiProductController {
 	} 
  
 	
+	
+
 	@PostMapping("/")
 	public ResponseEntity<Product> postProduct(@RequestBody Product product){
 		if (this.productServ.findOne(product.getName())==null) {
@@ -100,6 +106,8 @@ public class ApiProductController {
 						
 					} catch (StripeException e) {
 						e.printStackTrace();
+						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+
 					}
 				}
 			    switch(plan.getKey()) {
@@ -137,7 +145,7 @@ public class ApiProductController {
 	public ResponseEntity<Product> editProduct(@RequestBody Product product){
 		Product p = this.productServ.findOne(product.getName());
 		if (p==null) {
-			return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
 		}else{
 			p.setDescription(product.getDescription());
 			try {
@@ -147,6 +155,7 @@ public class ApiProductController {
 				this.stripeServ.updateProduct(pStripe, params);
 			} catch (StripeException e) {
 				e.printStackTrace();
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			} 
 			p.setTrialDays(product.getTrialDays());
 			p.setPhotoAvailable(product.isPhotoAvailable());
@@ -161,7 +170,7 @@ public class ApiProductController {
 	public ResponseEntity<Product> deleteProduct(@PathVariable String productName,HttpServletRequest request){
 		Product p = this.productServ.findOne(productName);
 		if(p==null) {
-			return new ResponseEntity<Product>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<Product>(HttpStatus.NOT_FOUND);
 		}else {
 			try {
 				com.stripe.model.Product product = this.stripeServ.retrieveProduct(p.getProductStripeId());

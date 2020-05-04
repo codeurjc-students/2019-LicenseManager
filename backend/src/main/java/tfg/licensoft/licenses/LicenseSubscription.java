@@ -9,6 +9,9 @@ import java.util.UUID;
 
 import javax.persistence.Entity;
 import javax.persistence.Transient;
+
+import io.swagger.annotations.ApiModel;
+
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
@@ -23,6 +26,7 @@ import tfg.licensoft.configurations.PropertiesLoader;
 import tfg.licensoft.products.Product;
 
 @Entity
+@ApiModel("License Subscription")
 public class LicenseSubscription extends License {
 	@Id
 	@GeneratedValue(strategy = GenerationType.AUTO)

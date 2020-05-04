@@ -21,7 +21,7 @@ import com.stripe.model.Subscription;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/licenses")
-public class ApiLicenseController {
+public class ApiLicenseController implements ILicenseController {
 
 	@Autowired 
 	private LicenseService licServ;
@@ -93,7 +93,7 @@ public class ApiLicenseController {
 			}
 			return new ResponseEntity<License>(l,HttpStatus.OK);
 		}else {
-			return new ResponseEntity<License>(HttpStatus.PRECONDITION_REQUIRED);
+			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -110,6 +110,13 @@ public class ApiLicenseController {
 		
 		List<License> licenses=this.licServ.findByProductAndOwner(p, userName);
 		return new ResponseEntity<>(licenses,HttpStatus.OK);		
+	}
+	
+	
+	//Unique form to generate LicenseSubscription model for Swagger Documentation
+	@GetMapping("/LS")
+	public LicenseSubscription LicenseSubscription() {
+		return new LicenseSubscription();
 	}
 	
 }
