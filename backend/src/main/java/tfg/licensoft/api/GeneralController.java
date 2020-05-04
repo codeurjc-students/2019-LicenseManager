@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RestController;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api")
-public class GeneralController {
+public class GeneralController implements IGeneralController{
 	
 	public class Response{
 		private String response;
@@ -40,7 +40,7 @@ public class GeneralController {
 	String privateKey;
 	
 	@GetMapping("/keys/stripe/public")
-	private ResponseEntity<Response> getPublicStripeKey() {
+	public ResponseEntity<Response> getPublicStripeKey() {
 		Response key= new Response();
 		key.setResponse(publicKey);
 		if(publicKey!=null) {
@@ -51,7 +51,7 @@ public class GeneralController {
 	}
 
 	@GetMapping("/appName")
-	private ResponseEntity<Response> getAppName() {
+	public ResponseEntity<Response> getAppName() {
 		Response r= new Response();
 		r.setResponse(this.appName);
 		if(appName!=null) {
@@ -62,7 +62,7 @@ public class GeneralController {
 	}
 	
 	@GetMapping("/appDomain")
-	private ResponseEntity<Response> getAppDomain() {
+	public ResponseEntity<Response> getAppDomain() {
 		Response r= new Response();
 		r.setResponse(this.appDomain);
 		if(appDomain!=null) {
@@ -71,7 +71,7 @@ public class GeneralController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	
+	/*
 	@GetMapping("/privateKey")
 	public ResponseEntity<Response> getPrivateKeyPath() {
 		System.out.println("-----------------------ACTION---------------------------");
@@ -82,5 +82,5 @@ public class GeneralController {
 		}else {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
-	}
+	}*/
 }

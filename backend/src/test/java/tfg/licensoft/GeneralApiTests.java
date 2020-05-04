@@ -62,6 +62,7 @@ public class GeneralApiTests {
         .andExpect(jsonPath("$.text", is("http://testdomain.com")));
 	}
 	
+	/*
 	@Test
 	public void testGetPublicPrivateKeyPath() throws Exception {
 	mvc.perform(MockMvcRequestBuilders.get("/api/privateKey")
@@ -69,6 +70,6 @@ public class GeneralApiTests {
         .andExpect(status().isOk())
         .andExpect(jsonPath("$.text", is("path/to/key")));
 	}
-
+	 */
 
 }
