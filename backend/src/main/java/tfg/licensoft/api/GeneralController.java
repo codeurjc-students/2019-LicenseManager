@@ -16,14 +16,14 @@ import org.springframework.web.bind.annotation.RestController;
 public class GeneralController {
 	
 	public class Response{
-		private String text;
+		private String response;
 		
-		public String getText() {
-			return this.text;
+		public String getResponse() {
+			return this.response;
 		}
 		
-		public void setText(String te) {
-			this.text=te;
+		public void setResponse(String te) {
+			this.response=te;
 		}
 	}
 	
@@ -39,10 +39,10 @@ public class GeneralController {
 	@Value("${licencheck.keys.private}")
 	String privateKey;
 	
-	@GetMapping("keys/stripe/public")
+	@GetMapping("/keys/stripe/public")
 	private ResponseEntity<Response> getPublicStripeKey() {
 		Response key= new Response();
-		key.setText(publicKey);
+		key.setResponse(publicKey);
 		if(publicKey!=null) {
 			return new ResponseEntity<>(key,HttpStatus.OK);
 		}else {
@@ -53,7 +53,7 @@ public class GeneralController {
 	@GetMapping("/appName")
 	private ResponseEntity<Response> getAppName() {
 		Response r= new Response();
-		r.setText(this.appName);
+		r.setResponse(this.appName);
 		if(appName!=null) {
 			return new ResponseEntity<>(r, HttpStatus.OK);
 		}else {
@@ -64,7 +64,7 @@ public class GeneralController {
 	@GetMapping("/appDomain")
 	private ResponseEntity<Response> getAppDomain() {
 		Response r= new Response();
-		r.setText(this.appDomain);
+		r.setResponse(this.appDomain);
 		if(appDomain!=null) {
 			return new ResponseEntity<>(r, HttpStatus.OK);
 		}else {
@@ -74,8 +74,9 @@ public class GeneralController {
 	
 	@GetMapping("/privateKey")
 	public ResponseEntity<Response> getPrivateKeyPath() {
+		System.out.println("-----------------------ACTION---------------------------");
 		Response r= new Response();
-		r.setText(this.privateKey);
+		r.setResponse(this.privateKey);
 		if(privateKey!=null) {
 			return new ResponseEntity<>(r, HttpStatus.OK);
 		}else {

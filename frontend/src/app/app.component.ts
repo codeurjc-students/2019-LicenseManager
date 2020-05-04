@@ -32,7 +32,7 @@ export class AppComponent{
         
         this.appService.getAppName().subscribe(
             (name:any) => {
-                this.appName=name.text;
+                this.appName=name.response;
                 this.loginService.resetPages();
                 if(this.loginService.isLogged){
                     this.loginService.addPages(this.loginService.isAdmin)

@@ -125,7 +125,7 @@ export class CatalogProductComponent implements OnInit {
   setUp(){
     this.appService.getPublicStripeKey().subscribe(
       (key:any)=> {
-        this.stripeService.changeKey(key.text);
+        this.stripeService.changeKey(key.response);
         this.stripeService.elements(this.elementsOptions).subscribe(
          elements => {
            this.elements = elements;
