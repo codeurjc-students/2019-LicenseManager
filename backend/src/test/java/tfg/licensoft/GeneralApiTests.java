@@ -43,7 +43,7 @@ public class GeneralApiTests {
 	mvc.perform(MockMvcRequestBuilders.get("/api/appName")
 				.contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.text", is("Name!")));
+        .andExpect(jsonPath("$.response", is("Name!")));
 	}
 	
 	@Test
@@ -51,7 +51,7 @@ public class GeneralApiTests {
 	mvc.perform(MockMvcRequestBuilders.get("/api/keys/stripe/public")
 				.contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.text", is("pk_test")));
+        .andExpect(jsonPath("$.response", is("pk_test")));
 	}
 	
 	@Test
@@ -59,7 +59,7 @@ public class GeneralApiTests {
 	mvc.perform(MockMvcRequestBuilders.get("/api/appDomain")
 				.contentType(MediaType.APPLICATION_JSON))
         .andExpect(status().isOk())
-        .andExpect(jsonPath("$.text", is("http://testdomain.com")));
+        .andExpect(jsonPath("$.response", is("http://testdomain.com")));
 	}
 	
 	/*

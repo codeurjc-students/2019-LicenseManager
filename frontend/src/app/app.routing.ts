@@ -11,6 +11,7 @@ import { CustomFormComponentComponent } from './custom-form-component/custom-for
 import { NotFoundComponent } from './not-found/not-found.component';
 import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistics.component';
 import { Component } from '@angular/core';
+import { ApiDocsComponent } from './api-docs/api-docs.component';
 
 
 
@@ -27,7 +28,7 @@ const appRoutes = [
    { path: 'products', component: CatalogComponent, },
    { path: 'products/:name', component: CatalogProductComponent, },
    { path: 'user/dashboard/:name/statistics/:serial', component: LicenseStatisticsComponent, },
-   { path: 'try', component: CustomFormComponentComponent, },
+   { path: 'development/api', component: ApiDocsComponent, },
    {path: '404', component: NotFoundComponent},
    {path: '**', redirectTo: '/404'}
 ];

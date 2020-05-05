@@ -410,7 +410,7 @@ public class ProductApiTests {
     	mvc.perform(MockMvcRequestBuilders.put("/api/products/")
     			.content(jsonParser.toJson(pS))
     			.contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNotFound());
     }
     
     @Test
@@ -434,7 +434,7 @@ public class ProductApiTests {
     public void testDeleteNoContent() throws Exception{
     	mvc.perform(MockMvcRequestBuilders.delete("/api/products/no")
     			.contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNotFound());
     }
     
 }

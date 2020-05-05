@@ -265,7 +265,7 @@ public class LicenseApiTests {
     public void testCancelAtEndProductNull() throws Exception{
     	mvc.perform(MockMvcRequestBuilders.put("/api/licenses/cancelAtEnd/sd/products/no")
     			.contentType(MediaType.APPLICATION_JSON))
-    			.andExpect(status().isPreconditionRequired());
+    			.andExpect(status().isNotFound());
 
     }
     

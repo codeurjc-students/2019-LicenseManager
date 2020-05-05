@@ -97,6 +97,8 @@ import com.sun.mail.iap.Response;
 
 import springfox.documentation.builders.PathSelectors;
 import springfox.documentation.builders.RequestHandlerSelectors;
+import springfox.documentation.service.ApiInfo;
+import springfox.documentation.service.Contact;
 import springfox.documentation.spi.DocumentationType;
 import springfox.documentation.spring.web.plugins.Docket;
 import springfox.documentation.swagger2.annotations.EnableSwagger2;
@@ -107,6 +109,7 @@ import java.io.InputStream;
 import java.net.URI;
 import java.net.URL;
 import java.net.URLStreamHandler;
+import java.util.Collections;
 
 import javax.annotation.Resource;
 
@@ -276,7 +279,18 @@ public class SwaggerConfiguration {
                 		File.class,
                 		java.io.File.class,
                 		Resource.class
-                		);
+                		)
+                .apiInfo(apiInfo());
+    }
+    
+    private ApiInfo apiInfo() {
+        return new ApiInfo(
+          "Licensoft REST API", 
+          "This is the API for the Licensoft web-application. You can use it to learn how it works, or to build a new frontend using this backend methods", 
+          null, 
+          null, 
+          new Contact("Enrique Pina", "https://github.com/codeurjc-students/2019-LicenseManager", "e.pina.2016@alumnos.urjc.es"), 
+          null, null, Collections.emptyList());
     }
     
 }
