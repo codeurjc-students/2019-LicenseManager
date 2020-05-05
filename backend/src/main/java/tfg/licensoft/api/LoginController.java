@@ -29,6 +29,8 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
+
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 
@@ -46,7 +48,7 @@ import tfg.licensoft.users.UserService;
  */
 @CrossOrigin 
 @RestController
-public class LoginController {
+public class LoginController implements ILoginController{
 
 	private static final Logger log = LoggerFactory.getLogger(LoginController.class);
 
@@ -67,7 +69,7 @@ public class LoginController {
 	private GeneralController generalController;
 	
 	
-	@RequestMapping("/api/logIn")
+	@GetMapping("/api/logIn")
 	public ResponseEntity<User> logIn(HttpServletRequest req) {
 		if (!userComponent.isLoggedUser()) {
 			log.info("Not user logged");
@@ -79,7 +81,7 @@ public class LoginController {
 		}
 	}
 
-	@RequestMapping("/api/logOut")
+	@GetMapping("/api/logOut")
 	public ResponseEntity<Boolean> logOut(HttpSession session) {
 		if (!userComponent.isLoggedUser()) {
 			log.info("No user logged");
@@ -92,7 +94,7 @@ public class LoginController {
 		}
 	}
 	
-	@RequestMapping(value="/api/register/{user}/{pass1}/{pass2}/{email}", method= RequestMethod.POST)
+	@PostMapping(value="/api/register/{user}/{pass1}/{pass2}/{email}")
 	public ResponseEntity<User> register(Model model, @PathVariable String user, @PathVariable String pass1,
 			@PathVariable String pass2, @PathVariable String email,HttpServletRequest request, HttpServletResponse httpServletResponse) {
 		User newUser =userServ.findByName(user);

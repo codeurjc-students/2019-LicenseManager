@@ -44,7 +44,7 @@ import org.springframework.security.core.context.SecurityContextHolder;
 @CrossOrigin
 @RestController
 @RequestMapping(value = "/api/users")
-public class UserController {
+public class UserController implements IUserController{
 
 	@Autowired
 	private LicenseService licenseServ;
@@ -418,7 +418,7 @@ public class UserController {
 	
 	
 	@GetMapping("/{user}/cards")
-	private ResponseEntity<List<PaymentMethod>> getCardsFromUser(@PathVariable String user) {
+	public ResponseEntity<List<PaymentMethod>> getCardsFromUser(@PathVariable String user) {
 		User u = this.userServ.findByName(user);
 		
 		
@@ -449,7 +449,7 @@ public class UserController {
 	}
 	
 	@DeleteMapping("/{user}/card/{paymentMethodId}")
-	private ResponseEntity<SimpleResponse> deleteStripeCard(@PathVariable String user, @PathVariable String paymentMethodId) {
+	public ResponseEntity<SimpleResponse> deleteStripeCard(@PathVariable String user, @PathVariable String paymentMethodId) {
 		User u = this.userServ.findByName(user);
 		
 		// We don't know which user wants to affect -> Unauthorized
