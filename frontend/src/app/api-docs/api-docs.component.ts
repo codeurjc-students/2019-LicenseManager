@@ -13,13 +13,8 @@ import { Router } from '@angular/router';
     ngOnInit(): void {
         let url = "api/appDomain";
         this.http.get<string>(url).subscribe(
-            (s:any)=>{
-                if(s.response.charAt(4)=="s"){
-                    window.location.href="https://localhost/swagger-ui.html"
-                }else{
-                    window.location.href="http://localhost/swagger-ui.html"
-                }
-            }
+            //Not working on development = frontend endpoint is localhost:4200, and swagger ui is under backend endpoint localhost:80/
+            (s:any)=>{console.log(s.response);window.location.href=s.response+"/swagger-ui.html"}
         )
     }
 
