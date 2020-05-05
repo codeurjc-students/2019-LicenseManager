@@ -1,6 +1,6 @@
 # INSTALLATION GUIDE - Production
 Licensoft offers 2 Docker Images to deploy the application easily:
- * **licensoft** : runs under **HTTPS** on port 8443. Needs a SSL certificate (we provide a self-signed one and it will be explained how to make an own self-signed).
+ * **licensoft-https** : runs under **HTTPS** on port 8443. Needs a SSL certificate (we provide a self-signed one and it will be explained how to make an own self-signed).
  * **licensoft-http**: runs under **HTTP** on port 80.
 
 Both images need to be *paired* with a SQL Docker Container, so we provide a docker-compose.yml that will make them work together. This file will vary on some of its enviroment variables (properties) depending if the chosen image of Licensoft is HTTP or HTTPS.
@@ -15,7 +15,7 @@ Inside the docker folder, a `.env` file must be placed next to the `docker-compo
 *Example `.env`:* 
 * **Custom naming** 
 	* APPNAME=Licensoft
-	* APPDOMAIN=http://licensoft.es
+	* APPDOMAIN=http://licensoft.es/#  (**important** to add the **/#**)
 * **Stripe**
 	* STRIPE_PRIVATEKEY=sk_***
 	* STRIPE_PUBLICKEY=pk***
@@ -30,7 +30,7 @@ Inside the docker folder, a `.env` file must be placed next to the `docker-compo
 	*	SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE="true"  (*DON'T CHANGE*)
 * **RSA Private Key Path**
 	* LICENCHECK_KEYS_PRIVATE=/keys/private.key
- * **[IF IMAGE SELECTED IS *licensoft*] SSL (HTTPS) *(This example is valid for the default selfsigned certificate by the author)***
+ * **[IF IMAGE SELECTED IS *licensoft-https*] SSL (HTTPS) *(This example is valid for the default selfsigned certificate by the author)***
 	* SSLKEYSTORE=/certs/keystore.jks
 	* SSLKEYSTOREPASS=password 
 	* SSLKEYPASS=secret
@@ -47,7 +47,7 @@ Inside the docker folder, a `.env` file must be placed next to the `docker-compo
 
 * **RSA Private Key Path**: The path where your private key used to sign the Licenses is placed. We offer a private.key that is paired with its Public Key that works by default in Licencheck, placed in `docker/keys`. 
 
-* **[IF IMAGE SELECTED IS *licensoft*] SSL (HTTPS):** A `.jks` file it's necessary to run the application under HTTPS. By default, there is a selfsigned certificate. 
+* **[IF IMAGE SELECTED IS *licensoft-https*] SSL (HTTPS):** A `.jks` file it's necessary to run the application under HTTPS. By default, there is a selfsigned certificate. 
 To create a **new selfsigned credential** you must follow next steps:
 	1. Open your Shell.
 	2. `cd $JAVA_HOME/bin`
@@ -66,4 +66,5 @@ Once this is done, properties needed will be:
 
 ---
 1. Open your Shell and go to the docker folder of the project.
-2. Run `docker-compose up`. The application backend will be running on port 80 (image = licensoft-http) under HTTP or on port 8443 (image = licensoft) under HTTPS.
+2. Run `docker-compose up`. The application backend will be running on port 80 (image = 
+-http) under HTTP or on port 8443 (image = licensoft-https) under HTTPS.
