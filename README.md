@@ -86,6 +86,6 @@ To get this app running, a License of LicecheckExample must be bought in the web
 * [Licensoft-Web in Details](docs/LicensoftDetailed.md)
 * [Stripe Integration](docs/StripeIntegration.md)
 * [Licencheck Guide](docs/LicencheckGuide.md)
-* [API](docs/API.md)
+* [API](http://licensoft.es/swagger-ui.html)
 * [Installation Guide-Production](docs/INSTALLATION_GUIDE.md)
 * [Installation Guide-Development](docs/InstallationGuide-Development.md)
