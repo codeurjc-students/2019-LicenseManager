@@ -6,8 +6,13 @@ import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.Calendar;
 import java.util.Date;
 import java.util.UUID;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
+import java.util.concurrent.Future;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -27,12 +32,18 @@ import javax.net.ssl.TrustManager;
 import javax.net.ssl.X509TrustManager;
 
 
+
 public class Licencheck {
+
 
     private String baseEndpoint;
     private HttpsURLConnection con;
     private byte [] key;
     private byte [] digest;
+
+    private LicencheckListener listener;
+
+   // private Future<CheckInfo> checkInfo;
 
     //Constructor for non-Internet checking
     public Licencheck(){
@@ -196,7 +207,20 @@ public class Licencheck {
         if(l!=null) {
             try (LicenseReader reader = new LicenseReader(l)) {
                 License license = reader.read(IOFormat.STRING);
-                return license.isOK(key);
+                if (license.isOK(key)){
+                    if(!license.get("type").getString().equals("L")){ //Subscription Type Licenses
+                        Date startDate = license.get("startDate").getDate();
+                        Date endDate = license.get("endDate").getDate();
+                        Date actual = new Date();
+
+                        return (actual.after(startDate) && actual.before(endDate));  //Inside of bounds
+
+                    }else{  //Lifetime License = always valid if license.isOK==true
+                        return true;
+                    }
+                }else{
+                    return false;
+                }
             } catch (IOException e) {
                 System.out.print("Error reading license file " + e);
                 return false;
@@ -206,13 +230,25 @@ public class Licencheck {
         }
     }
 
+    /*
+     CheckInfo checkInfo = new CheckInfo();
+
+
+    checkInfo.setReason("LICENSE NOT VALID");
+    this.listener.checkResult(checkInfo);
+     */
     public void createLicense(String path){
+        Date dt = new Date();
+        Calendar c = Calendar.getInstance();
+        c.setTime(dt);
+        c.add(Calendar.DATE, 1);
+        dt = c.getTime();
         License license = new License();
         license.add(Feature.Create.stringFeature("serial", UUID.randomUUID().toString()));
-        license.add(Feature.Create.dateFeature("endDate",new Date()));
+        license.add(Feature.Create.dateFeature("endDate",dt));
         license.add(Feature.Create.dateFeature("startDate",new Date()));
         license.add(Feature.Create.stringFeature("product","p1"));
-        license.add(Feature.Create.stringFeature("type","MB"));
+        license.add(Feature.Create.stringFeature("type","D"));
         license.setExpiry(license.get("endDate").getDate());
         license.setLicenseId(UUID.fromString(license.get("serial").getString()));
 
@@ -230,5 +266,11 @@ public class Licencheck {
         }
     }
 
+    public void addInvalidLicenseListener(LicencheckListener listener){
+        this.listener = listener;
+    }
 
+   /* public Future<CheckInfo> getCheckInfo() {
+        return checkInfo;
+    }*/
 }

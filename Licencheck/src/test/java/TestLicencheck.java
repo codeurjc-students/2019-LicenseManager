@@ -3,22 +3,13 @@ import org.junit.Test;
 
 import java.io.File;
 import java.io.IOException;
+import java.math.BigInteger;
+import java.util.concurrent.Callable;
+import java.util.concurrent.ExecutionException;
+import java.util.stream.IntStream;
 
 public class TestLicencheck{
 
-    @Test
-    public void checkOfflineFalse() throws IOException {
-        Licencheck l = new Licencheck();
-        File lic = new File("M:\\UNIVERSIDAD\\TFG\\2019-LicenseManager\\Licencheck\\src\\main\\resources\\license-plainChecked.txt");
-        Assert.assertFalse(l.checkLicenseOffline(lic));
-    }
-
-    @Test
-    public void checkOfflineTrue() throws IOException {
-        Licencheck l = new Licencheck();
-        File lic = new File("C:\\Users\\KIKIT\\Downloads\\license-Subscription (11).txt");
-        Assert.assertTrue(l.checkLicenseOffline(lic));
-    }
 
     @Test
     public void testFlujoEntero() throws IOException {
@@ -28,6 +19,38 @@ public class TestLicencheck{
 
         File lic = new File("license-plainChecked-v2.txt");
         Assert.assertTrue(l.checkLicenseOffline(lic));
+    }
+
+    @Test
+    public void testa() throws IOException {
+        Licencheck l = new Licencheck();
+       // l.createLicense("license-plainChecked-v2.txt");
+
+        File lic = new File("C:\\Users\\KIKIT\\Downloads\\license-Photoshop (7).txt");
+
+        l.addInvalidLicenseListener(checkInfo -> {
+
+            switch (checkInfo.getReason()){
+                case "NO_PAYMENT": {
+                    System.out.println("The user hasn't paid");
+                    break;
+                }
+                case "LICENSE NOT VALID":{
+                    System.out.println("License not valid");
+                    break;
+                }
+            }
+
+        });
+        Assert.assertTrue(l.checkLicenseOffline(lic));
+
+    }
+
+
+
+
+
+
     }
 /*
 
@@ -67,4 +90,4 @@ public class TestLicencheck{
     }
 
 */
-}
+
