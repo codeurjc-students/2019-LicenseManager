@@ -182,11 +182,10 @@ public class License {
 			privateKeyPath = System.getenv("LICENCHECK_KEYS_PRIVATE");
 		}
 		javax0.license3j.License license = new javax0.license3j.License();
-        license.add(Feature.Create.stringFeature("serial",this.getSerial()));
         license.add(Feature.Create.dateFeature("startDate",this.getStartDate()));
         license.add(Feature.Create.stringFeature("product",this.getProduct().getName()));
         license.add(Feature.Create.stringFeature("type",this.getType()));
-        license.setLicenseId(UUID.fromString(license.get("serial").getString()));
+        license.add(Feature.Create.stringFeature("owner",this.getOwner()));
 
         try {
             KeyPairReader kpr = new KeyPairReader(privateKeyPath);

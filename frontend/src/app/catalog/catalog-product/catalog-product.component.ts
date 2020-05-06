@@ -64,7 +64,7 @@ export class CatalogProductComponent implements OnInit {
         this.numberOfPlans=s.length; 
         if(this.loginService.isLogged){
           this.getLicensesOfProductAndUser();
-          this.fileName= "license-"+this.product.name + ".txt"; 
+          this.fileName= "license-"+this.product.name +"-"+this.loginService.getUserLogged().name+ ".txt"; 
 
           //Checking if redirected by a Lifetime buy
           let piId = localStorage.getItem("pi");
