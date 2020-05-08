@@ -42,14 +42,13 @@ Licencheck Offline checking works with a RSA Cryptography Algorithm. For that re
 - Private key: Needed on the backend of Licensoft web application to sign the Licenses that will be served to customers.
 - Public key: Needed on Licencheck to validate the sign of the License served on the Licensoft web app.
 
-A default pair of keys are offered to start using Licensoft and Licencheck without any extra configuration, but it can be configured with a new pair of keys:
-...
+A default pair of keys are offered to start using Licensoft and Licencheck without any extra configuration, but it can be configured with a new pair of keys (see [InstallationGuide](INSTALLATION_GUIDE.md#gen-keys)).
 
 Licencheck must be instantiated **without** parameters.
 ```
 Licencheck l = new Licencheck();
 ```
-If you want to override the Public Key, it must be setted as a **byte[]**. This key must be paired with the Private key of Licensoft web app (see [InstallationGuide](INSTALLATION_GUIDE.md#gen-keys) to know how to generate a new pair and get the byte[] value of the public key).
+If you want to override the Public Key, it must be setted as a **byte[]**. This key must be paired with the Private key of Licensoft web app  (see [InstallationGuide](INSTALLATION_GUIDE.md#gen-keys) to know how to generate a new pair and get the byte[] value of the public key).
 ```
 l.setKey(newKey);
 ```
@@ -95,7 +94,7 @@ A default Public Key (that pairs with the default Private Key offered in Licenso
  
  2. ### <a name= "check"></a> CheckLickense(File f) 
  Licencheck will check with a RSA Algorithm if the LicenseFile introduced has been changed since its original signing. 
- If it hasn't been changed, then Licencheck check its attributes inside the LicenseFile and decides if the License is inside the period bounds or not, returning **true/false**.
- If it has been changed, returns **false**.
+ - If it hasn't been changed, then Licencheck check its attributes inside the LicenseFile and decides if the License is inside the period bounds or not, returning **true/false**.
+ - If it has been changed, returns **false**.
  
 
