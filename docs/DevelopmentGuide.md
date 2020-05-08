@@ -116,7 +116,7 @@ We use a proxy.conf.js file to redirect all the requests made to **/api/*** to t
 * Owner (String)
 * Price (double)
 
-### #License Subscription
+#### License Subscription
 * Trial (boolean)
 * CancelAtEnd (boolean)
 * SubscriptionItemId (String)
@@ -124,7 +124,7 @@ We use a proxy.conf.js file to redirect all the requests made to **/api/*** to t
 * NUsage (int)
 * EndDate (Date)
 
-### License Statistics
+#### License Statistics
 Object with statistics of a License (by ip)
 * License (License)
 * Ip (String)
