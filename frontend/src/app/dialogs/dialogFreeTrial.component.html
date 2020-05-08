@@ -2,10 +2,26 @@
     <div class="content-container">
         <mat-icon id="close-icon" (click)="closeDialog()">close</mat-icon>
         <span class="content-span full-width">
-        <h2>Free Trial - M Subscription</h2>
-        <a>Introduce your card info. You won't be charged until the free trial ends. You can disable automatic renewal on your User Dashboard.</a>
+        <h2>Free Trial</h2>
+        <a>Introduce your card info and choose the subscription type you want. You won't be charged until the free trial ends. You can disable automatic renewal on your User Dashboard.</a>
+        <br>
+        <br>
+        <a>Select your Subscription type:</a>
+        <br>
+        <br>
+        <mat-select [(value)]="typeSelected">
+            <mat-option *ngFor="let type of types | keyvalue" [value]="type.key">
+              <a>{{type.key}} subscription ({{type.value}}€/{{type.key}})</a>
+            </mat-option>
+        </mat-select>
+        <br>
+        <br>
         <app-card-form [calledByTrial]="true" [productName]=data.productName (valid)="setValid($event)" (token)="setToken($event)" (cardParams)="setParams($event)"></app-card-form>
+        <a *ngIf="valid" style="color: green;"><mat-icon>check</mat-icon> Valid card</a>
+
+        <button mat-flat-button id="yes-button" style="text-align: center;" (click)="yes()"  *ngIf="valid && typeSelected!=null">SUBSCRIBE</button>
+
     </span>
+
     </div>
-    <button mat-flat-button id="yes-button" (click)="yes()" *ngIf="valid">SUBSCRIBE</button>
 </div>

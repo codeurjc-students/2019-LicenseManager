@@ -14,13 +14,19 @@ export class DialogFreeTrial {
 
     valid:boolean;
     token:string;
+    typeSelected:string;
+    types:{ [name: string]: number };
     params:any[];
+    resp:any[] = [];
     constructor(@Inject(MAT_DIALOG_DATA) public data, public dialogRef: MatDialogRef<DialogFreeTrial>){ 
         this.valid=false;
+        this.types=data.types;
     }
 
     yes(){
-        this.dialogRef.close(this.params);
+        this.resp[0]=this.params;
+        this.resp[1] = this.typeSelected;
+        this.dialogRef.close(this.resp);
     }
 
     closeDialog() {

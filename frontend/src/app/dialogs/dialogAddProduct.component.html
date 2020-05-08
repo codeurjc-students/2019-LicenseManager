@@ -19,7 +19,20 @@
     </mat-select>
     </mat-form-field>
     <br>
-    <mat-form-field *ngIf="monthly && type=='subscription'"> 
+    <mat-form-field *ngIf="type!=null && type=='mettered'">
+        <mat-select [(ngModel)]="modeSelected" placeholder="Mode" required [disabled]="edit">
+            <mat-option value="Offline" default>Offline</mat-option>
+        </mat-select>    </mat-form-field>
+    <br>
+    <mat-form-field *ngIf="type!=null && type!='mettered'">
+        <mat-select [(ngModel)]="modeSelected" placeholder="Mode" required [disabled]="edit">
+            <mat-option value="Online">Online</mat-option>
+            <mat-option value="Offline">Offline</mat-option>
+            <mat-option value="Both">Both</mat-option>
+        </mat-select>
+    </mat-form-field>
+    <br>
+    <mat-form-field *ngIf="type=='subscription'"> 
         <input matInput placeholder="Trial Days" [(ngModel)]="trialDays" required> 
     </mat-form-field>
     <div *ngIf="type==='subscription'" class="prices" >
@@ -60,10 +73,10 @@
   </td-file-upload>
     </mat-dialog-content>
     <mat-dialog-actions>
-        <button mat-raised-button color="primary"  (click)="add()" *ngIf="!edit" [disabled]="(monthly && (trialDays==null || trialDays=='')) || description==null || (name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
-        || (monthly && (priceMonthly==null || priceMonthly=='')) || (annual && (priceAnnual==null || priceAnnual==''))) || type==='lifetime' && (price==null || price=='')">ADD</button>
-        <button mat-raised-button color="primary"  (click)="save()" *ngIf="edit" [disabled]="(monthly && (trialDays==null)) || description==null || (name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
-        || (monthly && (priceMonthly==null || priceMonthly=='')) || (annual && (priceAnnual==null || priceAnnual==''))) || type==='lifetime' && (price==null || price=='')">SAVE</button>
+        <button mat-raised-button color="primary"  (click)="add()" *ngIf="!edit" [disabled]="(type=='subscription' && (trialDays==null || trialDays=='')) || description==null || (name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
+        || (monthly && (priceMonthly==null || priceMonthly=='')) || (annual && (priceAnnual==null || priceAnnual==''))) || type==='lifetime' && (price==null || price=='') || modeSelected==null || (type=='mettered' && modeSelected !='Offline') || type==='mettered' && (price==null || price=='') ">ADD</button>
+        <button mat-raised-button color="primary"  (click)="save()" *ngIf="edit" [disabled]="(type=='subscription' && (trialDays==null || trialDays=='')) || description==null || (name==null || name=='') || (type==''||type==null) || type==='subscription' && ((daily && (priceDaily==null || priceDaily==''))
+        || (monthly && (priceMonthly==null || priceMonthly=='')) || (annual && (priceAnnual==null || priceAnnual==''))) || type==='lifetime' && (price==null || price=='') || modeSelected==null || (type=='mettered' && modeSelected !='Offline') || type==='lifetime' && (price==null || price=='') ">SAVE</button>
         <button mat-button  (click)="close()">CANCEL</button>
     </mat-dialog-actions>
 

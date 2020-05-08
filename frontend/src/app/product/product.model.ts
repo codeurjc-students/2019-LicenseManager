@@ -13,5 +13,6 @@ export interface Product{
     sku:string;
     active:boolean;
     trialDays:number;
+    mode:string;
 
 }

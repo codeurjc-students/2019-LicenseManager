@@ -48,7 +48,7 @@ public interface IUserController {
 	ResponseEntity<SimpleResponse> getDefaultPaymentMethod(@PathVariable String userName);
 	
 	
-	@ApiOperation(value = "Subscribes a given User to a given Product with a Trial Period")
+	@ApiOperation(value = "Subscribes a given User to a given Product with a Trial Period (any License type can have free trials)")
     @ApiResponses(value = {
             @ApiResponse(code = 200, message = "License"),
             @ApiResponse(code = 401, message = "User to get subscribed does not exist"),
@@ -56,7 +56,7 @@ public interface IUserController {
             @ApiResponse(code = 404, message = "Stripe Error"),
             @ApiResponse(code = 500, message = "Product to subscribe Not Found")
     })
-	ResponseEntity<License> addTrial(@PathVariable String productName, @PathVariable String userName,  @PathVariable String token);
+	ResponseEntity<License> addTrial(@PathVariable String productName, @PathVariable String userName,  @PathVariable String token, @PathVariable String type);
 
 
 	@ApiOperation(value = "Subscribes a given User to a given Product")

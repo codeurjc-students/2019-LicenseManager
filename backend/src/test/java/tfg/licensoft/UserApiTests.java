@@ -283,28 +283,28 @@ public class UserApiTests {
     
     @Test
     public void testAddTrial() throws Exception {
-    	mvc.perform(MockMvcRequestBuilders.put("/api/users/user/products/PS/addTrial/cards/tok_visa")
+    	mvc.perform(MockMvcRequestBuilders.put("/api/users/user/products/PS/M/addTrial/cards/tok_visa")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk());
     }
     
     @Test
     public void testAddTrialUnauthorized() throws Exception {
-    	mvc.perform(MockMvcRequestBuilders.put("/api/users/no/products/PS/addTrial/cards/tok_visa")
+    	mvc.perform(MockMvcRequestBuilders.put("/api/users/no/products/PS/M/addTrial/cards/tok_visa")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isUnauthorized());
     }
     
     @Test
     public void testAddTrialForbidden() throws Exception {
-    	mvc.perform(MockMvcRequestBuilders.put("/api/users/test/products/PS/addTrial/cards/tok_visa")
+    	mvc.perform(MockMvcRequestBuilders.put("/api/users/test/products/PS/M/addTrial/cards/tok_visa")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isForbidden());
     }
     
     @Test
     public void testAddTrialProductNotFound() throws Exception {
-    	mvc.perform(MockMvcRequestBuilders.put("/api/users/user/products/no/addTrial/cards/tok_visa")
+    	mvc.perform(MockMvcRequestBuilders.put("/api/users/user/products/no/M/addTrial/cards/tok_visa")
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isNotFound());
     }

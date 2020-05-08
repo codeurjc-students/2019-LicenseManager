@@ -48,7 +48,11 @@ public class LicenseSubscription extends License {
 			this.calculateEndDate(ahoraCal,trialDays);
 		}
 		this.setPrice(product.getPlansPrices().get(type));
-		this.setLicenseString(this.generateLicenseFile2("licenseFile-"+this.getProduct().getName()+".txt"));
+		
+        String mode = this.getProduct().getMode();
+        if(mode.equals("Offline") || mode.equals("Both")){
+    		this.setLicenseString(this.generateLicenseFile2("licenseFile-"+this.getProduct().getName()+".txt"));
+        }
 
 	}
 	

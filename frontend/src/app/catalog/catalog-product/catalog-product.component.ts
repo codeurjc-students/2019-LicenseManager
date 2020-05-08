@@ -245,13 +245,14 @@ export class CatalogProductComponent implements OnInit {
      );
    
      }else{
-      this.dialogService.openFreeTrialDialog(this.product.name).afterClosed().subscribe(
+      this.dialogService.openFreeTrialDialog(this.product.name, this.product.plansPrices).afterClosed().subscribe(
         res=> {
           if (res!=null){
+            console.log(res);
             this.loading=true;
-            this.userProfileService.addFreeTrial(this.product,this.loginService.getUserLogged().name,this.product.trialDays, res[0]).subscribe(
+            this.userProfileService.addFreeTrial(this.product,this.loginService.getUserLogged().name,this.product.trialDays, res[0][0], res[1]).subscribe(
                 (u:any)=> {
-                  this.usedCardServ.postUsedCard(res[1], res[2], res[3],this.product.name).subscribe(
+                  this.usedCardServ.postUsedCard(res[0][1], res[0][2], res[0][3],this.product.name).subscribe(
                     card => {this.loading=false;},
                     error=>{this.loading=false;console.log(error);}
                   )

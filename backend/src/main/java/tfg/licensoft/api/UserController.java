@@ -196,8 +196,8 @@ public class UserController implements IUserController{
 
 	
 	//Will be subscribed to a M subscription with x free trial days
-	@PutMapping("/{userName}/products/{productName}/addTrial/cards/{token}")
-	public ResponseEntity<License> addTrial(@PathVariable String productName, @PathVariable String userName,  @PathVariable String token){
+	@PutMapping("/{userName}/products/{productName}/{type}/addTrial/cards/{token}")
+	public ResponseEntity<License> addTrial(@PathVariable String productName, @PathVariable String userName,  @PathVariable String token, @PathVariable String type){
 		
 		User user = this.userServ.findByName(userName);
 		Product product = this.productServ.findOne(productName);
@@ -212,7 +212,9 @@ public class UserController implements IUserController{
 			return new ResponseEntity<>(HttpStatus.FORBIDDEN);
 		}
 		
-		if(product!=null) {
+		
+		if(product!=null && product.getPlans().get(type)!=null) {
+			
 			try {
 				String pM = this.addCardStripeElements(userName,token).getBody().getResponse();
 
@@ -221,14 +223,14 @@ public class UserController implements IUserController{
 						    .setCustomer(user.getCustomerStripeId())
 						    .addItem(
 						      SubscriptionCreateParams.Item.builder()
-						        .setPlan(product.getPlans().get("M")) //Free trial is always monthly subscription
+						        .setPlan(product.getPlans().get(type)) //Free trial is always monthly subscription
 						        .build())
 						    .setTrialPeriodDays((long)product.getTrialDays())
 						    .setDefaultPaymentMethod(pM)
 						    .build();
 				Subscription subscription = this.stripeServ.createSubscription(params);
 				
-				LicenseSubscription license = new LicenseSubscription(true, "M", product, user.getName(),product.getTrialDays());
+				LicenseSubscription license = new LicenseSubscription(true, type, product, user.getName(),product.getTrialDays());
 				license.setCancelAtEnd(false);  //Trial Periods have automatic renewal
 				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
 				license.setSubscriptionId(subscription.getId());

@@ -10,7 +10,7 @@
                 <a><strong>PRODUCT</strong></a>
             </mat-grid-tile>
             <mat-grid-tile colspan="2">
-                <a><strong>SERIAL</strong></a>
+                <a><strong>SERIAL(Online)</strong></a>
             </mat-grid-tile>
             <mat-grid-tile>
                 <a><strong>STATUS</strong></a>
@@ -40,7 +40,10 @@
                         <span (click)="manageLink(license.product.name)" class="productName">{{license.product.name}}</span>
                     </mat-grid-tile>
                     <mat-grid-tile colspan="2">
-                        <a>{{license.serial}}</a>
+                        <div *ngIf="license.product.mode=='Online' || license.product.mode=='Both'">
+                            <a>{{license.serial}}</a>
+                        </div>
+                        <a *ngIf="license.product.mode=='Offline'"> -- </a>
                     </mat-grid-tile>
                     <mat-grid-tile>
                         <span *ngIf="license.active"><mat-icon>check</mat-icon></span> 
@@ -77,8 +80,10 @@
                         <span *ngIf="!license.active">-</span>
                     </mat-grid-tile>
                     <mat-grid-tile colspan="2">
-                        <button mat-raised-button color="primary" (click)="downloadDialog(license)">Get LicenseFile</button>
-                        <a id="download" [href]="fileurl" download={{fileName}} style="display: none;">Download License File</a>
+                        <div *ngIf="license.product.mode=='Offline' || license.product.mode=='Both'">
+                            <button mat-raised-button color="primary" (click)="downloadDialog(license)">Get LicenseFile</button>
+                            <a id="download" [href]="fileurl" download={{fileName}} style="display: none;">Download License File</a>
+                        </div>
                     </mat-grid-tile>
                     <mat-grid-tile colspan="1">
                         <button mat-raised-button color="primary" *ngIf="license.type!='L'" (click)="editPaymentMethod(license.subscriptionId)"><mat-icon>create</mat-icon></button>

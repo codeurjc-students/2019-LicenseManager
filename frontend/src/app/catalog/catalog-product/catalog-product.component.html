@@ -15,8 +15,8 @@
             <hr>
             <mat-card-content>
                 <mat-grid-list cols="7" rowHeight="4rem">
-                    <mat-grid-tile>
-                        <a><strong>SERIAL</strong></a>
+                    <mat-grid-tile *ngIf="license?.product.mode!='Offline'">
+                        <a><strong>SERIAL </strong></a>
                     </mat-grid-tile>
                     <mat-grid-tile>
                         <a><strong>STATUS</strong></a>
@@ -35,8 +35,11 @@
         
                 <mat-grid-list cols="7" rowHeight="4rem">
                    <div *ngFor="let license of userLicensesOfProduct | paginate: {itemsPerPage:numberOfElements, currentPage: pageActual}">
-                        <mat-grid-tile>
+                        <mat-grid-tile *ngIf="license?.product.mode!='Offline'">
                             <a>{{license.serial}}</a>
+                        </mat-grid-tile>
+                        <mat-grid-tile *ngIf="license?.product.mode=='Offline'">
+                            <a>Not availabe in Offline products</a>
                         </mat-grid-tile>
                         <mat-grid-tile>
                             <span *ngIf="license.active"><mat-icon>check</mat-icon></span> 
@@ -121,17 +124,23 @@
     <br>
 
     <div>
-        <span *ngIf="product?.trialDays!=0" id="freeTrial" class="font" (click)="freeTrial()">{{product?.trialDays}}-DAY FREE TRIAL <i>(M)</i></span>
+        <span *ngIf="product?.trialDays!=0" id="freeTrial"  (click)="freeTrial()">{{product?.trialDays}}-DAY FREE TRIAL</span>
     </div>
     <br>
     <br>
 
     <div id="successfulMessage" *ngIf="successfulMessage">
         <div class="scContent">
-            <a  >Payment Successful! Your license serial : <span class="serial">{{serial}}</span></a>
-            <button mat-raised-button color="primary" (click)="copyMessage(serial)" value="click to copy" class="copyButton">Copy license serial</button>
-            <hr>
-            <div class="filemsg" *ngIf="licenseFileString!=''">
+            <div>
+                <a>Payment Successful!</a>
+            </div>
+            <div *ngIf="product?.mode=='Online' || product?.mode=='Both'">
+                <hr>
+                <span class="serial">Your license serial : {{serial}}</span>
+                <button mat-raised-button color="primary" (click)="copyMessage(serial)" value="click to copy" class="copyButton">Copy license serial</button>
+            </div>
+            <div class="filemsg" *ngIf="licenseFileString!='' && (product?.mode=='Offline' || product?.mode=='Both')">
+                <hr>
                 <a>For use without Internet conexion, download the license as a file. It can't be modified (won't work if done)</a>
                 <a class="fakeButton" [href]="fileurl" download={{fileName}}>Download File</a>
             </div>

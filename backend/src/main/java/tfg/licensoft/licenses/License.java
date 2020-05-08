@@ -55,9 +55,12 @@ public class License {
 	
 	public License(boolean active, Product product, String owner) {
         this.type = "L";
-		this.serial = this.generateSerial();
-		this.active = active;
 		this.product=product;
+
+        this.serial = this.generateSerial();
+        
+
+		this.active = active;
 		if(active) {
 			Calendar ahoraCal = Calendar.getInstance();
 			this.startDate = ahoraCal.getTime();
@@ -68,7 +71,11 @@ public class License {
 		}catch(NullPointerException e) {
 			this.price=0;
 		}
-		this.licenseString =  this.generateLicenseFile("licenseFile-"+this.getProduct().getName()+".txt");
+		
+        String mode = this.product.getMode();
+        if(mode.equals("Offline") || mode.equals("Both")){
+    		this.licenseString =  this.generateLicenseFile("licenseFile-"+this.getProduct().getName()+".txt");
+        }
 
 
 	}

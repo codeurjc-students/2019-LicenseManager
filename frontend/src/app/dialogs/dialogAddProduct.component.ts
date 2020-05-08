@@ -29,6 +29,7 @@ import { DialogService } from './dialog.service';
     edit:boolean;
     trialDays:number;
     productEdit:Product;
+    modeSelected:string;
 
     constructor(@Inject(MAT_DIALOG_DATA) public data:any,private dialogRef:MatDialogRef<DialogAddProductComponent>, private productServ:ProductService,private dialogService:DialogService){
       if(data.type=="edit"){
@@ -111,7 +112,7 @@ import { DialogService } from './dialog.service';
       typeSubs.push('MB');
       plansPricesN['MB']=this.price;
     }
-    let prod:Product = {name: this.name, licenses:licenses, typeSubs:typeSubs,photoAvailable:isFile,description: this.description,webLink:this.webLink,photoSrc:"",plansPrices:plansPricesN,sku:null, active:true, trialDays:this.trialDays};
+    let prod:Product = {name: this.name, licenses:licenses, typeSubs:typeSubs,photoAvailable:isFile,description: this.description,webLink:this.webLink,photoSrc:"",plansPrices:plansPricesN,sku:null, active:true, trialDays:this.trialDays, mode:this.modeSelected};
     this.productServ.postProduct(prod).subscribe(
       g => {
         if(this.file!=null){
@@ -128,7 +129,7 @@ import { DialogService } from './dialog.service';
     }else{
       isFile=false;
     }
-    let prod:Product = {name: this.productEdit.name, licenses:this.productEdit.licenses, typeSubs:this.productEdit.typeSubs,photoAvailable:isFile,description: this.description,webLink:this.webLink,photoSrc:"",plansPrices:this.productEdit.plansPrices,sku:this.productEdit.sku, active:true,trialDays:this.trialDays};
+    let prod:Product = {name: this.productEdit.name, licenses:this.productEdit.licenses, typeSubs:this.productEdit.typeSubs,photoAvailable:isFile,description: this.description,webLink:this.webLink,photoSrc:"",plansPrices:this.productEdit.plansPrices,sku:this.productEdit.sku, active:true,trialDays:this.trialDays, mode:this.modeSelected};
     this.productServ.putProduct(prod).subscribe(
       g => {if(this.file!=null){
         this.uploadEvent(this.file);

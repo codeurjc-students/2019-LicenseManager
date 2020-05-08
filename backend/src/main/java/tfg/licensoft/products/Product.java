@@ -76,16 +76,22 @@ public class Product {
 	@ApiModelProperty(example="7",required=true)
 	private int trialDays;
 	
+	@ApiModelProperty(example="Online",required=true)
+	private String mode;
+	
+
+	
 
 	public Product() {}
 	
-	public Product(String name) {
+	public Product(String name, String mode) {
 		this.name=name;
 		this.licenses = new ArrayList<>();
 		this.plans = new HashMap<>();
 		this.typeSubs= new ArrayList<>();
 		this.plansPrices = new HashMap<>();
 		this.active=true; 
+		this.mode = mode;
  
 	}
 	
@@ -94,8 +100,18 @@ public class Product {
 	//Getters & Setters
 	
 	
+	
+	
 	public String getPhotoSrc() {
 		return photoSrc;
+	}
+
+	public String getMode() {
+		return mode;
+	}
+
+	public void setMode(String mode) {
+		this.mode = mode;
 	}
 
 	public int getTrialDays() {

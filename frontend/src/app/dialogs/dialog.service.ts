@@ -58,13 +58,14 @@ export class DialogService {
       });
     }
 
-    openFreeTrialDialog(productName:string){
+    openFreeTrialDialog(productName:string, types:{ [name: string]: number }){
       return this.dialog.open(DialogFreeTrial,{
         width: '390px',
             panelClass: 'confirm-dialog-container',
             disableClose: true,
             data :{
               productName : productName,
+              types:types
             }
       })
     }

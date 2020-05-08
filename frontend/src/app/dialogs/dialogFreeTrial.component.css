@@ -94,6 +94,7 @@ mat-footer-row mat-footer-cell{
     padding: 0px !important;
   }
 
+
    /* mat-confirm-dialog (customised dialog) */
    .confirm-dialog-container .mat-dialog-container {
     border-radius: .25em .25em .4em .4em;
@@ -127,6 +128,7 @@ border-radius: 0px;
     background-color: #12b828b7;
     color:white;
     border-radius: 0px;
+    margin: 30px;
 }
 
 .confirm-dialog-container span.content-span{
