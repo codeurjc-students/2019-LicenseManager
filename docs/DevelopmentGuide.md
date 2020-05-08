@@ -145,4 +145,4 @@ Object with statistics of a License (by ip)
 *	ExpYear (int)
 *	ProductName (String)
 
-![UML Class Diagram](images/DiagramaUMLClases.jpeg)
+![UML Class Diagram](images/DiagramaUMLClases1.jpeg)
