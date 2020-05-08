@@ -58,8 +58,8 @@ ADMINPASS=adminPass
 
 * **Email Sending (GMAIL):** Emails are sent when registering, indicating the credentials created. This email will be sent with the indicated account (must be Gmail). It's necessary to set the password of the account too.
 
-* **RSA Private Key Path (LICENCHECK_KEYS_PRIVATE)**: The path where your private key used to sign the Licenses is placed. We offer a private.key that is paired with its Public Key that works by default in Licencheck. This file should be always placed in the `keys` folder (inside Licensoft-v1.5 folder previously downloaded).
-We recommend to **generate a new pair of keys** (the default ones will be used by everyone who uses Licensoft), using the [License3jRepl]([https://github.com/verhas/License3jrepl](https://github.com/verhas/License3jrepl)) tool with Docker:
+* **RSA Private Key Path (LICENCHECK_KEYS_PRIVATE)**:  The path where your private key used to sign the Licenses is placed. We offer a private.key that is paired with its Public Key that works by default in Licencheck. This file should be always placed in the `keys` folder (inside Licensoft-v1.5 folder previously downloaded).
+We recommend to **generate a new pair of keys** (the default ones will be used by everyone who uses Licensoft), using the [License3jRepl]([https://github.com/verhas/License3jrepl](https://github.com/verhas/License3jrepl)) tool with Docker <a name="gen-keys"></a>:
 	1. Run the License 3jRepl docker image, where pwd = folder where you want to store the keys (path\to\Licensoft-v1.5\keys)
 	```
 	docker container run -it -v `pwd`:/opt  verhas/license3jrepl
