@@ -1,0 +1,46 @@
+version: "2.1"
+
+services:
+    sql:
+        image: mysql:latest
+        command: --default-authentication-plugin=mysql_native_password
+        restart: always
+
+        healthcheck:
+            test: "/usr/bin/mysql --user=root --password=12345pass --execute \"SHOW DATABASES\""
+            interval: 5s
+            timeout: 30s
+            retries: 5
+        environment:
+            MYSQL_ROOT_PASSWORD: 12345pass
+            MYSQL_DATABASE: licensoft
+
+    licensoft:
+        image: kikeajani/licensoft-http:latest
+        volumes:
+            - ./keys:/keys
+        links:
+            - sql
+        depends_on:
+            sql:
+               condition: service_healthy
+        ports:
+            - "80:80"
+        restart: always
+        environment:
+            SPRING_DATASOURCE_URL: jdbc:mysql://sql/licensoft?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+            SPRING_DATASOURCE_USERNAME: root
+            SPRING_DATASOURCE_PASSWORD: 12345pass
+            SPRING_JPA_HIBERNATE_DDL-AUTO: update
+            STRIPE_PRIVATEKEY: ${STRIPE_PRIVATEKEY}
+            STRIPE_PUBLICKEY: ${STRIPE_PUBLICKEY}
+            APPNAME: ${APPNAME}
+            APP_DOMAIN: ${APPDOMAIN}
+            ADMINEMAIL: ${ADMINEMAIL}
+            ADMINNAME: ${ADMINNAME}
+            ADMINPASS: ${ADMINPASS}
+            SPRING_MAIL_USERNAME: ${SPRING_MAIL_USERNAME}
+            SPRING_MAIL_PASSWORD: ${SPRING_MAIL_PASSWORD}
+            SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_AUTH}
+            SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE: ${SPRING_MAIL_PROPERTIES_MAIL_SMTP_STARTTLS_ENABLE}
+            LICENCHECK_KEYS_PRIVATE: ${LICENCHECK_KEYS_PRIVATE}

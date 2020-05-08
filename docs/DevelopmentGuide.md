@@ -1,4 +1,6 @@
-# INSTALLATION GUIDE - Development
+#  Development Guide
+
+## Installation
 On this tutorial, we are going to explain how to execute the application with Open Source tools: Eclipse Spring Tool Suite 3 and Visual Studio Code. You can use others if you want to.
 **Pre-requisites:** Java and MySQL server installed on your machine.
 
@@ -89,3 +91,58 @@ We use a proxy.conf.js file to redirect all the requests made to **/api/*** to t
 	}
 }
 ```
+## Inside the app
+### DOMAIN
+####  Product
+* Name (String)
+* Description (String)
+* WebLink (String)
+* Licenses  (License[])
+* TypeSubs (String[]) 
+* PhotoAvailable (boolean)
+* PlansPrices (Map<String, Number>)
+* Plans (Map<String,String>)
+* Sku (String)
+* Active (boolean)
+* ProductStripeId (String)
+* TrialDays (int)
+
+#### License
+* Serial (String)
+* Active (boolean)
+* Type (String)
+* Product
+* StartDate (Date)
+* Owner (String)
+* Price (double)
+
+### #License Subscription
+* Trial (boolean)
+* CancelAtEnd (boolean)
+* SubscriptionItemId (String)
+* SubscriptionId (String)
+* NUsage (int)
+* EndDate (Date)
+
+### License Statistics
+Object with statistics of a License (by ip)
+* License (License)
+* Ip (String)
+* NUsage (int)
+* LastUsage (Date)
+
+
+#### User
+* Email (String)
+* Name (String)
+* Roles (String[])
+* Password (String - hashed)
+* UserStripeId (String)
+
+#### Used Card
+*	Last4 (int)
+*	ExpMonth (int)
+*	ExpYear (int)
+*	ProductName (String)
+
+![UML Class Diagram](images/DiagramaUMLClases.jpeg)

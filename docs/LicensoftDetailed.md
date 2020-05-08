@@ -1,13 +1,8 @@
+LicensoftDetailed
+LicensoftDetailed
 
 ## INDEX
 * [Roles](#roles)
-* [Domain](#domain)
-    * [Product](#product)
-    * [License](#license)
-	* [LicenseSubscription](#license-subscription)
-    * [LicenseStatistics](#license-statistics)
-    * [User](#user)
-	* [UsedCard](#used-card)
 * [ADMIN Habilities](#admin-habilities)
     * [Add Product - Subscription](#add-product-subs) 
     * [Add Product - Lifetime](#add-product-lifetime)
@@ -30,61 +25,10 @@
 
 ## ROLES
 In Licensoft there are 2 types of roles: **ADMIN** and **USER**. 
-	**ADMIN** will be the Software seller. The main diference between them is that ADMIN can   
-```Add/Edit/Delete Products (name, description, prices...). ```
-
-## DOMAIN
-### Product
-* Name (String)
-* Description (String)
-* WebLink (String)
-* Licenses  (License[])
-* TypeSubs (String[]) 
-* PhotoAvailable (boolean)
-* PlansPrices (Map<String, Number>)
-* Plans (Map<String,String>)
-* Sku (String)
-* Active (boolean)
-* ProductStripeId (String)
-* TrialDays (int)
-
-### License
-* Serial (String)
-* Active (boolean)
-* Type (String)
-* Product [(Product)](README.md#product)
-* StartDate (Date)
-* Owner (String)
-* Price (double)
-
-### License Subscription
-* Trial (boolean)
-* CancelAtEnd (boolean)
-* SubscriptionItemId (String)
-* SubscriptionId (String)
-* NUsage (int)
-* EndDate (Date)
-
-### License Statistics
-Object with statistics of a License (by ip)
-* License (License)
-* Ip (String)
-* NUsage (int)
-* LastUsage (Date)
+	**ADMIN-->** (Unique) The seller. It will be able to post, update and delete new Products, and see statistics of them.  
+	**USER-->** The customer. It will be able to see all the products and purchase/subscribe to them and get the Licenses. It will be able to see the statistics of the Licenses that it owns.
 
 
-### User
-* Email (String)
-* Name (String)
-* Roles (String[])
-* Password (String - hashed)
-* UserStripeId (String)
-
-### Used Card
-*	Last4 (int)
-*	ExpMonth (int)
-*	ExpYear (int)
-*	ProductName (String)
 
 ## ADMIN Habilities
 ### Add Product - Subscription type <a name="add-product-subs"></a>
@@ -145,7 +89,7 @@ The delete will set the product to inactive and it will disappear from the catal
 
 ---
 
-### Subscribe to a Free Trial
+### Get a Free Trial
 ![Subscribe to Trial](gifs/subsTrial.gif)
 
 ---
@@ -163,3 +107,77 @@ The delete will set the product to inactive and it will disappear from the catal
 
 
 
+
+INDEX
+Roles
+ADMIN Habilities
+Add Product - Subscription
+Add Product - Lifetime
+Add Product - Mettered Billing
+Edit Product
+Delete Product
+USER normal flow
+Register
+Login
+Attach payment source to user
+Search in catalog
+Subscribe to Product
+Subscribe to a Free Trial
+Buy Lifetime Product
+Introduce license Serial into purchased software
+ROLES
+In Licensoft there are 2 types of roles: ADMIN and USER.
+ADMIN–> (Unique) The seller. It will be able to post, update and delete new Products, and see statistics of them.
+USER–> The customer. It will be able to see all the products and purchase/subscribe to them and get the Licenses. It will be able to see the statistics of the Licenses that it owns.
+
+ADMIN Habilities
+Add Product - Subscription type
+Add Subscription Product
+
+Add Product - Lifetime type
+This flow is the same as Adding a subscription type but changing its type.
+
+Add Lifetime Product
+
+Add Product - Mettered Billing(Subscription) type
+This flow is the same as Adding a subscription type (MB is a type of Subscription).
+
+Add MB Product
+
+Edit Product
+Admin can change URL and description of a Product. To edit other parameters admin should add a new product.
+EditProduct
+
+Delete Product
+The delete will set the product to inactive and it will disappear from the catalog, but active licenses of it will still be active.
+DeleteProduct
+
+USER normal Flow
+Register
+Register
+
+Login
+Login
+
+Attach payment source to User
+Add payment Source
+
+Search in catalog
+Search
+
+Subscribe to Product
+Subscribe to Product
+
+Get a Free Trial
+Subscribe to Trial
+
+Buy Lifetime Product
+Buy a Product
+
+Introduce license Serial into the purchased software
+Introduce serial
+
+Markdown selection 2676 bytes 325 words 107 lines Ln 108, Col 0HTML 1198 characters 242 words 40 paragraphs
+MENU
+Signed in as Kike Pina Boyer.
+Main workspace synced with your Google Drive app data folder.

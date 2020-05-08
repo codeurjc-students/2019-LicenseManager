@@ -1,8 +1,17 @@
 # What's Licencheck?
-Licencheck is a Java Library that allows 3rd programs to check the validity of a Product License Serial acquired in a Licensoft-web with a simple method.
+Licencheck is a Java Library that allows 3rd programs to check the validity of a Product License acquired in a Licensoft-web with a simple method.
 
-## How to use Licencheck 
-1. Import Licencheck Maven dependency on your **pom.xml**.
+These Licenses can be delivered to the customers to *unlock* the software in two forms:
+- **Online mode: Serial-->** A unique alphanumeric code.
+- **Offline mode: License File-->** A txt file with the License attributes signed by the web application with a RSA  cryptographic algorithm so it can't work if it's modified by an external. **MB** Licenses **not** allowed to use this type.
+
+
+
+
+
+
+## How to use Licencheck  <a name="how-to-use"></a>
+**1**. Import Licencheck Maven dependency on your **pom.xml**.
 ```
 <dependency>
 <groupId>com.github.kikeajani</groupId>
@@ -10,29 +19,61 @@ Licencheck is a Java Library that allows 3rd programs to check the validity of a
 <version>1.2.0</version>
 </dependency>
 ```
-2. Instantiate Licencheck as follows:
-`Licencheck licencheck = new Licencheck(url, isSelfisgned);`
-Where "url" must be the endpoint of your Licensoft web API.
-Boolean IsSelfsigned => Indicate if your endpoint url has a selfsigned certificate or not.
-Example : 
-	`Licencheck licencheck = new Licencheck("https://localhost:8443", true);`
+**2**. Choose an option to check : Online or Offline (depending your product)
+	 
+2.1.**ONLINE CHECK**
+For an online checking, Licencheck will do REST requests to the web-application to check if the serial introduced is valid and active for this product.
+For that reason, it's necessary to instantiate Licencheck with 2 params: 
+	- **URL Domain of the web-app (String)**
+	- **Indication if the web-app is deployed under a self-signed certificate for SSL (boolean)**
+```
+Licencheck l = new Licencheck("http://mylicensoftwebpage.com",false);
+```
+Then, call the method *checkLicense* :
+```
+l.checkLicense("ebc2d716-d666-4eef-8e3d-50c435e1d3e4","productName")
+``` 
+- If it’s **valid**, it will return a String indicating the **pseudonym** of the License (D, M, A, MB, L). 
+- If it's **not valid** will return **null**, 
+*The offline mode doesn't return the pseudonym because it can be read from the License File.*
+	
+2.2. **OFFLINE CHECK**  
+Licencheck Offline checking works with a RSA Cryptography Algorithm. For that reason, Private and Public keys are needed:
+- Private key: Needed on the backend of Licensoft web application to sign the Licenses that will be served to customers.
+- Public key: Needed on Licencheck to validate the sign of the License served on the Licensoft web app.
 
-3. Call [licencheck.checkLicense(String serial, String productName)](#check) whenever you want to check if a license introduced by the user is valid or not.
-	- If it's valid, it will return the **License** object (see [README](../README.md) doc).
-	- If it's not valid, it will return **null**.
-4. Call [licencheck.updateUsage(String licenseSerial, String productName, long usage](#update) whenever you want to inform of an usage of the software (functionality, program started, etc).
-	- If the product and the serial exists, and the subscription is Mettered-Billing type, will return the actual usage of the license (with the new usage updated).
-	- If not, it will return null. 
+A default pair of keys are offered to start using Licensoft and Licencheck without any extra configuration, but it can be configured with a new pair of keys:
+...
+
+Licencheck must be instantiated **without** parameters.
+```
+Licencheck l = new Licencheck();
+```
+If you want to override the Public Key, it must be setted as a **byte[]**. This key must be paired with the Private key of Licensoft web app (see [InstallationGuide](INSTALLATION_GUIDE.md#gen-keys) to know how to generate a new pair and get the byte[] value of the public key).
+```
+l.setKey(newKey);
+```
+Then, the License file must be located on the customer's system file. ***(Best option is to indicate the customer to place it next to the .exe/.jar/etc)***
+```
+File lic = new File("license-ProductName.txt");
+```
+
+Finally, calling method *checkLicenseOffline* will return if it's **valid/not valid**.
+```
+l.checkLicenseOffline(lic)
+```
 
 
-## API Controller
-Apart from the Licencheck library, there is a APIController on the Licensoft-web Java code that receives the requests made by the library.
-You can check it on this repository code, inside "backend" folder --> ApiLicencheckController
-This Controller just has 2 methods, explained below.
+**3**. Call [licencheck.updateUsage(String licenseSerial, String productName, long usage](#update) whenever you want to inform of an usage of the software (functionality, program started, etc).
+	- If the product and the serial **exists**, and the subscription is not Lifetime type, will **return the actual usage** of the license (with the new usage updated).
+	- If **not**, it will return **null**. 
 
- ## How does Licencheck works?
+
+
+ ## How does Licencheck works inside?
+ **ONLINE MODE**
  1. ### Constructor
- Licencheck constructor makes a new URL with the param passed adding */licencheck/* at the end (endpoint of [Licensoft-web API Controller](#api-controller))
+ Licencheck constructor with params makes a new URL with the param passed adding */licencheck/* at the end.
  With an instance made like following:
  `Licencheck l = new Licencheck("https://localhost:8443",true); `
  Licencheck would construct its final endpoint like:
@@ -41,27 +82,20 @@ This Controller just has 2 methods, explained below.
  2. ### <a name= "check"></a> CheckLickense(String licenseSerial, String productName) 
  Licencheck will do a HTTP GET request to:
   `baseEndpoint + "checkLicense/"  + productName + "/"  + licenseSerial` 
-  , path of the API Controller method.
 
 3. ### <a name= "update"></a>  UpdateUsage(String  licenseSerial, String  productName, long  usage)
-Licencheck will do a HTTP PUT request to: `baseEndpoint"updateUsage/"+usage+"/"+productName+"/"+licenseSerial`
-  , path of the API Controller method.
-  
-4. ### API Controller method `checkLicense(@PathVariable String licenseSerial, @PathVariable String productName )`
-This method will search in the Database if there is a License of the Product (which name has been passed) with that serial and if it's active.
-Then, it will return;
-*  **null** (HttpStatus 204 NO CONTENT) 
-*  **License** (HttpStatus 200 OK).
-5. ### API Controller method `updateUsage(@PathVariable int usage,@PathVariable String licenseSerial, @PathVariable String productName , HttpServletRequest request)`
-This method will try to update the usage of a product's MB license type.
-If the license introduced exists, it will be updated adding the usage introduced to the actual usage. Also, it will be saved the usage of the license by different IPs. 
+Licencheck will do a HTTP PUT request to: `baseEndpoint +"updateUsage/"+usage+"/"+productName+"/"+licenseSerial`
 
-That means that a MB-License with usage = 10,  could have been used by:
-	- 111.111.111.111, usage =3.
-	- 222.222.222.222, usage =7.
-Total usage = 10.
+---
+**OFFLINE MODE**
+  Offline checking is based on a RSA cryptography algorithm. Licencheck receives a signed file (with a private key, in the Licensoft web backend), and tries to certificate that the file hasn't been modified (using the public key, placed inside Licencheck).
+  ***! Remember: MB Licenses can't be used with the Offline mode, and UpdateUsage method is just valid for Online Licenses***
+ 1. ### Constructor
+A default Public Key (that pairs with the default Private Key offered in Licensoft web backend) is setted.
+ 
+ 2. ### <a name= "check"></a> CheckLickense(File f) 
+ Licencheck will check with a RSA Algorithm if the LicenseFile introduced has been changed since its original signing. 
+ If it hasn't been changed, then Licencheck check its attributes inside the LicenseFile and decides if the License is inside the period bounds or not, returning **true/false**.
+ If it has been changed, returns **false**.
+ 
 
-So, the possible returns are:
-* **null**(HttpStatus.NOT_ACCEPTABLE) = The license introduced doesn't belongs to a MB-license type.
-* **null** (HttpStatus.NOT_FOUND) = The license doesnt belongs to the product introduced.
-* **int actualUsage** (HttpStatus.OK) 
