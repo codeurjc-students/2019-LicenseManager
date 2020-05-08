@@ -80,7 +80,7 @@ To get this app running, a License of LicecheckExample must be bought in [licens
 
 ## DOCUMENTATION
 * [Installation Guide-Production](docs/INSTALLATION_GUIDE.md)
-* [Development Guide](docs/Development_Guide.md)
+* [Development Guide](docs/DevelopmentGuide.md)
 * [Licensoft-Web in Details](docs/LicensoftDetailed.md)
 * [Stripe Integration](docs/StripeIntegration.md)
 * [Licencheck Guide](docs/LicencheckGuide.md)
