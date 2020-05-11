@@ -65,6 +65,7 @@ public class LicencheckApiTests {
     @Before
     public void initialize() {
     	Product p1 = new Product();
+    	p1.setMode("Both");
     	p1.setActive(true);
     	p1.setDescription("Desc p1");
     	p1.setName("P1");
@@ -78,6 +79,7 @@ public class LicencheckApiTests {
     	p1.setWebLink("p1.com");
     	
     	Product pS= new Product();
+    	pS.setMode("Both");
     	pS.setActive(true);
     	pS.setDescription("Desc pS");
     	pS.setName("PS");
@@ -146,14 +148,14 @@ public class LicencheckApiTests {
     public void testCheckLicenseLicenseNull() throws Exception{
     	mvc.perform(MockMvcRequestBuilders.get("/licencheck/checkLicense/P1/smb")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNotFound());
     }
     
     @Test
     public void testCheckLicenseProductNull() throws Exception{
     	mvc.perform(MockMvcRequestBuilders.get("/licencheck/checkLicense/no/smb")
                 .contentType(MediaType.APPLICATION_JSON))
-                .andExpect(status().isNoContent());
+                .andExpect(status().isNotFound());
     }
     
     @Test

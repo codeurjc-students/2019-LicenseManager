@@ -128,6 +128,7 @@ public class UserApiTests {
     	pS.setDescription("Desc pS");
     	pS.setName("PS");
     	pS.setPhotoAvailable(false);
+    	pS.setMode("Both");
     	HashMap<String,Double> plans2 = new HashMap<>();
     	plans2.put("D", 1.0);
     	plans2.put("M", 10.0);
@@ -150,6 +151,7 @@ public class UserApiTests {
     	p1.setActive(true);
     	p1.setDescription("Desc p1");
     	p1.setName("P1");
+    	p1.setMode("Both");
     	p1.setPhotoAvailable(false);
     	HashMap<String,Double> plansL = new HashMap<>();
     	plansL.put("L", 12.0);
@@ -400,6 +402,7 @@ public class UserApiTests {
     @Test
     public void testPayment() throws Exception {
     	Product p1 = new Product();
+    	p1.setMode("Both");
     	p1.setActive(true);
     	p1.setDescription("Desc p1");
     	p1.setName("P1");

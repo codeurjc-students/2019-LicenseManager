@@ -72,6 +72,7 @@ public class LicenseApiTests {
     public void initialize() throws StripeException {
     	User user = new User("test@gmail.com","cus_id1","test","t","ROLE_ADMIN","ROLE_USER");
     	Product p1 = new Product();
+    	p1.setMode("Both");
     	p1.setActive(true);
     	p1.setDescription("Desc p1");
     	p1.setName("P1");
@@ -91,6 +92,7 @@ public class LicenseApiTests {
     	
     	Product pS= new Product();
     	pS.setActive(true);
+    	pS.setMode("Both");
     	pS.setDescription("Desc pS");
     	pS.setName("PS");
     	pS.setPhotoAvailable(false);

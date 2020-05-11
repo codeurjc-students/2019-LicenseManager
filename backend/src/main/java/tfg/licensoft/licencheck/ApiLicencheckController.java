@@ -58,14 +58,13 @@ public class ApiLicencheckController {
 
 		if (product==null) {
 			System.out.println("Product is null");
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		License license = this.licenseService.findBySerialAndProductAndActive(licenseSerial, product,true);
-
 		if (license==null ) {
 			System.out.println("License is null: " +license);
 
-			return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}else {
 			return new ResponseEntity<>(license,HttpStatus.OK);
 		}

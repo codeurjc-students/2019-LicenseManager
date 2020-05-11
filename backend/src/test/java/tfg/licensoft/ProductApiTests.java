@@ -75,6 +75,7 @@ public class ProductApiTests {
     public void initialize() {
     	User user = new User("test@gmail.com","cus_id1","test","t","ROLE_ADMIN","ROLE_USER");
     	Product p1 = new Product();
+    	p1.setMode("Both");
     	p1.setActive(true);
     	p1.setDescription("Desc p1");
     	p1.setName("P1");
@@ -95,6 +96,7 @@ public class ProductApiTests {
     	
     	Product pS= new Product();
     	pS.setActive(true);
+    	pS.setMode("Both");
     	pS.setDescription("Desc pS");
     	pS.setName("PS");
     	pS.setPhotoAvailable(false);
@@ -243,6 +245,8 @@ public class ProductApiTests {
     	sc.setData(data);
     	
     	Product pS= new Product();
+    	pS.setMode("Both");
+
     	pS.setName("PS");
     	HashMap<String,Double> plans2 = new HashMap<>();
     	plans2.put("M", 10.0);
@@ -273,6 +277,8 @@ public class ProductApiTests {
     	
     	Product pS= new Product();
     	pS.setName("PS");
+    	pS.setMode("Both");
+
     	HashMap<String,Double> plans2 = new HashMap<>();
     	plans2.put("D", 10.0);
     	pS.setPlansPrices(plans2);
@@ -301,6 +307,8 @@ public class ProductApiTests {
     	
     	Product pS= new Product();
     	pS.setName("PS");
+    	pS.setMode("Both");
+
     	HashMap<String,Double> plans2 = new HashMap<>();
     	plans2.put("A", 10.0);
     	pS.setPlansPrices(plans2);
@@ -330,6 +338,8 @@ public class ProductApiTests {
     	
     	Product pS= new Product();
     	pS.setName("PS");
+    	pS.setMode("Both");
+
     	HashMap<String,Double> plans2 = new HashMap<>();
     	plans2.put("MB", 10.0);
     	pS.setPlansPrices(plans2);
@@ -348,6 +358,8 @@ public class ProductApiTests {
     public void testPostProductLifetime() throws Exception {
     	com.stripe.model.Product p = new com.stripe.model.Product();
     	Product pS= new Product();
+    	pS.setMode("Both");
+
     	pS.setName("PL");
     	HashMap<String,Double> plans2 = new HashMap<>();
     	plans2.put("L", 10.0);
@@ -369,6 +381,7 @@ public class ProductApiTests {
     public void testPostProductSubAlreadyExistingProduct() throws Exception {
     	Product pS= new Product();
     	pS.setName("PS");
+    	pS.setMode("Both");
 
     	mvc.perform(MockMvcRequestBuilders.post("/api/products/")
     			.content(jsonParser.toJson(pS))
@@ -383,11 +396,14 @@ public class ProductApiTests {
     	Product pPreChanged= new Product();
     	pPreChanged.setDescription("last Desc");
     	pPreChanged.setName("PS");
-    	
+    	pPreChanged.setMode("Both");
+
     	Product pS= new Product();
     	pS.setName("PS");
     	pS.setProductStripeId("p_id");
     	pS.setDescription("new Desc");
+    	pS.setMode("Both");
+
     	HashMap<String,Double> plans2 = new HashMap<>();
     	plans2.put("MB", 10.0);
     	pS.setPlansPrices(plans2);
@@ -406,7 +422,7 @@ public class ProductApiTests {
     public void testEditProductNoContent () throws Exception{
     	Product pS= new Product();
     	pS.setName("no");
-
+    	pS.setMode("Both");
     	mvc.perform(MockMvcRequestBuilders.put("/api/products/")
     			.content(jsonParser.toJson(pS))
     			.contentType(MediaType.APPLICATION_JSON))
@@ -417,6 +433,8 @@ public class ProductApiTests {
     public void testDeleteProduct () throws Exception{
     	Product pS= new Product();
     	pS.setName("PS");
+    	pS.setMode("Both");
+
     	pS.setProductStripeId("p_id");
     	pS.setDescription("new Desc");
     	pS.setActive(true);
