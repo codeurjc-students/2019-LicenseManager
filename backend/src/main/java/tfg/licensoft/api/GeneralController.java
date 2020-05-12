@@ -39,6 +39,7 @@ public class GeneralController implements IGeneralController{
 	@Value("${licencheck.keys.private}")
 	String privateKey;
 	
+	
 	@GetMapping("/keys/stripe/public")
 	public ResponseEntity<SimpleResponse> getPublicStripeKey() {
 		SimpleResponse key= new SimpleResponse();
@@ -71,16 +72,5 @@ public class GeneralController implements IGeneralController{
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
-	/*
-	@GetMapping("/privateKey")
-	public ResponseEntity<SimpleResponse> getPrivateKeyPath() {
-		System.out.println("-----------------------ACTION---------------------------");
-		SimpleResponse r= new SimpleResponse();
-		r.setResponse(this.privateKey);
-		if(privateKey!=null) {
-			return new ResponseEntity<>(r, HttpStatus.OK);
-		}else {
-			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
-		}
-	}*/
+
 }

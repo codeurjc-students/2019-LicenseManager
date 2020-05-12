@@ -171,6 +171,7 @@ export class LicenseStatisticsComponent implements OnInit{
         console.log(this.statListMapIPName);
     }
 
+    
     mapByNameIP(){
         this.license.licenseStats.forEach(
             function(value) {

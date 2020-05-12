@@ -12,6 +12,7 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistics.component';
 import { Component } from '@angular/core';
 import { ApiDocsComponent } from './api-docs/api-docs.component';
+import { ProductStatisticsComponent } from './productStatistics/product-statistics.component';
 
 
 
@@ -20,17 +21,16 @@ const appRoutes = [
    { path: '', redirectTo: 'products', pathMatch: 'full' },
    { path: 'register', component: RegisterComponent, },
    { path: 'login', component: LoginComponent, },
-   { path: 'admin/products/:name', component: ProductComponent, },
+   { path: 'admin/products/:name/statistics', component: ProductStatisticsComponent, },
    { path: 'admin/dashboard', component: AdminDashboardComponent, },
    { path: 'user/dashboard', component: UserDashboardComponent, },
    { path: 'user/profile', component: UserProfileComponent, },
-  // { path: 'catalog', component: CatalogComponent, },
    { path: 'products', component: CatalogComponent, },
    { path: 'products/:name', component: CatalogProductComponent, },
-   { path: 'user/dashboard/:name/statistics/:serial', component: LicenseStatisticsComponent, },
+   { path: 'user/products/:name/statistics/:serial', component: LicenseStatisticsComponent, },
    { path: 'development/api', component: ApiDocsComponent, },
-   {path: '404', component: NotFoundComponent},
-   {path: '**', redirectTo: '/404'}
+   { path: '404', component: NotFoundComponent},
+   { path: '**', redirectTo: '/404'}
 ];
 
 

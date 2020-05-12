@@ -1,0 +1,16 @@
+.center-div-pie{
+    margin-left: auto;
+    margin-right: auto;
+    width: 700px;
+  }
+
+  .list-cell:hover {
+    border: 1px;
+    background: lightgray;
+  }
+
+  .link{
+    outline: none !important;
+    COLOR:blue;
+    cursor:pointer;
+}

@@ -1,0 +1,130 @@
+<div class="background" id="appRootClass">
+    <br>
+    <mat-card>
+        <mat-card-title>Statistics of {{product?.name}}</mat-card-title>
+        <hr>
+        <mat-tab-group (selectedTabChange)="resetIndexPage($event)"> 
+            <mat-tab label="By User">
+                <mat-card-content>
+                    <div class="center-div-pie">     
+                        <app-pie-chart *ngIf="statsByLicenseMap?.size!=0" [statsMap]="statsByLicenseMap"  (setLineChart)="setLineChart($event)"></app-pie-chart>
+                    </div>
+                    <mat-grid-list cols="7"  rowHeight="4rem">
+                        <mat-grid-tile>
+                            <a><strong>SERIAL</strong></a>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <a><strong>ACTIVE</strong></a>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <a><strong>OWNER</strong></a>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <a><strong>TYPE</strong></a>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <a><strong>START DATE</strong></a>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <a><strong>END DATE</strong></a>
+                        </mat-grid-tile>
+                        <mat-grid-tile>
+                            <a><strong>USAGE</strong></a>
+                        </mat-grid-tile>
+
+                    </mat-grid-list>
+
+                    <mat-grid-list cols="7" rowHeight="4:1">
+                        <div *ngFor="let license of licenses  | paginate: {itemsPerPage:numberOfElementsLicense, currentPage: pageActualLicense}" class="list-cell" >
+                            <div class="list-cell">
+                                <mat-grid-tile>
+                                    <a>{{license.serial}} <i class="link" (click)="goToStats(license?.product.name,license.serial)">(View)</i></a>
+                                </mat-grid-tile>
+                                <mat-grid-tile>
+                                    <span *ngIf="license.active"><mat-icon>check</mat-icon></span> 
+                                    <span *ngIf="!license.active"><mat-icon>remove</mat-icon></span> 
+                                </mat-grid-tile>
+                                <mat-grid-tile>
+                                    <a *ngIf="license.owner!=null">{{license.owner}}</a>
+                                    <a *ngIf="license.owner==null">--</a>
+                                </mat-grid-tile>
+                                <mat-grid-tile>
+                                    <span>{{license.type}}</span>
+                                </mat-grid-tile>
+                                <mat-grid-tile>
+                                        <a *ngIf="license.startDate">{{license.startDate | date:'medium'}}</a>
+                                        <a *ngIf="!license.startDate">--</a>
+                
+                                </mat-grid-tile>
+                                <mat-grid-tile>
+                                        <a *ngIf="license.endDate">{{license.endDate | date:'medium'}}</a>
+                                        <a *ngIf="!license.endDate">--</a>
+                                </mat-grid-tile>
+                                <mat-grid-tile>
+                                        <a>{{statsByLicenseMap.get(license.serial)}}</a>
+                                </mat-grid-tile>  
+                            </div>                             
+                        </div>
+                            
+                    </mat-grid-list>
+                    <div *ngIf=" statsByLicenseMap.size > numberOfElementsLicense">
+                        <pagination-controls (pageChange)="pageActualLicense = $event" style=" display:inline-block;">
+                        </pagination-controls>
+                        <a style="display:inline-block;">Elements on page:</a>
+                        <div style="width: 120px; margin-left: auto; display:inline-block;">
+                            <mat-select [(value)]="numberOfElementsLicense" style="display:inline-block; width: 50px;">
+                                <mat-option value="5">5</mat-option>
+                                <mat-option value="10">10</mat-option>
+                                <mat-option value="25">25</mat-option>
+                            </mat-select>
+                        </div> 
+                    </div>
+                </mat-card-content>
+            </mat-tab>
+        <mat-tab label="By Owner">
+            <mat-card-content>
+                <div class="center-div-pie">     
+                    <app-pie-chart *ngIf="statsByOwnerMap?.size!=0" [statsMap]="statsByOwnerMap"  (setLineChart)="setLineChart($event)"></app-pie-chart>
+                </div>
+                <mat-grid-list cols="2"  rowHeight="4rem">
+                    <mat-grid-tile>
+                        <a><strong>OWNER</strong></a>
+                    </mat-grid-tile>
+                    <mat-grid-tile>
+                        <a><strong>TOTAL USAGE (Sum of all licenses of the user)</strong></a>
+                    </mat-grid-tile>
+                </mat-grid-list>
+                <mat-grid-list cols="2" rowHeight="17:1">
+                    <div *ngFor="let license of statsByOwnerMap  | keyvalue: valueDescOrder | paginate: {itemsPerPage:numberOfElementsLicense, currentPage: pageActualLicense}" class="list-cell" >
+                        <div class="list-cell">                       
+                            <mat-grid-tile>
+                                <a>{{license.key}}</a>
+                            </mat-grid-tile>
+                            <mat-grid-tile>
+                                    <a>{{license.value}}</a>
+                            </mat-grid-tile>  
+                        </div>                             
+                    </div>
+                        
+                </mat-grid-list>
+                <div *ngIf=" statsByLicenseMap.size > numberOfElementsOwner">
+                    <pagination-controls (pageChange)="pageActualOwner = $event" style=" display:inline-block;">
+                    </pagination-controls>
+                    <a style="display:inline-block;">Elements on page: </a>
+                    <div style="width: 120px; margin-left: auto; display:inline-block;">
+                        <mat-select [(value)]="numberOfElementsOwner" style="display:inline-block; width: 50px;">
+                            <mat-option value="5">5</mat-option>
+                            <mat-option value="10">10</mat-option>
+                            <mat-option value="25">25</mat-option>
+                        </mat-select>
+                    </div> 
+                </div>
+            </mat-card-content>
+        </mat-tab>
+        
+    </mat-tab-group>    
+    
+    </mat-card>
+    
+</div>
+    

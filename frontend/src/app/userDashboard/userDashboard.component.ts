@@ -56,7 +56,7 @@ export class UserDashboardComponent implements OnInit{
     }
 
     goToStats(productName:string, serial:string){
-        this.router.navigate(["user/dashboard/"+productName+"/statistics/"+serial]);
+        this.router.navigate(["user/products/"+productName+"/statistics/"+serial]);
     }
 
     cancelAtEnd(license:License){

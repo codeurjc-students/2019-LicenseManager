@@ -100,6 +100,7 @@ import { AddCardDialogComponent } from './dialogs/add-card-dialog/add-card-dialo
 import { CardSubscriptionSelectDialog } from './dialogs/card-subscription-select-dialog/card-subscription-select-dialog.component';
 import { CardSelectDialog } from './dialogs/card-select-dialog copy/card-select-dialog.component';
 import { ApiDocsComponent } from './api-docs/api-docs.component';
+import { ProductStatisticsComponent } from './productStatistics/product-statistics.component';
 
 @NgModule({
     imports: [ 
@@ -163,7 +164,7 @@ import { ApiDocsComponent } from './api-docs/api-docs.component';
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,ApiDocsComponent,CardSubscriptionSelectDialog,CardSelectDialog,AddCardDialogComponent,BarChartComponent, PieChartComponent, LicenseStatisticsComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
+    declarations: [AppComponent,ProductStatisticsComponent,ApiDocsComponent,CardSubscriptionSelectDialog,CardSelectDialog,AddCardDialogComponent,BarChartComponent, PieChartComponent, LicenseStatisticsComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
     bootstrap: [AppComponent],
     entryComponents: [DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent, DialogFreeTrial, AddCardDialogComponent,CardSelectDialog,CardSubscriptionSelectDialog,
     ],
