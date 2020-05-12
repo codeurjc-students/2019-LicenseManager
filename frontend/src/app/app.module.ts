@@ -72,11 +72,9 @@ import { LoginComponent } from './login/login.component';
 import { LoginService } from './login/login.service';
 import { RegisterComponent } from './register/register.component';
 import { RegisterService } from './register/register.service';
-import { ProductComponent } from './product/product.component';
 import { ProductService } from './product/product.service';
 import { LicenseService } from './licenses/license.service';
 import { UserDashboardComponent } from './userDashboard/userDashboard.component';
-import { CardLicenseComponent } from './cards/cardLicense.component';
 import { UserProfileComponent } from './userProfile/userProfile.component';
 import { UserProfileService } from './userProfile/userProfile.service';
 import { BasicAuthInterceptor } from './login/auth.interceptor';
@@ -164,7 +162,7 @@ import { ProductStatisticsComponent } from './productStatistics/product-statisti
         NgxChartsModule,
         routing,
     ],
-    declarations: [AppComponent,ProductStatisticsComponent,ApiDocsComponent,CardSubscriptionSelectDialog,CardSelectDialog,AddCardDialogComponent,BarChartComponent, PieChartComponent, LicenseStatisticsComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, ProductComponent, UserDashboardComponent,NotFoundComponent,CardLicenseComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
+    declarations: [AppComponent,ProductStatisticsComponent,ApiDocsComponent,CardSubscriptionSelectDialog,CardSelectDialog,AddCardDialogComponent,BarChartComponent, PieChartComponent, LicenseStatisticsComponent,DialogAddProductComponent,UserProfileComponent,LoginComponent, RegisterComponent, UserDashboardComponent,NotFoundComponent, AdminDashboardComponent, CardFormComponent,CatalogComponent, CatalogProductComponent, CustomFormComponentComponent, ConfirmationDialogComponent, DialogFreeTrial],
     bootstrap: [AppComponent],
     entryComponents: [DialogAddProductComponent, ConfirmationDialogComponent,LoginComponent, DialogFreeTrial, AddCardDialogComponent,CardSelectDialog,CardSubscriptionSelectDialog,
     ],
