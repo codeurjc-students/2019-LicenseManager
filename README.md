@@ -1,3 +1,5 @@
+[![Build Status](https://travis-ci.com/codeurjc-students/2019-LicenseManager.svg?branch=master)](https://travis-ci.com/github/codeurjc-students/2019-LicenseManager)
+
 
 # What's Licensoft?
 Licensoft is an OpenSource online platform to allow software developers and software companies to manage paid licenses of their software. 
