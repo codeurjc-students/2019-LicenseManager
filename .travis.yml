@@ -1,0 +1,18 @@
+language: java
+
+services:
+  - docker
+  - maven
+
+script:
+
+  # Build angular app
+  - cd frontend
+  - docker run --rm --name angular-cli -v ${PWD}:/angular -w /angular node /bin/bash -c "npm install; npm run build"
+
+  # Copy new generated resources on back static
+  - cd ../backend
+  - mkdir -p "src/main/resources/static/" && cp -r ../frontend/dist/front/* src/main/resources/static/
+
+  # Create jar
+  - mvn package
