@@ -1,3 +1,6 @@
+[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=codeurjc-students_2019-LicenseManager&metric=alert_status)](https://sonarcloud.io/dashboard?id=codeurjc-students_2019-LicenseManager)
+
+
 [![Build Status](https://travis-ci.com/codeurjc-students/2019-LicenseManager.svg?branch=master)](https://travis-ci.com/github/codeurjc-students/2019-LicenseManager)
 
 
