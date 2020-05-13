@@ -31,7 +31,7 @@ public class LicenseStatistics {
 	
 	@JsonIgnore
 	@ManyToOne
-	private License license;
+	private LicenseSubscription license;
 	private String ip;
 	private int nUsage;
     @ElementCollection(targetClass=Date.class)
@@ -39,15 +39,17 @@ public class LicenseStatistics {
 	private String userName;
 	@Lob
 	private HashMap<String,Integer> usagePerTime;
+	
+	private Integer period;
 
 	
 	public LicenseStatistics() {}
-	public LicenseStatistics(License l) {
+	public LicenseStatistics(LicenseSubscription l) {
 		this.nUsage=0;
 		this.usages= new ArrayList<>();
 		this.license=l;
 		this.setUsagePerTimeReady();
-
+		this.period=l.getPeriod();
 		
 	}
 	
@@ -123,10 +125,18 @@ public class LicenseStatistics {
 	public void setId(Long id) {
 		this.id = id;
 	}
-	public License getLicense() {
+	
+	
+	public Integer getPeriod() {
+		return period;
+	}
+	public void setPeriod(Integer period) {
+		this.period = period;
+	}
+	public LicenseSubscription getLicense() {
 		return license;
 	}
-	public void setLicense(License license) {
+	public void setLicense(LicenseSubscription license) {
 		this.license = license;
 	}
 

@@ -8,5 +8,6 @@ export interface LicenseStatistics{
 	usages:Date[];
 	userName:string;
 	usagePerTime:Map<String,number>;
+	period:number;
 
 }

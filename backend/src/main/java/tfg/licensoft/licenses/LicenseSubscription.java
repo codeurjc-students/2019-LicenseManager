@@ -37,6 +37,7 @@ public class LicenseSubscription extends License {
 	private String subscriptionId;
 	private int nUsage;
 	private Date endDate;
+	private Integer period;
 	
 	public LicenseSubscription(boolean active, String type,  Product product, String owner,long trialDays) {
 		super(active, product, owner);
@@ -53,6 +54,8 @@ public class LicenseSubscription extends License {
         if(mode.equals("Offline") || mode.equals("Both")){
     		this.setLicenseString(this.generateLicenseFile2("licenseFile-"+this.getProduct().getName()+".txt"));
         }
+        
+        this.period=1;
 
 	}
 	
@@ -99,11 +102,30 @@ public class LicenseSubscription extends License {
 		this.setStartDate(ahoraCal.getTime());
 		this.calculateEndDate(ahoraCal,trialDays);
 		this.nUsage= 0 ;
+		this.period++;
 	}
 
 	
 	
 	
+	
+	
+	public Integer getPeriod() {
+		return period;
+	}
+
+
+
+
+
+	public void setPeriod(Integer period) {
+		this.period = period;
+	}
+
+
+
+
+
 	public Long getId() {
 		return id;
 	}

@@ -84,11 +84,7 @@ public class ApiLicencheckController {
 			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 		
-		
-		//Only permitted for MB subscribe (for now)
-		/*if(!l.getType().equals("MB")) {
-			return new ResponseEntity<>(HttpStatus.NOT_ACCEPTABLE);
-		}*/
+	
 		
 		if(l.getType().equals("MB")) {
 
@@ -128,9 +124,9 @@ public class ApiLicencheckController {
 		}else {
 			user = null;
 		}
-		LicenseStatistics lStats = this.licenseStatService.findByLicenseAndIpAndUserName(l, request.getRemoteAddr(), user);
+		LicenseStatistics lStats = this.licenseStatService.findByLicenseAndIpAndUserNameAndPeriod(l, request.getRemoteAddr(), user,l.getPeriod());
 		if(lStats==null) {
-			lStats = new LicenseStatistics(newL);
+			lStats = new LicenseStatistics((LicenseSubscription)newL);
 			System.out.println("Creating new");
 		}
 		

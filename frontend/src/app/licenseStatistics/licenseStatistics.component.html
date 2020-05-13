@@ -1,14 +1,21 @@
 <div class="background" id="appRootClass">
 <br>
 <mat-card>
-    <mat-card-title>Statistics of {{productName}} - License Serial: {{license?.serial}}</mat-card-title>
+    <mat-card-title>Statistics of {{productName}} - License Serial: {{license?.serial}} - Period:              
+        <mat-select [value]="periodSelected" style="display:inline-block; width: 300px;" (selectionChange)="changePeriod($event)">
+            <mat-option value="0">Current Period</mat-option>
+            <mat-option *ngIf="license?.period>1" value="1">Previous Period</mat-option>
+        </mat-select>
+    </mat-card-title>
     <hr>
     <mat-tab-group (selectedTabChange)="resetIndexPage($event)"> 
         <mat-tab label="By IP">
             <mat-card-content>
                 <a class="text">Number of Different IPs: {{licensesByIpMap.size}}</a>
                 <div class="center-div-pie">     
-                    <app-pie-chart *ngIf="licensesByIpMap?.size!=0" [statsMap]="licensesByIpMap"  (setLineChart)="setLineChart($event)"></app-pie-chart>
+                    <app-pie-chart  *ngIf="licensesByIpMap?.size!=0 && trigger" [statsMap]="licensesByIpMap"  (setLineChart)="setLineChart($event)"></app-pie-chart>
+                    <app-pie-chart  *ngIf="licensesByIpMap?.size!=0 && !trigger" [statsMap]="licensesByIpMap"  (setLineChart)="setLineChart($event)"></app-pie-chart>
+
                 </div>
                 <mat-grid-list cols="3"  rowHeight="4rem">
                     <mat-grid-tile>
@@ -53,7 +60,9 @@
         <mat-card-content>
             <a class="text">Number of Different UserNames: {{licensesByNameMap.size}}</a>
             <div class="center-div-pie">     
-                <app-pie-chart *ngIf="licensesByNameMap?.size!=0" [statsMap]="licensesByNameMap"   (setLineChart)="setLineChart($event)"></app-pie-chart>
+                <app-pie-chart *ngIf="licensesByNameMap?.size!=0 && !trigger" [statsMap]="licensesByNameMap"   (setLineChart)="setLineChart($event)"></app-pie-chart>
+                <app-pie-chart *ngIf="licensesByNameMap?.size!=0 && trigger" [statsMap]="licensesByNameMap"   (setLineChart)="setLineChart($event)"></app-pie-chart>
+
             </div>
             <mat-grid-list cols="3"  rowHeight="4rem">
                 <mat-grid-tile>
@@ -98,7 +107,9 @@
         <mat-card-content>
             <a class="text">Number of Different UserName+IP: {{licensesByIpAndNameMap.size}}</a>
             <div class="center-div-pie">     
-                <app-pie-chart *ngIf="licensesByIpAndNameMap?.size!=0" [statsMap]="licensesByIpAndNameMap"   (setLineChart)="setLineChart($event)"></app-pie-chart>
+                <app-pie-chart *ngIf="licensesByIpAndNameMap?.size!=0 && !trigger" [statsMap]="licensesByIpAndNameMap"   (setLineChart)="setLineChart($event)"></app-pie-chart>
+                <app-pie-chart *ngIf="licensesByIpAndNameMap?.size!=0 && trigger" [statsMap]="licensesByIpAndNameMap"   (setLineChart)="setLineChart($event)"></app-pie-chart>
+
             </div>
             <mat-grid-list cols="4"  rowHeight="4rem">
                 <mat-grid-tile>

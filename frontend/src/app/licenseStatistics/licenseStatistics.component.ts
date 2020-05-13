@@ -1,8 +1,9 @@
-import { Component, OnInit } from '@angular/core';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
+import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { License } from '../licenses/license.model';
 import { LicenseService } from '../licenses/license.service';
 import { DatePipe } from '@angular/common';
+import { PieChartComponent } from '../charts/pie-chart.component';
 
 export interface Stats{
     nUsage:number;
@@ -42,6 +43,11 @@ export class LicenseStatisticsComponent implements OnInit{
 
     selected:string = "";
     lineChartMap:Map<string,number> = new Map();
+
+    periodSelected:number;
+
+    trigger:boolean = true;
+
     
     constructor(private activeRoute: ActivatedRoute, private licenseServ:LicenseService, private datePipipe:DatePipe){}
 
@@ -52,26 +58,35 @@ export class LicenseStatisticsComponent implements OnInit{
             this.productName = params.get('name');
             let serial = params.get('serial');
             this.licenseServ.getOneLicense(serial,this.productName).subscribe(
-                l=>{ this.license=l; this.mapByIp(); this.mapByName(); this.listByName(); this.listIP(); this.listByIPAndName();this.mapByNameIP()},
+                (l:any)=>{ this.license=l;this.periodSelected=l.period;  this.mapByIp(); this.mapByName(); this.listByName(); this.listIP(); this.listByIPAndName();this.mapByNameIP()
+                },
                 error => console.log(error)
             )
         });
     }
 
+    rechargeData(){
+        this.statListMapIP.clear(); this.statListMapIPName.clear(); this.statListMapName.clear(); this.licensesByIpAndNameMap.clear(); this.licensesByIpMap.clear(); this.licensesByNameMap.clear();
+        this.mapByIp(); this.mapByName(); this.listByName(); this.listIP(); this.listByIPAndName();this.mapByNameIP()
+
+    }
+
     //Method that provides the info of the list by Ip
     listIP(){
         this.license.licenseStats.forEach( function(value) {
-            let obj = this.statListMapIP.get(value.ip);
-            let stat:Stats;
-            if(obj==null){
-                let map=this.mixUsagePerTimes(Object.entries(value.usagePerTime),null);
-                stat= {nUsage:value.nUsage, usages: value.usages, usagePerTime: map };
-            }else{
-                let aux = value.usages.concat(obj.usages).sort();
-                let map:Map<String,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
-                stat = {nUsage:value.nUsage + obj.nUsage, usages: aux,  usagePerTime: map};
-            }       
-            this.statListMapIP.set(value.ip,stat);
+            if(value.period==this.periodSelected){
+                let obj = this.statListMapIP.get(value.ip);
+                let stat:Stats;
+                if(obj==null){
+                    let map=this.mixUsagePerTimes(Object.entries(value.usagePerTime),null);
+                    stat= {nUsage:value.nUsage, usages: value.usages, usagePerTime: map };
+                }else{
+                    let aux = value.usages.concat(obj.usages).sort();
+                    let map:Map<String,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
+                    stat = {nUsage:value.nUsage + obj.nUsage, usages: aux,  usagePerTime: map};
+                }        
+                this.statListMapIP.set(value.ip,stat);
+            }
 
         }.bind(this));
 
@@ -102,11 +117,14 @@ export class LicenseStatisticsComponent implements OnInit{
     mapByIp(){
         this.license.licenseStats.forEach(
             function(value) {
-                let x = this.licensesByIpMap.get(value.ip);
-                if(x!=null){
-                    this.licensesByIpMap.set(value.ip,x+value.nUsage);
-                }else{
-                    this.licensesByIpMap.set(value.ip,value.nUsage);
+                if(value.period==this.periodSelected){
+
+                    let x = this.licensesByIpMap.get(value.ip);
+                    if(x!=null){
+                        this.licensesByIpMap.set(value.ip,x+value.nUsage);
+                    }else{
+                        this.licensesByIpMap.set(value.ip,value.nUsage);
+                    }
                 }
             }.bind(this)
         );
@@ -115,20 +133,23 @@ export class LicenseStatisticsComponent implements OnInit{
      //Method that provides the info of the list by UserName
     listByName(){
         this.license.licenseStats.forEach( function(value) {
-            if(value.userName==null){
-                value.userName= "Others";
+            if(value.period==this.periodSelected){
+
+                if(value.userName==null){
+                    value.userName= "Others";
+                }
+                let obj = this.statListMapName.get(value.userName);
+                let stat:Stats;
+                if(obj==null){
+                    let map=this.mixUsagePerTimes(Object.entries(value.usagePerTime),null);
+                    stat= {nUsage:value.nUsage, usages: value.usages , usagePerTime: map};
+                }else{
+                    let map:Map<String,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
+                    let aux = value.usages.concat(obj.usages).sort();
+                    stat = {nUsage:value.nUsage + obj.nUsage, usages: aux , usagePerTime:map};
+                }       
+                this.statListMapName.set(value.userName,stat);
             }
-            let obj = this.statListMapName.get(value.userName);
-            let stat:Stats;
-            if(obj==null){
-                let map=this.mixUsagePerTimes(Object.entries(value.usagePerTime),null);
-                stat= {nUsage:value.nUsage, usages: value.usages , usagePerTime: map};
-            }else{
-                let map:Map<String,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
-                let aux = value.usages.concat(obj.usages).sort();
-                stat = {nUsage:value.nUsage + obj.nUsage, usages: aux , usagePerTime:map};
-            }       
-            this.statListMapName.set(value.userName,stat);
 
         }.bind(this));
     }
@@ -138,11 +159,14 @@ export class LicenseStatisticsComponent implements OnInit{
     mapByName(){
         this.license.licenseStats.forEach(
             function(value) {
-                let x = this.licensesByNameMap.get(value.userName);
-                if(x!=null){
-                    this.licensesByNameMap.set(value.userName,x+value.nUsage);
-                }else{
-                    this.licensesByNameMap.set(value.userName,value.nUsage);
+                if(value.period==this.periodSelected){
+
+                    let x = this.licensesByNameMap.get(value.userName);
+                    if(x!=null){
+                        this.licensesByNameMap.set(value.userName,x+value.nUsage);
+                    }else{
+                        this.licensesByNameMap.set(value.userName,value.nUsage);
+                    }
                 }
             }.bind(this)
         );
@@ -151,35 +175,40 @@ export class LicenseStatisticsComponent implements OnInit{
 
     listByIPAndName(){
         this.license.licenseStats.forEach( function(value) {
-            if(value.userName==null){
-                value.userName= "Others";
+            if(value.period==this.periodSelected){
+
+                if(value.userName==null){
+                    value.userName= "Others";
+                }
+                let obj = this.statListMapIPName.get(value.userName+"%"+value.ip);
+                let stat:Stats;
+                if(obj==null){
+                    let map=this.mixUsagePerTimes(Object.entries(value.usagePerTime),null);
+                    stat= {nUsage:value.nUsage, usages: value.usages , usagePerTime: map};
+                }else{
+                    console.log("no debería imprimirse esto");
+                    let map:Map<String,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
+                    let aux = value.usages.concat(obj.usages).sort();
+                    stat = {nUsage:value.nUsage + obj.nUsage, usages: aux , usagePerTime:map};
+                }       
+                this.statListMapIPName.set(value.userName+"%"+value.ip,stat);
             }
-            let obj = this.statListMapIPName.get(value.userName+"%"+value.ip);
-            let stat:Stats;
-            if(obj==null){
-                let map=this.mixUsagePerTimes(Object.entries(value.usagePerTime),null);
-                stat= {nUsage:value.nUsage, usages: value.usages , usagePerTime: map};
-            }else{
-                console.log("no debería imprimirse esto");
-                let map:Map<String,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
-                let aux = value.usages.concat(obj.usages).sort();
-                stat = {nUsage:value.nUsage + obj.nUsage, usages: aux , usagePerTime:map};
-            }       
-            this.statListMapIPName.set(value.userName+"%"+value.ip,stat);
 
         }.bind(this));
-        console.log(this.statListMapIPName);
     }
 
     
     mapByNameIP(){
         this.license.licenseStats.forEach(
             function(value) {
-                let x = this.licensesByIpAndNameMap.get(value.userName+"%"+value.ip);
-                if(x!=null){
-                    this.licensesByIpAndNameMap.set(value.userName+"%"+value.ip,x+value.nUsage);
-                }else{
-                    this.licensesByIpAndNameMap.set(value.userName+"%"+value.ip,value.nUsage);
+                if(value.period==this.periodSelected){
+
+                    let x = this.licensesByIpAndNameMap.get(value.userName+"%"+value.ip);
+                    if(x!=null){
+                        this.licensesByIpAndNameMap.set(value.userName+"%"+value.ip,x+value.nUsage);
+                    }else{
+                        this.licensesByIpAndNameMap.set(value.userName+"%"+value.ip,value.nUsage);
+                    }
                 }
             }.bind(this)
         );
@@ -210,6 +239,12 @@ export class LicenseStatisticsComponent implements OnInit{
         this.numberOfElementsIP=5;
         this.numberOfElementsIPName=5;
         this.numberOfElementsName=5;
+    }
+
+    changePeriod($event:any){
+        this.periodSelected=this.license.period - $event.value;
+        this.trigger=!this.trigger;
+        this.rechargeData();
     }
 
 

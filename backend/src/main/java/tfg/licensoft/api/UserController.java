@@ -412,7 +412,6 @@ public class UserController implements IUserController{
 				}
 				
 			}, 
-					
 					license.getEndDate()
 					
 			);

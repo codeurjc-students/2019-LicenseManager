@@ -29,6 +29,10 @@ public class LicenseStatisticsService {
 		return this.licStatRepo.findByLicenseAndIpAndUserName(lic, ip, userName);
 	}
 	
+	public LicenseStatistics findByLicenseAndIpAndUserNameAndPeriod(License lic, String ip, String userName, int period) {
+		return this.licStatRepo.findByLicenseAndIpAndUserNameAndPeriod(lic, ip, userName, period);
+	}
+	
 	public LicenseStatistics delete(LicenseStatistics l) {
 		return this.delete(l);
 	}
