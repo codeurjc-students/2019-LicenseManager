@@ -12,7 +12,7 @@ script:
 
   # Copy new generated resources on back static
   - cd ../backend
-  - mkdir -p "src/main/resources/static/" && cp -r ../frontend/dist/front/* src/main/resources/static/
+  - mkdir -p "src/main/resources/static/" && cp -r ../frontend/dist/my-app/* src/main/resources/static/
 
   # Create jar
   - mvn package
