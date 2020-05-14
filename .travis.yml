@@ -15,4 +15,4 @@ script:
   - mkdir -p "src/main/resources/static/" && cp -r ../frontend/dist/my-app/* src/main/resources/static/
 
   # Create jar
-  - mvn package
+  - mvn package 
