@@ -417,7 +417,7 @@ public class ProductApiTests {
                 .contentType(MediaType.APPLICATION_JSON))
                 .andExpect(status().isOk()).andExpect(jsonPath("$.description",is("new Desc")));
     }
-    
+   
     @Test
     public void testEditProductNoContent () throws Exception{
     	Product pS= new Product();

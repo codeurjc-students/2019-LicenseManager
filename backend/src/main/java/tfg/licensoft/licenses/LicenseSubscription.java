@@ -28,9 +28,7 @@ import tfg.licensoft.products.Product;
 @Entity
 @ApiModel("License Subscription")
 public class LicenseSubscription extends License {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+
 	private boolean trial;
 	private boolean cancelAtEnd;
 	private String subscriptionItemId;
@@ -126,17 +124,6 @@ public class LicenseSubscription extends License {
 
 
 
-	public Long getId() {
-		return id;
-	}
-
-
-
-
-
-	public void setId(Long id) {
-		this.id = id;
-	}
 
 
 
