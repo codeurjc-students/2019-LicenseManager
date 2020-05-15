@@ -1,0 +1,9 @@
+endDate:DATE=2020-04-06 18:10:56.810
+expiryDate:DATE=2020-04-06 18:10:56.810
+licenseId:UUID=8cee8023-73e5-4025-97b0-d011e700f72c
+licenseSignature:BINARY=gdPKfqffZfYJcSzulkXm9j9fDhyW41DQL6SdG8VVIqphRdU7mA6/Mj8Dt14Iryfo0kZ5V1PZihoZaIdp00lKEDid5O2cSfJ49x2lbUi1pzWdBrGV9Sc/G+0pPyNes/EHabIf5eLYJPQFPq7qGn6/1Z1KGs9uV1y8dFbIvKlqbAw=
+product=p1
+serial=8cee8023-73e5-4025-97b0-d011e700f72c
+signatureDigest=SHA-512
+startDate:DATE=2020-04-06 18:10:56.810
+type=MB

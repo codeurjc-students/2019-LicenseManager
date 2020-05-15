@@ -1,0 +1,4 @@
+edition=community
+licenseSignature:BINARY=ezCD3ZhqY9NrweZHKSkkoRmu7pTogWB+UaHrOBUHqKFwQVw351gYzfPqs6PmKKEgOG7PxPaHwLkK4wXH3rqb3eLbD80k12aFHH1gkWO3nvgR9tqP/j3XpHSrJZD9bnYeW67bgbIwVri+/p6E3FoVPXgiB2agoEi7prAFB02ALow=
+signatureDigest=SHA-512
+valid-until=2029.12.31

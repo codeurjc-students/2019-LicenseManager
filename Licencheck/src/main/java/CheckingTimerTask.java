@@ -1,29 +1,25 @@
-import java.util.TimerTask;
+import org.quartz.*;
 
-public class CheckingTimerTask extends TimerTask {
+import java.util.Date;
+
+
+public class CheckingTimerTask implements Job {
 
 
 
-    private Licencheck licencheck;
-    private String licenseSerial;
-    private String productName;
-    private boolean hasStarted = false;
-
-    public CheckingTimerTask(Licencheck l, String licenseSerial, String productName){
-        this.licencheck=l;
-        this.licenseSerial=licenseSerial;
-        this.productName=productName;
-    }
 
     @Override
-    public void run() {
-        this.hasStarted = true;
-        this.licencheck.checkLicense(licenseSerial, productName);
+    public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
+        JobDataMap data = jobExecutionContext.getJobDetail().getJobDataMap();
+        String licenseSerial = data.getString("LICENSE_SERIAL");
+        String productName = data.getString("PRODUCT_NAME");
+        Licencheck licencheck = (Licencheck)data.get("LICENCHECK");
 
-
-    }
-
-    public boolean hasRunStarted() {
-        return this.hasStarted;
+        try {
+            licencheck.checkLicenseScheduled(licenseSerial, productName);
+        } catch (SchedulerException e) {
+            e.printStackTrace();
+        }
+        licencheck.addRepetition();
     }
 }

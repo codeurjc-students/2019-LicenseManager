@@ -1,4 +1,5 @@
 import java.io.*;
+import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.GeneralSecurityException;
@@ -6,9 +7,8 @@ import java.security.KeyFactory;
 import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
 import java.security.spec.PKCS8EncodedKeySpec;
+import java.util.*;
 import java.util.Calendar;
-import java.util.Date;
-import java.util.UUID;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
@@ -24,6 +24,8 @@ import javax0.license3j.io.IOFormat;
 import javax0.license3j.io.KeyPairReader;
 import javax0.license3j.io.LicenseReader;
 import javax0.license3j.io.LicenseWriter;
+import org.quartz.*;
+import org.quartz.impl.StdSchedulerFactory;
 import sun.security.rsa.RSAPrivateKeyImpl;
 
 import javax.net.ssl.HttpsURLConnection;
@@ -43,9 +45,12 @@ public class Licencheck {
 
     private LicencheckListener listener;
 
-   // private Future<CheckInfo> checkInfo;
 
-    //Constructor for non-Internet checking
+    private Scheduler scheduler;
+
+    private int repetition = 0;
+
+    //Constructor for Offline checking, setting default public key
     public Licencheck(){
         this.digest = new byte[] {
                 (byte)0x55,
@@ -84,6 +89,7 @@ public class Licencheck {
         };
     }
 
+    //Constructor for Online checking
     public Licencheck(String url, boolean selfsigned){
         if(url.charAt(url.length()-1)=='/'){
             //Remove the last dash '/'
@@ -122,8 +128,26 @@ public class Licencheck {
     }
 
 
+
+    public void addLicencheckListener(LicencheckListener listener){
+        this.listener = listener;
+    }
+
+    public void setKey(byte[] key) {
+        this.key = key;
+    }
+
+    protected void addRepetition(){
+        this.repetition++;
+    }
+
+
+    /*
+    -------------------------------CHECKING METHODS------------------------------
+     */
+
     //Return values --> NULL (if check == false ) , type license (L,M,D,Y) = (Life,Month,Day,Year)
-    public String checkLicense(String licenseSerial, String productName){
+    public String checkLicenseOnce(String licenseSerial, String productName){
         try {
             URL url = new URL(baseEndpoint + "checkLicense/" + productName + "/" + licenseSerial);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -134,8 +158,6 @@ public class Licencheck {
 
 
             int HttpResult = con.getResponseCode();
-
-
             StringBuilder sb = new StringBuilder();
 
             if (HttpResult == HttpsURLConnection.HTTP_OK) {
@@ -147,20 +169,215 @@ public class Licencheck {
                 }
                 JsonObject jsonObject = new JsonParser().parse(sb.toString()).getAsJsonObject();
                 JsonElement type = jsonObject.get("type");
-                System.out.println("The type of the license is --> " + type.getAsString());
                 br.close();
                 con.disconnect();
                 return type.getAsString();
             } else {
                 con.disconnect();
-                return null;  //No existe la licencia para ese usuario (con su respectiva contraseña) y producto
+                return null;  //License doesn't exist for product and license introduced
             }
         }catch (IOException e){
             e.printStackTrace();
             return null;
         }
+    }
+
+    //Checks License and if valid, sets a scheduler for every 24h to call "checkLicenseScheduled"
+    public void checkLicensePeriodically(String licenseSerial, String productName) {
+        if(listener==null){
+            throw new NullPointerException("A Listener is needed to be setted before calling this method. Try to call 'addLicencheckListener' first.");
+        }
+        this.repetition=0;
+        Timer time = new Timer();
+        CheckInfo checkInfo = new CheckInfo();
+        try {
+            URL url = new URL(baseEndpoint + "checkLicense/" + productName + "/" + licenseSerial);
+            HttpURLConnection con = (HttpURLConnection) url.openConnection();
+            con.setDoOutput(true);
+            con.setRequestMethod("GET");
+            con.setRequestProperty("Content-Type", "application/json");
+            con.setRequestProperty("Accept", "application/json");
+
+
+            int HttpResult = con.getResponseCode(); //Get the response
+            StringBuilder sb = new StringBuilder();
+
+            if (HttpResult == HttpsURLConnection.HTTP_OK) {
+                BufferedReader br = new BufferedReader(
+                        new InputStreamReader(con.getInputStream(), "utf-8"));
+                String line = null;
+                while ((line = br.readLine()) != null) {
+                    sb.append(line + "\n");
+                }
+                JsonObject jsonObject = new JsonParser().parse(sb.toString()).getAsJsonObject();
+                br.close();
+                con.disconnect();
+
+
+                //Setting the scheduler
+                JobDetail job1 = JobBuilder.newJob(CheckingTimerTask.class).build();
+                job1.getJobDataMap().put("LICENSE_SERIAL", licenseSerial);
+                job1.getJobDataMap().put("PRODUCT_NAME", productName);
+                job1.getJobDataMap().put("LICENCHECK",this);
+
+                Trigger t = TriggerBuilder.newTrigger().withIdentity("CroneTrigger").withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(10).repeatForever()).build();
+                try {
+                    this.scheduler = StdSchedulerFactory.getDefaultScheduler();
+                    this.scheduler.start();
+                    this.scheduler.scheduleJob(job1,t);
+                } catch (SchedulerException e) {
+                    e.printStackTrace();
+                }
+
+                //Set the response
+                checkInfo.setReason("VALID");
+                this.listener.checkResult(checkInfo);
+
+
+            } else if (HttpResult == HttpURLConnection.HTTP_NOT_FOUND) {
+                checkInfo.setReason("NOT_VALID");
+                this.listener.checkResult(checkInfo);
+                con.disconnect();
+            } else if (HttpResult == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+                con.disconnect();
+            }else{
+                checkInfo.setReason("UNKNOWN_ERROR");
+                this.listener.checkResult(checkInfo);
+            }
+
+        }catch (NullPointerException n){
+            checkInfo.setReason("UNKNOWN_ERROR");
+            this.listener.checkResult(checkInfo);
+
+        } catch (ConnectException ex){
+            checkInfo.setReason("INTERNET_CON_ERROR");
+            this.listener.checkResult(checkInfo);
+            time.schedule(new TimerTask() {
+                @Override
+                public void run() {
+                        checkLicensePeriodically(licenseSerial, productName);
+                }
+            }, 5000);
+
+        } catch (IOException e) {
+            con.disconnect();
+            checkInfo.setReason("UNKNOWN_ERROR");
+            this.listener.checkResult(checkInfo);
+        }
 
     }
+
+
+
+    protected void checkLicenseScheduled(String licenseSerial, String productName) throws SchedulerException {
+        if(repetition!=0) { //To avoid first call when scheduling
+            Timer time = new Timer();
+            CheckInfo checkInfo = new CheckInfo();
+            try {
+                URL url = new URL(baseEndpoint + "checkLicense/" + productName + "/" + licenseSerial);
+                HttpURLConnection con = (HttpURLConnection) url.openConnection();
+                con.setDoOutput(true);
+                con.setRequestMethod("GET");
+                con.setRequestProperty("Content-Type", "application/json");
+                con.setRequestProperty("Accept", "application/json");
+
+
+                int HttpResult = con.getResponseCode();
+                StringBuilder sb = new StringBuilder();
+
+                if (HttpResult == HttpsURLConnection.HTTP_OK) {
+                    BufferedReader br = new BufferedReader(
+                            new InputStreamReader(con.getInputStream(), "utf-8"));
+                    String line = null;
+                    while ((line = br.readLine()) != null) {
+                        sb.append(line + "\n");
+                    }
+                    JsonObject jsonObject = new JsonParser().parse(sb.toString()).getAsJsonObject();
+                    br.close();
+                    con.disconnect();
+
+                    //If valid, inform, finish this execution and wait for the next scheduled(24h)
+                    checkInfo.setReason("VALID_R");
+                    this.listener.checkResult(checkInfo);
+
+
+                } else if (HttpResult == HttpURLConnection.HTTP_NOT_FOUND) {
+                    //The license must have expired between last execution and this execution, without being renewed
+                    this.scheduler.shutdown(); //Stop the scheduler, just needed if it was valid
+                    checkInfo.setReason("NOT_VALID_R");
+                    this.listener.checkResult(checkInfo);
+                    con.disconnect();
+                } else if (HttpResult == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+                    this.scheduler.shutdown();
+                    con.disconnect();
+                } else {
+                    this.scheduler.shutdown();
+                    con.disconnect();
+                    checkInfo.setReason("UNKNOWN_ERROR_R");
+                    this.listener.checkResult(checkInfo);
+                }
+
+            } catch (NullPointerException n) {
+                con.disconnect();
+                this.scheduler.shutdown();
+
+                checkInfo.setReason("UNKNOWN_ERROR_R");
+                this.listener.checkResult(checkInfo);
+
+            } catch (ConnectException ex) {
+                System.out.println("Internet conexion error scheduled");
+                this.scheduler.shutdown();
+               // con.disconnect();
+                checkInfo.setReason("INTERNET_CON_ERROR_R");
+                this.listener.checkResult(checkInfo);
+                time.schedule(new TimerTask() {
+                    @Override
+                    public void run() {
+                            checkLicensePeriodically(licenseSerial, productName);
+                    }
+                }, 5000);
+
+            } catch (IOException e) {
+                this.scheduler.shutdown();
+                con.disconnect();
+                checkInfo.setReason("UNKNOWN_ERROR_R");
+                this.listener.checkResult(checkInfo);
+            }
+        }
+    }
+
+    public boolean checkLicenseOffline (File l) throws IOException{
+        if(l!=null) {
+            try (LicenseReader reader = new LicenseReader(l)) {
+                License license = reader.read(IOFormat.STRING);
+                if (license.isOK(key)){
+                    if(!license.get("type").getString().equals("L")){ //Subscription Type Licenses
+                        Date startDate = license.get("startDate").getDate();
+                        Date endDate = license.get("endDate").getDate();
+                        Date actual = new Date();
+
+                        return (actual.after(startDate) && actual.before(endDate));  //Inside of bounds
+
+                    }else{  //Lifetime License = always valid if license.isOK==true
+                        return true;
+                    }
+                }else{
+                    return false;
+                }
+            } catch (IOException e) {
+                System.out.print("Error reading license file " + e);
+                return false;
+            }
+        }else{
+            throw new FileNotFoundException("The LicenseFile introduced is null");
+        }
+    }
+
+
+    /*
+    -------------------------------UPDATE USAGE METHOD------------------------------
+     */
+
 
     //Returns the actual usage or null if not exists
     public Integer updateUsage(String licenseSerial, String productName, long usage){
@@ -203,41 +420,10 @@ public class Licencheck {
 
     }
 
-    public boolean checkLicenseOffline (File l) throws IOException{
-        if(l!=null) {
-            try (LicenseReader reader = new LicenseReader(l)) {
-                License license = reader.read(IOFormat.STRING);
-                if (license.isOK(key)){
-                    if(!license.get("type").getString().equals("L")){ //Subscription Type Licenses
-                        Date startDate = license.get("startDate").getDate();
-                        Date endDate = license.get("endDate").getDate();
-                        Date actual = new Date();
-
-                        return (actual.after(startDate) && actual.before(endDate));  //Inside of bounds
-
-                    }else{  //Lifetime License = always valid if license.isOK==true
-                        return true;
-                    }
-                }else{
-                    return false;
-                }
-            } catch (IOException e) {
-                System.out.print("Error reading license file " + e);
-                return false;
-            }
-        }else{
-            throw new FileNotFoundException("The file introduced is null");
-        }
-    }
-
-    /*
-     CheckInfo checkInfo = new CheckInfo();
 
 
-    checkInfo.setReason("LICENSE NOT VALID");
-    this.listener.checkResult(checkInfo);
-     */
-    public void createLicense(String path){
+    //Just needed for tests
+    protected void createLicense(String path){
         Date dt = new Date();
         Calendar c = Calendar.getInstance();
         c.setTime(dt);
@@ -266,11 +452,7 @@ public class Licencheck {
         }
     }
 
-    public void addInvalidLicenseListener(LicencheckListener listener){
-        this.listener = listener;
-    }
 
-   /* public Future<CheckInfo> getCheckInfo() {
-        return checkInfo;
-    }*/
+
+
 }

@@ -1,0 +1,7 @@
+endDate:DATE=2020-04-06 17:56:41.055
+expiryDate:DATE=2020-04-06 17:56:41.055
+licenseId:UUID=9ce53b05-5225-45f5-a56f-b9ada6a78c49
+product=p1
+serial=9ce53b05-5225-45f5-a56f-b9ada6a78c49
+startDate:DATE=2020-04-06 17:56:41.055
+type=MB
