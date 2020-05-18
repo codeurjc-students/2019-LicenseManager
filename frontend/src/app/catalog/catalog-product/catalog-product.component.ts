@@ -1,4 +1,4 @@
-import { Component, OnInit, Input, OnChanges, SimpleChanges, Renderer, ViewChild, TemplateRef } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { Product } from '../../product/product.model';
 import { ProductService } from '../../product/product.service';
 import { ActivatedRoute, ParamMap, Router } from '@angular/router';
@@ -8,13 +8,12 @@ import { DialogService } from '../../dialogs/dialog.service';
 import { LicenseService } from '../../licenses/license.service';
 import { License } from '../../licenses/license.model';
 import { DatePipe } from '@angular/common';
-import { MatDialogRef, MatDialog, MatSnackBarConfig, MatSnackBar } from '@angular/material';
-import { LoginComponent } from '../../login/login.component';
+import { MatDialogRef, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { AppService } from '../../app.service';
 import { CardFormComponent } from '../../userProfile/card-form/card-form.component';
 import { UsedCardService } from '../../usedCard/usedCard.service';
 import { StripeService, Elements, Element as StripeElement, ElementsOptions } from 'ngx-stripe';
-import { FormGroup, FormControl, Validators } from '@angular/forms';
+import { FormGroup } from '@angular/forms';
 import { DomSanitizer } from '@angular/platform-browser';
 const BASE_URL_PRODUCT = "/api/products/"
 
@@ -270,53 +269,7 @@ export class CatalogProductComponent implements OnInit {
 
 
 
-//METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT
-  startPurchase(){
-    if(this.loginService.getUserLogged()==null){
-      this.dialogService.openConfirmDialog("You have to be logged first! If you don't have an account, you can register too",false,false);
-   
-     }else{
-      this.purchase=true;
-      this.setUp();
-     }
-  }
-
-  pay(){
-    const name = this.loginService.getUserLogged().name
-    this.stripeService
-      .createToken(this.card, { name })
-      .subscribe(result => {
-        if (result.token) {
-          this.loading=true;
-          this.userProfileService.pay(name,this.product, result.token.id).subscribe(
-            data => {
-              this.userProfileService.confirmPay(name,this.product,data[`id`]).subscribe(
-                (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile()},
-                error => {
-                  console.log(error);
-                  if(error.status == 304){
-                    var iframe = document.createElement('iframe');
-                    iframe.src = "marca.com";
-                    iframe.width = "600";
-                    iframe.height = "400";
-                  
-                    //yourContainer.appendChild(iframe);
-                  }
-                  this.dialogService.openConfirmDialog("The purchase has not been posible",false,false); 
-                  this.loading=false; 
-                  this.purchase=false;}
-              )
-            }
-          );
-          
-        } else if (result.error) {
-          console.log("result.error");
-        }
-      });
-  }
-
-
-
+  
   //Function to copy the license serial to the clipboard
   copyMessage(val: string){
     const selBox = document.createElement('textarea');
@@ -348,10 +301,7 @@ export class CatalogProductComponent implements OnInit {
 
 
 
-
-  //PRUEBAS
-
-  //METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT	//METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT
+  //METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT	
   loadStripe() {	 
     if(!window.document.getElementById('stripe-script')) {	    
         var s = window.document.createElement("script");	  
