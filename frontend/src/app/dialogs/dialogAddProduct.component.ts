@@ -31,10 +31,11 @@ import { DialogService } from './dialog.service';
     productEdit:Product;
     modeSelected:string;
 
-    constructor(@Inject(MAT_DIALOG_DATA) public data:any,private dialogRef:MatDialogRef<DialogAddProductComponent>, private productServ:ProductService,private dialogService:DialogService){
+    constructor(@Inject(MAT_DIALOG_DATA) public data:any,private dialogRef:MatDialogRef<DialogAddProductComponent>, private productServ:ProductService){
       if(data.type=="edit"){
         this.edit=true;
         let prod:Product = data.product;
+        this.modeSelected=prod.mode;
         this.name=prod.name;
         this.description=prod.description;
         this.webLink=prod.webLink;
@@ -140,7 +141,7 @@ import { DialogService } from './dialog.service';
 
   selectEvent(file: File): void {
     if(file.size>=1048576){
-      this.dialogService.openConfirmDialog("The file is too large. Max: 1048575 bytes",false,false)
+      alert("The file is too large. Max: 1048575 bytes");
     }else{
       this.file=file;
     }
@@ -148,7 +149,7 @@ import { DialogService } from './dialog.service';
 
   uploadEvent(file: File): void {
     if(file.size>=1048576){
-      this.dialogService.openConfirmDialog("The file is too large. Max: 1048575 bytes",false,false)
+      alert("The file is too large. Max: 1048575 bytes");
     }else{
       this.productServ.addImage(this.file, this.name).subscribe(
         u => {  },

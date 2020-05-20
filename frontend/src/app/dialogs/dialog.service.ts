@@ -6,6 +6,8 @@ import { DialogFreeTrial } from './dialogFreeTrial.component';
 import { AddCardDialogComponent } from './add-card-dialog/add-card-dialog.component';
 import { CardSelectDialog } from './card-select-dialog copy/card-select-dialog.component';
 import { CardSubscriptionSelectDialog } from './card-subscription-select-dialog/card-subscription-select-dialog.component';
+import { DialogAddProductComponent } from './dialogAddProduct.component';
+import { Product } from '../product/product.model';
 
 @Injectable({
     providedIn:'root'
@@ -14,6 +16,23 @@ import { CardSubscriptionSelectDialog } from './card-subscription-select-dialog/
 export class DialogService {
     
     constructor(private dialog:MatDialog){}
+
+    openAddProductDialog(){
+      return this.dialog.open(DialogAddProductComponent, {
+        data:{
+            type:"add",
+        },
+    });
+    }
+
+    openEditProductDialog(prod:Product){
+      return this.dialog.open(DialogAddProductComponent, {
+        data:{
+            type:"edit",
+            product:prod,
+        },
+    });
+    }
 
 
     openConfirmDialog(msg,cb:boolean, noButton:boolean,width:string="390px"){

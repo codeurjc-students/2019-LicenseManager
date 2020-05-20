@@ -1,4 +1,4 @@
-import { Component, ViewChild, TemplateRef } from "@angular/core";
+import { Component, ViewChild, TemplateRef, OnInit } from '@angular/core';
 import { Product } from "../product/product.model";
 import { ProductService } from "../product/product.service";
 import { Router } from '@angular/router';
@@ -11,7 +11,7 @@ import { DialogService } from '../dialogs/dialog.service';
     templateUrl: './adminDashboard.component.html',
     styleUrls: ['./adminDashboard.component.css']
   })
-  export class AdminDashboardComponent {
+  export class AdminDashboardComponent implements OnInit{
     @ViewChild('addProductDialog',{static:false}) searchDialog: TemplateRef<any>;
     dialogRef: MatDialogRef<any, any>;
     products:Product[];
@@ -19,10 +19,12 @@ import { DialogService } from '../dialogs/dialog.service';
     pageActual:number = 1;
     numberOfElements = 5;
 
-    conf:MatSnackBarConfig= new MatSnackBarConfig();
+    conf:MatSnackBarConfig;
 
-    constructor(private snackbar:MatSnackBar,private dialogService:DialogService,public dialog: MatDialog,private productService:ProductService,private router: Router){
+    constructor(private snackbar:MatSnackBar,private dialogService:DialogService,public dialog: MatDialog,private productService:ProductService,private router: Router){}
+    ngOnInit(): void {
         this.getProducts();
+        this.conf= new MatSnackBarConfig();
         this.conf.duration=3000;
     }
 
@@ -34,25 +36,15 @@ import { DialogService } from '../dialogs/dialog.service';
     }
 
     openAddProductDialog(){
-        this.dialogRef = this.dialog.open(DialogAddProductComponent, {
-            data:{
-                type:"add",
-            },
-        });
-        this.dialogRef.afterClosed().subscribe(
-            (p:any) => {if(p){this.getProducts();this.snackbar.open("Product added","X",this.conf)}}
-
+        this.dialogService.openAddProductDialog().afterClosed().subscribe(
+            (p:any) => {if(p){this.getProducts();this.snackbar.open("Product added","X",this.conf)}},
+            error => console.log(error)
         );
     }
 
     openEditProductDialog(prod:Product){
-        this.dialogRef = this.dialog.open(DialogAddProductComponent, {
-            data:{
-                type:"edit",
-                product:prod,
-            },
-        });
-        this.dialogRef.afterClosed().subscribe(
+        
+        this.dialogService.openEditProductDialog(prod).afterClosed().subscribe(
             p =>{ this.getProducts(); if(p){this.snackbar.open("Product updated","X",this.conf)}}
 
         );
