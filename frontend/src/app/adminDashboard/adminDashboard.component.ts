@@ -21,7 +21,7 @@ import { DialogService } from '../dialogs/dialog.service';
 
     conf:MatSnackBarConfig;
 
-    constructor(private snackbar:MatSnackBar,private dialogService:DialogService,public dialog: MatDialog,private productService:ProductService,private router: Router){}
+    constructor(public snackbar:MatSnackBar,private dialogService:DialogService,public dialog: MatDialog,private productService:ProductService,private router: Router){}
     ngOnInit(): void {
         this.getProducts();
         this.conf= new MatSnackBarConfig();
