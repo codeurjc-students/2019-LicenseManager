@@ -1,5 +1,6 @@
 backend/target/classes/META-INF/MANIFEST.MF
 frontend/node_modules/
+frontend/coverage/
 Licencheck/.idea
 Licencheck/target/
 JavApplication/target

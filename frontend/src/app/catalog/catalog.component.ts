@@ -10,17 +10,21 @@ const BASE_URL_PRODUCT = "/api/products/"
   templateUrl: './catalog.component.html',
   styleUrls: ['./catalog.component.css']
 })
-export class CatalogComponent {
+export class CatalogComponent implements OnInit{
+  
 
   products:Product[];
   searchInputTerm:string;
   pageActual:number = 1;
   numberOfElements = 5;
-  constructor(private productService:ProductService, private router:Router){
-      productService.getProducts().subscribe( 
-          (resp:any) =>{this.products = resp},
-          error => console.log(error)
-      );
+
+  constructor(private productService:ProductService, private router:Router){}
+
+  ngOnInit(): void {
+    this.productService.getProducts().subscribe( 
+      (resp:any) =>{this.products = resp},
+      error => console.log(error)
+    );
   }
 
   goToProduct(name:string){
