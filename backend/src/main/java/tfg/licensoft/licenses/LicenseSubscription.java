@@ -49,7 +49,7 @@ public class LicenseSubscription extends License {
 		this.setPrice(product.getPlansPrices().get(type));
 		
         String mode = this.getProduct().getMode();
-        if(mode.equals("Offline") || mode.equals("Both")){
+        if(mode!=null && (mode.equals("Offline") || mode.equals("Both"))){
     		this.setLicenseString(this.generateLicenseFile2("licenseFile-"+this.getProduct().getName()+".txt"));
         }
         

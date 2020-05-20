@@ -73,7 +73,7 @@ public class License {
 		}
 		
         String mode = this.product.getMode();
-        if(mode.equals("Offline") || mode.equals("Both")){
+        if(mode!=null && (mode.equals("Offline") || mode.equals("Both"))){
     		this.licenseString =  this.generateLicenseFile("licenseFile-"+this.getProduct().getName()+".txt");
         }
 

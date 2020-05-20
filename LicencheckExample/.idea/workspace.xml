@@ -4,6 +4,7 @@
     <list default="true" id="6973064f-5ff2-4f00-98b8-251b1f60f0de" name="Default Changelist" comment="">
       <change beforePath="$PROJECT_DIR$/../Licencheck/license-plainChecked-v2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/license-plainChecked-v2.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Licencheck/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Licencheck/pom.xml.versionsBackup" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/pom.xml.versionsBackup" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Licencheck/src/main/java/CheckingTimerTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/src/main/java/CheckingTimerTask.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Licencheck/src/main/java/Licencheck.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/src/main/java/Licencheck.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../Licencheck/src/main/resources/licencheck.properties" beforeDir="false" />
@@ -33,7 +34,7 @@
     <session id="-575867622">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="11" />
+          <entry key="project.closed" value="12" />
           <entry key="project.open.time.0" value="6" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.11" value="1" />
@@ -152,7 +153,7 @@
       <select />
     </treeState>
   </component>
-  <component name="ProjectFrameBounds" extendedState="7">
+  <component name="ProjectFrameBounds" extendedState="6">
     <option name="x" value="643" />
     <option name="y" value="330" />
     <option name="width" value="1440" />
@@ -299,8 +300,7 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="-8" y="-8" width="1936" height="1056" extended-state="7" />
-    <editor active="true" />
+    <frame x="-8" y="-8" width="1936" height="1056" extended-state="6" />
     <layout>
       <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.20575693" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
@@ -311,7 +311,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" visible="true" weight="0.1637744" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.1637744" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
