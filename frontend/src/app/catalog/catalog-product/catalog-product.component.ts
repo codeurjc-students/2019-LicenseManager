@@ -51,7 +51,22 @@ export class CatalogProductComponent implements OnInit {
 
   fileName:string;
 
-  constructor(private sanitizer: DomSanitizer,private snackbar:MatSnackBar,private stripeService: StripeService, public usedCardServ:UsedCardService,public cardForm:CardFormComponent,public appService:AppService,private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,private productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
+  constructor(private sanitizer: DomSanitizer,public snackbar:MatSnackBar,private stripeService: StripeService, public usedCardServ:UsedCardService,public cardForm:CardFormComponent,public appService:AppService,private datepipe:DatePipe,private router:Router,private licenseServ:LicenseService,private dialogService:DialogService,private activeRoute: ActivatedRoute,public productService:ProductService, private loginService:LoginService, private userProfileService:UserProfileService) {
+    
+   }
+
+   public stripeForm = new FormGroup({ });
+
+
+   pathPhotos(productName:string){
+    return BASE_URL_PRODUCT + productName +"/image";
+  }
+
+
+
+  ngOnInit() {
+    this.loadStripe();
+    this.user=this.loginService.getUserLogged();
     this.purchase=false;
     let productName;
     this.activeRoute.paramMap.subscribe((params: ParamMap) => {
@@ -90,7 +105,7 @@ export class CatalogProductComponent implements OnInit {
             }else{
               automaticRenewal = false;
             }
-      
+            console.log(this.user);
             this.userProfileService.check3dsSubs(this.user.name,this.product,piId_s, automaticRenewal,localStorage.getItem("type"),localStorage.getItem("subscriptionId")).subscribe(
               (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile();document.getElementById("exp").scrollIntoView()},
               error => {                      
@@ -113,57 +128,15 @@ export class CatalogProductComponent implements OnInit {
     );
     this.successfulMessage=false;
     this.loading=false;
-   }
 
-   public stripeForm = new FormGroup({ });
-
-
-   pathPhotos(productName:string){
-    return BASE_URL_PRODUCT + productName +"/image";
-  }
-  setUp(){
-    this.appService.getPublicStripeKey().subscribe(
-      (key:any)=> {
-        this.stripeService.changeKey(key.response);
-        this.stripeService.elements(this.elementsOptions).subscribe(
-         elements => {
-           this.elements = elements;
-           if (!this.card) {
-             this.card = this.elements.create('card', {
-               style: {
-                 base: {
-                   iconColor: '#666EE8',
-                   color: '#31325F',
-                   fontWeight: 300,
-                   fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                   fontSize: '18px',
-                   '::placeholder': {
-                     color: '#3F51B5'
-                   }
-                 }
-               }
-             });
-             this.card.mount('#card-element');
-           }
-         }
-       );
-      }
-    );
-  }
-
-
-  ngOnInit() {
-    this.loadStripe();
-    this.user=this.loginService.getUserLogged();
   }
 
 
 
 
 //METHODS TO SUBSCRIBE TO A PRODUCT
-  subscribeToProduct(type:string,money:string){
+  subscribeToProduct(type:string,money:any){
     let msg;
-
     if(this.loginService.getUserLogged()==null){
      this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
       res => {    
@@ -185,6 +158,7 @@ export class CatalogProductComponent implements OnInit {
             this.loading=true;
             this.userProfileService.addSubscriptionToProduct(this.product,type,this.loginService.getUserLogged().name, res[1], res[2]).subscribe(
                 (u:any)=> { 
+                  console.log(u.type);
                   if(u.type!="RequiresAction"){
                     this.successfulMessage=true;
                     this.loading=false;
@@ -196,7 +170,7 @@ export class CatalogProductComponent implements OnInit {
                     localStorage.setItem("type",type);
                     localStorage.setItem("automaticRenewal",res[1]);
                     localStorage.setItem("subscriptionId", u.subscriptionId);
-                    window.location=u.serial;
+                    this.redirect(u.serial);
                   }
                 },
                 error=> {this.treatmentBuyError(error, type,money);this.loading=false;},
@@ -208,6 +182,10 @@ export class CatalogProductComponent implements OnInit {
       )
     }
 
+  }
+
+  redirect(location:any){
+    window.location=location;
   }
 
   createFile(){
@@ -269,7 +247,36 @@ export class CatalogProductComponent implements OnInit {
 
 
 
-//METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT
+/*METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT
+  setUp(){
+    this.appService.getPublicStripeKey().subscribe(
+      (key:any)=> {
+        this.stripeService.changeKey(key.response);
+        this.stripeService.elements(this.elementsOptions).subscribe(
+         elements => {
+           this.elements = elements;
+           if (!this.card) {
+             this.card = this.elements.create('card', {
+               style: {
+                 base: {
+                   iconColor: '#666EE8',
+                   color: '#31325F',
+                   fontWeight: 300,
+                   fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
+                   fontSize: '18px',
+                   '::placeholder': {
+                     color: '#3F51B5'
+                   }
+                 }
+               }
+             });
+             this.card.mount('#card-element');
+           }
+         }
+       );
+      }
+    );
+  }
   startPurchase(){
     if(this.loginService.getUserLogged()==null){
       this.dialogService.openConfirmDialog("You have to be logged first! If you don't have an account, you can register too",false,false);
@@ -313,7 +320,7 @@ export class CatalogProductComponent implements OnInit {
         }
       });
   }
-
+*/
 
 
   //Function to copy the license serial to the clipboard
@@ -415,7 +422,6 @@ export class CatalogProductComponent implements OnInit {
             );
           }
         }
-
       });
   
       handler.open({

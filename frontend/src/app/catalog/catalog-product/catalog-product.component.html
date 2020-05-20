@@ -1,13 +1,13 @@
 <div class="background" id="appRootClass">
 <div class="center-div" *ngIf="product?.active">
     <br>    
-    <h1 style="font-family:Arial" class="content">{{product?.name}}</h1>
+    <h1 style="font-family:Arial" class="content" id="productName">{{product?.name}}</h1>
     <br>
-    <span class="content"><a href="//{{product?.webLink}}">{{product?.webLink}}</a></span>
+    <span class="content" id="webLink"><a href="//{{product?.webLink}}">{{product?.webLink}}</a></span>
     <br>
-    <div class="post-thumb" *ngIf="product?.photoAvailable"><img [src]="pathPhotos(product.name)" class="logoPhoto" height="150" width="150"></div>
+    <div class="post-thumb" *ngIf="product?.photoAvailable" id="photo"><img [src]="pathPhotos(product.name)" class="logoPhoto" height="150" width="150"></div>
     <br>
-    <span class="content" style="white-space: pre-line"> {{product?.description}} </span>
+    <span class="content" style="white-space: pre-line" id="description"> {{product?.description}} </span>
     <br>
     <div *ngIf="userLicensesOfProduct?.length!=0 && userLicensesOfProduct!=null">
         <mat-card>
@@ -75,7 +75,7 @@
 
     <br>
     <div [ngClass]="numberOfPlans == 1 ? 'grid-container' : numberOfPlans == 2 ? 'grid-container2' : numberOfPlans == 3 ? 'grid-container3' : 'grid-container4'">
-        <div  *ngFor="let plan of product?.plansPrices | keyvalue">
+        <div *ngFor="let plan of product?.plansPrices | keyvalue" attr.id="plan{{plan.key}}">
             <br>
             <br>
             <img src="assets/logo_{{plan.key}}.png" class="logoPhoto" height="150" width="150" #photo>
@@ -96,7 +96,7 @@
             <br>
 
             <button mat-raised-button  *ngIf="plan.key=='L' && !loading" (click)="pay2(plan.value)" color="primary" >PURCHASE</button>
-            <button mat-raised-button *ngIf="plan.key!='L' && !loading" (click)="subscribeToProduct(plan.key, plan.value)" color="primary">SUBSCRIBE</button>
+            <button mat-raised-button attr.id="buttonSubs{{plan.key}}" *ngIf="plan.key!='L' && !loading" (click)="subscribeToProduct(plan.key, plan.value)" color="primary">SUBSCRIBE</button>
 
             <br>
             <br>
@@ -123,7 +123,7 @@
     <br>
     <br>
 
-    <div>
+    <div id="freeTrialComp">
         <span *ngIf="product?.trialDays!=0" id="freeTrial"  (click)="freeTrial()">{{product?.trialDays}}-DAY FREE TRIAL</span>
     </div>
     <br>
@@ -137,7 +137,7 @@
             <div *ngIf="product?.mode=='Online' || product?.mode=='Both'">
                 <hr>
                 <span class="serial">Your license serial : {{serial}}</span>
-                <button mat-raised-button color="primary" (click)="copyMessage(serial)" value="click to copy" class="copyButton">Copy license serial</button>
+                <button id="copyButton" mat-raised-button color="primary" (click)="copyMessage(serial)" value="click to copy" class="copyButton">Copy license serial</button>
             </div>
             <div class="filemsg" *ngIf="licenseFileString!='' && (product?.mode=='Offline' || product?.mode=='Both')">
                 <hr>

@@ -19,5 +19,5 @@ import { LicenseStatistics } from '../licenseStatistics/licenseStatistics.model'
       trial?:boolean;
       licenseStats?:LicenseStatistics[];
       licenseString?:string;
-      period:number;
+      period?:number;
   }
