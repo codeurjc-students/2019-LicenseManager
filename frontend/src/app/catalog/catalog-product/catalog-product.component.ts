@@ -139,9 +139,11 @@ export class CatalogProductComponent implements OnInit {
     let msg;
     if(this.loginService.getUserLogged()==null){
      this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
-      res => {    
-        let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
-        element.click();
+      res => {   
+        if(res[0]==true){
+          let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
+          element.click();
+        }
       },
       error => console.log(error)
     );
@@ -215,8 +217,10 @@ export class CatalogProductComponent implements OnInit {
     if(this.loginService.getUserLogged()==null){
       this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
        res => {    
-         let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
-         element.click();
+         if(res[0]==true){
+            let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
+            element.click();
+         }
        },
        error => console.log(error)
      );
@@ -374,8 +378,11 @@ export class CatalogProductComponent implements OnInit {
     if(this.loginService.getUserLogged()==null){
       this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
        res => {    
-         let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
-         element.click();
+         if(res[0]==true){
+            let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
+            element.click();
+         }
+
        },
        error => console.log(error)
      );

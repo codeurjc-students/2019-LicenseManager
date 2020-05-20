@@ -264,6 +264,9 @@ describe('CatalogProductComponent', () => {
 
       it('should not be logged when trying to subscribe',()=>{
         loginServiceMock.getUserLogged.and.returnValue(null);
+        let res:any[] = [];
+        res[0]=false;
+        dialogServiceMock.openConfirmDialog.and.returnValue({afterClosed: () => of(res)});
         fixture.detectChanges();
         component.subscribeToProduct("M",2);
 
