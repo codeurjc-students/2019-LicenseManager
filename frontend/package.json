@@ -44,6 +44,7 @@
     "docker-build": "ng build --configuration=docker",
     "docker-run": "ng serve --configuration=docker",
     "test": "ng test",
+    "test-ci": "ng test --no-watch --no-progress --browsers=ChromeHeadlessCI",
     "lint": "ng lint",
     "e2e": "ng e2e"
   },

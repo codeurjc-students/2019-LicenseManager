@@ -6,9 +6,14 @@ services:
 
 script:
 
-  # Build angular app
+  # Build frontend
   - cd frontend
-  - docker run --rm --name angular-cli -v ${PWD}:/angular -w /angular node /bin/bash -c "npm install; npm run build"
+  - npm install
+  - npm run build
+  
+  # Run front tests
+  - npm run test-ci
+  
 
   # Copy new generated resources on back static
   - cd ../backend
