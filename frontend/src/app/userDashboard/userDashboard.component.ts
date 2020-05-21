@@ -31,7 +31,7 @@ export class UserDashboardComponent implements OnInit{
     conf:MatSnackBarConfig= new MatSnackBarConfig();
 
 
-    constructor(private snackbar:MatSnackBar,private sanitizer: DomSanitizer,private dialogService:DialogService,private licenseService:LicenseService,private datepipe: DatePipe,private router:Router,public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute, public loginService:LoginService, public userProfileService:UserProfileService){}
+    constructor(public snackbar:MatSnackBar,private sanitizer: DomSanitizer,private dialogService:DialogService,private licenseService:LicenseService,private datepipe: DatePipe,private router:Router,public dialog: MatDialog,public licenseServ:LicenseService, private activeRoute: ActivatedRoute, public loginService:LoginService, public userProfileService:UserProfileService){}
 
 
     ngOnInit(): void {

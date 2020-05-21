@@ -5,6 +5,7 @@ import { Product } from '../product/product.model';
 import { LicenseStatistics } from '../licenseStatistics/licenseStatistics.model';
 
   export interface License {
+      id?:number;
       serial?:string;
       active?:boolean;
       type?:string;
