@@ -1,42 +1,73 @@
-/*
+
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
 import { LoginComponent } from './login.component';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
-import { MatDialog, MatSnackBar } from '@angular/material';
+import { MatDialog, MatSnackBar, MatDialogRef } from '@angular/material';
 import { LoginService, User } from './login.service';
 import { Router } from '@angular/router';
 import { By } from '@angular/platform-browser';
-import { Observable } from 'rxjs';
+import { Observable, of } from 'rxjs';
+import { DOMHelper } from '../../testing/dom-helper';
 
 describe('LoginComponent', () => {
   let component: LoginComponent;
   let fixture: ComponentFixture<LoginComponent>;
+  let loginServiceMock:any;
+  let routerMock:any;
+  let user:User={name:"Kike",roles:[],authdata:"",userStripeId:"stripe_id",email:"email@email.com"};
 
+  let domHelper:DOMHelper<LoginComponent>;
+  let dialogRefMock:any;
+  afterEach(()=>{
+    fixture.destroy();
+  })
+  
+  
   beforeEach(async(() => {
-    class LoginServiceStub {
-      getUserLogged(){
-        let user:User={name:"Kike",roles:[],authdata:"",userStripeId:"stripe_id",email:"email@email.com"};
-        return user;
-      }
 
-      logIn(user: string, pass: string) {
-        let userObj:User={name:"Kike",roles:[],authdata:"",userStripeId:"stripe_id",email:"email@email.com"};
-
-        let resp =  Observable.of(userObj);
-        return resp;
+    class MatDialogRefMock {
+      close(value = '') {
+  
       }
     }
-    const routerSpy = jasmine.createSpyObj('Router', ['navigateByUrl']);
+
+    class MatDialogMock {
+      open() {
+          return {
+              afterClosed: () => of({ name: 'some object' })
+          };
+      }
+
+      close(){
+
+      }
+    }
+
+    dialogRefMock = jasmine.createSpyObj("DialogRef",["open","close"]);
+
+    dialogRefMock.open.and.returnValue(true);
+    dialogRefMock.close.and.returnValue(true);
+
+
+    routerMock = jasmine.createSpyObj('Router', ['navigate']);
+
+    loginServiceMock = jasmine.createSpyObj("LoginService", ["getUserLogged", "logIn","getUserLoggedBack"]);
+    loginServiceMock.getUserLogged.and.returnValue(of(user));
+    loginServiceMock.getUserLoggedBack.and.returnValue(of(user));
+
+    loginServiceMock.logIn.and.returnValue(of(user));
+
 
     TestBed.configureTestingModule({
       declarations: [ LoginComponent ],
       schemas:[NO_ERRORS_SCHEMA],
       providers: [
-        {provide:MatDialog},
+        {provide:MatDialogRef, useClass:MatDialogRefMock},
+        {provide:MatDialog, useClass:MatDialogMock},
         {provide:MatSnackBar},
-        {provide:LoginService, useClass:LoginServiceStub},
-        { provide: Router,useValue: routerSpy},
+        {provide:LoginService, useValue:loginServiceMock},
+        { provide: Router,useValue: routerMock},
 
 
       ]
@@ -47,26 +78,41 @@ describe('LoginComponent', () => {
   beforeEach(() => {
     fixture = TestBed.createComponent(LoginComponent);
     component = fixture.componentInstance;
-    fixture.detectChanges();
+    component.user=user;
+    domHelper = new DOMHelper(fixture);
   });
 
-  it('should create', () => {
-    expect(component).toBeTruthy();
-  });
+  describe("Page creation-display", () => {
 
+    it('should create', () => {
+      fixture.detectChanges();
 
-  it('should be logged Kike', () => {
-    expect(component.user.name).toBe("Kike");
+      expect(component).toBeTruthy();
+    });
+
+    it("should get user logged", () => {
+      fixture.detectChanges();
+      let userLog:any = component.getUserLogged();
+      component.getUserLoggedBack();
+
+      expect(userLog.value).toBe(user);
+
+    })
+
   })
 
-  it('should login now', ()=>{
-    let m :MouseEvent = new MouseEvent("click");
-    
-    component.logIn(m,"Kike","pass");
+  describe("Methods", () => {
 
-    expect(component.error).toBe(false);
+    it("should navigate", ()=> {
+      fixture.detectChanges();
+      component.manageLinks("adminDashboard");
+      expect(routerMock.navigate).toHaveBeenCalledWith(["/admin/dashboard"]);
+      component.manageLinks("userDashboard");
+      expect(routerMock.navigate).toHaveBeenCalledWith(["user/dashboard"]);
+      component.manageLinks("userProfile");
+      expect(routerMock.navigate).toHaveBeenCalledWith(["user/profile"]);
+    })
+
   })
-
 
 });
-*/

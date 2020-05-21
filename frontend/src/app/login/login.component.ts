@@ -10,13 +10,16 @@ import { Router } from '@angular/router';
   templateUrl: './login.component.html',
   styleUrls: ['./login.component.css']
 })
-export class LoginComponent  {
+export class LoginComponent implements OnInit  {
   @ViewChild('loginDialog',{static:false}) loginDialog: TemplateRef<any>;
   dialogRef: MatDialogRef<any, any>;
 
   user:User;
   error:boolean;
-  constructor(public dialog: MatDialog,private snackBar: MatSnackBar, public loginService:LoginService, private router:Router) { 
+  constructor(public dialog: MatDialog,public snackBar: MatSnackBar, public loginService:LoginService, private router:Router) { 
+
+  }
+  ngOnInit(): void {
     this.user=this.loginService.getUserLogged();
     this.error=false;
   }

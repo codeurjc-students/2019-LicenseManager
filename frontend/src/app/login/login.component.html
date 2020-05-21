@@ -6,11 +6,10 @@
         </span>     
  </ng-container>
  <!--<button mat-button (click)="getUserLoggedBack()">User logged back</button>-->
-
  <ng-container *ngIf="loginService.isLogged">
     <a>{{loginService.user.name}}</a>
         <span>
-            <button mat-button (click)='logOut()'>
+            <button mat-button (click)='logOut()' id="logOutButton">
                 <mat-icon >exit_to_app</mat-icon>
             </button>
             
