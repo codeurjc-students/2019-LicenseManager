@@ -12,7 +12,7 @@ import { DialogService } from '../dialogs/dialog.service';
     styleUrls: ['./userProfile.component.css']
 
   })
-  export class UserProfileComponent{
+  export class UserProfileComponent implements OnInit{
     user:User;
     loading:boolean;
     paymentMethods:any[];
@@ -31,11 +31,15 @@ import { DialogService } from '../dialogs/dialog.service';
     mcError:boolean = false;
     
     constructor(private dialogService:DialogService,private userProfileService:UserProfileService,private activeRoute:ActivatedRoute,private loginService:LoginService){
-      this.user=this.loginService.user;
-      if(this.user!=null){
-        this.getCards();
-      }
+
      }
+
+  ngOnInit(): void {
+    this.user=this.loginService.user;
+    if(this.user!=null){
+      this.getCards();
+    }
+  }
  
      getCards(){
       this.loading=true;

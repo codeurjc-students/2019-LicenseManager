@@ -11,9 +11,9 @@
                 <mat-grid-tile > <img *ngIf="(!visaError && paymentMethod?.card.brand == 'visa' || !mcError && paymentMethod?.card.brand == 'mastercard' || paymentMethod?.card.brand == 'amex' && !amexError)" src="assets/{{paymentMethod?.card.brand}}.png" width="50px" (error)="updateUrl(paymentMethod?.card.brand)"> | {{paymentMethod?.card.brand.toUpperCase()}} that ends with {{paymentMethod?.card.last4}} - Expiring {{paymentMethod?.card.expMonth}}/{{paymentMethod?.card.expYear}}</mat-grid-tile>
                 <mat-grid-tile>
                     <button mat-icon-button >
-                            <mat-icon class="icon" (click)="firstStepDelete(paymentMethod?.id)" >delete</mat-icon>
+                            <mat-icon class="icon" (click)="firstStepDelete(paymentMethod?.id)" attr.id="deleteButton-{{paymentMethod.id}}" >delete</mat-icon>
                     </button> 
-                    <button mat-icon-button *ngIf="paymentMethod?.id!=defaultPM"  (click)="setDefault(paymentMethod?.id)">
+                    <button mat-icon-button *ngIf="paymentMethod?.id!=defaultPM"  (click)="setDefault(paymentMethod?.id)" attr.id="setDefault-{{paymentMethod.id}}">
                          <a id="setDefault">Set as Default</a>
                     </button>
                     <a id="default" *ngIf="paymentMethod?.id==defaultPM">DEFAULT</a>                     
