@@ -4,6 +4,9 @@ services:
   - docker
   - maven
 
+node_js:
+  - "10.9"
+
 script:
 
   # Build frontend
