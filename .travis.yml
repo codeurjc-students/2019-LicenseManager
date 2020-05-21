@@ -1,30 +1,26 @@
-matrix:
-    include:
-    
+language: java
 
--language: java
+services:
+  - docker
+  - maven
 
-    services:
-      - docker
-      - maven
+node_js:
+  - "10.9"
 
-    script:
+script:
 
-      # Copy new generated resources on back static
-      - cd ../backend
-      - mkdir -p "src/main/resources/static/" && cp -r ../frontend/dist/my-app/* src/main/resources/static/
+  # Build frontend
+  - cd frontend
+  - npm install
+  - npm run build
+  
+  # Run front tests
+  - npm run test-ci
+  
 
-      # Create jar
-      - mvn package 
-      
--language: node_js
-     node_js: 10.9
-     
-     script:
-            # Build frontend
-              - cd frontend
-              - npm install
-              - npm run build
+  # Copy new generated resources on back static
+  - cd ../backend
+  - mkdir -p "src/main/resources/static/" && cp -r ../frontend/dist/my-app/* src/main/resources/static/
 
-              # Run front tests
-              - npm run test-ci
+  # Create jar
+  - mvn package 
