@@ -1,4 +1,4 @@
-import { Component, Inject } from "@angular/core";
+import { Component, Inject } from '@angular/core';
 import { ConfirmationDialogComponent } from "./confirmation-dialog/confirmation-dialog.component";
 import { MatDialogRef, MAT_DIALOG_DATA } from "@angular/material";
 
@@ -22,6 +22,7 @@ export class DialogFreeTrial {
         this.valid=false;
         this.types=data.types;
     }
+
 
     yes(){
         this.resp[0]=this.params;
