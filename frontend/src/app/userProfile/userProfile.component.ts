@@ -31,6 +31,7 @@ import { DialogService } from '../dialogs/dialog.service';
     mcError:boolean = false;
     
     constructor(private dialogService:DialogService,private userProfileService:UserProfileService,private activeRoute:ActivatedRoute,private loginService:LoginService){
+      this.user=this.loginService.user;
 
      }
 

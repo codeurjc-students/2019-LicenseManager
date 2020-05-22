@@ -1,4 +1,4 @@
-import { Component, Inject } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { UserProfileService } from '../../userProfile/userProfile.service';
 
@@ -8,7 +8,7 @@ import { UserProfileService } from '../../userProfile/userProfile.service';
     styleUrls: ['./card-select-dialog.component.css']
 
 })
-export class CardSelectDialog {
+export class CardSelectDialog implements OnInit{
 
     paymentMethods:any[];
     pmSelected:any;
@@ -22,10 +22,11 @@ export class CardSelectDialog {
 
 
     constructor(@Inject(MAT_DIALOG_DATA) public data,public dialogRef: MatDialogRef<CardSelectDialog>, private userProfileServ:UserProfileService){ 
-        this.loading=true;
         this.user=data.user;
+    }
+    ngOnInit(): void {
+        this.loading=true;
         this.getCards(this.user);
-
     }
 
     getCards(user:any){
