@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">84.73% </span>
+                <span class="strong">82.04% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>172/203</span>
+                <span class='fraction'>169/206</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">69.44% </span>
+                <span class="strong">66.67% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>25/36</span>
+                <span class='fraction'>28/42</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">81.71% </span>
+                <span class="strong">78.44% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>134/164</span>
+                <span class='fraction'>131/167</span>
             </div>
         
             
@@ -495,7 +495,14 @@
 <a name='L437'></a><a href='#L437'>437</a>
 <a name='L438'></a><a href='#L438'>438</a>
 <a name='L439'></a><a href='#L439'>439</a>
-<a name='L440'></a><a href='#L440'>440</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L440'></a><a href='#L440'>440</a>
+<a name='L441'></a><a href='#L441'>441</a>
+<a name='L442'></a><a href='#L442'>442</a>
+<a name='L443'></a><a href='#L443'>443</a>
+<a name='L444'></a><a href='#L444'>444</a>
+<a name='L445'></a><a href='#L445'>445</a>
+<a name='L446'></a><a href='#L446'>446</a>
+<a name='L447'></a><a href='#L447'>447</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -638,7 +645,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -713,7 +722,9 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -872,7 +883,10 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -1075,9 +1089,11 @@ export class CatalogProductComponent implements OnInit {
     let msg;
     if(this.loginService.getUserLogged()==null){
      this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
-      res =&gt; {    
-        let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
-        element.click();
+      res =&gt; {   
+        <span class="missing-if-branch" title="if path not taken" >I</span>if(res[0]==true){
+          let element: HTMLElement = <span class="cstat-no" title="statement not covered" >document.getElementById('loginButton') as HTMLElement;</span>
+<span class="cstat-no" title="statement not covered" >          element.click();</span>
+        }
       },
 <span class="fstat-no" title="function not covered" >      error </span>=&gt; <span class="cstat-no" title="statement not covered" >console.log(error)</span>
     );
@@ -1151,8 +1167,10 @@ export class CatalogProductComponent implements OnInit {
     if(this.loginService.getUserLogged()==null){
       this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
        res =&gt; {    
-         let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
-         element.click();
+         <span class="missing-if-branch" title="if path not taken" >I</span>if(res[0]==true){
+            let element: HTMLElement = <span class="cstat-no" title="statement not covered" >document.getElementById('loginButton') as HTMLElement;</span>
+<span class="cstat-no" title="statement not covered" >            element.click();</span>
+         }
        },
 <span class="fstat-no" title="function not covered" >       error </span>=&gt; <span class="cstat-no" title="statement not covered" >console.log(error)</span>
      );
@@ -1310,8 +1328,11 @@ export class CatalogProductComponent implements OnInit {
     <span class="missing-if-branch" title="else path not taken" >E</span>if(this.loginService.getUserLogged()==null){
       this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
        res =&gt; {    
-         let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
-         element.click();
+         <span class="missing-if-branch" title="if path not taken" >I</span>if(res[0]==true){
+            let element: HTMLElement = <span class="cstat-no" title="statement not covered" >document.getElementById('loginButton') as HTMLElement;</span>
+<span class="cstat-no" title="statement not covered" >            element.click();</span>
+         }
+&nbsp;
        },
 <span class="fstat-no" title="function not covered" >       error </span>=&gt; <span class="cstat-no" title="statement not covered" >console.log(error)</span>
      );
@@ -1380,7 +1401,7 @@ export class CatalogProductComponent implements OnInit {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 20 2020 16:06:12 GMT+0200 (GMT+02:00)
+                at Fri May 22 2020 19:59:32 GMT+0200 (GMT+02:00)
             </div>
         </div>
         <script src="..\..\..\..\prettify.js"></script>

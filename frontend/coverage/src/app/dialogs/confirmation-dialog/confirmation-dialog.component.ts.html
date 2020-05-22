@@ -22,30 +22,30 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">35% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>7/20</span>
+                <span class='fraction'>20/20</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">0% </span>
+                <span class="strong">50% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>0/4</span>
+                <span class='fraction'>2/4</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">16.67% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Functions</span>
-                <span class='fraction'>1/6</span>
+                <span class='fraction'>6/6</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">33.33% </span>
+                <span class="strong">100% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>6/18</span>
+                <span class='fraction'>18/18</span>
             </div>
         
             
@@ -54,7 +54,7 @@
             Press <em>n</em> or <em>j</em> to go to the next uncovered block, <em>b</em>, <em>p</em> or <em>k</em> for the previous block.
         </p>
     </div>
-    <div class='status-line low'></div>
+    <div class='status-line high'></div>
     <pre><table class="coverage">
 <tr><td class="line-count quiet"><a name='L1'></a><a href='#L1'>1</a>
 <a name='L2'></a><a href='#L2'>2</a>
@@ -107,34 +107,34 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">4x</span>
+<span class="cline-any cline-yes">4x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
-<span class="cline-any cline-no">&nbsp;</span>
-<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -149,34 +149,34 @@ import { MAT_DIALOG_DATA, MatDialogRef } from '@angular/material';
   styleUrls: ['./confirmation-dialog.component.css']
 })
 export class ConfirmationDialogComponent{
-<span class="cstat-no" title="statement not covered" >  exit:boolean[]=[];</span>
+  exit:boolean[]=[];
   checkboxStatus:boolean;
   noButton:boolean;
-<span class="fstat-no" title="function not covered" >  constructor(@I</span>nject(MAT_DIALOG_DATA) public <span class="cstat-no" title="statement not covered" >data, public <span class="cstat-no" title="statement not covered" >d</span>ialogRef: M</span>atDialogRef&lt;ConfirmationDialogComponent&gt;) { 
-<span class="cstat-no" title="statement not covered" >    if(data.checkbox){</span>
-<span class="cstat-no" title="statement not covered" >      this.checkboxStatus=false;</span>
+  constructor(@Inject(MAT_DIALOG_DATA) public data, public dialogRef: MatDialogRef&lt;ConfirmationDialogComponent&gt;) { 
+    <span class="missing-if-branch" title="else path not taken" >E</span>if(data.checkbox){
+      this.checkboxStatus=false;
     }
-<span class="cstat-no" title="statement not covered" >    if(data.noButton){</span>
-<span class="cstat-no" title="statement not covered" >      this.noButton=true;</span>
+    <span class="missing-if-branch" title="else path not taken" >E</span>if(data.noButton){
+      this.noButton=true;
     }
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  ngOnInit(</span>) {
+  ngOnInit() {
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  closeDialog(</span>) {
-<span class="cstat-no" title="statement not covered" >    this.dialogRef.close(false);</span>
+  closeDialog() {
+    this.dialogRef.close(false);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  yes(</span>){
-<span class="cstat-no" title="statement not covered" >    this.exit[0]=true;</span>
-<span class="cstat-no" title="statement not covered" >    this.exit[1]=this.checkboxStatus;</span>
-<span class="cstat-no" title="statement not covered" >    this.dialogRef.close(this.exit);</span>
+  yes(){
+    this.exit[0]=true;
+    this.exit[1]=this.checkboxStatus;
+    this.dialogRef.close(this.exit);
   }
 &nbsp;
-<span class="fstat-no" title="function not covered" >  no(</span>){
-<span class="cstat-no" title="statement not covered" >    this.exit[0] =false;</span>
-<span class="cstat-no" title="statement not covered" >    this.dialogRef.close(this.exit);</span>
+  no(){
+    this.exit[0] =false;
+    this.dialogRef.close(this.exit);
 &nbsp;
   }
 &nbsp;
@@ -189,7 +189,7 @@ export class ConfirmationDialogComponent{
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Wed May 20 2020 16:06:12 GMT+0200 (GMT+02:00)
+                at Fri May 22 2020 19:59:32 GMT+0200 (GMT+02:00)
             </div>
         </div>
         <script src="..\..\..\..\prettify.js"></script>
