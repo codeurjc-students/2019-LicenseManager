@@ -31,7 +31,7 @@ import { DialogService } from './dialog.service';
     productEdit:Product;
     modeSelected:string;
 
-    constructor(@Inject(MAT_DIALOG_DATA) public data:any,private dialogRef:MatDialogRef<DialogAddProductComponent>, private productServ:ProductService){
+    constructor(@Inject(MAT_DIALOG_DATA) public data:any,public dialogRef:MatDialogRef<DialogAddProductComponent>, private productServ:ProductService){
       if(data.type=="edit"){
         this.edit=true;
         let prod:Product = data.product;

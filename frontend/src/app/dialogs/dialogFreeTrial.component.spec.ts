@@ -10,7 +10,7 @@ import { DOMHelper } from 'src/testing/dom-helper';
 import { User } from 'src/app/login/login.service';
 import { DialogFreeTrial } from './dialogFreeTrial.component';
 
-describe('', () => {
+describe('DialogFreeTrial', () => {
   let component: DialogFreeTrial;
   let fixture: ComponentFixture<DialogFreeTrial>;
   let routerMock:any;
