@@ -4,27 +4,26 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog, MatSnackBar, MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material';
 import { Router } from '@angular/router';
-import { By } from '@angular/platform-browser';
 import { Observable, of } from 'rxjs';
 import { DOMHelper } from 'src/testing/dom-helper';
-import { User } from 'src/app/login/login.service';
-import { DialogFreeTrial } from './dialogFreeTrial.component';
 import { DialogAddProductComponent } from './dialogAddProduct.component';
 import { ProductService } from '../product/product.service';
 import { Product } from '../product/product.model';
+import { MatDialogRefMock } from '../mock/MatDialogRefMock.component';
+import { MatDialogMock } from '../mock/MatDialogMock.component';
+
+let error = new Error();
+let prod:Product;
+let component: DialogAddProductComponent;
+let fixture: ComponentFixture<DialogAddProductComponent>;
+let dialogRefMock:any;
+let productServMock:any;
+
 
 describe('DialogAddProductComponent Edit', () => {
-  let component: DialogAddProductComponent;
-  let fixture: ComponentFixture<DialogAddProductComponent>;
   let routerMock:any;
   let domHelper:DOMHelper<DialogAddProductComponent>;
-  let dialogRefMock:any;
-  let productServMock:any;
 
-  let prod:Product;
-
-  let file2:any ={size:800};
-  let error = new Error();
 
 
   afterEach(()=>{
@@ -34,29 +33,9 @@ describe('DialogAddProductComponent Edit', () => {
   
   beforeEach(async(() => {
 
-    class MatDialogRefMock {
-      close(value = '') {
-  
-      }
-    }
-
-    class MatDialogMock {
-      open() {
-          return {
-              afterClosed: () => of({ name: 'some object' })
-          };
-      }
-
-      close(){
-
-      }
-    }
-
     let plansPrices:{[name:string]:number} = {["M"]:2, ["D"]:0.5, ["A"]:100};
-      let plansPrices2:{[name:string]:number} = {["L"]:10};
   
-      prod = {name: "Prod1", licenses:[], typeSubs:["D","M","A"],photoAvailable:true,description: "The description",webLink:"www.c.com",photoSrc:"",plansPrices:plansPrices,sku:null, active:true, trialDays:9, mode:"Both"};
-      let prod2:Product = {name: "Prod2", licenses:[], typeSubs:["L"],photoAvailable:false,description: "The description",webLink:"www.c.com",photoSrc:"",plansPrices:plansPrices2,sku:null, active:true, trialDays:9, mode:"Both"};
+    prod = {name: "Prod1", licenses:[], typeSubs:["D","M","A"],photoAvailable:true,description: "The description",webLink:"www.c.com",photoSrc:"",plansPrices:plansPrices,sku:null, active:true, trialDays:9, mode:"Both"};
   
 
     dialogRefMock = jasmine.createSpyObj("DialogRef",["open","close"]);
@@ -207,16 +186,6 @@ describe('DialogAddProductComponent Edit', () => {
 
 
 describe('DialogAddProductComponent Add', () => {
-
-    let component: DialogAddProductComponent;
-    let fixture: ComponentFixture<DialogAddProductComponent>;
-    let dialogRefMock:any;
-    let productServMock:any;
-  
-    let prod:Product;
-  
-    let error = new Error();
-  
   
     afterEach(()=>{
       fixture.destroy();
@@ -225,41 +194,13 @@ describe('DialogAddProductComponent Add', () => {
     
     beforeEach(async(() => {
   
-      class MatDialogRefMock {
-        close(value = '') {
-    
-        }
-      }
-  
-      class MatDialogMock {
-        open() {
-            return {
-                afterClosed: () => of({ name: 'some object' })
-            };
-        }
-  
-        close(){
-  
-        }
-      }
-  
-      let plansPrices:{[name:string]:number} = {["M"]:2, ["D"]:0.5, ["A"]:100};
-    
-      prod = {name: "Prod1", licenses:[], typeSubs:["D","M","A"],photoAvailable:true,description: "The description",webLink:"www.c.com",photoSrc:"",plansPrices:plansPrices,sku:null, active:true, trialDays:9, mode:"Both"};
-    
-  
       dialogRefMock = jasmine.createSpyObj("DialogRef",["open","close"]);
   
-      dialogRefMock.open.and.returnValue(true);
       dialogRefMock.close.and.returnValue(true);
   
     
       productServMock = jasmine.createSpyObj("ProductService", ["putProduct","postProduct","addImage"]);
-  
-      productServMock.putProduct.and.returnValue(of(prod));
-      productServMock.postProduct.and.returnValue(of(prod));
-      productServMock.addImage.and.returnValue(Observable.create(observer => {observer.error(error)}));
-  
+      productServMock.postProduct.and.returnValue(of(prod));  
   
       TestBed.configureTestingModule({
         declarations: [ DialogAddProductComponent ],

@@ -4,11 +4,10 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog, MatSnackBar, MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material';
 import { Router } from '@angular/router';
-import { By } from '@angular/platform-browser';
-import { Observable, of } from 'rxjs';
 import { DOMHelper } from 'src/testing/dom-helper';
-import { User } from 'src/app/login/login.service';
 import { DialogFreeTrial } from './dialogFreeTrial.component';
+import { MatDialogRefMock } from '../mock/MatDialogRefMock.component';
+import { MatDialogMock } from '../mock/MatDialogMock.component';
 
 describe('DialogFreeTrial', () => {
   let component: DialogFreeTrial;
@@ -23,24 +22,6 @@ describe('DialogFreeTrial', () => {
   
   
   beforeEach(async(() => {
-
-    class MatDialogRefMock {
-      close(value = '') {
-  
-      }
-    }
-
-    class MatDialogMock {
-      open() {
-          return {
-              afterClosed: () => of({ name: 'some object' })
-          };
-      }
-
-      close(){
-
-      }
-    }
 
     dialogRefMock = jasmine.createSpyObj("DialogRef",["open","close"]);
 

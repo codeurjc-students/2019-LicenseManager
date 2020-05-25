@@ -94,7 +94,8 @@
                             "src/app/*.service.ts",
                             "src/app/**/*.service.ts",
                             "src/app/login/login.component.ts",
-                            "src/app/userProfile/card-form/card-form.component.ts"
+                            "src/app/userProfile/card-form/card-form.component.ts",
+                            "src/app/mock/**"
                         ]
                     }
                 },
