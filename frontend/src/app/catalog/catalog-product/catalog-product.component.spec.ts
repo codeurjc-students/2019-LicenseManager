@@ -2,7 +2,7 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { CatalogProductComponent } from './catalog-product.component';
-import { MatGridListModule, MatIconModule, MatSelectModule, MatOptionModule, MatCardModule, MatSnackBarModule, MatDialogModule, MatDialog } from '@angular/material';
+import { MatGridListModule, MatIconModule, MatSelectModule, MatOptionModule, MatCardModule, MatSnackBarModule, MatDialog } from '@angular/material';
 import { NgxPaginationModule} from 'ngx-pagination';
 import { StripeService } from 'ngx-stripe';
 import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';

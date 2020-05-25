@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { MatGridListModule, MatIconModule, MatSelectModule, MatOptionModule, MatCardModule, MatSnackBarModule, MatDialogModule, MatDialog, MatSnackBar } from '@angular/material';
+import { MatGridListModule, MatIconModule, MatSelectModule, MatOptionModule, MatCardModule, MatSnackBarModule, MatDialog, MatSnackBar } from '@angular/material';
 import { NgxPaginationModule} from 'ngx-pagination';
 import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';

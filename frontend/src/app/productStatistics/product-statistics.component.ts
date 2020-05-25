@@ -9,7 +9,7 @@ import { HttpClient } from '@angular/common/http';
 export interface Stats{
     nUsage:number;
     usages:Date[];
-	usagePerTime:Map<String,number>;
+	usagePerTime:Map<string,number>;
 }
 
 @Component({
