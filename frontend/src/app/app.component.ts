@@ -1,9 +1,6 @@
-import { Component, ChangeDetectorRef, AfterViewInit, ViewChild, TemplateRef, OnDestroy, ElementRef, OnInit } from '@angular/core';
+import { Component } from '@angular/core';
 import { environment } from 'src/environments/environment';
-import { TdTabSelectBase } from '@covalent/core';
 import { Router } from '@angular/router';
-import { NgForm } from '@angular/forms';
-import { UserProfileService } from './userProfile/userProfile.service';
 import { AppService } from './app.service';
 import { LoginService } from './login/login.service';
 

@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { HttpClient, HttpHeaders } from "@angular/common/http";
+import { HttpClient } from "@angular/common/http";
 
 const BASE_URL = 'api';
 
@@ -17,7 +17,7 @@ export class AppService{
 
     getPublicStripeKey(){
         let url = BASE_URL + "/keys/stripe/public";
-        return this.http.get<String>(url)
+        return this.http.get<string>(url)
     }
 
     getAppName(){

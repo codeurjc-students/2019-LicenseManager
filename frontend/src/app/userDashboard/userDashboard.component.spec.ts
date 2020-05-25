@@ -1,17 +1,9 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-
 import { MatGridListModule, MatIconModule, MatSelectModule, MatOptionModule, MatCardModule, MatSnackBarModule, MatDialogModule, MatDialog, MatSnackBar } from '@angular/material';
 import { NgxPaginationModule} from 'ngx-pagination';
-import { StripeService } from 'ngx-stripe';
-import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
-import { CardFormComponent } from 'src/app/userProfile/card-form/card-form.component';
 import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
-
 import { of, Observable } from 'rxjs';
-
-import { By } from '@angular/platform-browser';
 import { UserDashboardComponent } from './userDashboard.component';
 import { DOMHelper } from 'src/testing/dom-helper';
 import { ActivatedRouteMock } from '../mock/activated-route-mock.component';

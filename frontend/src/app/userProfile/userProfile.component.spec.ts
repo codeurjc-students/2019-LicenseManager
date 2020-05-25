@@ -1,18 +1,15 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatGridListModule, MatIconModule, MatSelectModule, MatOptionModule, MatCardModule, MatSnackBarModule, MatDialogModule, MatDialog, MatSnackBar } from '@angular/material';
+import { MatGridListModule, MatIconModule, MatSelectModule, MatOptionModule, MatCardModule, MatSnackBarModule, MatDialog, MatSnackBar } from '@angular/material';
 
 import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
 
 import { of, Observable } from 'rxjs';
 
-import { By } from '@angular/platform-browser';
 import { DOMHelper } from 'src/testing/dom-helper';
 import { ActivatedRouteMock } from '../mock/activated-route-mock.component';
 import { LicenseService } from '../licenses/license.service';
-import { License } from '../licenses/license.model';
-import { Product } from '../product/product.model';
 import { User, LoginService } from '../login/login.service';
 import { UserProfileService } from '../userProfile/userProfile.service';
 import { DialogService } from '../dialogs/dialog.service';

@@ -1,11 +1,11 @@
-import { Component, Input, SimpleChanges, OnInit, Output, EventEmitter, HostListener } from '@angular/core';
+import { Component, Input, SimpleChanges, OnInit, HostListener } from '@angular/core';
 
 @Component({
     selector: 'bar-chart-component',
     templateUrl: './bar-chart.component.html',
   })
   export class BarChartComponent implements OnInit{
-    @Input()statsMap:Map<String,number>;
+    @Input()statsMap:Map<string,number>;
 
 
     single: any[];

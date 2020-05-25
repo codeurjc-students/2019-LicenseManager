@@ -1,10 +1,8 @@
-import { Component, OnInit, NgZone } from '@angular/core';
+import { Component, NgZone } from '@angular/core';
 
 @Component({
   selector: 'app-custom-form-component',
-  templateUrl: './custom-form-component.component.html',
-  styleUrls: ['./custom-form-component.component.css']
-})
+  templateUrl: './custom-form-component.component.html'})
 export class CustomFormComponentComponent {
 
   cardNumber: string;

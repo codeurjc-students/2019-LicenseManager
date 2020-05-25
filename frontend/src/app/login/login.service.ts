@@ -22,7 +22,7 @@ export class LoginService {
     isAdmin = false;
     user: User;
     auth: string;
-    pages:String[]=[];
+    pages:string[]=[];
 
     constructor(private http: HttpClient) {
         let user = JSON.parse(localStorage.getItem('currentUser'));
@@ -41,12 +41,12 @@ export class LoginService {
         });
 
         return this.http.get<User>(URL+'/logIn', { headers })
-            .pipe(map(user => {
+            .pipe(map(userR => {
 
-                if (user) {
-                    this.setCurrentUser(user);
-                    user.authdata = auth;
-                    localStorage.setItem('currentUser', JSON.stringify(user));
+                if (userR) {
+                    this.setCurrentUser(userR);
+                    userR.authdata = auth;
+                    localStorage.setItem('currentUser', JSON.stringify(userR));
                     this.addPages(this.isAdmin);
                 }
                 

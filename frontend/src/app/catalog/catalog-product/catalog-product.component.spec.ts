@@ -1,5 +1,5 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
-import { FormsModule, ReactiveFormsModule, ControlContainer } from '@angular/forms';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 
 import { CatalogProductComponent } from './catalog-product.component';
 import { MatGridListModule, MatIconModule, MatSelectModule, MatOptionModule, MatCardModule, MatSnackBarModule, MatDialogModule, MatDialog } from '@angular/material';
@@ -9,7 +9,7 @@ import { HttpClientModule, HttpErrorResponse } from '@angular/common/http';
 import { CardFormComponent } from 'src/app/userProfile/card-form/card-form.component';
 import { AppService } from '../../app.service';
 import { DatePipe } from '@angular/common';
-import { Router, ActivatedRoute, convertToParamMap } from '@angular/router';
+import { Router, ActivatedRoute } from '@angular/router';
 import { LicenseService } from '../../licenses/license.service';
 import { ProductService } from '../../product/product.service';
 import { LoginService, User } from '../../login/login.service';
@@ -17,12 +17,10 @@ import { UserProfileService } from '../../userProfile/userProfile.service';
 import { ActivatedRouteMock } from '../../mock/activated-route-mock.component';
 import { of, Observable } from 'rxjs';
 import { Product } from '../../product/product.model';
-import { By } from '@angular/platform-browser';
 import {DOMHelper} from '../../../testing/dom-helper'
 import { License } from '../../licenses/license.model';
 import { DialogService } from '../../dialogs/dialog.service';
 import { UsedCardService } from '../../usedCard/usedCard.service';
-import { IterableDiffers } from '@angular/core';
 
 describe('CatalogProductComponent', () => {
   let component: CatalogProductComponent;
@@ -244,7 +242,6 @@ describe('CatalogProductComponent', () => {
       let prod2:Product = {name: "Prod2", licenses:[], typeSubs:["M","D"],photoAvailable:false,description: "The description",webLink:"www.c.com",photoSrc:"",plansPrices:plansPrices,sku:null, active:true, trialDays:9, mode:"Both"};
       let licReq:License = {serial:"serial", active:true, type:"RequiresAction", product:prod2, startDate:new Date(), endDate:new Date(), owner:"Kike", cancelAtEnd:false, subscriptionId:"sub_id", nUsage:1, price:2,trial:false, licenseStats:[],licenseString:"licFileStr",period:1}
       userProfileServiceMock.addSubscriptionToProduct.and.returnValue(of(licReq));
-      let lic:License = {serial:"serial", active:true, type:"M", product:prod2, startDate:new Date(), endDate:new Date(), owner:"Kike", cancelAtEnd:false, subscriptionId:"sub_id", nUsage:1, price:2,trial:false, licenseStats:[],licenseString:"licFileStr",period:1}
       
       productServiceMock.getProduct.and.returnValue(of(prod2));
 

@@ -1,6 +1,4 @@
 import { Injectable } from '@angular/core';
-import { Observable } from 'rxjs';
-import { License } from './license.model';
 import { HttpClient } from '@angular/common/http';
 
 const BASE_URL = '/api/licenses/';

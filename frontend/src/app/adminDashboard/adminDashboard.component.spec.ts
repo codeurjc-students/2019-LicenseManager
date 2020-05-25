@@ -7,7 +7,7 @@ import { Router } from '@angular/router';
 import { Observable, of } from 'rxjs';
 import { LoginService } from '../login/login.service';
 import { NgxPaginationModule } from 'ngx-pagination';
-import { MatSnackBarModule, MatDialogModule, MatDialogRef } from '@angular/material';
+import { MatSnackBarModule, MatDialogModule } from '@angular/material';
 import { ProductService } from '../product/product.service';
 import { Product } from '../product/product.model';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';

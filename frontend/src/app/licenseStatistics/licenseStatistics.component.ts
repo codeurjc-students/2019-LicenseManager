@@ -1,14 +1,13 @@
-import { Component, OnInit, ChangeDetectorRef, ViewChild } from '@angular/core';
-import { ActivatedRoute, ParamMap, Router } from '@angular/router';
+import { Component, OnInit } from '@angular/core';
+import { ActivatedRoute, ParamMap } from '@angular/router';
 import { License } from '../licenses/license.model';
 import { LicenseService } from '../licenses/license.service';
 import { DatePipe } from '@angular/common';
-import { PieChartComponent } from '../charts/pie-chart.component';
 
 export interface Stats{
     nUsage:number;
     usages:Date[];
-	usagePerTime:Map<String,number>;
+	usagePerTime:Map<string,number>;
 }
 
 
@@ -33,13 +32,13 @@ export class LicenseStatisticsComponent implements OnInit{
 
     loading:boolean = false;
 
-    licensesByNameMap: Map<String,Number> = new Map();
-    licensesByIpMap: Map<String,Number> = new Map();
-    licensesByIpAndNameMap: Map<String,Number> = new Map();
+    licensesByNameMap: Map<string,number> = new Map();
+    licensesByIpMap: Map<string,number> = new Map();
+    licensesByIpAndNameMap: Map<string,number> = new Map();
 
-    statListMapIP: Map<String,Stats> = new Map();
-    statListMapName: Map<String,Stats> = new Map();
-    statListMapIPName: Map<String,Stats> = new Map();
+    statListMapIP: Map<string,Stats> = new Map();
+    statListMapName: Map<string,Stats> = new Map();
+    statListMapIPName: Map<string,Stats> = new Map();
 
     selected:string = "";
     lineChartMap:Map<string,number> = new Map();
@@ -82,7 +81,7 @@ export class LicenseStatisticsComponent implements OnInit{
                     stat= {nUsage:value.nUsage, usages: value.usages, usagePerTime: map };
                 }else{
                     let aux = value.usages.concat(obj.usages).sort();
-                    let map:Map<String,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
+                    let map:Map<string,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
                     stat = {nUsage:value.nUsage + obj.nUsage, usages: aux,  usagePerTime: map};
                 }        
                 this.statListMapIP.set(value.ip,stat);
@@ -144,7 +143,7 @@ export class LicenseStatisticsComponent implements OnInit{
                     let map=this.mixUsagePerTimes(Object.entries(value.usagePerTime),null);
                     stat= {nUsage:value.nUsage, usages: value.usages , usagePerTime: map};
                 }else{
-                    let map:Map<String,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
+                    let map:Map<string,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
                     let aux = value.usages.concat(obj.usages).sort();
                     stat = {nUsage:value.nUsage + obj.nUsage, usages: aux , usagePerTime:map};
                 }       
@@ -187,7 +186,7 @@ export class LicenseStatisticsComponent implements OnInit{
                     stat= {nUsage:value.nUsage, usages: value.usages , usagePerTime: map};
                 }else{
                     console.log("no debería imprimirse esto");
-                    let map:Map<String,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
+                    let map:Map<string,number> = this.mixUsagePerTimes(Object.entries(value.usagePerTime),obj.usagePerTime.entries());
                     let aux = value.usages.concat(obj.usages).sort();
                     stat = {nUsage:value.nUsage + obj.nUsage, usages: aux , usagePerTime:map};
                 }       

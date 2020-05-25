@@ -3,7 +3,6 @@ import { Product } from '../product/product.model';
 import { MatDialogRef, MAT_DIALOG_DATA } from '@angular/material';
 import { License } from '../licenses/license.model';
 import { ProductService } from '../product/product.service';
-import { DialogService } from './dialog.service';
 
 @Component({
     selector: 'app-dialogAddProduct',

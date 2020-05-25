@@ -1,5 +1,3 @@
-import { User } from '../login/login.service';
-
 export interface StripeCard {
     customerStripeId:string;
     addressZip:string;

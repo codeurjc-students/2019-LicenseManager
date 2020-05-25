@@ -1,13 +1,7 @@
 <div class="bg">
-  <!--<div id="logoBg">
-      <a  id="name" class="font">{{appName}}</a>
-  </div>-->
   <div id="content">
     <td-layout-nav class="sticky">
       <div td-toolbar-content layout="row" layout-align="start center" flex> 
-      <!--  <a mat-icon-button [routerLink]="['/products']">
-          <mat-icon>home</mat-icon>
-        </a> -->
         <a mat-button (click)="manageLinks(appName)" class="font-size-medium">{{appName}}</a>
         <div *ngFor="let page of loginService.pages" class="buttons">
           <button mat-button (click)="manageLinks(page)" *ngIf="page != appName" [ngClass]="selected == page ? 'selBorder' : ''">

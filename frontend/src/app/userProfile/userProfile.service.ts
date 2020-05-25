@@ -1,11 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Http } from '@angular/http';
 import { HttpClient } from '@angular/common/http';
-import { map } from 'rxjs/operators';
 import { Observable } from 'rxjs';
 import { LoginService } from '../login/login.service';
 import { Product } from '../product/product.model';
-import { ActivatedRoute, ParamMap } from '@angular/router';
 
 const BASE_URL = '/api/users/';
 

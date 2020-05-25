@@ -1,4 +1,4 @@
-import { NgModule, TemplateRef } from '@angular/core';
+import { NgModule } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { JsonpModule, HttpModule } from '@angular/http';
@@ -38,8 +38,6 @@ import {
     MatNativeDateModule,
     MatSliderModule,
     MatAutocompleteModule,
-    MatSnackBar,
-    MAT_DIALOG_DEFAULT_OPTIONS,
     MAT_CHECKBOX_CLICK_ACTION,
     MatCheckboxModule,
 } from '@angular/material';
@@ -90,7 +88,6 @@ import { NotFoundComponent } from './not-found/not-found.component';
 import { AppService } from './app.service';
 import { DialogFreeTrial } from './dialogs/dialogFreeTrial.component';
 import { UsedCardService } from './usedCard/usedCard.service';
-import { LicenseStatistics } from './licenseStatistics/licenseStatistics.model';
 import { LicenseStatisticsComponent } from './licenseStatistics/licenseStatistics.component';
 import { PieChartComponent } from './charts/pie-chart.component';
 import { BarChartComponent } from './charts/bar-chart.component';

@@ -141,7 +141,7 @@ export class CatalogProductComponent implements OnInit {
      this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
       res => {   
         if(res[0]==true){
-          let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
+          let element: HTMLElement = document.getElementById('loginButton');
           element.click();
         }
       },
@@ -218,7 +218,7 @@ export class CatalogProductComponent implements OnInit {
       this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
        res => {    
          if(res[0]==true){
-            let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
+            let element: HTMLElement = document.getElementById('loginButton');
             element.click();
          }
        },
@@ -240,8 +240,6 @@ export class CatalogProductComponent implements OnInit {
                   this.successfulMessage=true;this.loading=false;this.serial=u.serial;this.licenseFileString=u.licenseString; this.createFile()},
                 error=> {this.treatmentBuyError(error,null,null);this.loading=false;},
             )
-          }else{
-
           }
         }
       )
@@ -249,82 +247,6 @@ export class CatalogProductComponent implements OnInit {
   }
   
 
-
-
-/*METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT
-  setUp(){
-    this.appService.getPublicStripeKey().subscribe(
-      (key:any)=> {
-        this.stripeService.changeKey(key.response);
-        this.stripeService.elements(this.elementsOptions).subscribe(
-         elements => {
-           this.elements = elements;
-           if (!this.card) {
-             this.card = this.elements.create('card', {
-               style: {
-                 base: {
-                   iconColor: '#666EE8',
-                   color: '#31325F',
-                   fontWeight: 300,
-                   fontFamily: '"Helvetica Neue", Helvetica, sans-serif',
-                   fontSize: '18px',
-                   '::placeholder': {
-                     color: '#3F51B5'
-                   }
-                 }
-               }
-             });
-             this.card.mount('#card-element');
-           }
-         }
-       );
-      }
-    );
-  }
-  startPurchase(){
-    if(this.loginService.getUserLogged()==null){
-      this.dialogService.openConfirmDialog("You have to be logged first! If you don't have an account, you can register too",false,false);
-   
-     }else{
-      this.purchase=true;
-      this.setUp();
-     }
-  }
-
-  pay(){
-    const name = this.loginService.getUserLogged().name
-    this.stripeService
-      .createToken(this.card, { name })
-      .subscribe(result => {
-        if (result.token) {
-          this.loading=true;
-          this.userProfileService.pay(name,this.product, result.token.id).subscribe(
-            data => {
-              this.userProfileService.confirmPay(name,this.product,data[`id`]).subscribe(
-                (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile()},
-                error => {
-                  console.log(error);
-                  if(error.status == 304){
-                    var iframe = document.createElement('iframe');
-                    iframe.src = "marca.com";
-                    iframe.width = "600";
-                    iframe.height = "400";
-                  
-                    //yourContainer.appendChild(iframe);
-                  }
-                  this.dialogService.openConfirmDialog("The purchase has not been posible",false,false); 
-                  this.loading=false; 
-                  this.purchase=false;}
-              )
-            }
-          );
-          
-        } else if (result.error) {
-          console.log("result.error");
-        }
-      });
-  }
-*/
 
 
   //Function to copy the license serial to the clipboard
@@ -359,9 +281,8 @@ export class CatalogProductComponent implements OnInit {
 
 
 
-  //PRUEBAS
 
-  //METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT	//METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT
+  //METHODS TO CHECKOUT A SIMPLE-PAY PRODUCT
   loadStripe() {	 
     if(!window.document.getElementById('stripe-script')) {	    
         var s = window.document.createElement("script");	  
@@ -379,7 +300,7 @@ export class CatalogProductComponent implements OnInit {
       this.dialogService.openConfirmDialog("You have to be logged first! Click 'OK' to Log in or Sign up",false,false).afterClosed().subscribe(
        res => {    
          if(res[0]==true){
-            let element: HTMLElement = document.getElementById('loginButton') as HTMLElement;
+            let element: HTMLElement = document.getElementById('loginButton');
             element.click();
          }
 

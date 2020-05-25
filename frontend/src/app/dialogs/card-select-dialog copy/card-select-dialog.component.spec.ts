@@ -4,18 +4,17 @@ import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog, MatSnackBar, MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material';
 import { Router } from '@angular/router';
-import { By } from '@angular/platform-browser';
 import { Observable, of } from 'rxjs';
 import { CardSelectDialog } from './card-select-dialog.component';
 import { DOMHelper } from 'src/testing/dom-helper';
-import { User } from 'src/app/login/login.service';
 import { UserProfileService } from '../../userProfile/userProfile.service';
+import { MatDialogRefMock } from 'src/app/mock/MatDialogRefMock.component';
+import { MatDialogMock } from 'src/app/mock/MatDialogMock.component';
 
 describe('CardSelectDialog', () => {
   let component: CardSelectDialog;
   let fixture: ComponentFixture<CardSelectDialog>;
   let routerMock:any;
-  let user:User={name:"Kike",roles:[],authdata:"",userStripeId:"stripe_id",email:"email@email.com"};
   let userProfileServiceMock:any;
   let domHelper:DOMHelper<CardSelectDialog>;
   let dialogRefMock:any;
@@ -27,24 +26,6 @@ describe('CardSelectDialog', () => {
   
   
   beforeEach(async(() => {
-
-    class MatDialogRefMock {
-      close(value = '') {
-  
-      }
-    }
-
-    class MatDialogMock {
-      open() {
-          return {
-              afterClosed: () => of({ name: 'some object' })
-          };
-      }
-
-      close(){
-
-      }
-    }
 
     dialogRefMock = jasmine.createSpyObj("DialogRef",["open","close"]);
 

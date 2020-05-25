@@ -7,9 +7,7 @@ import { Router } from '@angular/router';
 
 @Component({
   selector: 'app-login',
-  templateUrl: './login.component.html',
-  styleUrls: ['./login.component.css']
-})
+  templateUrl: './login.component.html'})
 export class LoginComponent implements OnInit  {
   @ViewChild('loginDialog',{static:false}) loginDialog: TemplateRef<any>;
   dialogRef: MatDialogRef<any, any>;
@@ -47,7 +45,7 @@ export class LoginComponent implements OnInit  {
 
     this.loginService.logIn(user, pass).subscribe(
         (u) => {
-            this.dialogRef.close(); this.error=false;;
+            this.dialogRef.close(); this.error=false;
         },
         (error) => this.error=true,
     );

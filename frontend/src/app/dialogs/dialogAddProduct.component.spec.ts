@@ -170,7 +170,6 @@ describe('DialogAddProductComponent Edit', () => {
     it("should fail putting a product", () => {
         productServMock.putProduct.and.returnValue(Observable.create(observer => {observer.error(error)}));
         fixture.detectChanges();
-        let file:any ={size:800};
         component.file=null;
         component.save();
 

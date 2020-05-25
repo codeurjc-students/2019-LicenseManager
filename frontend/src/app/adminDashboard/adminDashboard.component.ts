@@ -3,7 +3,6 @@ import { Product } from "../product/product.model";
 import { ProductService } from "../product/product.service";
 import { Router } from '@angular/router';
 import { MatDialog, MatDialogRef, MatSnackBar, MatSnackBarConfig } from '@angular/material';
-import { DialogAddProductComponent } from "../dialogs/dialogAddProduct.component";
 import { DialogService } from '../dialogs/dialog.service';
 
 @Component({

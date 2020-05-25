@@ -5,7 +5,6 @@ import { NO_ERRORS_SCHEMA } from '@angular/core';
 import { MatDialog, MatSnackBar, MatDialogRef, MatDialogModule, MAT_DIALOG_DATA } from '@angular/material';
 import { Router } from '@angular/router';
 import { DOMHelper } from 'src/testing/dom-helper';
-import { User } from 'src/app/login/login.service';
 import { ConfirmationDialogComponent } from './confirmation-dialog.component';
 import { MatDialogRefMock } from '../../mock/MatDialogRefMock.component';
 import { MatDialogMock } from '../../mock/MatDialogMock.component';

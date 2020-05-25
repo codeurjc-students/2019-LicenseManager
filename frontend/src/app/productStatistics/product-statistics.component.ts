@@ -4,7 +4,6 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { Product } from '../product/product.model';
 import { License } from '../licenses/license.model';
 import { KeyValue } from '@angular/common';
-import { Http } from '@angular/http/public_api';
 import { HttpClient } from '@angular/common/http';
 
 export interface Stats{
@@ -30,10 +29,10 @@ export interface Stats{
     pageActualLicense:number = 1;
     pageActualOwner:number = 1;
 
-    statsByOwnerMap: Map<String,Number> = new Map();
-    statsByLicenseMap: Map<String,Number> = new Map();
+    statsByOwnerMap: Map<string,number> = new Map();
+    statsByLicenseMap: Map<string,number> = new Map();
 
-    statListMapLicense: Map<String,Stats> = new Map();
+    statListMapLicense: Map<string,Stats> = new Map();
 
       
     n:number;

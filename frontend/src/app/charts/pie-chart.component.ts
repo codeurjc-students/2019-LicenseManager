@@ -1,6 +1,5 @@
 import { Component, OnInit, Input, SimpleChanges, Output, EventEmitter } from '@angular/core';
-import { License } from "../licenses/license.model";
-import { LicenseStatistics } from '../licenseStatistics/licenseStatistics.model';
+
 
 @Component({
     selector: 'app-pie-chart',

@@ -1,9 +1,8 @@
-import { Component, OnInit, Directive, Input } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { User, LoginService } from '../login/login.service';
-import { ActivatedRoute, ParamMap } from '@angular/router';
+import { ActivatedRoute } from '@angular/router';
 import { UserProfileService } from './userProfile.service';
-import { FormControl, FormGroup, Validators } from '@angular/forms';
-import { StripeCard } from '../stripe/stripeCard.model';
+import { FormControl, Validators } from '@angular/forms';
 import { DialogService } from '../dialogs/dialog.service';
 
 @Component({

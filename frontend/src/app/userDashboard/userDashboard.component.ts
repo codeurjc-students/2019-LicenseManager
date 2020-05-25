@@ -6,7 +6,6 @@ import { ActivatedRoute, ParamMap, Router } from '@angular/router';
 import { MatDialogRef, MatDialog, MatSnackBarConfig, MatSnackBar } from '@angular/material';
 import { DatePipe } from '@angular/common';
 import { DialogService } from '../dialogs/dialog.service';
-import { Product } from '../product/product.model';
 import { DomSanitizer } from '@angular/platform-browser';
 import { UserProfileService } from '../userProfile/userProfile.service';
 
@@ -88,7 +87,7 @@ export class UserDashboardComponent implements OnInit{
         this.dialogService.openConfirmDialog("You are going to download the License File of " + license.product.name + "'s license with serial: " + license.serial + ".\n This file cannot be modified. If done, it will NOT work.",false,false).afterClosed().subscribe(
             res => {
                 if(res){
-                    let element: HTMLElement = document.getElementById('download') as HTMLElement;
+                    let element: HTMLElement = document.getElementById('download');
                     element.click();
                 }
             }
@@ -100,7 +99,7 @@ export class UserDashboardComponent implements OnInit{
             res => {
                 if(res[0]){
                     this.userProfileService.setPaymentMethodOfSubs(subsId,this.userName,res[2]).subscribe(
-                        (res:any) => {this.snackbar.open("Method of payment changed succesfully","X",this.conf)},
+                        (res2:any) => {this.snackbar.open("Method of payment changed succesfully","X",this.conf)},
                         error => console.log(error) 
                     )
                 }
