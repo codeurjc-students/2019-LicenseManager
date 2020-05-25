@@ -1,6 +1,9 @@
-[![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=codeurjc-students_2019-LicenseManager&metric=alert_status)](https://sonarcloud.io/dashboard?id=codeurjc-students_2019-LicenseManager)
-[![Build Status](https://travis-ci.com/codeurjc-students/2019-LicenseManager.svg?branch=master)](https://travis-ci.com/github/codeurjc-students/2019-LicenseManager)
 
+**TRAVIS** [![Build Status](https://travis-ci.com/codeurjc-students/2019-LicenseManager.svg?branch=master)](https://travis-ci.com/github/codeurjc-students/2019-LicenseManager)
+
+**SONAR FRONTEND** [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=codeurjc-students_2019-LicenseManager&metric=alert_status)](https://sonarcloud.io/dashboard?id=codeurjc-students_2019-LicenseManager)
+
+**SONAR BACKEND** [![Quality Gate Status](https://sonarcloud.io/api/project_badges/measure?project=KikeAjani_LicenBack&metric=alert_status)](https://sonarcloud.io/dashboard?id=KikeAjani_LicenBack)
 
 # What's Licensoft?
 Licensoft is an OpenSource online platform to allow software developers and software companies to manage paid licenses of their software. 
