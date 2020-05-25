@@ -19,14 +19,32 @@ export class CardSelectDialog implements OnInit{
     inserted:boolean=false;
     cardAdded:boolean = false;
     user:string;
+    subsId:string;
 
 
     constructor(@Inject(MAT_DIALOG_DATA) public data,public dialogRef: MatDialogRef<CardSelectDialog>, private userProfileServ:UserProfileService){ 
         this.user=data.user;
+        if(data.subsId!=null){
+            this.subsId = data.subsId;
+        }
     }
     ngOnInit(): void {
         this.loading=true;
-        this.getCards(this.user);
+        if(this.subsId!=null){
+            this.getCards2(this.user, this.subsId);
+        }else{
+            this.getCards(this.user);
+        }
+    }
+
+    
+    getCards2(user:any, subsId:string){
+        this.userProfileServ.getUserCardsStripe(user).subscribe(
+            (cards:any) => {this.paymentMethods=cards;this.loading=false; this.userProfileServ.getPaymentMethodOfSubs(subsId,user).subscribe(
+                (def:any) => {this.defaultPM=def.response; this.pmSelected=this.defaultPM} 
+            )},
+            error=> {console.log(error);this.loading=false}
+        )
     }
 
     getCards(user:any){

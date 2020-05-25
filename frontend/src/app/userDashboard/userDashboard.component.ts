@@ -99,7 +99,7 @@ export class UserDashboardComponent implements OnInit{
         this.dialogService.openCardSubscriptionSelectDialog(this.userName,"Cards available",subsId).afterClosed().subscribe(
             res => {
                 if(res[0]){
-                    this.userProfileService.setPaymentMethodOfSubs(subsId,this.userName,res[1]).subscribe(
+                    this.userProfileService.setPaymentMethodOfSubs(subsId,this.userName,res[2]).subscribe(
                         (res:any) => {this.snackbar.open("Method of payment changed succesfully","X",this.conf)},
                         error => console.log(error) 
                     )

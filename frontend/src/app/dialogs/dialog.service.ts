@@ -5,7 +5,6 @@ import { LoginComponent } from '../login/login.component';
 import { DialogFreeTrial } from './dialogFreeTrial.component';
 import { AddCardDialogComponent } from './add-card-dialog/add-card-dialog.component';
 import { CardSelectDialog } from './card-select-dialog copy/card-select-dialog.component';
-import { CardSubscriptionSelectDialog } from './card-subscription-select-dialog/card-subscription-select-dialog.component';
 import { DialogAddProductComponent } from './dialogAddProduct.component';
 import { Product } from '../product/product.model';
 
@@ -68,7 +67,7 @@ export class DialogService {
     }
 
     openCardSubscriptionSelectDialog(userName:string, msg:string, subsId:string){
-      return this.dialog.open(CardSubscriptionSelectDialog,{
+      return this.dialog.open(CardSelectDialog,{
         data:{
           user: userName,
           msg: msg,
