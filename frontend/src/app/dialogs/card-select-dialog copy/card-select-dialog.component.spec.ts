@@ -39,9 +39,10 @@ describe('CardSelectDialog', () => {
     paymentMethods.push({id:1,card: {brand:"visa", last4:"4444"}});
     paymentMethods.push({id:2, card:{brand:"visa", last4:"5555"}});
 
-    userProfileServiceMock = jasmine.createSpyObj("UserProfileService", ["getUserCardsStripe","getDefaultCard"]);
+    userProfileServiceMock = jasmine.createSpyObj("UserProfileService", ["getUserCardsStripe","getDefaultCard","getPaymentMethodOfSubs"]);
     userProfileServiceMock.getUserCardsStripe.and.returnValue(of(paymentMethods));
     userProfileServiceMock.getDefaultCard.and.returnValue(of({response:"1"}));
+    userProfileServiceMock.getPaymentMethodOfSubs.and.returnValue(of({response:"1"}));
 
 
 
@@ -76,11 +77,16 @@ describe('CardSelectDialog', () => {
   describe("Page creation-display", () => {
       it("should create", () => {
           fixture.detectChanges();
-          console.log(component.paymentMethods);
-          expect(true).toBe(true);
           expect(component.paymentMethods[0].card.last4).toBe("4444");
           expect(component.defaultPM).toBe("1");
       })
+
+      it("should create for subscription card select", () => {
+        fixture.detectChanges();
+        component.getCards2("user","subsId");
+        expect(component.paymentMethods[0].card.last4).toBe("4444");
+        expect(component.defaultPM).toBe("1");
+    })
   })
 
   describe("Error handling", () => {
@@ -92,7 +98,14 @@ describe('CardSelectDialog', () => {
         fixture.detectChanges();
     
         expect(console.log).toHaveBeenCalledWith(error);
+
+        component.getCards2("as","a");
+
+        expect(console.log).toHaveBeenCalledTimes(2);
+
       })
+
+
   })
 
   describe("Methods", () => {
