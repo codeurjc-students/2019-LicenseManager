@@ -210,14 +210,11 @@ describe('DialogAddProductComponent Add', () => {
 
     let component: DialogAddProductComponent;
     let fixture: ComponentFixture<DialogAddProductComponent>;
-    let routerMock:any;
-    let domHelper:DOMHelper<DialogAddProductComponent>;
     let dialogRefMock:any;
     let productServMock:any;
   
     let prod:Product;
   
-    let file2:any ={size:800};
     let error = new Error();
   
   
@@ -247,10 +244,8 @@ describe('DialogAddProductComponent Add', () => {
       }
   
       let plansPrices:{[name:string]:number} = {["M"]:2, ["D"]:0.5, ["A"]:100};
-        let plansPrices2:{[name:string]:number} = {["L"]:10};
     
-        prod = {name: "Prod1", licenses:[], typeSubs:["D","M","A"],photoAvailable:true,description: "The description",webLink:"www.c.com",photoSrc:"",plansPrices:plansPrices,sku:null, active:true, trialDays:9, mode:"Both"};
-        let prod2:Product = {name: "Prod2", licenses:[], typeSubs:["L"],photoAvailable:false,description: "The description",webLink:"www.c.com",photoSrc:"",plansPrices:plansPrices2,sku:null, active:true, trialDays:9, mode:"Both"};
+      prod = {name: "Prod1", licenses:[], typeSubs:["D","M","A"],photoAvailable:true,description: "The description",webLink:"www.c.com",photoSrc:"",plansPrices:plansPrices,sku:null, active:true, trialDays:9, mode:"Both"};
     
   
       dialogRefMock = jasmine.createSpyObj("DialogRef",["open","close"]);
@@ -258,16 +253,13 @@ describe('DialogAddProductComponent Add', () => {
       dialogRefMock.open.and.returnValue(true);
       dialogRefMock.close.and.returnValue(true);
   
-  
-      routerMock = jasmine.createSpyObj('Router', ['navigate']);
-  
+    
       productServMock = jasmine.createSpyObj("ProductService", ["putProduct","postProduct","addImage"]);
   
       productServMock.putProduct.and.returnValue(of(prod));
       productServMock.postProduct.and.returnValue(of(prod));
       productServMock.addImage.and.returnValue(Observable.create(observer => {observer.error(error)}));
   
-      console.log = jasmine.createSpy("log");
   
       TestBed.configureTestingModule({
         declarations: [ DialogAddProductComponent ],
@@ -279,10 +271,7 @@ describe('DialogAddProductComponent Add', () => {
           {provide:MatDialogRef, useClass:MatDialogRefMock},
           {provide:MatDialog, useClass:MatDialogMock},
           {provide:MatSnackBar},
-          { provide: ProductService, useValue: productServMock},
-          { provide: Router,useValue: routerMock},
-  
-  
+          { provide: ProductService, useValue: productServMock},  
         ]
       })
       .compileComponents();
@@ -291,7 +280,6 @@ describe('DialogAddProductComponent Add', () => {
     beforeEach(() => {
       fixture = TestBed.createComponent(DialogAddProductComponent);
       component = fixture.componentInstance;
-      domHelper = new DOMHelper(fixture);
     });
 
 
@@ -308,7 +296,6 @@ describe('DialogAddProductComponent Add', () => {
             component.daily=true;
             component.monthly=true;
             component.annual=true;
-           // domHelper.clickButtonById("#addButton");
             component.add();
             expect(component.dialogRef.close).toHaveBeenCalledWith(true);
             expect(component.uploadEvent).toHaveBeenCalledWith(file);
