@@ -7,14 +7,14 @@
             </td-search-box>
             <div *ngIf="products?.length==0" style="text-align: center;">
                 <br>
-                <span style="font-family:Arial; color:red">There aren't products available </span>
+                <span style="font-family:Arial, Helvetica, sans-serif; color:red">There aren't products available </span>
                 <br>
             </div>
             <div  *ngFor="let product of products | paginate: {itemsPerPage:numberOfElements, currentPage: pageActual}" attr.id="productContainer{{product.name}}">
                     <hr>
                     <div class="post-container">
                         <h3 class="post-title"><a attr.id="link{{product.name}}" (click)="goToProduct(product.name)" class="link">{{product.name}}</a></h3>                   
-                        <div class="post-thumb" *ngIf="product.photoAvailable"><img [src]="pathPhotos(product.name)" class="logoPhoto" height="150" width="150" #photo attr.id="photo{{product.name}}"></div>
+                        <div class="post-thumb" *ngIf="product.photoAvailable"><img [src]="pathPhotos(product.name)" class="logoPhoto" height="150" width="150" #photo attr.id="photo{{product.name}}" alt="photo of product {{product.name}}"></div>
                         <div class="post-content">
                             <p class="italic">{{product.description}}</p>
                         </div>

@@ -1,11 +1,11 @@
 <div class="background" id="appRootClass">
 <div class="center-div" *ngIf="product?.active">
     <br>    
-    <h1 style="font-family:Arial" class="content" id="productName">{{product?.name}}</h1>
+    <h1 style="font-family:Arial, Helvetica, sans-serif" class="content" id="productName">{{product?.name}}</h1>
     <br>
     <span class="content" id="webLink"><a href="//{{product?.webLink}}">{{product?.webLink}}</a></span>
     <br>
-    <div class="post-thumb" *ngIf="product?.photoAvailable" id="photo"><img [src]="pathPhotos(product.name)" class="logoPhoto" height="150" width="150"></div>
+    <div class="post-thumb" *ngIf="product?.photoAvailable" id="photo"><img [src]="pathPhotos(product.name)" class="logoPhoto" height="150" width="150" alt="photo of product"></div>
     <br>
     <span class="content" style="white-space: pre-line" id="description"> {{product?.description}} </span>
     <br>
@@ -78,7 +78,7 @@
         <div *ngFor="let plan of product?.plansPrices | keyvalue" attr.id="plan{{plan.key}}">
             <br>
             <br>
-            <img src="assets/logo_{{plan.key}}.png" class="logoPhoto" height="150" width="150" #photo>
+            <img src="assets/logo_{{plan.key}}.png" class="logoPhoto" height="150" width="150" #photo alt="logo of plan {{plan.key}}">
             <br>
             <br>
             
@@ -100,7 +100,7 @@
 
             <br>
             <br>
-            <img *ngIf="loading" src="assets/spinner.gif" id="spinner" width="140px" >
+            <img *ngIf="loading" src="assets/spinner.gif" id="spinner" width="140px" alt="spinner gif">
 
             <div class="typeExp" *ngIf="plan.key=='L' && purchase">
                 <mat-card  >
@@ -159,15 +159,15 @@
                     <span *ngIf="plan.key=='MB'">MB = mettered: Your subscription will be valid for 1 month and you will be charged per use </span>
                 </div>
                 <br>
-                <span (click)="manageLicenses()" *ngIf="this.loginService.isLogged"><i>You can cancel the automatic renewal on your <a class="link">User Dashboard</a></i></span>
+                <span (click)="manageLicenses()" *ngIf="this.loginService.isLogged"><em>You can cancel the automatic renewal on your <a class="link">User Dashboard</a></em></span>
         </mat-card>
     </div>
     <br>
 </div> 
 
 <div class="center-div" *ngIf="!product?.active && product?.active!=null">
-    <h1  style="font-family:Arial" class="content"><mat-icon >warning</mat-icon>The product {{product?.name}} is not Active <mat-icon>warning</mat-icon></h1>
-    <span style="font-family:Arial">If you have licenses of this product, don't worry. They are still valid.</span>
+    <h1  style="font-family:Arial, Helvetica, sans-serif" class="content"><mat-icon >warning</mat-icon>The product {{product?.name}} is not Active <mat-icon>warning</mat-icon></h1>
+    <span style="font-family:Arial, Helvetica, sans-serif">If you have licenses of this product, don't worry. They are still valid.</span>
 </div>
 
 

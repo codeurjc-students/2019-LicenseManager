@@ -2,13 +2,13 @@
 <br>
 <br>
 <mat-card>
-    <mat-card-title>Your credit cards <img  *ngIf="loading" src="assets/spinner.gif" width="50px"></mat-card-title>
+    <mat-card-title>Your credit cards <img  *ngIf="loading" src="assets/spinner.gif" width="50px" alt="spinner gif"></mat-card-title>
     <hr>
     <mat-card-content>
-        <b *ngIf="stripeCards?.length==0">You don't have any card attached yet</b>
+        <strong *ngIf="stripeCards?.length==0">You don't have any card attached yet</strong>
         <mat-grid-list cols="2" rowHeight="4rem" *ngIf="!loading" >
             <div *ngFor="let paymentMethod of paymentMethods| paginate: {itemsPerPage:numberOfElements, currentPage: pageActual}" class="comp">
-                <mat-grid-tile > <img *ngIf="(!visaError && paymentMethod?.card.brand == 'visa' || !mcError && paymentMethod?.card.brand == 'mastercard' || paymentMethod?.card.brand == 'amex' && !amexError)" src="assets/{{paymentMethod?.card.brand}}.png" width="50px" (error)="updateUrl(paymentMethod?.card.brand)"> | {{paymentMethod?.card.brand.toUpperCase()}} that ends with {{paymentMethod?.card.last4}} - Expiring {{paymentMethod?.card.expMonth}}/{{paymentMethod?.card.expYear}}</mat-grid-tile>
+                <mat-grid-tile > <img alt="logo card brand" *ngIf="(!visaError && paymentMethod?.card.brand == 'visa' || !mcError && paymentMethod?.card.brand == 'mastercard' || paymentMethod?.card.brand == 'amex' && !amexError)" src="assets/{{paymentMethod?.card.brand}}.png" width="50px" (error)="updateUrl(paymentMethod?.card.brand)"> | {{paymentMethod?.card.brand.toUpperCase()}} that ends with {{paymentMethod?.card.last4}} - Expiring {{paymentMethod?.card.expMonth}}/{{paymentMethod?.card.expYear}}</mat-grid-tile>
                 <mat-grid-tile>
                     <button mat-icon-button >
                             <mat-icon class="icon" (click)="firstStepDelete(paymentMethod?.id)" attr.id="deleteButton-{{paymentMethod.id}}" >delete</mat-icon>

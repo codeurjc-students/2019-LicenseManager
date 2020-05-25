@@ -180,6 +180,5 @@ import { ProductStatisticsComponent } from './productStatistics/product-statisti
 export class AppModule {
     constructor(private matIconRegistry: MatIconRegistry, private domSanitizer: DomSanitizer, private appService:AppService ) {
         matIconRegistry.addSvgIconSet(domSanitizer.bypassSecurityTrustResourceUrl('/assets/symbol-defs.svg'));
-        this.appService.publicApiKey;
     }
 }

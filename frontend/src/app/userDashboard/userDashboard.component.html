@@ -1,7 +1,7 @@
 <div class="background" id="appRootClass">
     <br>
     <mat-card>
-        <mat-card-title> My Licenses      <img *ngIf="loading" src="assets/spinner.gif" id="spinner">
+        <mat-card-title> My Licenses      <img *ngIf="loading" src="assets/spinner.gif" id="spinner" alt="spinner gif">
         </mat-card-title>
         <hr>
         <mat-card-content>
@@ -57,7 +57,7 @@
                         <a *ngIf="!license.startDate">--</a>
                     </mat-grid-tile>
                     <mat-grid-tile colspan="2">
-                        <a *ngIf="license.endDate">{{license.endDate| date:'medium'}} <i *ngIf="license.trial">(trial period)</i></a>
+                        <a *ngIf="license.endDate">{{license.endDate| date:'medium'}} <em *ngIf="license.trial">(trial period)</em></a>
                         <a *ngIf="!license.endDate">--</a>
                     </mat-grid-tile>
                     <mat-grid-tile colspan="2">
@@ -69,7 +69,7 @@
                     </mat-grid-tile>
                     <mat-grid-tile>
                         <div *ngIf="license.product.mode!='Offline' && license.type!='L' && license.active">
-                            <span attr.id="usage-{{license.id}}">{{license.nUsage}} <i class="link" (click)="goToStats(license?.product.name,license.serial)">(View)</i></span>
+                            <span attr.id="usage-{{license.id}}">{{license.nUsage}} <em class="link" (click)="goToStats(license?.product.name,license.serial)">(View)</em></span>
                         </div>
                         <div *ngIf="!(license.product.mode!='Offline' && license.type!='L' && license.active)">
                             <span>-</span>
@@ -104,9 +104,9 @@
                 </mat-select>
             </div> 
         </mat-card-content>
-        <i style="color: rgba(255, 0, 0, 0.61)">Upcoming invoices for MB licenses are a preview of the invoice that will be billed on the End Date. It may change if the subscription is updated. </i>
+        <em style="color: rgba(255, 0, 0, 0.61)">Upcoming invoices for MB licenses are a preview of the invoice that will be billed on the End Date. It may change if the subscription is updated. </em>
         <br>
-        <i style="color: rgba(255, 0, 0, 0.61)">Serial and Usage are available for Licenses with <strong>Online or Both</strong> mode. <br> LicenseFile is available for Licenses with <strong>Offline or Both</strong> mode.</i>
+        <em style="color: rgba(255, 0, 0, 0.61)">Serial and Usage are available for Licenses with <strong>Online or Both</strong> mode. <br> LicenseFile is available for Licenses with <strong>Offline or Both</strong> mode.</em>
 
     </mat-card>
 

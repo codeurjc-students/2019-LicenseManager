@@ -35,6 +35,7 @@ export class UserDashboardComponent implements OnInit{
 
 
     ngOnInit(): void {
+        this.conf.duration=3000;
         this.pageActual=1;
         this.loading=false;
         this.activeRoute.paramMap.subscribe((params: ParamMap) => {
@@ -99,7 +100,7 @@ export class UserDashboardComponent implements OnInit{
             res => {
                 if(res[0]){
                     this.userProfileService.setPaymentMethodOfSubs(subsId,this.userName,res[1]).subscribe(
-                        (res:any) => {this.conf.duration=3000,this.snackbar.open("Method of payment changed succesfully","X",this.conf)},
+                        (res:any) => {this.snackbar.open("Method of payment changed succesfully","X",this.conf)},
                         error => console.log(error) 
                     )
                 }

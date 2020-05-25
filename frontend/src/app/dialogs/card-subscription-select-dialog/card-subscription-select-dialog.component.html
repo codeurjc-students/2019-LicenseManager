@@ -6,7 +6,7 @@
                 <mat-radio-group aria-label="Select an option" [(ngModel)]="pmSelected">
                 <div *ngFor="let paymentMethod of paymentMethods" >
                         <mat-radio-button value={{paymentMethod?.id}}>
-                            <img *ngIf="(!visaError && paymentMethod?.card.brand == 'visa' || !mcError && paymentMethod?.card.brand == 'mastercard' || paymentMethod?.card.brand == 'amex' && !amexError)" src="assets/{{paymentMethod?.card.brand}}.png" width="50px" (error)="updateUrl(paymentMethod?.card.brand)"><a id="info">| {{paymentMethod?.card.brand.toUpperCase()}} that ends with {{paymentMethod?.card.last4}} - Expiring {{paymentMethod?.card.expMonth}}/{{paymentMethod?.card.expYear}}</a>
+                            <img alt="logo of card brand" *ngIf="(!visaError && paymentMethod?.card.brand == 'visa' || !mcError && paymentMethod?.card.brand == 'mastercard' || paymentMethod?.card.brand == 'amex' && !amexError)" src="assets/{{paymentMethod?.card.brand}}.png" width="50px" (error)="updateUrl(paymentMethod?.card.brand)"><a id="info">| {{paymentMethod?.card.brand.toUpperCase()}} that ends with {{paymentMethod?.card.last4}} - Expiring {{paymentMethod?.card.expMonth}}/{{paymentMethod?.card.expYear}}</a>
                         </mat-radio-button>
                 </div>
                 </mat-radio-group>

@@ -38,7 +38,7 @@
                         <div *ngFor="let license of licenses  | paginate: {itemsPerPage:numberOfElementsLicense, currentPage: pageActualLicense}" class="list-cell" >
                             <div class="list-cell">
                                 <mat-grid-tile>
-                                    <a>{{license.serial}} <i class="link" (click)="goToStats(license?.product.name,license.serial)">(View)</i></a>
+                                    <a>{{license.serial}} <em class="link" (click)="goToStats(license?.product.name,license.serial)">(View)</em></a>
                                 </mat-grid-tile>
                                 <mat-grid-tile>
                                     <span *ngIf="license.active"><mat-icon>check</mat-icon></span> 
