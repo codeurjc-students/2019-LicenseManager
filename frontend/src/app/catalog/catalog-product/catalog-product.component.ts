@@ -80,45 +80,49 @@ export class CatalogProductComponent implements OnInit {
           this.getLicensesOfProductAndUser();
           this.fileName= "license-"+this.product.name +"-"+this.loginService.getUserLogged().name+ ".txt"; 
 
-          //Checking if redirected by a Lifetime buy
-          let piId = localStorage.getItem("pi");
-          if(piId!=null){
-            localStorage.removeItem("pi");
-      
-            this.userProfileService.check3dsPayment(this.user.name,this.product,piId).subscribe(
-              (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile();document.getElementById("exp").scrollIntoView()},
-              error => {                      
-                this.dialogService.openConfirmDialog("The purchase has not been posible. Try again with other card",false,false); 
-                this.loading=false; 
-                this.purchase=false;
-              }
-            )
-          }
+          if(localStorage.getItem("product_bought")==this.product.name){ //Product redirected by bought of this same product
 
-          //Checking if redirected by a Subscription buy
-          let piId_s = localStorage.getItem("pi_s");
-          if(piId_s!=null){
-            localStorage.removeItem("pi_s");
-            let automaticRenewal;
-            if(localStorage.getItem("automaticRenewal")=="true"){
-              automaticRenewal=true;
-            }else{
-              automaticRenewal = false;
-            }
-            console.log(this.user);
-            this.userProfileService.check3dsSubs(this.user.name,this.product,piId_s, automaticRenewal,localStorage.getItem("type"),localStorage.getItem("subscriptionId")).subscribe(
-              (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile();document.getElementById("exp").scrollIntoView()},
-              error => {                      
-                this.dialogService.openConfirmDialog("The purchase has not been posible. Try again with other card",false,false); 
-                this.loading=false; 
-                this.purchase=false;
+              //Checking if redirected by a Lifetime buy
+              let piId = localStorage.getItem("pi");
+              if(piId!=null){
+                localStorage.removeItem("pi");
+          
+                this.userProfileService.check3dsPayment(this.user.name,this.product,piId).subscribe(
+                  (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile();document.getElementById("exp").scrollIntoView()},
+                  error => {                      
+                    this.dialogService.openConfirmDialog("The purchase has not been posible. Try again with other card",false,false); 
+                    this.loading=false; 
+                    this.purchase=false;
+                  }
+                )
               }
-            )
-          }
 
-          localStorage.removeItem("type");
-          localStorage.removeItem("automaticRenewal");
-          localStorage.removeItem("subscriptionId");
+              //Checking if redirected by a Subscription buy
+              let piId_s = localStorage.getItem("pi_s");
+              if(piId_s!=null){
+                localStorage.removeItem("pi_s");
+                let automaticRenewal;
+                if(localStorage.getItem("automaticRenewal")=="true"){
+                  automaticRenewal=true;
+                }else{
+                  automaticRenewal = false;
+                }
+                console.log(this.user);
+                this.userProfileService.check3dsSubs(this.user.name,this.product,piId_s, automaticRenewal,localStorage.getItem("type"),localStorage.getItem("subscriptionId")).subscribe(
+                  (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile();document.getElementById("exp").scrollIntoView()},
+                  error => {                      
+                    this.dialogService.openConfirmDialog("The purchase has not been posible. Try again with other card",false,false); 
+                    this.loading=false; 
+                    this.purchase=false;
+                  }
+                )
+              }
+
+              localStorage.removeItem("type");
+              localStorage.removeItem("automaticRenewal");
+              localStorage.removeItem("subscriptionId");
+
+          }
 
 
         }
@@ -168,6 +172,7 @@ export class CatalogProductComponent implements OnInit {
                     this.licenseFileString=u.licenseString; 
                     this.createFile();
                   }else{
+                    localStorage.setItem("product_bought",this.product.name);
                     localStorage.setItem("pi_s",u.owner);
                     localStorage.setItem("type",type);
                     localStorage.setItem("automaticRenewal",res[1]);
@@ -330,6 +335,8 @@ export class CatalogProductComponent implements OnInit {
                       this.createFile()
                     }else{
                       localStorage.setItem("pi",data['id']);
+                      localStorage.setItem("product_bought",this.product.name);
+
                       console.log(t.serial);
                       window.location=t.serial;
                     }
