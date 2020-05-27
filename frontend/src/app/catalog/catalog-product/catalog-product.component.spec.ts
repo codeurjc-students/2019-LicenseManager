@@ -150,6 +150,8 @@ describe('CatalogProductComponent', () => {
 
     it('should init with recent Lifetime buy with 3ds valid', () => {
       localStorage.setItem("pi","pi_d");
+      localStorage.setItem("product_bought","Prod1");
+
       let plansPrices:{[name:string]:number} = {["L"]:5};
 
       let prod2:Product = {name: "ProdL", licenses:[], typeSubs:["L"],photoAvailable:false,description: "The description",webLink:"www.c.com",photoSrc:"",plansPrices:plansPrices,sku:null, active:true, trialDays:9, mode:"Both"};
@@ -163,6 +165,8 @@ describe('CatalogProductComponent', () => {
 
     it('should init with recent Lifetime buy with 3ds NOT valid', () => {
       localStorage.setItem("pi","pi_d");
+      localStorage.setItem("product_bought","Prod1");
+
       userProfileServiceMock.check3dsPayment.and.returnValue(Observable.create(observer => {observer.error(new Error())}));
       fixture.detectChanges();
       expect(dialogServiceMock.openConfirmDialog).toHaveBeenCalledTimes(1);
@@ -170,6 +174,8 @@ describe('CatalogProductComponent', () => {
 
     it('should init with recent subscription with 3ds valid', () => {
       localStorage.setItem("pi_s","pi_d");
+      localStorage.setItem("product_bought","Prod1");
+
       let plansPrices:{[name:string]:number} = {["M"]:5};
 
       let prod2:Product = {name: "ProdL", licenses:[], typeSubs:["M"],photoAvailable:false,description: "The description",webLink:"www.c.com",photoSrc:"",plansPrices:plansPrices,sku:null, active:true, trialDays:9, mode:"Both"};
@@ -184,6 +190,8 @@ describe('CatalogProductComponent', () => {
 
     it('should init with recent subscription with 3ds NOT valid', () => {
       localStorage.setItem("pi_s","pi_d");
+      localStorage.setItem("product_bought","Prod1");
+
       userProfileServiceMock.check3dsSubs.and.returnValue(Observable.create(observer => {observer.error(new Error())}));
       fixture.detectChanges();
       expect(dialogServiceMock.openConfirmDialog).toHaveBeenCalledTimes(1);
