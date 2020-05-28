@@ -1,8 +1,8 @@
 <div class="background" id="appRootClass">
 <br>
 <mat-card>
-    <mat-card-title>Statistics of {{productName}} - License Serial: {{license?.serial}} - Period:              
-        <mat-select [value]="periodSelected" style="display:inline-block; width: 300px;" (selectionChange)="changePeriod($event)">
+    <mat-card-title>Statistics of {{productName}} - License Serial: {{license?.serial}} - Period: <a *ngIf="periodSelected==license?.period">Current Period</a>   <a *ngIf="periodSelected!=license?.period">Previous Period</a>          
+        <mat-select [value]="periodSelected" style="display:inline-block; width: 10px;" (selectionChange)="changePeriod($event)">
             <mat-option value="0">Current Period</mat-option>
             <mat-option *ngIf="license?.period>1" value="1">Previous Period</mat-option>
         </mat-select>
