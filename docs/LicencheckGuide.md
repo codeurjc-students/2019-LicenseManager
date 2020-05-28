@@ -21,7 +21,7 @@ These Licenses can be delivered to the customers to *unlock* the software in two
 ```
 **2**. Choose an option to check : Online or Offline (depending your product)
 	 
-2.1.**ONLINE CHECK**
+2.1. **ONLINE CHECK**
 For an online checking, Licencheck will do REST requests to the web-application to check if the serial introduced is valid and active for this product.
 For that reason, it's necessary to instantiate Licencheck with 2 params: 
 	- **URL Domain of the web-app (String)**
@@ -29,13 +29,78 @@ For that reason, it's necessary to instantiate Licencheck with 2 params:
 ```
 Licencheck l = new Licencheck("http://mylicensoftwebpage.com",false);
 ```
-Then, call the method *checkLicense* :
+ Then, there are 2 options to check a License :
+  - **Immediate** checking: Calling a method returns a response.
+  - **Periodically** checking: Calling a method checks the license, and if it's valid, sets a 24h timer that will check everyday if the license is still valid.
+  
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	**IMMEDIATE**
 ```
-l.checkLicense("ebc2d716-d666-4eef-8e3d-50c435e1d3e4","productName")
+l.checkLicenseOnce("ebc2d716-d666-4eef-8e3d-50c435e1d3e4","productName")
 ``` 
 - If it’s **valid**, it will return a String indicating the **pseudonym** of the License (D, M, A, MB, L). 
 - If it's **not valid** will return **null**, 
 *The offline mode doesn't return the pseudonym because it can be read from the License File.*
+
+&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	**PERIODICALLY**
+
+As this method does NOT return anything immediatly, it is necessary to add previously a Listener that will execute some code when the method has checked the license (**non-blocking**) and returns a response code.
+This listener must be implemented by the Licencheck's user, describing how the Software should act when it receives the response.
+The **response codes** must be obtained by calling "**checkInfo.getReason()**" :
+
+| CODE | EXPLANATION| SUGGESTED LISTENER ACT
+| -- | -- | -- |
+| **VALID**   |  The license is valid.   | Allow user to use the software
+|**VALID_R** | The license is valid.|  Allow user to use the software
+|**NOT_VALID** | The license is not valid: unpaid, not active, modified... | Not allow user to use the software. <br> Ask for a new valid serial.
+|**NOT_VALID_R** | License has been valid previously, but not now = expired  | Not allow user to use the software.<br> Ask for a new valid serial.
+|**UNKNOWN_ERROR** |  Something unexpected has happened | Ask for a new valid serial.
+|**UNKNOWN_ERROR_R** |  Something unexpected has happened | Ask for a new valid serial.
+|**INTERNET_CON_ERROR** | Checking has not been posible because server backend is busy/disconnected. Licencheck will retry every 5 seconds to connect to server and check the license | Set a max number of retries, and if it is overcome, stop the execution of the software.
+|**INTERNET_CON_ERROR_R** | Checking has not been posible because server backend is busy/disconnected. Licencheck will retry every 5 seconds to connect to server and check the license | Set a max number of retries, and if it is overcome, stop the execution of the software.
+
+Response codes with **_R** are responses received by a periodical checking. Sometimes it is needed a different action if the checking failed on first call, that if it has failed in scheduled checks.
+Example of listener skeleton:
+```
+licencheck.addLicencheckListener(checkInfo -> {  
+    switch (checkInfo.getReason()) {  
+        case("VALID_R"):{  
+           ...
+           break;
+        }  
+        case ("VALID"): {  
+           ...
+		   break;
+        }  
+        case ("NOT_VALID_R"): {  
+           ...
+           break;
+		}  
+  
+        case ("NOT_VALID"): {  
+           ...
+		   break;  
+		}  
+        case ("INTERNET_CON_ERROR_R"):  
+        case ("INTERNET_CON_ERROR"): {  
+           ...
+		   break;  
+		}  
+        case ("UNKNOWN_ERROR_R"):  
+        case ("UNKNOWN_ERROR"): {  
+           ... 
+		   break;  
+		}  
+  
+    }  
+});
+```
+
+Now, call the method and keep with your program functionality.
+```
+l.checkLicensePeriodically("ebc2d716-d666-4eef-8e3d-50c435e1d3e4","productName");
+...
+``` 
+	
 	
 2.2. **OFFLINE CHECK**  
 Licencheck Offline checking works with a RSA Cryptography Algorithm. For that reason, Private and Public keys are needed:
@@ -78,11 +143,11 @@ l.checkLicenseOffline(lic)
  Licencheck would construct its final endpoint like:
  `baseEndpoint = https://localhost:8443/licencheck/`
  
- 2. ### <a name= "check"></a> CheckLickense(String licenseSerial, String productName) 
+ 2. ### <a name= "check"></a> Checking a Lickense
  Licencheck will do a HTTP GET request to:
   `baseEndpoint + "checkLicense/"  + productName + "/"  + licenseSerial` 
 
-3. ### <a name= "update"></a>  UpdateUsage(String  licenseSerial, String  productName, long  usage)
+3. ### <a name= "update"></a>  Updating Usage
 Licencheck will do a HTTP PUT request to: `baseEndpoint +"updateUsage/"+usage+"/"+productName+"/"+licenseSerial`
 
 ---

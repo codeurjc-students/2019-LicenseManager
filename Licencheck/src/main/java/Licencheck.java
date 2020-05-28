@@ -3,16 +3,9 @@ import java.net.ConnectException;
 import java.net.HttpURLConnection;
 import java.net.URL;
 import java.security.GeneralSecurityException;
-import java.security.KeyFactory;
-import java.security.PrivateKey;
 import java.security.cert.X509Certificate;
-import java.security.spec.PKCS8EncodedKeySpec;
 import java.util.*;
 import java.util.Calendar;
-import java.util.concurrent.Callable;
-import java.util.concurrent.ExecutorService;
-import java.util.concurrent.Executors;
-import java.util.concurrent.Future;
 
 import com.google.gson.JsonElement;
 import com.google.gson.JsonObject;
@@ -26,7 +19,6 @@ import javax0.license3j.io.LicenseReader;
 import javax0.license3j.io.LicenseWriter;
 import org.quartz.*;
 import org.quartz.impl.StdSchedulerFactory;
-import sun.security.rsa.RSAPrivateKeyImpl;
 
 import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
