@@ -22,16 +22,16 @@
         <div class='clearfix'>
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">82.04% </span>
+                <span class="strong">81.82% </span>
                 <span class="quiet">Statements</span>
-                <span class='fraction'>169/206</span>
+                <span class='fraction'>171/209</span>
             </div>
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">66.67% </span>
+                <span class="strong">68.18% </span>
                 <span class="quiet">Branches</span>
-                <span class='fraction'>28/42</span>
+                <span class='fraction'>30/44</span>
             </div>
         
             
@@ -43,9 +43,9 @@
         
             
             <div class='fl pad1y space-right2'>
-                <span class="strong">78.44% </span>
+                <span class="strong">78.24% </span>
                 <span class="quiet">Lines</span>
-                <span class='fraction'>131/167</span>
+                <span class='fraction'>133/170</span>
             </div>
         
             
@@ -423,7 +423,14 @@
 <a name='L365'></a><a href='#L365'>365</a>
 <a name='L366'></a><a href='#L366'>366</a>
 <a name='L367'></a><a href='#L367'>367</a>
-<a name='L368'></a><a href='#L368'>368</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
+<a name='L368'></a><a href='#L368'>368</a>
+<a name='L369'></a><a href='#L369'>369</a>
+<a name='L370'></a><a href='#L370'>370</a>
+<a name='L371'></a><a href='#L371'>371</a>
+<a name='L372'></a><a href='#L372'>372</a>
+<a name='L373'></a><a href='#L373'>373</a>
+<a name='L374'></a><a href='#L374'>374</a>
+<a name='L375'></a><a href='#L375'>375</a></td><td class="line-coverage quiet"><span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -505,12 +512,14 @@
 <span class="cline-any cline-yes">20x</span>
 <span class="cline-any cline-yes">19x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">2x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">2x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">8x</span>
+<span class="cline-any cline-yes">3x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-yes">1x</span>
@@ -521,8 +530,8 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">19x</span>
-<span class="cline-any cline-yes">19x</span>
+<span class="cline-any cline-yes">7x</span>
+<span class="cline-any cline-yes">7x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
 <span class="cline-any cline-yes">3x</span>
@@ -541,9 +550,11 @@
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-yes">18x</span>
-<span class="cline-any cline-yes">18x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-yes">6x</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -593,6 +604,7 @@
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
+<span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
 <span class="cline-any cline-yes">1x</span>
@@ -755,6 +767,8 @@
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-no">&nbsp;</span>
+<span class="cline-any cline-neutral">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-no">&nbsp;</span>
 <span class="cline-any cline-neutral">&nbsp;</span>
@@ -872,45 +886,49 @@ export class CatalogProductComponent implements OnInit {
           this.getLicensesOfProductAndUser();
           this.fileName= "license-"+this.product.name +"-"+this.loginService.getUserLogged().name+ ".txt"; 
 &nbsp;
-          //Checking if redirected by a Lifetime buy
-          let piId = localStorage.getItem("pi");
-          if(piId!=null){
-            localStorage.removeItem("pi");
-      
-            this.userProfileService.check3dsPayment(this.user.name,this.product,piId).subscribe(
-              (t:any) =&gt; {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile();document.getElementById("exp").scrollIntoView()},
-              error =&gt; {                      
-                this.dialogService.openConfirmDialog("The purchase has not been posible. Try again with other card",false,false); 
-                this.loading=false; 
-                this.purchase=false;
-              }
-            )
-          }
+          if(localStorage.getItem("product_bought")==this.product.name){ //Product redirected by bought of this same product
 &nbsp;
-          //Checking if redirected by a Subscription buy
-          let piId_s = localStorage.getItem("pi_s");
-          if(piId_s!=null){
-            localStorage.removeItem("pi_s");
-            let automaticRenewal;
-            <span class="missing-if-branch" title="if path not taken" >I</span>if(localStorage.getItem("automaticRenewal")=="true"){
-<span class="cstat-no" title="statement not covered" >              automaticRenewal=true;</span>
-            }else{
-              automaticRenewal = false;
-            }
-            console.log(this.user);
-            this.userProfileService.check3dsSubs(this.user.name,this.product,piId_s, automaticRenewal,localStorage.getItem("type"),localStorage.getItem("subscriptionId")).subscribe(
-              (t:any) =&gt; {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile();document.getElementById("exp").scrollIntoView()},
-              error =&gt; {                      
-                this.dialogService.openConfirmDialog("The purchase has not been posible. Try again with other card",false,false); 
-                this.loading=false; 
-                this.purchase=false;
+              //Checking if redirected by a Lifetime buy
+              let piId = localStorage.getItem("pi");
+              if(piId!=null){
+                localStorage.removeItem("pi");
+          
+                this.userProfileService.check3dsPayment(this.user.name,this.product,piId).subscribe(
+                  (t:any) =&gt; {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile();document.getElementById("exp").scrollIntoView()},
+                  error =&gt; {                      
+                    this.dialogService.openConfirmDialog("The purchase has not been posible. Try again with other card",false,false); 
+                    this.loading=false; 
+                    this.purchase=false;
+                  }
+                )
               }
-            )
-          }
 &nbsp;
-          localStorage.removeItem("type");
-          localStorage.removeItem("automaticRenewal");
-          localStorage.removeItem("subscriptionId");
+              //Checking if redirected by a Subscription buy
+              let piId_s = localStorage.getItem("pi_s");
+              if(piId_s!=null){
+                localStorage.removeItem("pi_s");
+                let automaticRenewal;
+                <span class="missing-if-branch" title="if path not taken" >I</span>if(localStorage.getItem("automaticRenewal")=="true"){
+<span class="cstat-no" title="statement not covered" >                  automaticRenewal=true;</span>
+                }else{
+                  automaticRenewal = false;
+                }
+                console.log(this.user);
+                this.userProfileService.check3dsSubs(this.user.name,this.product,piId_s, automaticRenewal,localStorage.getItem("type"),localStorage.getItem("subscriptionId")).subscribe(
+                  (t:any) =&gt; {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile();document.getElementById("exp").scrollIntoView()},
+                  error =&gt; {                      
+                    this.dialogService.openConfirmDialog("The purchase has not been posible. Try again with other card",false,false); 
+                    this.loading=false; 
+                    this.purchase=false;
+                  }
+                )
+              }
+&nbsp;
+              localStorage.removeItem("type");
+              localStorage.removeItem("automaticRenewal");
+              localStorage.removeItem("subscriptionId");
+&nbsp;
+          }
 &nbsp;
 &nbsp;
         }
@@ -960,6 +978,7 @@ export class CatalogProductComponent implements OnInit {
                     this.licenseFileString=u.licenseString; 
                     this.createFile();
                   }else{
+                    localStorage.setItem("product_bought",this.product.name);
                     localStorage.setItem("pi_s",u.owner);
                     localStorage.setItem("type",type);
                     localStorage.setItem("automaticRenewal",res[1]);
@@ -1122,6 +1141,8 @@ export class CatalogProductComponent implements OnInit {
 <span class="cstat-no" title="statement not covered" >                      this.createFile()</span>
                     }else{
 <span class="cstat-no" title="statement not covered" >                      localStorage.setItem("pi",data['id']);</span>
+<span class="cstat-no" title="statement not covered" >                      localStorage.setItem("product_bought",this.product.name);</span>
+&nbsp;
 <span class="cstat-no" title="statement not covered" >                      console.log(t.serial);</span>
 <span class="cstat-no" title="statement not covered" >                      window.location=t.serial;</span>
                     }
@@ -1164,7 +1185,7 @@ export class CatalogProductComponent implements OnInit {
             <div class='footer quiet pad2 space-top1 center small'>
                 Code coverage generated by
                 <a href="https://istanbul.js.org/" target="_blank">istanbul</a>
-                at Mon May 25 2020 16:59:18 GMT+0200 (GMT+02:00)
+                at Wed May 27 2020 16:39:17 GMT+0200 (GMT+02:00)
             </div>
         </div>
         <script src="..\..\..\..\prettify.js"></script>
