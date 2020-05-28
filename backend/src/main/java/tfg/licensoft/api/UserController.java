@@ -536,7 +536,12 @@ public class UserController implements IUserController{
     		return new ResponseEntity<>(HttpStatus.NOT_FOUND);
     	}
         Map<String, Object> params = new HashMap<>();
-        params.put("return_url", this.generalController.appDomain+"/products/"+productName);
+        String productNameLink = productName;
+        if(productName.contains(" ")) {
+        	productNameLink = productNameLink.replace(" ", "%20");
+        	
+        }
+        params.put("return_url", this.generalController.appDomain+"/products/"+productNameLink);
         PaymentIntent piReturned = this.stripeServ.confirmPaymentIntent(paymentIntent, params);
         String status = piReturned.getStatus();
 		License license = new License(true, p, userName);

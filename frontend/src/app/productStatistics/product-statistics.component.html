@@ -4,7 +4,7 @@
         <mat-card-title>Statistics of {{product?.name}}</mat-card-title>
         <hr>
         <mat-tab-group (selectedTabChange)="resetIndexPage($event)"> 
-            <mat-tab label="By User">
+            <mat-tab label="By Serial">
                 <mat-card-content>
                     <div class="center-div-pie">     
                         <app-pie-chart *ngIf="statsByLicenseMap?.size!=0" [statsMap]="statsByLicenseMap"  (setLineChart)="setLineChart($event)"></app-pie-chart>
@@ -84,7 +84,7 @@
         <mat-tab label="By Owner">
             <mat-card-content>
                 <div class="center-div-pie">     
-                    <app-pie-chart *ngIf="statsByOwnerMap?.size!=0" [statsMap]="statsByOwnerMap"  (setLineChart)="setLineChart($event)"></app-pie-chart>
+                    <app-pie-chart *ngIf="statsByOwnerMap?.size!=0" [statsMap]="statsByOwnerMap"></app-pie-chart>
                 </div>
                 <mat-grid-list cols="2"  rowHeight="4rem">
                     <mat-grid-tile>
