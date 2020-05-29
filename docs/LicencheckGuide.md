@@ -16,7 +16,7 @@ These Licenses can be delivered to the customers to *unlock* the software in two
 <dependency>
 <groupId>com.github.kikeajani</groupId>
 <artifactId>licencheck</artifactId>
-<version>1.2.0</version>
+<version>2.0.0</version>
 </dependency>
 ```
 **2**. Choose an option to check : Online or Offline (depending your product)
