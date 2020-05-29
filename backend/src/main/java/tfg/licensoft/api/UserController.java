@@ -1,5 +1,6 @@
 package tfg.licensoft.api;
 
+import tfg.licensoft.dtos.ProductDTO;
 import tfg.licensoft.licenses.License;
 import tfg.licensoft.licenses.LicenseService;
 import tfg.licensoft.licenses.LicenseSubscription;
@@ -15,14 +16,10 @@ import org.springframework.web.bind.annotation.*;
 import com.stripe.exception.StripeException;
 import com.stripe.model.Customer;
 import com.stripe.model.Invoice;
-import com.stripe.model.InvoiceItem;
 import com.stripe.model.PaymentIntent;
 import com.stripe.model.PaymentMethod;
 import com.stripe.model.PaymentMethodCollection;
-import com.stripe.model.SetupIntent;
 import com.stripe.model.Subscription;
-import com.stripe.param.InvoiceCreateParams;
-import com.stripe.param.InvoiceItemCreateParams;
 import com.stripe.param.SubscriptionCreateParams;
 
 import java.util.ArrayList;
@@ -35,11 +32,16 @@ import java.util.Optional;
 import java.util.Timer;
 import java.util.TimerTask;
 
+import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import java.util.regex.Pattern;
 
 @CrossOrigin
 @RestController
@@ -64,6 +66,17 @@ public class UserController implements IUserController{
 	@Autowired
 	private GeneralController generalController;
 	
+	private static final String CUSTOMER= "customer";
+	private static final String DEFAULT_PAYMENT_METHOD= "default_payment_method";
+	private static final String REQUIRES_ACTION= "requires_action";
+
+    private static final Logger LOGGER = Logger.getLogger("tfg.licensoft.api.UserController");
+
+    Pattern pattern = Pattern.compile("[A-Za-z0-9_]+");
+
+    private ModelMapper modelMapper = new ModelMapper();
+
+    
 	class SimpleResponse{
 		private String response;
 		
@@ -118,24 +131,24 @@ public class UserController implements IUserController{
 			List<Object> paymentMethodTypes =  new ArrayList<>();
 			paymentMethodTypes.add("card");
 			params.put("payment_method_types", paymentMethodTypes);
-			params.put("customer", user.getCustomerStripeId());
+			params.put(CUSTOMER, user.getCustomerStripeId());
 			params.put("payment_method", paymentMethod.getId());
 			params.put("confirm", true);
 
 			this.stripeServ.createSetupIntent(params);
 			
 			params.clear();
-			params.put("customer", user.getCustomerStripeId());
+			params.put(CUSTOMER, user.getCustomerStripeId());
 			this.stripeServ.attachPaymentMethod(paymentMethod, params);
 			
 			this.setDefaultPaymentMethod(userName, paymentMethod.getId());
 			
 			SimpleResponse response = new SimpleResponse(paymentMethod.getId());
-			return new ResponseEntity<SimpleResponse>(response,HttpStatus.OK);
+			return new ResponseEntity<>(response,HttpStatus.OK);
 
 		} catch (StripeException e) {
-			e.printStackTrace();
-			return new ResponseEntity<SimpleResponse>(HttpStatus.INTERNAL_SERVER_ERROR);
+    		LOGGER.severe(e.getMessage());
+			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -145,7 +158,7 @@ public class UserController implements IUserController{
 			User user = this.userServ.findByName(userName);
 			// We don't know which user wants to affect -> Unauthorized
 			if(user==null) {
-				return new ResponseEntity<Boolean>(false,HttpStatus.UNAUTHORIZED);
+				return new ResponseEntity<>(false,HttpStatus.UNAUTHORIZED);
 			}
 			// User to be affected != User that made the request
 			if(!user.equals(this.getRequestUser())) {
@@ -155,17 +168,17 @@ public class UserController implements IUserController{
 			Customer c =this.stripeServ.retrieveCustomer(user.getCustomerStripeId());
 			
 			Map<String, Object> params = new HashMap<>();
-			params.put("default_payment_method", paymentMethodId);
+			params.put(DEFAULT_PAYMENT_METHOD, paymentMethodId);
 			
 			Map<String, Object> params2 = new HashMap<>();
 			params2.put("invoice_settings", params);
 			this.stripeServ.updateCustomer(c, params2);
 
-			return new ResponseEntity<Boolean>(true,HttpStatus.OK);
+			return new ResponseEntity<>(true,HttpStatus.OK);
 
 		}catch(StripeException e ) {
-			e.printStackTrace();
-			return new ResponseEntity<Boolean>(false,HttpStatus.INTERNAL_SERVER_ERROR);
+    		LOGGER.severe(e.getMessage());
+			return new ResponseEntity<>(false,HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
 	
@@ -189,7 +202,7 @@ public class UserController implements IUserController{
 			return new ResponseEntity<>(r,HttpStatus.OK);
 
 		} catch (StripeException e) {
-			e.printStackTrace();
+    		LOGGER.severe(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -198,6 +211,11 @@ public class UserController implements IUserController{
 	//Will be subscribed to a M subscription with x free trial days
 	@PutMapping("/{userName}/products/{productName}/{type}/addTrial/cards/{token}")
 	public ResponseEntity<License> addTrial(@PathVariable String productName, @PathVariable String userName,  @PathVariable String token, @PathVariable String type){
+		
+		String safeType = "";
+		if(pattern.matcher(type).matches()) {
+			safeType = type;
+		}
 		
 		User user = this.userServ.findByName(userName);
 		Product product = this.productServ.findOne(productName);
@@ -213,7 +231,7 @@ public class UserController implements IUserController{
 		}
 		
 		
-		if(product!=null && product.getPlans().get(type)!=null) {
+		if(product!=null && product.getPlans().get(safeType)!=null) {
 			
 			try {
 				String pM = this.addCardStripeElements(userName,token).getBody().getResponse();
@@ -223,27 +241,27 @@ public class UserController implements IUserController{
 						    .setCustomer(user.getCustomerStripeId())
 						    .addItem(
 						      SubscriptionCreateParams.Item.builder()
-						        .setPlan(product.getPlans().get(type)) //Free trial is always monthly subscription
+						        .setPlan(product.getPlans().get(safeType)) //Free trial is always monthly subscription
 						        .build())
 						    .setTrialPeriodDays((long)product.getTrialDays())
 						    .setDefaultPaymentMethod(pM)
 						    .build();
 				Subscription subscription = this.stripeServ.createSubscription(params);
 				
-				LicenseSubscription license = new LicenseSubscription(true, type, product, user.getName(),product.getTrialDays());
+				LicenseSubscription license = new LicenseSubscription(true, safeType, product, user.getName(),product.getTrialDays());
 				license.setCancelAtEnd(false);  //Trial Periods have automatic renewal
 				license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
 				license.setSubscriptionId(subscription.getId());
 				licenseServ.save(license);
 				this.setTimerAndEndDate(license.getSerial(),license.getProduct(),product.getTrialDays(),0);
-				return new ResponseEntity<License>(license,HttpStatus.OK);
+				return new ResponseEntity<>(license,HttpStatus.OK);
 
 			}catch(StripeException e) {
-				e.printStackTrace();
-				return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
+	    		LOGGER.severe(e.getMessage());
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
 		}else {
-			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 
 		}
 	}
@@ -252,10 +270,13 @@ public class UserController implements IUserController{
 	
 	@PutMapping("{userName}/products/{productName}/{typeSubs}/addSubscription/renewal/{automaticRenewal}/paymentMethods/{pmId}")
 	public ResponseEntity<License> addSubscription(@PathVariable String productName, @PathVariable String typeSubs, @PathVariable String userName, @PathVariable boolean automaticRenewal, @PathVariable String pmId){
-
+    	String cleanedUserName="";
+		if(pattern.matcher(userName).matches()) {
+    		cleanedUserName=userName;
+    	}
 		
 		Product product = this.productServ.findOne(productName);
-		User user = this.userServ.findByName(userName);
+		User user = this.userServ.findByName(cleanedUserName);
 		
 		// We don't know which user wants to affect -> Unauthorized
 		if(user==null) {
@@ -267,9 +288,9 @@ public class UserController implements IUserController{
 		}
 		
 		//Check for MB subs if user has a payment method attached
-		List<PaymentMethod> lPayments = this.getCardsFromUser(userName).getBody();
-		if(typeSubs.equals("MB") && lPayments!=null && lPayments.size()==0) {
-			return new ResponseEntity<License>(HttpStatus.PRECONDITION_REQUIRED); //The precondition is to have an attached payment source
+		List<PaymentMethod> lPayments = this.getCardsFromUser(cleanedUserName).getBody();
+		if(typeSubs.equals("MB") && lPayments!=null && lPayments.isEmpty()) {
+			return new ResponseEntity<>(HttpStatus.PRECONDITION_REQUIRED); //The precondition is to have an attached payment source
 		}
 		
 		String planId=null;
@@ -285,10 +306,10 @@ public class UserController implements IUserController{
 				Map<String, Object> expand = new HashMap<>();
 				expand.put("0", "latest_invoice.payment_intent");
 				Map<String, Object> params = new HashMap<>();
-				params.put("customer", user.getCustomerStripeId());
+				params.put(CUSTOMER, user.getCustomerStripeId());
 				params.put("items", items);
 				if(!pmId.equals("default")) {
-					params.put("default_payment_method", pmId);
+					params.put(DEFAULT_PAYMENT_METHOD, pmId);
 				}
 				params.put("expand", expand);
 				params.put("cancel_at_period_end", !automaticRenewal);
@@ -296,11 +317,11 @@ public class UserController implements IUserController{
 				try {
 					subscription = this.stripeServ.createSubscription(params);
 				} catch (StripeException e) { 
-					e.printStackTrace();
+		    		LOGGER.severe(e.getMessage());
 					if(e.getCode().equals("resource_missing") && e.getMessage().contains("This customer has no attached payment source")) {
-						return new ResponseEntity<License>(HttpStatus.PRECONDITION_REQUIRED); //The precondition is to have an attached payment source
+						return new ResponseEntity<>(HttpStatus.PRECONDITION_REQUIRED); //The precondition is to have an attached payment source
 					}else {
-						return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
+						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 				}
 				this.productServ.save(product);	
@@ -315,17 +336,16 @@ public class UserController implements IUserController{
 					licenseServ.save(license);
 					this.setTimerAndEndDate(license.getSerial(),license.getProduct(),0,0);
 					
-					return new ResponseEntity<License>(license,HttpStatus.OK);
+					return new ResponseEntity<>(license,HttpStatus.OK);
 				}else if (status.equals("incomplete")) {
 					try {
 						Invoice s = this.stripeServ.getLatestInvoice(subscription.getLatestInvoice());
 						piReturned = this.stripeServ.retrievePaymentIntent(s.getPaymentIntent());
 					} catch (StripeException e1) {
-						// TODO Auto-generated catch block
 						e1.printStackTrace();
 						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 					}
-					if(piReturned != null && piReturned.getStatus().equals("requires_action")) {   //SCA 3DSecure authentication needed
+					if(piReturned != null && piReturned.getStatus().equals(REQUIRES_ACTION)) {   //SCA 3DSecure authentication needed
 						
 						PaymentIntent piReturned2 =null;
 				        Map<String, Object> params2 = new HashMap<>();				 
@@ -333,12 +353,16 @@ public class UserController implements IUserController{
 				        try {
 							piReturned2 = this.stripeServ.confirmPaymentIntent(piReturned, params2);
 						} catch (StripeException e) {
-							// TODO Auto-generated catch block
-							e.printStackTrace();
+				    		LOGGER.severe(e.getMessage());
 						}
 				        
+				        //Added for Sonar analysis
+				        if(piReturned2==null) {
+							return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
+				        }
 				        
-						LicenseSubscription fakeLicense = new LicenseSubscription(true,typeSubs,product,userName,0);
+				        
+						LicenseSubscription fakeLicense = new LicenseSubscription(true,typeSubs,product,cleanedUserName,0);
 						fakeLicense.setType("RequiresAction");
 						fakeLicense.setSerial(piReturned2.getNextAction().getRedirectToUrl().getUrl());
 						fakeLicense.setOwner(piReturned2.getId());
@@ -348,23 +372,24 @@ public class UserController implements IUserController{
 						try {
 							this.stripeServ.cancelSubscription(subscription);
 						} catch (StripeException e) {
-							e.printStackTrace();
+				    		LOGGER.severe(e.getMessage());
 						}
-						return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
+						return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 					}
 					
 				}else { // Other unknown cases
-					return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR); 
+					return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR); 
 				}
 			
 		}else {
-			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 	
 	private void setTimerAndEndDate(String licenseSerial, Product product,long trialDays, int nRetry) {	
 		LicenseSubscription license = licenseSubsServ.findBySerialAndProduct(licenseSerial, product);
-		System.out.println("Setting " + license.getSerial() + " timer");
+		LOGGER.log(Level.INFO, "Setting {0} timer",license.getSerial());
+
 		
 		Timer time = new Timer();
 			time.schedule(new TimerTask() {
@@ -373,10 +398,11 @@ public class UserController implements IUserController{
 				public void run() {
 					LicenseSubscription license = licenseSubsServ.findBySerialAndProduct(licenseSerial, product);
 					if(license==null) {
-						return;
+						LOGGER.log(Level.INFO, "License is null while setting timer renewal");
+
 					}else {
 						if(license.getCancelAtEnd()) {
-							System.out.println("Setting license inactive...");
+							LOGGER.log(Level.INFO,"Setting license inactive...");
 							license.setActive(false);
 							licenseSubsServ.save(license);
 						}else {
@@ -384,13 +410,13 @@ public class UserController implements IUserController{
 								Subscription subs = stripeServ.retrieveSubscription(license.getSubscriptionId());
 								String status = subs.getStatus();
 								if(status.equals("active")) {  //Already paid
-									System.out.println("Renewal doing on " + license);
+									LOGGER.log(Level.INFO,"Renewal doing on {0}" , license);
 									license.renew(trialDays);
 									licenseSubsServ.save(license);
 									setTimerAndEndDate(licenseSerial,product,0,0);
 								}else if (status.equals("past_due")) {  //Needs 3Dsecure 
 									Invoice inv = stripeServ.getLatestInvoice(subs.getLatestInvoice());
-									if (inv.getStatus().equals("requires_action") && nRetry<3) {  //Max retries when requires action is 3.
+									if (inv.getStatus().equals(REQUIRES_ACTION) && nRetry<3) {  //Max retries when requires action is 3.
 										Date dt = new Date();
 										Calendar c = Calendar.getInstance(); 
 										c.setTime(dt); 
@@ -398,7 +424,7 @@ public class UserController implements IUserController{
 										dt = c.getTime();
 										license.setEndDate(dt);
 										setTimerAndEndDate(licenseSerial,product,0,nRetry+1);
-										System.out.println("Subscription " + subs.getId() + " needs SCA autenthication. This is the " + nRetry + " retry of 3 max.");
+										LOGGER.log(Level.INFO,"Subscription {0} needs SCA autenthication. This is the {1} retry of 3 max.", new Object[] { subs.getId(), nRetry }  );
 									}
 								}else {//Subs canceled because max retries
 									stripeServ.cancelSubscription(subs);
@@ -434,7 +460,7 @@ public class UserController implements IUserController{
 		
 		try {
 			Map<String, Object> params = new HashMap<>();
-			params.put("customer", u.getCustomerStripeId());
+			params.put(CUSTOMER, u.getCustomerStripeId());
 			params.put("type", "card");
 	
 			PaymentMethodCollection paymentMethods = this.stripeServ.getPaymentMethodCollection(params);
@@ -444,7 +470,7 @@ public class UserController implements IUserController{
 			}
 			return new ResponseEntity<>(list,HttpStatus.OK);
 		}catch (StripeException e) {
-			e.printStackTrace();
+    		LOGGER.severe(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 	}
@@ -468,7 +494,7 @@ public class UserController implements IUserController{
 			SimpleResponse res = new SimpleResponse("true");
 			return new ResponseEntity<>(res,HttpStatus.OK);
 		}catch(StripeException e) {
-			e.printStackTrace();
+    		LOGGER.severe(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -479,8 +505,9 @@ public class UserController implements IUserController{
 	//LIFETIME BUY METHODS
 	
     @PostMapping("{userName}/paymentIntent/{tokenId}")
-    public ResponseEntity<String> payment(@PathVariable String userName,@RequestBody Product product, @PathVariable String tokenId) throws StripeException {
-    	
+    public ResponseEntity<String> payment(@PathVariable String userName,@RequestBody ProductDTO product, @PathVariable String tokenId) throws StripeException {
+		Product savedProduct = this.convertToEntity(product);
+
 		User u = this.userServ.findByName(userName);
 		
 		// We don't know which user wants to affect -> Unauthorized
@@ -500,32 +527,34 @@ public class UserController implements IUserController{
 
 		PaymentMethod paymentMethod =  this.stripeServ.createPaymentMethod(paramsPM);
 
-		
     	Map<String, Object> params = new HashMap<>();
-        params.put("amount", product.getPlansPrices().get("L").intValue()*100);
+        params.put("amount", savedProduct.getPlansPrices().get("L").intValue()*100);
         params.put("payment_method", paymentMethod.getId());
         params.put("currency", "eur");
-        params.put("description", "Product bought: " + product.getName());
+        params.put("description", "Product bought: " + savedProduct.getName());
         
 
 		
-        List<Object> payment_method_types = new ArrayList<>();
-        payment_method_types.add("card");
-        params.put("payment_method_types", payment_method_types);
-        params.put("customer",u.getCustomerStripeId());
+        List<Object> paymentMethodTypes = new ArrayList<>();
+        paymentMethodTypes.add("card");
+        params.put("payment_method_types", paymentMethodTypes);
+        params.put(CUSTOMER,u.getCustomerStripeId());
         params.put("receipt_email",u.getEmail());
         PaymentIntent paymentIntent = this.stripeServ.createPaymentIntent(params);
         String paymentStr = paymentIntent.toJson();
-        return new ResponseEntity<String>(paymentStr, HttpStatus.OK);
+        return new ResponseEntity<>(paymentStr, HttpStatus.OK);
     }
 
 	
     
     @PostMapping("{userName}/confirm/{id}/products/{productName}")
     public ResponseEntity<License> confirm(@PathVariable String id, @PathVariable String userName, @PathVariable String productName) throws StripeException {
-   
+    	String cleanedUserName="";
+    	if(pattern.matcher(userName).matches()) {
+    		cleanedUserName=userName;
+    	}
     	Product p = this.productServ.findOne(productName);
-		User user = this.userServ.findByName(userName);
+		User user = this.userServ.findByName(cleanedUserName);
 
     	ResponseEntity<License> check = this.checkProductAndUser(p, user);
     	if(check.getStatusCode()!=HttpStatus.OK) {
@@ -544,16 +573,16 @@ public class UserController implements IUserController{
         params.put("return_url", this.generalController.appDomain+"/products/"+productNameLink);
         PaymentIntent piReturned = this.stripeServ.confirmPaymentIntent(paymentIntent, params);
         String status = piReturned.getStatus();
-		License license = new License(true, p, userName);
+		License license = new License(true, p, cleanedUserName);
 
         if(status.equals("succeeded")) {
 			licenseServ.save(license);
 			return new ResponseEntity<>(license,HttpStatus.OK);
         }else if(status.equals("requires_payment_method")) {
-            System.out.println(piReturned.getLastPaymentError().getMessage());
+            LOGGER.log(Level.INFO,"{0}",piReturned.getLastPaymentError().getMessage());
     		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 
-        }else if(status.equals("requires_action")) {
+        }else if(status.equals(REQUIRES_ACTION)) {
         	//Fake license
         	License license2 = new License();
         	license2.setType("RequiresAction");
@@ -568,8 +597,13 @@ public class UserController implements IUserController{
     @PostMapping("/{username}/paymentIntents/{paymentIntentId}/products/{product}")
     public ResponseEntity<License> confirm3dsPaymentResponse(@PathVariable String paymentIntentId, @PathVariable String username, @PathVariable String product,  @RequestParam Optional<String> type, 
     		@RequestParam Optional<String> subscriptionId,  @RequestParam Optional<String> automaticRenewal){
+    	String cleanedUserName="";
+    	if(pattern.matcher(username).matches()) {
+    		cleanedUserName=username;
+    	}
+    	
     	Product p = this.productServ.findOne(product);
-		User user = this.userServ.findByName(username);
+		User user = this.userServ.findByName(cleanedUserName);
 
     	ResponseEntity<License> check = this.checkProductAndUser(p, user);
     	if(check.getStatusCode()!=HttpStatus.OK) {
@@ -585,16 +619,23 @@ public class UserController implements IUserController{
 	    	
 	    	if(pi.getStatus().equals("succeeded")) {
 		    	if(!type.isPresent()) {
-		    		License license = new License(true, p, username);
+		    		License license = new License(true, p, cleanedUserName);
 		    		this.licenseServ.save(license);
 					return new ResponseEntity<>(license,HttpStatus.OK);
 	    		}else {
-	    			boolean automaticR= Boolean.parseBoolean(automaticRenewal.get());
 					LicenseSubscription license = new LicenseSubscription(true, type.get(), p, user.getName(),0);
-					Subscription subscription = this.stripeServ.retrieveSubscription(subscriptionId.get());
-					license.setCancelAtEnd(!automaticR);
-					license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
-					license.setSubscriptionId(subscriptionId.get());
+					
+					if(subscriptionId.isPresent()) {
+						Subscription subscription = this.stripeServ.retrieveSubscription(subscriptionId.get());
+						license.setSubscriptionItemId(subscription.getItems().getData().get(0).getId());
+						license.setSubscriptionId(subscriptionId.get());
+					}
+					
+	    			if (automaticRenewal.isPresent()) {
+		    			boolean automaticR= Boolean.parseBoolean(automaticRenewal.get());
+						license.setCancelAtEnd(!automaticR);
+	    			}
+	    			
 					licenseServ.save(license);
 					return new ResponseEntity<>(license,HttpStatus.OK);
 
@@ -605,7 +646,7 @@ public class UserController implements IUserController{
 				return new ResponseEntity<>(HttpStatus.PRECONDITION_FAILED);
 	    	}
     	}catch(StripeException e) {
-    		e.printStackTrace();
+    		LOGGER.severe(e.getMessage());
     		return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
     	}
     	
@@ -663,7 +704,7 @@ public class UserController implements IUserController{
 			}
 			return new ResponseEntity<>(new SimpleResponse(subs.getDefaultPaymentMethod()),HttpStatus.OK);
 		} catch (StripeException e) {
-			e.printStackTrace();
+    		LOGGER.severe(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
@@ -682,14 +723,19 @@ public class UserController implements IUserController{
 				return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 			}
 			Map<String, Object> params = new HashMap<>();
-			params.put("default_payment_method", pmId);
+			params.put(DEFAULT_PAYMENT_METHOD, pmId);
 			Subscription subsReturned= this.stripeServ.updateSubscription(subs, params);
+			LOGGER.log(Level.INFO,"Payment Method posted to used");
 			return new ResponseEntity<>(new SimpleResponse(subsReturned.getDefaultPaymentMethod()),HttpStatus.OK);
 		} catch (StripeException e) {
-			e.printStackTrace();
+    		LOGGER.severe(e.getMessage());
 			return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 		}
 		
     }
+    
+	private Product convertToEntity(ProductDTO dto ) {
+		return modelMapper.map(dto, Product.class);
+	}
     
 }

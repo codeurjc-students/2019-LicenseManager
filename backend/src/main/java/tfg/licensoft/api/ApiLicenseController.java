@@ -53,9 +53,9 @@ public class ApiLicenseController implements ILicenseController {
 		Product p = this.productServ.findOne(product);
 		License license = this.licServ.findBySerialAndProduct(serial, p);
 		if (license!=null) {
-			return new ResponseEntity<License>(license, HttpStatus.OK);
+			return new ResponseEntity<>(license, HttpStatus.OK);
 		}else {
-			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	} 
 	
@@ -65,10 +65,10 @@ public class ApiLicenseController implements ILicenseController {
 		User user = this.userServ.findByName(userName);
 		
 		if(user==null) {
-			return new ResponseEntity<List<License>>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}else { 
 			List<License> licenses = this.licServ.findByUsername(userName); 
-			return new ResponseEntity<List<License>>(licenses,HttpStatus.OK);
+			return new ResponseEntity<>(licenses,HttpStatus.OK);
 		}
 	} 
 	 
@@ -89,11 +89,11 @@ public class ApiLicenseController implements ILicenseController {
 				
 			} catch (StripeException e) {
 				e.printStackTrace();
-				return new ResponseEntity<License>(HttpStatus.INTERNAL_SERVER_ERROR);
+				return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
 			}
-			return new ResponseEntity<License>(l,HttpStatus.OK);
+			return new ResponseEntity<>(l,HttpStatus.OK);
 		}else {
-			return new ResponseEntity<License>(HttpStatus.NOT_FOUND);
+			return new ResponseEntity<>(HttpStatus.NOT_FOUND);
 		}
 	}
 
@@ -115,7 +115,7 @@ public class ApiLicenseController implements ILicenseController {
 	
 	//Unique form to generate LicenseSubscription model for Swagger Documentation
 	@GetMapping("/LS")
-	public LicenseSubscription LicenseSubscription() {
+	public LicenseSubscription licenseSubscription() {
 		return new LicenseSubscription();
 	}
 	

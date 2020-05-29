@@ -15,8 +15,8 @@ import io.swagger.annotations.ApiOperation;
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
 import tfg.licensoft.api.UserController.SimpleResponse;
+import tfg.licensoft.dtos.ProductDTO;
 import tfg.licensoft.licenses.License;
-import tfg.licensoft.products.Product;
 
 public interface IUserController {
 	
@@ -99,7 +99,7 @@ public interface IUserController {
             @ApiResponse(code = 403, message = "User to be linked to the Payment Intent is not the same that does the request"),
             @ApiResponse(code = 500, message = "Stripe Error"),
     })
-    ResponseEntity<String> payment(@PathVariable String userName,@RequestBody Product product, @PathVariable String tokenId) throws StripeException;
+    ResponseEntity<String> payment(@PathVariable String userName,@RequestBody ProductDTO product, @PathVariable String tokenId) throws StripeException;
 
 
 	@ApiOperation(value = "Confirms a previusly created Payment Intent in Stripe")

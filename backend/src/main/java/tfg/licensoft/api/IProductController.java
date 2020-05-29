@@ -13,10 +13,10 @@ import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.multipart.MultipartFile;
 
 import io.swagger.annotations.ApiOperation;
-import io.swagger.annotations.ApiImplicitParam;
 
 import io.swagger.annotations.ApiResponse;
 import io.swagger.annotations.ApiResponses;
+import tfg.licensoft.dtos.ProductDTO;
 import tfg.licensoft.products.Product;
 
 public interface IProductController {
@@ -44,7 +44,7 @@ public interface IProductController {
             @ApiResponse(code = 409, message = "Product with the same name already exists"),
             @ApiResponse(code = 500, message = "Stripe Error")
     })
-	public ResponseEntity<Product> postProduct(@RequestBody Product product);
+	public ResponseEntity<Product> postProduct(@RequestBody ProductDTO product);
 
 	@ApiOperation(value = "Updates a given Product")
     @ApiResponses(value = {
@@ -52,7 +52,7 @@ public interface IProductController {
             @ApiResponse(code = 404, message = "Product to be updated does NOT exist"),
             @ApiResponse(code = 500, message = "Stripe Error")
     })
-	ResponseEntity<Product> editProduct(@RequestBody Product product);
+	ResponseEntity<Product> editProduct(@RequestBody ProductDTO product);
 
 	
 	@ApiOperation(value = "Deletes the Product with given name")
@@ -79,6 +79,6 @@ public interface IProductController {
             @ApiResponse(code = 400, message = "File Not Found")
 
     })
-	ResponseEntity<byte[]> postImage(@RequestBody MultipartFile file, @PathVariable String productName) throws Exception;
+	ResponseEntity<byte[]> postImage(@RequestBody MultipartFile file, @PathVariable String productName) throws IOException;
 
 }

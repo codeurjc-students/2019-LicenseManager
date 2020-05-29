@@ -1,7 +1,5 @@
 package tfg.licensoft.api;
 
-
-import java.util.Collection;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -13,20 +11,15 @@ import javax.servlet.http.HttpSession;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.mail.SimpleMailMessage;
-import org.springframework.mail.javamail.JavaMailSenderImpl;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
-import org.springframework.security.core.context.SecurityContextHolder;
+
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+
 import org.springframework.web.bind.annotation.RestController;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -76,7 +69,7 @@ public class LoginController implements ILoginController{
 			return new ResponseEntity<>(HttpStatus.UNAUTHORIZED);
 		} else {
 			User loggedUser = userComponent.getLoggedUser();
-			log.info("Logged as " + loggedUser.getName());
+			log.info("Logged as {0}" , loggedUser.getName());
 			return new ResponseEntity<>(loggedUser, HttpStatus.OK);
 		}
 	}
@@ -101,7 +94,7 @@ public class LoginController implements ILoginController{
 		User newUserEmail =userServ.findByEmail(email);
 
 		if ((pass1.equals(pass2)) && (newUser == null) && (newUserEmail == null)) {
-			Map<String,Object> customerParameter = new HashMap<String,Object>();
+			Map<String,Object> customerParameter = new HashMap<>();
 			customerParameter.put("name", user);
 			customerParameter.put("email",email);
 			try {
@@ -117,10 +110,7 @@ public class LoginController implements ILoginController{
 			}
 			String appName = this.generalController.appName;
 			String sub = "New account created - " + appName;
-			/*String msg = "Welcome to a Licensoft-Web! \n"
-					+ "These are your credentials: \n" 
-					+ "Username: " + user + "\n"
-							+ "Password: "+ pass1;*/
+
 			String htmlCodeEmail= 
 					"<!DOCTYPE html PUBLIC \"-//W3C//DTD XHTML 1.0 Transitional//EN\" \"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd\">\r\n" + 
 					"<html style=\"width:100%;font-family:roboto, 'helvetica neue', helvetica, arial, sans-serif;-webkit-text-size-adjust:100%;-ms-text-size-adjust:100%;padding:0;Margin:0;\">\r\n" + 
@@ -495,9 +485,9 @@ public class LoginController implements ILoginController{
 					"</html>\r\n" + 
 					"";
 			this.emailSender.sendHtmlEmail(sub, htmlCodeEmail, email);
-			return new ResponseEntity<User>(newUser, HttpStatus.OK);
+			return new ResponseEntity<>(newUser, HttpStatus.OK);
 		} else {
-			return new ResponseEntity<User>(newUser, HttpStatus.CONFLICT);
+			return new ResponseEntity<>(newUser, HttpStatus.CONFLICT);
 		}
 		
 		
@@ -507,17 +497,15 @@ public class LoginController implements ILoginController{
 
 	
 	
-	@RequestMapping(value="/api/users", method=RequestMethod.GET)
+	@GetMapping(value="/api/users")
 	public ResponseEntity<Page<User>> getAllUsers(Pageable page){
 		Page<User> users= userServ.findAll(page);
-		return new ResponseEntity<Page<User>>(users,HttpStatus.OK);
+		return new ResponseEntity<>(users,HttpStatus.OK);
 	}
 	
 	@GetMapping("/api/getUserLogged")
 	public ResponseEntity<User> getUserLogged( HttpServletRequest request) {
-		Collection<SimpleGrantedAuthority> authorities = (Collection<SimpleGrantedAuthority>)    SecurityContextHolder.getContext().getAuthentication().getAuthorities();
-		System.out.println("??? ->  "+authorities + "  " + SecurityContextHolder.getContext().getAuthentication());
-		return new ResponseEntity<User>(this.userComponent.getLoggedUser(),HttpStatus.OK);
+		return new ResponseEntity<>(this.userComponent.getLoggedUser(),HttpStatus.OK);
 
 	}
 	

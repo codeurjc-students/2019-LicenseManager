@@ -33,12 +33,5 @@ public interface IGeneralController {
     })
 	ResponseEntity<SimpleResponse> getAppDomain();
     
-    /*
-    @ApiOperation(value = "Returns the path where the Private Key of RSA algorithm is placed.")
-    @ApiResponses(value = {
-            @ApiResponse(code = 200, message = "Application-web's domain"),
-            @ApiResponse(code = 404, message = "Application-web's domain Not Found")
-    })	ResponseEntity<SimpleResponse> getPrivateKeyPath();
-    */
 
 }

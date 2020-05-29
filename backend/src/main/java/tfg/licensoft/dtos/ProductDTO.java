@@ -1,36 +1,16 @@
-package tfg.licensoft.products;
-import io.swagger.annotations.ApiModel;
-import io.swagger.annotations.ApiModelProperty;
+package tfg.licensoft.dtos;
 
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
-import java.util.Map;
+import io.swagger.annotations.ApiModel;
+import io.swagger.annotations.ApiModelProperty;
 
-import javax.persistence.ElementCollection;
-import javax.persistence.CascadeType;
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.OneToMany;
-import javax.validation.constraints.NotNull;
-
-import com.fasterxml.jackson.annotation.JsonIgnore;
-
-import tfg.licensoft.licenses.License;
-
-@Entity
 @ApiModel("Product")
-public class Product {
-	@Id
-	@GeneratedValue(strategy = GenerationType.AUTO)
-	private Long id;
+public class ProductDTO {
 	
-	@JsonIgnore
-	@OneToMany(mappedBy = "product", cascade = CascadeType.ALL)
-	private List<License>licenses;
+	private Long id;
+	private List<LicenseDTO>licenses;
 
 	@ApiModelProperty(example="NameMocked",required=true)
 	private String name;
@@ -38,18 +18,14 @@ public class Product {
 	@ApiModelProperty(example="p_id",required=false)
 	private String productStripeId;
 	
-	
-	@JsonIgnore
 	private HashMap<String,String> plans;
 	
-	@ElementCollection
 	@ApiModelProperty(example="[\r\n" + 
 			"            \"M\",\"D\", \"A\"\r\n" + 
 			"        ]",required=true)
 	private List<String> typeSubs; 
 		
 	@ApiModelProperty(example="Description Mocked for Swagger test execution",required=true)
-	@Column(columnDefinition = "LONGTEXT")
 	private String description;
 	
 	@ApiModelProperty(example="www.testSwagger.com",required=true)
@@ -59,7 +35,6 @@ public class Product {
 	private boolean photoAvailable;
 	
 	@ApiModelProperty(example="testPath",required=true)
-	@NotNull
 	private String photoSrc;
 	
 	@ApiModelProperty(example="{\r\n" + 
@@ -84,9 +59,9 @@ public class Product {
 
 	
 
-	public Product() {}
+	public ProductDTO() {}
 	
-	public Product(String name, String mode) {
+	public ProductDTO(String name, String mode) {
 		this.name=name;
 		this.licenses = new ArrayList<>();
 		this.plans = new HashMap<>();
@@ -101,9 +76,6 @@ public class Product {
 	
 	
 	//Getters & Setters
-	
-	
-	
 	
 	public String getPhotoSrc() {
 		return photoSrc;
@@ -187,7 +159,7 @@ public class Product {
 	}
 
 
-	public Map<String,String> getPlans() {
+	public HashMap<String, String> getPlans() {
 		return plans;
 	}
 
@@ -195,11 +167,11 @@ public class Product {
 		this.plans = plans;
 	}
 
-	public List<License> getLicenses() {
+	public List<LicenseDTO> getLicenses() {
 		return licenses;
 	}
 
-	public void setLicenses(List<License> licenses) {
+	public void setLicenses(List<LicenseDTO> licenses) {
 		this.licenses = licenses;
 	}
 
@@ -212,7 +184,7 @@ public class Product {
 	}
 
 	
-	public Map<String, Double> getPlansPrices() {
+	public HashMap<String, Double> getPlansPrices() {
 		return plansPrices;
 	}
 
@@ -236,16 +208,13 @@ public class Product {
 			return false;
 		if (getClass() != obj.getClass())
 			return false;
-		Product other = (Product) obj;
+		ProductDTO other = (ProductDTO) obj;
 		if (name == null) {
 			if (other.name != null)
 				return false;
-		} 
-		else if (!name.equals(other.name))
+		} else if (!name.equals(other.name))
 			return false;
 		return true;
 	}
 
-
-	
 }

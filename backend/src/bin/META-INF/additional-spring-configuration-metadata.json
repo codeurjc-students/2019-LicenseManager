@@ -1,0 +1,12 @@
+{"properties": [
+  {
+    "name": "stripe.publicKey",
+    "type": "java.lang.String",
+    "description": "Public Stripe Api Key"
+  },
+  {
+    "name": "stripe.privateKey",
+    "type": "java.lang.String",
+    "description": "Private Stripe Api Key"
+  },
+]}

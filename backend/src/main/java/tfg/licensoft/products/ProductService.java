@@ -1,6 +1,7 @@
 package tfg.licensoft.products;
 
 import java.io.File;
+import java.io.IOException;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.util.List;
@@ -41,7 +42,7 @@ public class ProductService {
 		return this.productRep.findByActive(true);
 	}
 	
-	public void saveImage(MultipartFile file, Product product) throws Exception{
+	public void saveImage(MultipartFile file, Product product) throws IOException{
 		File uploadedFile = new File(FILES_FOLDER.toFile(), product.getName()+"_photo");
 		file.transferTo(uploadedFile);
 		product.setPhotoAvailable(true);

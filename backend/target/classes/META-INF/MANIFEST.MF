@@ -2,7 +2,7 @@ Manifest-Version: 1.0
 Built-By: KIKIT
 Build-Jdk: 13.0.2
 Implementation-Title: LicenseWeb
-Implementation-Version: 0.5.0
+Implementation-Version: 2.0.0
 Implementation-Vendor-Id: tfg
 Implementation-URL: https://projects.spring.io/spring-boot/#/spring-boot
  -starter-parent/license-web

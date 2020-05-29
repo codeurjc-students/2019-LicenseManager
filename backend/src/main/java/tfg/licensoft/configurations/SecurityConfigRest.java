@@ -14,6 +14,9 @@ public class SecurityConfigRest extends WebSecurityConfigurerAdapter{
    
 	@Autowired 
     protected UserRepositoryAuthProvider userAuthentication;
+	
+	private static final String ADMIN = "ADMIN";
+	private static final String USER = "USER";
 
     @Override
     protected void configure(HttpSecurity http) throws Exception {
@@ -21,38 +24,38 @@ public class SecurityConfigRest extends WebSecurityConfigurerAdapter{
         http.antMatcher("/api/**");
 
 		// User
-        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/user/**/card/**").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/user/**/card/**").hasAnyRole(ADMIN,USER);
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/login").authenticated();
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users").hasRole("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/users/**/addCard/**").hasAnyRole("ADMIN","USER");
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users/**/cards").hasAnyRole("ADMIN","USER");
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/users/**/buy/**/**").hasAnyRole("ADMIN","USER");
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/users/**/products/**/**/addSubscription/renewal/**").hasAnyRole("ADMIN","USER"); 
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/users/**/default-card/**").hasAnyRole("ADMIN","USER"); 
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users/**/default-card").hasAnyRole("ADMIN","USER"); 
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, "api/users/**/products/**/addTrial/cards/**").hasAnyRole("ADMIN","USER"); 
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/users/**/paymentIntent/**").hasAnyRole("ADMIN","USER");
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/users/**/confirm/**/products/**").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users").hasRole(ADMIN);
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/users/**/addCard/**").hasAnyRole(ADMIN,USER);
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users/**/cards").hasAnyRole(ADMIN,USER);
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/users/**/buy/**/**").hasAnyRole(ADMIN,USER);
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/users/**/products/**/**/addSubscription/renewal/**").hasAnyRole(ADMIN,USER); 
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/users/**/default-card/**").hasAnyRole(ADMIN,USER); 
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/users/**/default-card").hasAnyRole(ADMIN,USER); 
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "api/users/**/products/**/addTrial/cards/**").hasAnyRole(ADMIN,USER); 
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/users/**/paymentIntent/**").hasAnyRole(ADMIN,USER);
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/users/**/confirm/**/products/**").hasAnyRole(ADMIN,USER);
 
         //Product
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/products/**/image").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/products").permitAll();
         http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/products/**").permitAll();
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/products/").hasRole("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/products/").hasRole("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/products/**").hasRole("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/products/**/license/**").hasRole("ADMIN");
-        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/products/**/image").hasRole("ADMIN");
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/products/").hasRole(ADMIN);
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/products/").hasRole(ADMIN);
+        http.authorizeRequests().antMatchers(HttpMethod.DELETE, "/api/products/**").hasRole(ADMIN);
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/products/**/license/**").hasRole(ADMIN);
+        http.authorizeRequests().antMatchers(HttpMethod.POST, "/api/products/**/image").hasRole(ADMIN);
 
         //License  
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/products/**").hasAnyRole("ADMIN","USER");
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/**/products/**").hasAnyRole("ADMIN","USER");
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/users/**").hasAnyRole("ADMIN","USER");
-        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/licenses/cancelAtEnd/**/products/**").hasAnyRole("ADMIN","USER");
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/users/**/products/**").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/products/**").hasAnyRole(ADMIN,USER);
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/**/products/**").hasAnyRole(ADMIN,USER);
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/users/**").hasAnyRole(ADMIN,USER);
+        http.authorizeRequests().antMatchers(HttpMethod.PUT, "/api/licenses/cancelAtEnd/**/products/**").hasAnyRole(ADMIN,USER);
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/licenses/users/**/products/**").hasAnyRole(ADMIN,USER);
         
         //UsedCard
-        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/usedcards/checkUsed/***/***/***/product/***").hasAnyRole("ADMIN","USER");
+        http.authorizeRequests().antMatchers(HttpMethod.GET, "/api/usedcards/checkUsed/***/***/***/product/***").hasAnyRole(ADMIN,USER);
 
 
         // Do not redirect when logout
