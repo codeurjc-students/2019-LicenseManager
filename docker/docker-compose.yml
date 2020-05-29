@@ -19,6 +19,7 @@ services:
         image: kikeajani/licensoft-http:latest
         volumes:
             - ./keys:/keys
+
         links:
             - sql
         depends_on:

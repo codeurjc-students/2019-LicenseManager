@@ -20,7 +20,7 @@ cd ../../backend
 
 sudo docker run -it --rm -v ${PWD}:/usr/src/project -w /usr/src/project maven:alpine mvn package -DskipTests
 
-cp target/license-web-0.5.0.jar ../docker/build
+cp target/license-web-2.0.0.jar ../docker/build
 cd ../docker
 
 #sudo docker rmi -f kikeajani/licensoft-http
