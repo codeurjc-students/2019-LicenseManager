@@ -78,7 +78,7 @@ import { ProductService } from '../product/product.service';
   }
 
   add(){
-    if(!this.monthly || this.type!="subscription"){
+    if(this.type!="subscription"){
       this.trialDays=0;
     }
     let isFile;
