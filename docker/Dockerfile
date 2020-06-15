@@ -8,6 +8,7 @@ ENV privateStripeKeyEnv="$privateStripeKey"
 
 # Copy App
 COPY build/license-web-2.0.0.jar /
+COPY images /images
 
 # Expose port number
 EXPOSE 80
