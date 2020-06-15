@@ -106,6 +106,7 @@ We use a proxy.conf.js file to redirect all the requests made to **/api/*** to t
 * Active (boolean)
 * ProductStripeId (String)
 * TrialDays (int)
+* Mode (String)
 
 #### License
 * Serial (String)
@@ -115,6 +116,7 @@ We use a proxy.conf.js file to redirect all the requests made to **/api/*** to t
 * StartDate (Date)
 * Owner (String)
 * Price (double)
+* LicenseString (String)
 
 #### License Subscription
 * Trial (boolean)
@@ -123,6 +125,7 @@ We use a proxy.conf.js file to redirect all the requests made to **/api/*** to t
 * SubscriptionId (String)
 * NUsage (int)
 * EndDate (Date)
+* Period (Integer)
 
 #### License Statistics
 Object with statistics of a License (by ip)
@@ -130,6 +133,10 @@ Object with statistics of a License (by ip)
 * Ip (String)
 * NUsage (int)
 * LastUsage (Date)
+* Usages (List<Date>)
+* UserName (String)
+* UsagePerTime (Map<String,Integer>)
+* Period (Integer)
 
 
 #### User
