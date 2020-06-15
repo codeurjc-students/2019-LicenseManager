@@ -181,7 +181,6 @@ public class Licencheck {
         }
         this.repetition=0;
         Timer time = new Timer();
-        CheckInfo checkInfo = new CheckInfo();
         try {
             URL url = new URL(baseEndpoint + "checkLicense/" + productName + "/" + licenseSerial);
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
@@ -192,17 +191,8 @@ public class Licencheck {
 
 
             int HttpResult = con.getResponseCode(); //Get the response
-            StringBuilder sb = new StringBuilder();
 
-            if (HttpResult == HttpsURLConnection.HTTP_OK) {
-                BufferedReader br = new BufferedReader(
-                        new InputStreamReader(con.getInputStream(), "utf-8"));
-                String line = null;
-                while ((line = br.readLine()) != null) {
-                    sb.append(line + "\n");
-                }
-                JsonObject jsonObject = new JsonParser().parse(sb.toString()).getAsJsonObject();
-                br.close();
+            if (HttpResult == HttpsURLConnection.HTTP_OK) { ;
                 con.disconnect();
 
 
@@ -212,7 +202,8 @@ public class Licencheck {
                 job1.getJobDataMap().put("PRODUCT_NAME", productName);
                 job1.getJobDataMap().put("LICENCHECK",this);
 
-                Trigger t = TriggerBuilder.newTrigger().withIdentity("CroneTrigger").withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInSeconds(10).repeatForever()).build();
+                Trigger t = TriggerBuilder.newTrigger().withIdentity("CroneTrigger").withSchedule(SimpleScheduleBuilder.simpleSchedule().withIntervalInHours(24).repeatForever()).build();
+
                 try {
                     this.scheduler = StdSchedulerFactory.getDefaultScheduler();
                     this.scheduler.start();
@@ -222,28 +213,24 @@ public class Licencheck {
                 }
 
                 //Set the response
-                checkInfo.setReason("VALID");
-                this.listener.checkResult(checkInfo);
+                this.listener.checkResult(CheckInfo.Reason.VALID);
 
 
             } else if (HttpResult == HttpURLConnection.HTTP_NOT_FOUND) {
-                checkInfo.setReason("NOT_VALID");
-                this.listener.checkResult(checkInfo);
+                this.listener.checkResult(CheckInfo.Reason.NOT_VALID);
                 con.disconnect();
             } else if (HttpResult == HttpURLConnection.HTTP_INTERNAL_ERROR) {
+                this.listener.checkResult(CheckInfo.Reason.UNKNOWN_ERROR);
                 con.disconnect();
             }else{
-                checkInfo.setReason("UNKNOWN_ERROR");
-                this.listener.checkResult(checkInfo);
+                this.listener.checkResult(CheckInfo.Reason.UNKNOWN_ERROR);
             }
 
         }catch (NullPointerException n){
-            checkInfo.setReason("UNKNOWN_ERROR");
-            this.listener.checkResult(checkInfo);
+            this.listener.checkResult(CheckInfo.Reason.UNKNOWN_ERROR);
 
         } catch (ConnectException ex){
-            checkInfo.setReason("INTERNET_CON_ERROR");
-            this.listener.checkResult(checkInfo);
+            this.listener.checkResult(CheckInfo.Reason.INTERNET_CON_ERROR);
             time.schedule(new TimerTask() {
                 @Override
                 public void run() {
@@ -253,8 +240,7 @@ public class Licencheck {
 
         } catch (IOException e) {
             con.disconnect();
-            checkInfo.setReason("UNKNOWN_ERROR");
-            this.listener.checkResult(checkInfo);
+            this.listener.checkResult(CheckInfo.Reason.UNKNOWN_ERROR);
         }
 
     }
@@ -289,15 +275,15 @@ public class Licencheck {
                     con.disconnect();
 
                     //If valid, inform, finish this execution and wait for the next scheduled(24h)
-                    checkInfo.setReason("VALID_R");
-                    this.listener.checkResult(checkInfo);
+                   // checkInfo.setReason("VALID_R");
+                    this.listener.checkResult(CheckInfo.Reason.VALID_R);
 
 
                 } else if (HttpResult == HttpURLConnection.HTTP_NOT_FOUND) {
                     //The license must have expired between last execution and this execution, without being renewed
                     this.scheduler.shutdown(); //Stop the scheduler, just needed if it was valid
-                    checkInfo.setReason("NOT_VALID_R");
-                    this.listener.checkResult(checkInfo);
+                  //  checkInfo.setReason("NOT_VALID_R");
+                    this.listener.checkResult(CheckInfo.Reason.NOT_VALID_R);
                     con.disconnect();
                 } else if (HttpResult == HttpURLConnection.HTTP_INTERNAL_ERROR) {
                     this.scheduler.shutdown();
@@ -305,23 +291,23 @@ public class Licencheck {
                 } else {
                     this.scheduler.shutdown();
                     con.disconnect();
-                    checkInfo.setReason("UNKNOWN_ERROR_R");
-                    this.listener.checkResult(checkInfo);
+                   // checkInfo.setReason("UNKNOWN_ERROR_R");
+                    this.listener.checkResult(CheckInfo.Reason.UNKNOWN_ERROR_R);
                 }
 
             } catch (NullPointerException n) {
                 con.disconnect();
                 this.scheduler.shutdown();
 
-                checkInfo.setReason("UNKNOWN_ERROR_R");
-                this.listener.checkResult(checkInfo);
+                //checkInfo.setReason("UNKNOWN_ERROR_R");
+                this.listener.checkResult(CheckInfo.Reason.UNKNOWN_ERROR_R);
 
             } catch (ConnectException ex) {
                 System.out.println("Internet conexion error scheduled");
                 this.scheduler.shutdown();
                // con.disconnect();
-                checkInfo.setReason("INTERNET_CON_ERROR_R");
-                this.listener.checkResult(checkInfo);
+               // checkInfo.setReason("INTERNET_CON_ERROR_R");
+                this.listener.checkResult(CheckInfo.Reason.INTERNET_CON_ERROR_R);
                 time.schedule(new TimerTask() {
                     @Override
                     public void run() {
@@ -332,8 +318,8 @@ public class Licencheck {
             } catch (IOException e) {
                 this.scheduler.shutdown();
                 con.disconnect();
-                checkInfo.setReason("UNKNOWN_ERROR_R");
-                this.listener.checkResult(checkInfo);
+                //checkInfo.setReason("UNKNOWN_ERROR_R");
+                this.listener.checkResult(CheckInfo.Reason.UNKNOWN_ERROR_R);
             }
         }
     }
@@ -410,38 +396,6 @@ public class Licencheck {
             return null;
         }
 
-    }
-
-
-
-    //Just needed for tests
-    protected void createLicense(String path){
-        Date dt = new Date();
-        Calendar c = Calendar.getInstance();
-        c.setTime(dt);
-        c.add(Calendar.DATE, 1);
-        dt = c.getTime();
-        License license = new License();
-        license.add(Feature.Create.stringFeature("serial", UUID.randomUUID().toString()));
-        license.add(Feature.Create.dateFeature("endDate",dt));
-        license.add(Feature.Create.dateFeature("startDate",new Date()));
-        license.add(Feature.Create.stringFeature("product","p1"));
-        license.add(Feature.Create.stringFeature("type","D"));
-        license.setExpiry(license.get("endDate").getDate());
-        license.setLicenseId(UUID.fromString(license.get("serial").getString()));
-
-
-        try {
-            KeyPairReader kpr = new KeyPairReader("M:\\UNIVERSIDAD\\TFG\\License3jRepl-master\\private.key");
-
-            LicenseKeyPair lkp = kpr.readPrivate();
-            license.sign(lkp.getPair().getPrivate(),"SHA-512");
-
-            LicenseWriter licenseWriter = new LicenseWriter(path);
-            licenseWriter.write(license,IOFormat.STRING);
-        } catch (Exception e) {
-            e.printStackTrace();
-        }
     }
 
 

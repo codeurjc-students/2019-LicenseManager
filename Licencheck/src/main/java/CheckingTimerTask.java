@@ -5,9 +5,6 @@ import java.util.Date;
 
 public class CheckingTimerTask implements Job {
 
-
-
-
     @Override
     public void execute(JobExecutionContext jobExecutionContext) throws JobExecutionException {
         JobDataMap data = jobExecutionContext.getJobDetail().getJobDataMap();

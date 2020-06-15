@@ -1,4 +1,4 @@
 public interface LicencheckListener {
 
-    public void checkResult(CheckInfo checkInfo);
+    public void checkResult(CheckInfo.Reason checkInfo);
 }

@@ -1,9 +1,9 @@
-endDate:DATE=2020-05-16 13:54:14.802
-expiryDate:DATE=2020-05-16 13:54:14.802
-licenseId:UUID=de334107-9751-4499-bce7-7d5b634f54f1
-licenseSignature:BINARY=KHnzNKgwJeN+H15C2YBjF8Y3ZcIs/IAcOIpzp8IjvywNrACB0w4kcL6rp2Xs0pQ5PdRUkc6Rv1nKjWGvQakEfm6Eu+6t2H7a6EWPzX2zdpHPatxokmADV2ZMXGGhiDtrs8jEUDMO5zVAqIco2+0NmhH1j12sxTGgLTdXo4S/xsA=
+endDate:DATE=2020-06-12 13:38:07.204
+expiryDate:DATE=2020-06-12 13:38:07.204
+licenseId:UUID=e42ce24a-b51e-4916-a8c7-c8dd44e473fe
+licenseSignature:BINARY=B7114B7IB0eaCmsc+6MKXnhYx9SdqREDWuBlTgujhFUfA45+bMJPuikmVfbHvJhNKuEnqRIyN/t3Rxi59iOyuAT0HWswt0Chd7+9zBrgZGyHdYVxzUoOMF8AJlAIuxJdtUtdS6CaJmMgi0VhEwmsszLC5faADWWbIK+pQDKzc4Y=
 product=p1
-serial=de334107-9751-4499-bce7-7d5b634f54f1
+serial=e42ce24a-b51e-4916-a8c7-c8dd44e473fe
 signatureDigest=SHA-512
-startDate:DATE=2020-05-15 13:54:14.956
+startDate:DATE=2020-06-11 13:38:07.221
 type=D

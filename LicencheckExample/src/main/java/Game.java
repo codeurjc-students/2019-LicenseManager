@@ -25,32 +25,32 @@ public class Game implements Runnable{
         String typeLicense = null;
         while (typeLicense == null) {            //Checking if the serial is valid for our product ExampleLicensoft. It returns the type of license (L, D, M, A)
             licencheck.addLicencheckListener(checkInfo -> {
-                switch (checkInfo.getReason()) {
-                    case("VALID_R"):{
-                        System.out.println("---[BG] license checked ---");
+                switch (checkInfo) {
+                    case VALID_R:{
+                        System.out.println("---[BG] license checked successfully ---");
                         break;
                     }
-                    case ("VALID"): {
+                    case VALID: {
                         System.out.println("Valid Serial!");
                         triesRecon[0]=0; //Reset tries if last execution came from INTERNET_CON_ERROR
                         serial[1] = "ok";
                         this.run();
                         break;
                     }
-                    case ("NOT_VALID_R"): {
+                    case NOT_VALID_R: {
                         System.out.println("The license has expired. Introduce other valid license serial to keep using this app:");
                         serial[1] = "noOK";
                         serial[0] = System.console().readLine();
                     }
 
-                    case ("NOT_VALID"): {
+                    case NOT_VALID: {
                         System.out.println("Wrong serial. Introduce it again please:");
                         serial[1] = "noOK";
                         serial[0] = System.console().readLine();
                         break;
                     }
-                    case ("INTERNET_CON_ERROR_R"):
-                    case ("INTERNET_CON_ERROR"): {
+                    case INTERNET_CON_ERROR_R:
+                    case INTERNET_CON_ERROR: {
                         if(triesRecon[0]>5){
                             System.out.println("Max reconnecting tries. Exiting...");
                             System.exit(1);
@@ -60,8 +60,8 @@ public class Game implements Runnable{
                         triesRecon[0]++;
                         break;
                     }
-                    case ("UNKNOWN_ERROR_R"):
-                    case ("UNKNOWN_ERROR"): {
+                    case UNKNOWN_ERROR_R:
+                    case UNKNOWN_ERROR: {
                         System.out.println("Something wrong has happened. Introduce the serial again, please:");
                         serial[0] = System.console().readLine();
                         break;
@@ -70,7 +70,7 @@ public class Game implements Runnable{
                 }
             });
             if (serial[1].equals("noOK")) {
-                licencheck.checkLicensePeriodically(serial[0], "ExampleLicencheck");
+                licencheck.checkLicensePeriodically(serial[0], "LicencheckExample");
             }
 
         }
@@ -89,4 +89,7 @@ public class Game implements Runnable{
             System.out.println("Random number (1-"+maxNum+") = " + randomNumber);
         }
     }
+
+
+
 }

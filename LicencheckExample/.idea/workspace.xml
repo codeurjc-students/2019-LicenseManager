@@ -2,28 +2,25 @@
 <project version="4">
   <component name="ChangeListManager">
     <list default="true" id="6973064f-5ff2-4f00-98b8-251b1f60f0de" name="Default Changelist" comment="">
+      <change beforePath="$PROJECT_DIR$/../Licencheck/license-plainChecked-v2.txt" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/license-plainChecked-v2.txt" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Licencheck/src/main/java/CheckInfo.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/src/main/java/CheckInfo.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Licencheck/src/main/java/CheckingTimerTask.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/src/main/java/CheckingTimerTask.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Licencheck/src/main/java/Licencheck.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/src/main/java/Licencheck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Licencheck/src/main/java/LicencheckListener.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/src/main/java/LicencheckListener.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../Licencheck/src/test/java/TestLicencheck.java" beforeDir="false" afterPath="$PROJECT_DIR$/../Licencheck/src/test/java/TestLicencheck.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/pom.xml" beforeDir="false" afterPath="$PROJECT_DIR$/pom.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/main/java/Game.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/Game.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/LicencheckExample-1.0-SNAPSHOT-shaded.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/LicencheckExample-1.0-SNAPSHOT-shaded.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/LicencheckExample-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/LicencheckExample-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-archiver/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-archiver/pom.properties" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" beforeDir="false" afterPath="$PROJECT_DIR$/target/maven-status/maven-compiler-plugin/compile/default-compile/createdFiles.lst" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/target/original-LicencheckExample-1.0-SNAPSHOT.jar" beforeDir="false" afterPath="$PROJECT_DIR$/target/original-LicencheckExample-1.0-SNAPSHOT.jar" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/tfg/licensoft/api/UserController.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/tfg/licensoft/api/UserController.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/tfg/licensoft/licenses/License.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/tfg/licensoft/licenses/License.java" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../backend/src/main/java/tfg/licensoft/licenses/LicenseSubscription.java" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/src/main/java/tfg/licensoft/licenses/LicenseSubscription.java" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/../backend/target/classes/META-INF/maven/tfg/license-web/pom.properties" beforeDir="false" afterPath="$PROJECT_DIR$/../backend/target/classes/META-INF/maven/tfg/license-web/pom.properties" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/lcov.info" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/lcov.info" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/catalog/catalog-product/catalog-product.component.ts.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/catalog/catalog-product/catalog-product.component.ts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/catalog/catalog-product/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/catalog/catalog-product/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/catalog/catalog.component.ts.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/catalog/catalog.component.ts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/catalog/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/catalog/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/add-card-dialog/add-card-dialog.component.ts.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/add-card-dialog/add-card-dialog.component.ts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/add-card-dialog/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/add-card-dialog/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/card-select-dialog copy/card-select-dialog.component.ts.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/card-select-dialog copy/card-select-dialog.component.ts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/card-select-dialog copy/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/card-select-dialog copy/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/confirmation-dialog/confirmation-dialog.component.ts.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/confirmation-dialog/confirmation-dialog.component.ts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/confirmation-dialog/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/confirmation-dialog/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/dialogFreeTrial.component.ts.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/dialogFreeTrial.component.ts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/dialogs/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/userProfile/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/userProfile/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/app/userProfile/userProfile.component.ts.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/app/userProfile/userProfile.component.ts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/index.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/polyfills.ts.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/polyfills.ts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/test.ts.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/test.ts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/testing/dom-helper.ts.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/testing/dom-helper.ts.html" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/../frontend/coverage/src/testing/index.html" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/coverage/src/testing/index.html" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/../frontend/src/app/catalog/catalog-product/catalog-product.component.ts" beforeDir="false" afterPath="$PROJECT_DIR$/../frontend/src/app/catalog/catalog-product/catalog-product.component.ts" afterDir="false" />
     </list>
     <ignored path="$PROJECT_DIR$/out/" />
     <ignored path="$PROJECT_DIR$/target/" />
@@ -37,40 +34,41 @@
     <session id="-575867622">
       <usages-collector id="statistics.lifecycle.project">
         <counts>
-          <entry key="project.closed" value="14" />
-          <entry key="project.open.time.0" value="7" />
+          <entry key="project.closed" value="16" />
+          <entry key="project.open.time.0" value="8" />
           <entry key="project.open.time.1" value="1" />
           <entry key="project.open.time.11" value="1" />
           <entry key="project.open.time.2" value="1" />
           <entry key="project.open.time.22" value="1" />
+          <entry key="project.open.time.25" value="1" />
           <entry key="project.open.time.26" value="1" />
           <entry key="project.open.time.33" value="1" />
           <entry key="project.open.time.4" value="1" />
-          <entry key="project.opened" value="14" />
+          <entry key="project.opened" value="16" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.open">
         <counts>
-          <entry key="java" value="11" />
+          <entry key="java" value="13" />
           <entry key="xml" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.open">
         <counts>
-          <entry key="JAVA" value="11" />
+          <entry key="JAVA" value="13" />
           <entry key="XML" value="2" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.extensions.edit">
         <counts>
-          <entry key="java" value="2237" />
-          <entry key="xml" value="35" />
+          <entry key="java" value="2598" />
+          <entry key="xml" value="37" />
         </counts>
       </usages-collector>
       <usages-collector id="statistics.file.types.edit">
         <counts>
-          <entry key="JAVA" value="2237" />
-          <entry key="XML" value="35" />
+          <entry key="JAVA" value="2598" />
+          <entry key="XML" value="37" />
         </counts>
       </usages-collector>
     </session>
@@ -80,20 +78,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="170">
-              <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
-              <folding>
-                <element signature="imports" expanded="true" />
-              </folding>
-            </state>
-          </provider>
-        </entry>
-      </file>
-      <file pinned="false" current-in-tab="false">
-        <entry file="jar://$MAVEN_REPOSITORY$/com/github/kikeajani/licencheck/1.2.0/licencheck-1.2.0-sources.jar!/Licencheck.java">
-          <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="4981">
-              <caret line="335" column="52" selection-start-line="335" selection-start-column="28" selection-end-line="335" selection-end-column="52" />
+            <state>
+              <caret column="14" selection-start-column="14" selection-end-column="14" />
             </state>
           </provider>
         </entry>
@@ -101,11 +87,39 @@
       <file pinned="false" current-in-tab="true">
         <entry file="file://$PROJECT_DIR$/src/main/java/Game.java">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="51">
-              <caret line="26" selection-start-line="26" selection-end-line="70" selection-end-column="15" />
+            <state relative-caret-position="265">
+              <caret line="47" column="42" lean-forward="true" selection-start-line="47" selection-start-column="42" selection-end-line="47" selection-end-column="42" />
               <folding>
                 <element signature="imports" expanded="true" />
+                <element signature="e#190#191#0" expanded="true" />
+                <element signature="e#219#220#0" expanded="true" />
               </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/com/github/kikeajani/licencheck/2.0.0/licencheck-2.0.0-sources.jar!/Licencheck.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state relative-caret-position="119">
+              <caret line="274" column="59" selection-start-line="274" selection-start-column="59" selection-end-line="274" selection-end-column="59" />
+              <folding>
+                <element signature="e#6132#6133#0" expanded="true" />
+                <element signature="e#6172#6173#0" expanded="true" />
+                <element signature="e#10939#11128#0" expanded="true" />
+                <element signature="e#11127#11128#0" expanded="true" />
+                <element signature="e#14472#14681#0" expanded="true" />
+                <element signature="e#14680#14681#0" expanded="true" />
+              </folding>
+            </state>
+          </provider>
+        </entry>
+      </file>
+      <file pinned="false" current-in-tab="false">
+        <entry file="jar://$MAVEN_REPOSITORY$/com/github/kikeajani/licencheck/2.0.0/licencheck-2.0.0-sources.jar!/LicencheckListener.java">
+          <provider selected="true" editor-type-id="text-editor">
+            <state>
+              <caret column="17" selection-start-column="17" selection-end-column="17" />
             </state>
           </provider>
         </entry>
@@ -113,8 +127,8 @@
       <file pinned="false" current-in-tab="false">
         <entry file="file://$PROJECT_DIR$/pom.xml">
           <provider selected="true" editor-type-id="text-editor">
-            <state relative-caret-position="1071">
-              <caret line="63" column="26" selection-start-line="63" selection-start-column="26" selection-end-line="63" selection-end-column="26" />
+            <state relative-caret-position="687">
+              <caret line="63" column="22" selection-start-line="63" selection-start-column="22" selection-end-line="63" selection-end-column="22" />
             </state>
           </provider>
         </entry>
@@ -135,8 +149,8 @@
     <option name="CHANGED_PATHS">
       <list>
         <option value="$MAVEN_REPOSITORY$/com/licensoft/licencheck/Licencheck/1.0-SNAPSHOT/Licencheck-1.0-SNAPSHOT.jar!/Licencheck.class" />
-        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/Main.java" />
+        <option value="$PROJECT_DIR$/pom.xml" />
         <option value="$PROJECT_DIR$/src/main/java/Game.java" />
       </list>
     </option>
@@ -158,7 +172,7 @@
     </treeState>
   </component>
   <component name="ProjectFrameBounds" extendedState="7">
-    <option name="x" value="1912" />
+    <option name="x" value="-1928" />
     <option name="y" value="-8" />
     <option name="width" value="1936" />
     <option name="height" value="1056" />
@@ -169,7 +183,6 @@
       <foldersAlwaysOnTop value="true" />
     </navigator>
     <panes>
-      <pane id="Scope" />
       <pane id="ProjectPane">
         <subPane>
           <expand>
@@ -197,17 +210,23 @@
             </path>
             <path>
               <item name="LicencheckExample" type="b2602c69:ProjectViewProjectNode" />
+              <item name="LicencheckExample" type="462c0819:PsiDirectoryNode" />
+              <item name="target" type="462c0819:PsiDirectoryNode" />
+            </path>
+            <path>
+              <item name="LicencheckExample" type="b2602c69:ProjectViewProjectNode" />
               <item name="External Libraries" type="cb654da1:ExternalLibrariesNode" />
             </path>
           </expand>
           <select />
         </subPane>
       </pane>
+      <pane id="Scope" />
       <pane id="PackagesPane" />
     </panes>
   </component>
   <component name="PropertiesComponent">
-    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1588874239101" />
+    <property name="com.android.tools.idea.instantapp.provision.ProvisionBeforeRunTaskProvider.myTimeStamp" value="1591892748806" />
     <property name="last_opened_file_path" value="$PROJECT_DIR$/../../quartz-2.3.0-SNAPSHOT/lib/slf4j-log4j12-1.7.7.jar!/" />
     <property name="project.structure.last.edited" value="Modules" />
     <property name="project.structure.proportion" value="0.15" />
@@ -304,10 +323,10 @@
     <servers />
   </component>
   <component name="ToolWindowManager">
-    <frame x="1912" y="-8" width="1936" height="1056" extended-state="7" />
+    <frame x="-1928" y="-8" width="1936" height="1056" extended-state="7" />
     <editor active="true" />
     <layout>
-      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21002132" />
+      <window_info content_ui="combo" id="Project" order="0" visible="true" weight="0.21428572" />
       <window_info id="Structure" order="1" side_tool="true" weight="0.25" />
       <window_info id="Image Layers" order="2" />
       <window_info id="Designer" order="3" />
@@ -316,7 +335,7 @@
       <window_info id="Favorites" order="6" side_tool="true" />
       <window_info anchor="bottom" id="Message" order="0" />
       <window_info anchor="bottom" id="Find" order="1" />
-      <window_info anchor="bottom" id="Run" order="2" weight="0.1637744" />
+      <window_info anchor="bottom" id="Run" order="2" weight="0.16359697" />
       <window_info anchor="bottom" id="Debug" order="3" weight="0.3991323" />
       <window_info anchor="bottom" id="Cvs" order="4" weight="0.25" />
       <window_info anchor="bottom" id="Inspection" order="5" weight="0.4" />
@@ -378,36 +397,57 @@
         </state>
       </provider>
     </entry>
-    <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/github/kikeajani/licencheck/1.2.0/licencheck-1.2.0-sources.jar!/Licencheck.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="170">
-          <caret line="10" column="31" selection-start-line="10" selection-start-column="31" selection-end-line="10" selection-end-column="31" />
-          <folding>
-            <element signature="imports" expanded="true" />
-          </folding>
+        <state relative-caret-position="1535">
+          <caret line="276" column="46" selection-start-line="276" selection-start-column="34" selection-end-line="276" selection-end-column="46" />
         </state>
       </provider>
     </entry>
-    <entry file="jar://$MAVEN_REPOSITORY$/com/github/kikeajani/licencheck/1.2.0/licencheck-1.2.0-sources.jar!/Licencheck.java">
+    <entry file="jar://$MAVEN_REPOSITORY$/com/github/kikeajani/licencheck/2.0.0/licencheck-2.0.0-sources.jar!/LicencheckListener.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="4981">
-          <caret line="335" column="52" selection-start-line="335" selection-start-column="28" selection-end-line="335" selection-end-column="52" />
+        <state>
+          <caret column="17" selection-start-column="17" selection-end-column="17" />
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/pom.xml">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="1071">
-          <caret line="63" column="26" selection-start-line="63" selection-start-column="26" selection-end-line="63" selection-end-column="26" />
+        <state relative-caret-position="687">
+          <caret line="63" column="22" selection-start-line="63" selection-start-column="22" selection-end-line="63" selection-end-column="22" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="file://$PROJECT_DIR$/src/main/java/Main.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state>
+          <caret column="14" selection-start-column="14" selection-end-column="14" />
+        </state>
+      </provider>
+    </entry>
+    <entry file="jar://$MAVEN_REPOSITORY$/com/github/kikeajani/licencheck/2.0.0/licencheck-2.0.0-sources.jar!/Licencheck.java">
+      <provider selected="true" editor-type-id="text-editor">
+        <state relative-caret-position="119">
+          <caret line="274" column="59" selection-start-line="274" selection-start-column="59" selection-end-line="274" selection-end-column="59" />
+          <folding>
+            <element signature="e#6132#6133#0" expanded="true" />
+            <element signature="e#6172#6173#0" expanded="true" />
+            <element signature="e#10939#11128#0" expanded="true" />
+            <element signature="e#11127#11128#0" expanded="true" />
+            <element signature="e#14472#14681#0" expanded="true" />
+            <element signature="e#14680#14681#0" expanded="true" />
+          </folding>
         </state>
       </provider>
     </entry>
     <entry file="file://$PROJECT_DIR$/src/main/java/Game.java">
       <provider selected="true" editor-type-id="text-editor">
-        <state relative-caret-position="51">
-          <caret line="26" selection-start-line="26" selection-end-line="70" selection-end-column="15" />
+        <state relative-caret-position="265">
+          <caret line="47" column="42" lean-forward="true" selection-start-line="47" selection-start-column="42" selection-end-line="47" selection-end-column="42" />
           <folding>
             <element signature="imports" expanded="true" />
+            <element signature="e#190#191#0" expanded="true" />
+            <element signature="e#219#220#0" expanded="true" />
           </folding>
         </state>
       </provider>
