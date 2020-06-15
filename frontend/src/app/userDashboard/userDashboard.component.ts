@@ -84,7 +84,7 @@ export class UserDashboardComponent implements OnInit{
         this.fileName= "license-"+license.product.name +"-"+this.loginService.getUserLogged().name+ ".txt"; 
         const blob = new Blob([license.licenseString], { type: 'application/octet-stream' });
         this.fileurl = this.sanitizer.bypassSecurityTrustResourceUrl(window.URL.createObjectURL(blob));
-        this.dialogService.openConfirmDialog("You are going to download the License File of " + license.product.name + "'s license with serial: " + license.serial + ".\n This file cannot be modified. If done, it will NOT work.",false,false).afterClosed().subscribe(
+        this.dialogService.openConfirmDialog("You are going to download the License File of " + license.product.name + "'s license" + ".\n This file cannot be modified. If done, it will NOT work.",false,false).afterClosed().subscribe(
             res => {
                 if(res){
                     let element: HTMLElement = document.getElementById('download');

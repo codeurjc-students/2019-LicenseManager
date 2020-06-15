@@ -107,7 +107,6 @@ export class CatalogProductComponent implements OnInit {
                 }else{
                   automaticRenewal = false;
                 }
-                console.log(this.user);
                 this.userProfileService.check3dsSubs(this.user.name,this.product,piId_s, automaticRenewal,localStorage.getItem("type"),localStorage.getItem("subscriptionId")).subscribe(
                   (t:any) => {this.successfulMessage=true; this.serial=t.serial;this.loading=false;this.purchase=false;this.licenseFileString=t.licenseString; this.createFile();document.getElementById("exp").scrollIntoView()},
                   error => {                      
@@ -164,7 +163,6 @@ export class CatalogProductComponent implements OnInit {
             this.loading=true;
             this.userProfileService.addSubscriptionToProduct(this.product,type,this.loginService.getUserLogged().name, res[1], res[2]).subscribe(
                 (u:any)=> { 
-                  console.log(u.type);
                   if(u.type!="RequiresAction"){
                     this.successfulMessage=true;
                     this.loading=false;
@@ -234,7 +232,6 @@ export class CatalogProductComponent implements OnInit {
       this.dialogService.openFreeTrialDialog(this.product.name, this.product.plansPrices).afterClosed().subscribe(
         res=> {
           if (res!=null){
-            console.log(res);
             this.loading=true;
             this.userProfileService.addFreeTrial(this.product,this.loginService.getUserLogged().name,this.product.trialDays, res[0][0], res[1]).subscribe(
                 (u:any)=> {

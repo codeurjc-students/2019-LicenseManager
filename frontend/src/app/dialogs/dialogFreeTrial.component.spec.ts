@@ -60,6 +60,7 @@ describe('DialogFreeTrial', () => {
   describe("Page creation-display", () => {
       it("should create", () => {
           fixture.detectChanges();
+          expect(component).toBeTruthy();
 
 
       })
