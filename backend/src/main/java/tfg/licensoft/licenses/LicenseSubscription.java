@@ -3,6 +3,7 @@ package tfg.licensoft.licenses;
 
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
@@ -33,7 +34,7 @@ public class LicenseSubscription extends License {
 		this.nUsage=0;
 		this.trial=true; 
 		if(active) {
-			Calendar ahoraCal = Calendar.getInstance();
+			GregorianCalendar ahoraCal = new GregorianCalendar();
 			this.calculateEndDate(ahoraCal,trialDays);
 		}
 		this.setPrice(product.getPlansPrices().get(type));
@@ -68,7 +69,7 @@ public class LicenseSubscription extends License {
 
 
 
-	public void calculateEndDate(Calendar ahoraCal, long trialDays) {
+	public void calculateEndDate(GregorianCalendar ahoraCal, long trialDays) {
 		if(trialDays==0) {
 			this.trial=false;
 
@@ -96,7 +97,7 @@ public class LicenseSubscription extends License {
 	}
 	
 	public void renew(long trialDays) {
-		Calendar ahoraCal = Calendar.getInstance();
+		GregorianCalendar ahoraCal = new GregorianCalendar();
 		this.setStartDate(ahoraCal.getTime());
 		this.calculateEndDate(ahoraCal,trialDays);
 		this.nUsage= 0 ;

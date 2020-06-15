@@ -1,8 +1,8 @@
 package tfg.licensoft.licenses;
 
 import java.io.IOException;
-import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.List;
 import java.util.UUID;
 
@@ -59,7 +59,7 @@ public class License {
 
 		this.active = active;
 		if(active) {
-			Calendar ahoraCal = Calendar.getInstance();
+			GregorianCalendar ahoraCal = new GregorianCalendar();
 			this.startDate = ahoraCal.getTime();
 			this.owner=owner;
 		}

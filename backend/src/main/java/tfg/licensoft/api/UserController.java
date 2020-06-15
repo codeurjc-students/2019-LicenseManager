@@ -25,6 +25,7 @@ import com.stripe.param.SubscriptionCreateParams;
 import java.util.ArrayList;
 import java.util.Calendar;
 import java.util.Date;
+import java.util.GregorianCalendar;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -348,8 +349,13 @@ public class UserController implements IUserController{
 					if(piReturned != null && piReturned.getStatus().equals(REQUIRES_ACTION)) {   //SCA 3DSecure authentication needed
 						
 						PaymentIntent piReturned2 =null;
-				        Map<String, Object> params2 = new HashMap<>();				 
-				        params2.put("return_url", this.generalController.appDomain+"/products/"+productName);
+				        Map<String, Object> params2 = new HashMap<>();		
+				        String productNameLink = productName;
+				        if(productName.contains(" ")) {
+				        	productNameLink = productNameLink.replace(" ", "%20");
+				        	
+				        }
+				        params2.put("return_url", this.generalController.appDomain+"/products/"+productNameLink);
 				        try {
 							piReturned2 = this.stripeServ.confirmPaymentIntent(piReturned, params2);
 						} catch (StripeException e) {
@@ -737,5 +743,6 @@ public class UserController implements IUserController{
 	private Product convertToEntity(ProductDTO dto ) {
 		return modelMapper.map(dto, Product.class);
 	}
+
     
 }
