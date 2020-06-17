@@ -29,7 +29,7 @@ services:
             - "80:80"
         restart: always
         environment:
-            SPRING_DATASOURCE_URL: jdbc:mysql://sql/licensoft?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC
+            SPRING_DATASOURCE_URL: jdbc:mysql://sql/licensoft?useUnicode=true&useJDBCCompliantTimezoneShift=true&useLegacyDatetimeCode=false&serverTimezone=UTC&useSSL=false
             SPRING_DATASOURCE_USERNAME: root
             SPRING_DATASOURCE_PASSWORD: 12345pass
             SPRING_JPA_HIBERNATE_DDL-AUTO: update
