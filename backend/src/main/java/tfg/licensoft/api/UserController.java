@@ -396,6 +396,13 @@ public class UserController implements IUserController{
 		LicenseSubscription license = licenseSubsServ.findBySerialAndProduct(licenseSerial, product);
 		LOGGER.log(Level.INFO, "Setting {0} timer",license.getSerial());
 
+		/* Uncomment to test 
+		Calendar calendar = Calendar.getInstance(); // gets a calendar using the default time zone and locale.
+		calendar.add(Calendar.SECOND, 60);
+		license.setEndDate(calendar.getTime());
+		*/
+		
+		
 		
 		Timer time = new Timer();
 			time.schedule(new TimerTask() {
@@ -429,6 +436,7 @@ public class UserController implements IUserController{
 										c.add(Calendar.DATE, 1);
 										dt = c.getTime();
 										license.setEndDate(dt);
+										licenseSubsServ.save(license);
 										setTimerAndEndDate(licenseSerial,product,0,nRetry+1);
 										LOGGER.log(Level.INFO,"Subscription {0} needs SCA autenthication. This is the {1} retry of 3 max.", new Object[] { subs.getId(), nRetry }  );
 									}

@@ -102,6 +102,8 @@ public class LicenseSubscription extends License {
 		this.calculateEndDate(ahoraCal,trialDays);
 		this.nUsage= 0 ;
 		this.period++;
+		javax0.license3j.License l = this.generateLicenseFile2();
+		this.setLicenseString(this.signLicense(l));
 	}
 
 	
