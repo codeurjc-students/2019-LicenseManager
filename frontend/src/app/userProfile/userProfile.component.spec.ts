@@ -1,6 +1,6 @@
 import { async, ComponentFixture, TestBed } from '@angular/core/testing';
 
-import { MatGridListModule, MatIconModule, MatSelectModule, MatOptionModule, MatCardModule, MatSnackBarModule, MatDialog, MatSnackBar } from '@angular/material';
+import { MatGridListModule, MatIconModule, MatSelectModule, MatOptionModule, MatCardModule, MatDialog } from '@angular/material';
 
 import { DatePipe } from '@angular/common';
 import { Router, ActivatedRoute } from '@angular/router';
@@ -9,7 +9,6 @@ import { of, Observable } from 'rxjs';
 
 import { DOMHelper } from 'src/testing/dom-helper';
 import { ActivatedRouteMock } from '../mock/activated-route-mock.component';
-import { LicenseService } from '../licenses/license.service';
 import { User, LoginService } from '../login/login.service';
 import { UserProfileService } from '../userProfile/userProfile.service';
 import { DialogService } from '../dialogs/dialog.service';
@@ -23,12 +22,9 @@ describe('UserProfileComponent', () => {
   let domHelper: DOMHelper<UserProfileComponent>;
 
   //MOCKS
-  let licenseServiceMock:any;
   let loginServiceMock: any;
   let dialogServiceMock:any;
   let userProfileServiceMock:any;
-  let productServiceMock:any;
-  let usedCardServMock:any;
   let routerMock:any;
 
   let user:User;
@@ -41,9 +37,6 @@ describe('UserProfileComponent', () => {
 
     //MOCKS
     user={name:"Kike",roles:[],authdata:"",userStripeId:"stripe_id",email:"email@email.com"};
-   
-    let card:any;
-
 
 
     loginServiceMock= jasmine.createSpyObj("LoginService", ["getUserLogged"]);
@@ -51,15 +44,16 @@ describe('UserProfileComponent', () => {
     loginServiceMock.isLogged=true;
     loginServiceMock.user = user;
 
-    dialogServiceMock = jasmine.createSpyObj("DialogService",["openCardSubscriptionSelectDialog","openFreeTrialDialog","openConfirmDialog","openCardSelectDialog","openAddCardDialog"]);
+    dialogServiceMock = jasmine.createSpyObj("DialogService",["openConfirmDialog","openCardSelectDialog"]);
+
+    
     let res:any[] = [];
+
     res[0]=true;
     res[1]=false;
     res[2]="pmId";
     dialogServiceMock.openConfirmDialog.and.returnValue({afterClosed: () => of(res)});
-    dialogServiceMock.openCardSelectDialog.and.returnValue({afterClosed: () => of(res)});
-    dialogServiceMock.openCardSubscriptionSelectDialog.and.returnValue({afterClosed: () => of(res)});
-    
+
     paymentMethods.push({id:1,card: {brand:"visa", last4:"4444"}});
     paymentMethods.push({id:2, card:{brand:"visa", last4:"4444"}});
 
@@ -78,9 +72,7 @@ describe('UserProfileComponent', () => {
           { provide: DatePipe,provider:DatePipe},
           { provide: UserProfileService, useValue: userProfileServiceMock},
           { provide: LoginService, useValue:loginServiceMock},
-          { provide:MatSnackBar, provider: MatSnackBarModule},
           { provide: MatDialog, provider: MatDialog},
-          { provide:LicenseService, useValue: licenseServiceMock},
           { provide: Router,useValue: routerMock},
           {provide: DialogService, useValue:dialogServiceMock},
           {
