@@ -356,11 +356,21 @@ public class Licencheck {
     -------------------------------UPDATE USAGE METHOD------------------------------
      */
 
+    public Integer updateUsage(String licenseSerial, String productName, long usage) {
+        return this.updateUsage(licenseSerial,productName,usage, null);
+    }
 
-    //Returns the actual usage or null if not exists
-    public Integer updateUsage(String licenseSerial, String productName, long usage){
+
+
+        //Returns the actual usage or null if not exists
+    public Integer updateUsage(String licenseSerial, String productName, long usage, String userName){
         try {
-            URL url = new URL(baseEndpoint +"updateUsage/"+usage+"/"+productName+"/"+licenseSerial);
+            URL url;
+            if(userName==null) {
+                url = new URL(baseEndpoint + "updateUsage/" + usage + "/" + productName + "/" + licenseSerial);
+            }else{
+                url = new URL(baseEndpoint + "updateUsage/" + usage + "/" + productName + "/" + licenseSerial + "?userName=" + userName);
+            }
             HttpURLConnection con = (HttpURLConnection) url.openConnection();
             con.setDoOutput(true);
             con.setRequestMethod("PUT");
