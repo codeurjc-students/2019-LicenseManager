@@ -128,9 +128,9 @@ l.checkLicenseOffline(lic)
 ```
 
 
-**3**. Call [licencheck.updateUsage(String licenseSerial, String productName, long usage](#update) whenever you want to inform of an usage of the software (functionality, program started, etc).
-	- If the product and the serial **exists**, and the subscription is not Lifetime type, will **return the actual usage** of the license (with the new usage updated).
-	- If **not**, it will return **null**. 
+**3**. Call `licencheck.updateUsage(String licenseSerial, String productName, long usage)` or `licencheck.updateUsage(String licenseSerial, String productName, long usage, String userName)` whenever you want to inform of an usage of the software (functionality, program started, etc). With the second option it can be informed the name of the user that did the usage, for statistics.
+- If the product and the serial **exists**, and the subscription is not Lifetime type, will **return the actual usage** of the license (with the new usage updated).
+- If **not**, it will return **null**. 
 
 
 
